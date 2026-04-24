@@ -239,7 +239,10 @@ function buildSchedule() {
     }
     order.forEach((ti, idx) => {
       const team = TEAMS[ti];
-      const baseGap = 40 + rng() * 30; // 40-70 seconds between cars
+      const gap = 35 + Math.floor(rng() * 40); // 35-75 sec random gap
+      const runBreak = idx === 0 && run > 0 ? 60 + Math.floor(rng() * 90) : 0; // 60-150 sec break between runs
+      prevTime += gap + runBreak;
+      const goTime = prevTime;
 const pitGap = idx === 0 ? rng() * 120 : 0; // extra gap at start of each new run (setup time)
 const goTime = prevGoTime + baseGap + pitGap; // seconds from session start
       const s1 = calcSectorTime(team, 1, rng);
