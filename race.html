@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — RACE DAY LIVE | Degen Speedway</title>
+<meta name="description" content="Race Day — 20 Laps at Degen Speedway. 10 teams. 1 winner. The Degen Speedway Grand Prix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overflow:hidden;height:100vh}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes glow-green{0%,100%{box-shadow:0 0 8px #00ff88}50%{box-shadow:0 0 20px #00ff88}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#08080c}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+
+.top-bar{background:linear-gradient(90deg,#0a0a10,#111118,#0a0a10);border-bottom:2px solid #ff0040;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,0,64,.15);border:1px solid #ff0040;border-radius:4px;padding:3px 10px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ff0040;animation:pulse 1s infinite}
+.brand{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555;text-decoration:none}
+.session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040;opacity:1}
+.countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+.lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
+
+.ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
+.ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
+
+.main{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 82px)}
+
+.left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+
+.center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
+
+.right{background:#08080c;border-left:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.right-header{padding:12px 16px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+.col-headers{display:grid;grid-template-columns:28px 24px 1fr 40px 65px;padding:6px 12px;border-bottom:1px solid #1a1a1a;font-size:7px;color:#444;letter-spacing:1.5px;font-weight:700}
+.lb-row{display:grid;grid-template-columns:28px 24px 1fr 40px 65px;padding:7px 12px;border-bottom:1px solid #111;align-items:center;transition:all .3s}
+
+.waiting{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;background:#050508}
+.waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.waiting .countdown-big{font-family:'Space Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
+
+/* Team picker overlay */
+.team-picker-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,5,8,.95);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.team-picker-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px;max-width:500px}
+.team-pick-btn{background:#111;border:2px solid #333;border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s}
+.team-pick-btn:hover{border-color:#ff0040;background:#1a1a1a;transform:scale(1.05)}
+.team-pick-btn img{width:48px;height:48px;border-radius:50%;object-fit:cover;margin-bottom:6px}
+.team-pick-btn .name{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px}
+
+/* Fan zone bar */
+.fan-zone{display:flex;height:28px;border-radius:4px;overflow:hidden;margin-top:8px;border:1px solid #222}
+.fan-segment{display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:8px;font-weight:700;color:#fff;transition:width .5s;min-width:0;overflow:hidden}
+
+/* Position change indicators */
+.pos-up{color:#00ff88}
+.pos-down{color:#ff4444}
+.pos-same{color:#555}
+
+@media(max-width:1024px){
+  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
+  .left,.right{max-height:250px}
+}
+</style>
+</head>
+<body>
+
+<!-- TEAM PICKER OVERLAY -->
+<div class="team-picker-overlay" id="teamPicker">
+  <div style="font-size:36px;margin-bottom:8px">🏁</div>
+  <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">RACE DAY — DEGEN SPEEDWAY</h1>
+  <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:8px;letter-spacing:1px">WHO ARE YOU SUPPORTING?</div>
+  <div class="team-picker-grid" id="teamPickerGrid"></div>
+  <div style="font-family:'Chakra Petch';font-size:10px;color:#444;margin-top:20px">Pick your team to join the broadcast</div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="live-badge" id="liveBadge" style="display:none">
+      <div class="live-dot"></div>
+      <span style="font-size:11px;font-weight:700;color:#ff0040;letter-spacing:2px">LIVE</span>
+    </div>
+    <a href="index.html" class="brand">MEME GRAND PRIX</a>
+    <span id="trackInfo" style="font-size:10px;color:#555;margin-left:8px"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="fp1.html" class="session-tab" style="opacity:.6">FP1</a>
+    <a href="fp2.html" class="session-tab" style="opacity:.6">FP2</a>
+    <a href="quali.html" class="session-tab" style="opacity:.6">QUALI</a>
+    <a href="race.html" class="session-tab active">RACE</a>
+    <span class="lap-counter" id="lapCounter">LAP 0/20</span>
+  </div>
+  <div class="countdown" id="sessionClock">--:--</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ RACE NOT STARTED</div>
+  <div style="font-size:10px;color:#333">DEGEN SPEEDWAY — SEASON 1</div>
+</div>
+
+<!-- WAITING SCREEN -->
+<div class="waiting" id="waitingScreen" style="display:none">
+  <img src="webcar.png" alt="Meme GP Car" style="width:200px;margin-bottom:16px">
+  <h1>RACE DAY — DEGEN SPEEDWAY</h1>
+  <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">LIGHTS OUT IN</div>
+  <div class="countdown-big" id="waitCountdown">--:--:--</div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">20 laps · 10 teams · 1 winner</div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main" id="mainLayout" style="display:none">
+
+  <!-- LEFT: Timing Tower (compact race style) -->
+  <div class="left">
+    <div class="left-header">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#ff0040" id="raceStatus">RACE</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#ffcc00" id="lapDisplay">LAP 0/20</div>
+      </div>
+    </div>
+    <div id="raceTower" style="flex:1;overflow-y:auto"></div>
+    <!-- Fan Zone -->
+    <div style="padding:8px 14px;border-top:1px solid #1a1a1a">
+      <div style="font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;color:#555;margin-bottom:4px">FAN ZONE <span id="fanCount" style="color:#888"></span></div>
+      <div class="fan-zone" id="fanZone"></div>
+      <div id="yourTeam" style="font-family:'Space Mono',monospace;font-size:8px;color:#555;margin-top:4px"></div>
+    </div>
+  </div>
+
+  <!-- CENTER: Track -->
+  <div class="center">
+    <div class="grid-bg"></div>
+    <svg id="trackSvg" viewBox="0 0 1050 700" style="width:100%;max-width:800px;position:relative;z-index:2">
+      <path id="trackPath" d="M 870,560 L 870,340 C 870,290 865,260 840,230 L 800,190 C 785,178 780,168 785,155 C 790,142 800,138 820,140 L 860,148 C 880,152 890,148 890,135 C 890,120 878,112 860,112 L 680,120 C 640,122 610,130 580,150 C 550,170 530,178 500,170 C 470,162 455,150 440,150 L 380,155 C 350,158 330,168 320,185 L 300,230 C 290,250 275,258 260,250 L 240,238 C 220,228 205,230 200,245 L 190,280 C 182,305 175,310 175,310 C 175,310 170,320 180,340 L 210,380 C 225,400 225,415 210,430 C 195,448 190,460 200,475 L 230,510 C 245,528 265,535 290,535 L 380,540 C 410,540 425,545 435,555 C 445,565 455,568 475,565 L 560,548 C 590,542 615,545 640,558 C 665,572 690,580 720,580 L 780,575 C 810,572 835,568 855,565 C 868,562 870,560 870,560 Z" fill="none" stroke="none"/>
+      <use href="#trackPath" stroke="rgba(255,255,255,0.02)" stroke-width="58" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <use href="#trackPath" stroke="rgba(255,255,255,0.04)" stroke-width="40" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M 870,560 L 870,340 C 870,290 865,260 840,230 L 800,190 C 785,178 780,168 785,155 C 790,142 800,138 820,140 L 860,148 C 880,152 890,148 890,135 C 890,120 878,112 860,112 L 680,120 C 640,122 610,130 580,150 C 550,170 530,178 500,170" stroke="#ff3333" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+      <path d="M 500,170 C 470,162 455,150 440,150 L 380,155 C 350,158 330,168 320,185 L 300,230 C 290,250 275,258 260,250 L 240,238 C 220,228 205,230 200,245 L 190,280 C 182,305 175,310 175,310 C 175,310 170,320 180,340 L 210,380 C 225,400 225,415 210,430 C 195,448 190,460 200,475 L 230,510" stroke="#00bbff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+      <path d="M 230,510 C 245,528 265,535 290,535 L 380,540 C 410,540 425,545 435,555 C 445,565 455,568 475,565 L 560,548 C 590,542 615,545 640,558 C 665,572 690,580 720,580 L 780,575 C 810,572 835,568 855,565 C 868,562 870,560 870,560" stroke="#ffcc00" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+      <g id="corners"></g>
+      <line x1="863" y1="555" x2="877" y2="555" stroke="#fff" stroke-width="2" opacity="0.5"/>
+      <text x="893" y="558" font-family="'Space Mono',monospace" font-size="7" fill="#fff" opacity="0.4" letter-spacing="1">S/F</text>
+      <text x="135" y="298" font-family="'Space Mono',monospace" font-size="6" fill="#00bbff" opacity="0.3" letter-spacing="1" text-anchor="end">HAIRPIN</text>
+      <g id="carDots"></g>
+    </svg>
+  </div>
+
+  <!-- RIGHT: Race Info -->
+  <div class="right">
+    <div class="right-header">
+      <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px" id="rightTitle">RACE — TIMING</div>
+      <div id="raceInfo" style="font-size:9px;color:#444;letter-spacing:1px">DEGEN SPEEDWAY GRAND PRIX</div>
+    </div>
+    <!-- Lap info -->
+    <div style="display:flex;border-bottom:1px solid #1a1a1a">
+      <div style="flex:1;padding:8px 10px;border-right:1px solid #1a1a1a">
+        <div style="font-size:8px;color:#ffcc00;font-weight:700;letter-spacing:2px;margin-bottom:2px">LAP</div>
+        <div id="lapBig" style="font-size:20px;color:#fff;font-weight:700;font-family:'Orbitron',sans-serif">0/20</div>
+      </div>
+      <div style="flex:1;padding:8px 10px;border-right:1px solid #1a1a1a">
+        <div style="font-size:8px;color:#00ff88;font-weight:700;letter-spacing:2px;margin-bottom:2px">LEADER</div>
+        <div id="leaderName" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+      </div>
+      <div style="flex:1;padding:8px 10px">
+        <div style="font-size:8px;color:#ff0040;font-weight:700;letter-spacing:2px;margin-bottom:2px">FASTEST LAP</div>
+        <div id="fastestLap" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+      </div>
+    </div>
+    <!-- Position column headers -->
+    <div class="col-headers">
+      <span>POS</span><span></span><span>DRIVER</span><span style="text-align:center">+/-</span><span style="text-align:right">GAP</span>
+    </div>
+    <div id="leaderboard" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:10px 16px;border-top:1px solid #1a1a1a;background:#06060a;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:8px;color:#333;letter-spacing:1px">20 LAPS · 14 CORNERS</div>
+      <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 1</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// MEME GP — RACE DAY DETERMINISTIC LIVE SIMULATOR
+// 20 Laps — Degen Speedway Grand Prix
+// Session start: 2026-04-26 18:00:00 UTC (20:00 SAST)
+// ═══════════════════════════════════════════════════
+
+const SESSION_START_UTC = new Date('2026-04-26T09:15:00Z').getTime();
+const TOTAL_LAPS = 20;
+const LAP_REAL_SECONDS = 90; // each lap takes ~90 real seconds
+const SEED = 20260426004;
+
+// Starting grid from qualifying
+const TEAMS = [
+  { id:"TURBO", emoji:"🤖", logo:"turbo.png", color:"#00D4AA", engine:3, aero:7, chassis:3, drag:5, pit:6, overall:4.8, gridPos:1 },
+  { id:"DOGE",  emoji:"🐕", logo:"doge.png", color:"#C2A633", engine:10, aero:5, chassis:8, drag:7, pit:5, overall:7.0, gridPos:2 },
+  { id:"FLOKI", emoji:"⚔️", logo:"floki.png", color:"#D4A847", engine:5, aero:6, chassis:6, drag:9, pit:8, overall:6.8, gridPos:3 },
+  { id:"BONK",  emoji:"🦴", logo:"bonk.png", color:"#F5A623", engine:6, aero:6, chassis:4, drag:8, pit:7, overall:6.2, gridPos:4 },
+  { id:"PEPE",  emoji:"🐸", logo:"pepe.png", color:"#3D9B3D", engine:5, aero:9, chassis:6, drag:3, pit:7, overall:8.2, gridPos:5 },
+  { id:"SHIB",  emoji:"🐕‍🦺", logo:"shib.png", color:"#F7931A", engine:9, aero:3, chassis:7, drag:6, pit:4, overall:5.8, gridPos:6 },
+  { id:"WIF",   emoji:"🎩", logo:"wif.png", color:"#E91E8C", engine:4, aero:8, chassis:4, drag:4, pit:3, overall:4.6, gridPos:7 },
+  { id:"PENGU", emoji:"🐧", logo:"pengu.png", color:"#5B9BD5", engine:1, aero:10, chassis:2, drag:4, pit:6, overall:4.6, gridPos:8 },
+  { id:"MOG",   emoji:"😎", logo:"mog.png", color:"#8B5CF6", engine:2, aero:7, chassis:3, drag:3, pit:5, overall:4.0, gridPos:9 },
+  { id:"BRETT", emoji:"🔵", logo:"brett.png", color:"#0052FF", engine:3, aero:8, chassis:5, drag:2, pit:2, overall:4.0, gridPos:10 },
+];
+
+const CORNERS = [
+  [850,245,"1","#ff3333"],[870,260,"2","#ff3333"],[885,135,"3","#ff3333"],[680,118,"4","#ff3333"],[540,165,"5","#ff3333"],
+  [430,148,"6","#00bbff"],[330,178,"7","#00bbff"],[188,295,"8","#00bbff"],[218,420,"9","#00bbff"],
+  [250,525,"10","#ffcc00"],[400,540,"11","#ffcc00"],[448,562,"12","#ffcc00"],[558,545,"13","#ffcc00"],[730,578,"14","#ffcc00"],
+];
+
+const TRACK_PATH_D = document.getElementById('trackPath').getAttribute('d');
+
+function createRng(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+}
+
+function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
+function fmtCD(s) { const m=Math.floor(s/60); const ss=Math.floor(s)%60; return `${m}:${ss.toString().padStart(2,'0')}`; }
+
+// ═══ PRE-COMPUTE RACE ═══
+// For each lap, compute a lap time for each car, then derive cumulative times and positions
+
+function buildRace() {
+  const rng = createRng(SEED);
+  const race = { laps: [], events: [] };
+
+  // Cumulative time for each car (starts staggered by grid position)
+  const cumTimes = {};
+  TEAMS.forEach(t => { cumTimes[t.id] = (t.gridPos - 1) * 0.5; }); // 0.5s stagger per grid pos
+
+  const lapTimes = {}; // id -> array of lap times
+  TEAMS.forEach(t => { lapTimes[t.id] = []; });
+
+  let fastestLapTime = 999;
+  let fastestLapDriver = '';
+  let fastestLapNum = 0;
+
+  for (let lap = 1; lap <= TOTAL_LAPS; lap++) {
+    const lapData = { lap, positions: [], events: [] };
+
+    TEAMS.forEach(team => {
+      // Base lap time influenced by overall rating + some randomness
+      // Higher overall = faster base time
+      const base = 82 - (team.overall * 0.8);
+      const variance = (rng() - 0.5) * 3.0;
+
+      // Tyre degradation — cars get slightly slower over the race
+      const tyreDeg = lap * 0.04 * (1 + (10 - team.pit) * 0.02);
+
+      // Dirty air effect — cars close behind others are slightly slower
+      const lapTime = base + variance + tyreDeg;
+
+      lapTimes[team.id].push(lapTime);
+      cumTimes[team.id] += lapTime;
+
+      // Check fastest lap
+      if (lapTime < fastestLapTime) {
+        fastestLapTime = lapTime;
+        fastestLapDriver = team.id;
+        fastestLapNum = lap;
+      }
+    });
+
+    // Sort by cumulative time to get positions
+    const sorted = TEAMS.map(t => ({
+      id: t.id,
+      cumTime: cumTimes[t.id],
+      lastLap: lapTimes[t.id][lap - 1],
+    })).sort((a, b) => a.cumTime - b.cumTime);
+
+    // Detect position changes from previous lap
+    const prevPositions = lap > 1 ? race.laps[lap - 2].positions : TEAMS.map(t => t.id);
+
+    sorted.forEach((entry, pos) => {
+      const prevPos = prevPositions.indexOf(entry.id);
+      const change = prevPos - pos; // positive = gained positions
+
+      // Generate overtake events
+      if (change > 0 && lap > 1) {
+        const overtaken = prevPositions[pos];
+        race.events.push({
+          lap, type: 'overtake',
+          attacker: entry.id,
+          defender: overtaken,
+          newPos: pos + 1,
+        });
+      }
+    });
+
+    lapData.positions = sorted.map(e => e.id);
+    lapData.gaps = sorted.map((e, i) => i === 0 ? 0 : e.cumTime - sorted[0].cumTime);
+    lapData.lapTimes = {};
+    lapData.cumTimes = {};
+    sorted.forEach(e => { lapData.lapTimes[e.id] = e.lastLap; lapData.cumTimes[e.id] = e.cumTime; });
+
+    race.laps.push(lapData);
+  }
+
+  race.fastestLap = { time: fastestLapTime, driver: fastestLapDriver, lap: fastestLapNum };
+  return race;
+}
+
+const RACE = buildRace();
+
+// ═══ FAN ZONE ═══
+let selectedTeam = null;
+const fanCounts = {};
+const fanRng = createRng(SEED + 999);
+TEAMS.forEach(t => { fanCounts[t.id] = 20 + Math.floor(fanRng() * 80); });
+
+function initTeamPicker() {
+  // Check if already picked
+  try {
+    const saved = window.localStorage && localStorage.getItem('memegp-team');
+    if (saved && TEAMS.find(t => t.id === saved)) {
+      selectedTeam = saved;
+      fanCounts[saved] += 1;
+      document.getElementById('teamPicker').style.display = 'none';
+      return;
+    }
+  } catch(e) {}
+
+  const grid = document.getElementById('teamPickerGrid');
+  let html = '';
+  TEAMS.forEach(t => {
+    html += `<div class="team-pick-btn" onclick="pickTeam('${t.id}')">
+      <img src="${t.logo}" alt="${t.id}">
+      <div class="name" style="color:${t.color}">$${t.id}</div>
+      <div style="font-size:7px;color:#555">P${t.gridPos}</div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function pickTeam(id) {
+  selectedTeam = id;
+  fanCounts[id] += 1;
+  try { if(window.localStorage) localStorage.setItem('memegp-team', id); } catch(e) {}
+  document.getElementById('teamPicker').style.display = 'none';
+}
+// Make pickTeam global
+window.pickTeam = pickTeam;
+
+function renderFanZone() {
+  const total = Object.values(fanCounts).reduce((a, b) => a + b, 0);
+  document.getElementById('fanCount').textContent = `· ${total} watching`;
+
+  const zone = document.getElementById('fanZone');
+  let html = '';
+  TEAMS.forEach(t => {
+    const pct = (fanCounts[t.id] / total * 100);
+    if (pct > 3) {
+      html += `<div class="fan-segment" style="width:${pct}%;background:${t.color}">${pct > 6 ? t.id : ''}</div>`;
+    } else {
+      html += `<div class="fan-segment" style="width:${pct}%;background:${t.color}"></div>`;
+    }
+  });
+  zone.innerHTML = html;
+
+  if (selectedTeam) {
+    const team = TEAMS.find(t => t.id === selectedTeam);
+    document.getElementById('yourTeam').innerHTML = `Supporting: <span style="color:${team.color};font-weight:700">$${team.id}</span> ${team.emoji}`;
+  }
+}
+
+// ═══ CORNERS ═══
+const cornersG = document.getElementById('corners');
+CORNERS.forEach(([cx, cy, label, col]) => {
+  cornersG.innerHTML += `<circle cx="${cx}" cy="${cy}" r="8" fill="none" stroke="${col}" stroke-width="1" opacity="0.3"/>
+    <text x="${cx}" y="${Number(cy)+3}" text-anchor="middle" font-family="'Space Mono',monospace" font-size="6" font-weight="700" fill="${col}" opacity="0.5">${label}</text>`;
+});
+
+const pathEl = document.getElementById('trackPath');
+
+function getPoint(frac) {
+  const len = pathEl.getTotalLength();
+  const pt = pathEl.getPointAtLength(len * (frac % 1));
+  return { x: pt.x, y: pt.y };
+}
+
+// ═══ MAIN LOOP ═══
+function update() {
+  const now = Date.now();
+  const elapsed = (now - SESSION_START_UTC) / 1000;
+
+  // Before race
+  if (elapsed < 0) {
+    document.getElementById('waitingScreen').style.display = 'flex';
+    document.getElementById('mainLayout').style.display = 'none';
+    document.getElementById('liveBadge').style.display = 'none';
+    if (selectedTeam) document.getElementById('teamPicker').style.display = 'none';
+    const remaining = Math.abs(elapsed);
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = Math.floor(remaining % 60);
+    document.getElementById('waitCountdown').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    requestAnimationFrame(update);
+    return;
+  }
+
+  document.getElementById('waitingScreen').style.display = 'none';
+  document.getElementById('mainLayout').style.display = 'grid';
+  if (selectedTeam) document.getElementById('teamPicker').style.display = 'none';
+
+  // Calculate current lap based on elapsed time
+  const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
+  const lapProgress = (elapsed % LAP_REAL_SECONDS) / LAP_REAL_SECONDS;
+  const isComplete = elapsed >= TOTAL_LAPS * LAP_REAL_SECONDS;
+
+  const displayLap = isComplete ? TOTAL_LAPS : currentLap;
+
+  document.getElementById('liveBadge').style.display = isComplete ? 'none' : 'flex';
+  document.getElementById('lapCounter').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
+  document.getElementById('lapDisplay').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
+  document.getElementById('lapBig').textContent = `${displayLap}/${TOTAL_LAPS}`;
+
+  const raceTime = Math.floor(elapsed);
+  document.getElementById('sessionClock').textContent = fmtCD(raceTime);
+
+  // Get current and previous lap data
+  const lapIdx = Math.min(currentLap - 1, TOTAL_LAPS - 1);
+  const currentLapData = RACE.laps[lapIdx];
+  const prevLapData = lapIdx > 0 ? RACE.laps[lapIdx - 1] : null;
+
+  // Interpolate gaps between previous lap and current lap
+  // This creates smooth position transitions (visible overtakes)
+  const positions = currentLapData.positions;
+  let interpolatedGaps = {};
+  
+  if (prevLapData) {
+    // Blend between previous lap gaps and current lap gaps based on lapProgress
+    positions.forEach((id) => {
+      const prevGapIdx = prevLapData.positions.indexOf(id);
+      const currGapIdx = positions.indexOf(id);
+      const prevGap = prevLapData.gaps[prevGapIdx] || 0;
+      const currGap = currentLapData.gaps[currGapIdx] || 0;
+      // Smooth interpolation — overtakes happen gradually through the lap
+      interpolatedGaps[id] = prevGap + (currGap - prevGap) * lapProgress;
+    });
+  } else {
+    positions.forEach((id, i) => {
+      interpolatedGaps[id] = currentLapData.gaps[i] || 0;
+    });
+  }
+
+  // Sort by interpolated gaps to get real-time positions (for track rendering)
+  const liveOrder = [...positions].sort((a, b) => interpolatedGaps[a] - interpolatedGaps[b]);
+  const liveGaps = liveOrder.map(id => interpolatedGaps[id]);
+  
+  // Use end-of-lap positions for the leaderboard (confirmed positions)
+  // Use interpolated positions for the track visual (smooth overtakes)
+  const displayPositions = currentLapData.positions;
+  const displayGaps = currentLapData.gaps;
+
+  // Leader (from live interpolated order)
+  const leader = TEAMS.find(t => t.id === liveOrder[0]);
+  document.getElementById('leaderName').textContent = `$${leader.id}`;
+  document.getElementById('leaderName').style.color = leader.color;
+
+  // Fastest lap
+  if (RACE.fastestLap.lap <= currentLap) {
+    const flTeam = TEAMS.find(t => t.id === RACE.fastestLap.driver);
+    document.getElementById('fastestLap').innerHTML = `${fmt(RACE.fastestLap.time)} <span style="color:${flTeam.color};font-size:9px">$${flTeam.id}</span>`;
+  }
+
+  // Status
+  document.getElementById('raceStatus').textContent = isComplete ? 'RACE COMPLETE' : `RACING — LAP ${displayLap}`;
+  document.getElementById('rightTitle').textContent = isComplete ? 'FINAL CLASSIFICATION' : 'RACE — TIMING';
+
+  // Ticker
+  const tickerEl = document.getElementById('tickerMsg');
+  const tickerDiv = document.getElementById('ticker');
+
+  if (isComplete) {
+    const winner = TEAMS.find(t => t.id === positions[0]);
+    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${winner.emoji} $${winner.id} WINS THE DEGEN SPEEDWAY GRAND PRIX`;
+    tickerEl.style.color = '#00ff88';
+    tickerDiv.style.background = 'rgba(0,255,136,0.06)';
+  } else {
+    // Show recent overtakes
+    const recentOvertakes = RACE.events.filter(e => e.lap === currentLap && e.type === 'overtake');
+    if (recentOvertakes.length > 0) {
+      const last = recentOvertakes[recentOvertakes.length - 1];
+      const attacker = TEAMS.find(t => t.id === last.attacker);
+      const defender = TEAMS.find(t => t.id === last.defender);
+      tickerEl.textContent = `▸ OVERTAKE! ${attacker.emoji} $${last.attacker} passes $${last.defender} for P${last.newPos} — LAP ${currentLap}`;
+      tickerEl.style.color = '#ffcc00';
+      tickerDiv.style.background = 'rgba(255,204,0,0.06)';
+    } else {
+      tickerEl.textContent = `▸ LAP ${currentLap}/${TOTAL_LAPS} — ${leader.emoji} $${leader.id} leads`;
+      tickerEl.style.color = '#ff6644';
+      tickerDiv.style.background = 'rgba(255,0,64,0.06)';
+    }
+  }
+
+  document.getElementById('trackInfo').textContent = isComplete ? '' : `Lap ${displayLap}/${TOTAL_LAPS}`;
+
+  // ═══ RENDER CARS ON TRACK ═══ (uses live interpolated positions)
+  renderCarDots(liveOrder, lapProgress, isComplete, liveGaps);
+
+  // ═══ RENDER RACE TOWER (left panel) ═══ (uses live positions for real-time feel)
+  renderRaceTower(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap);
+
+  // ═══ RENDER LEADERBOARD (right panel) ═══ (uses live positions)
+  renderLeaderboard(liveOrder, liveGaps, prevLapData, currentLapData, isComplete);
+
+  // Fan zone
+  renderFanZone();
+
+  requestAnimationFrame(update);
+}
+
+function renderCarDots(positions, lapProgress, isComplete, gaps) {
+  const dotsG = document.getElementById('carDots');
+  if (isComplete) { dotsG.innerHTML = ''; return; }
+
+  let html = '';
+  positions.forEach((id, pos) => {
+    const team = TEAMS.find(t => t.id === id);
+    
+    // Use actual time gap to position cars on track
+    // Gap in seconds → fraction of track (LAP_REAL_SECONDS = one full lap)
+    const gapSeconds = gaps[pos] || 0;
+    const gapFraction = gapSeconds / LAP_REAL_SECONDS;
+    
+    // Leader is at lapProgress, everyone else is behind by their gap fraction
+    const frac = (lapProgress - gapFraction + 1) % 1;
+    const pt = getPoint(frac);
+    const logoId = 'logo-clip-' + id;
+
+    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="16"/></clipPath></defs>
+      <circle cx="${pt.x}" cy="${pt.y}" r="20" fill="${team.color}" opacity="0.15"/>
+      <circle cx="${pt.x}" cy="${pt.y}" r="17" fill="#111" stroke="${team.color}" stroke-width="2"/>
+      <image href="${team.logo}" x="${pt.x-16}" y="${pt.y-16}" width="32" height="32" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>
+      <rect x="${pt.x+20}" y="${pt.y-8}" width="42" height="14" rx="3" fill="rgba(0,0,0,0.88)" stroke="${team.color}" stroke-width="1"/>
+      <text x="${pt.x+25}" y="${pt.y+3}" font-family="'Space Mono',monospace" font-size="8" font-weight="700" fill="${team.color}">${id}</text>`;
+  });
+  dotsG.innerHTML = html;
+}
+
+function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplete, currentLap) {
+  const el = document.getElementById('raceTower');
+  let html = '';
+
+  positions.forEach((id, pos) => {
+    const team = TEAMS.find(t => t.id === id);
+    const prevPos = prevLapData ? prevLapData.positions.indexOf(id) : team.gridPos - 1;
+    const change = prevPos - pos;
+    const changeStr = change > 0 ? `▲${change}` : change < 0 ? `▼${Math.abs(change)}` : '—';
+    const changeColor = change > 0 ? '#00ff88' : change < 0 ? '#ff4444' : '#333';
+    const gap = pos === 0 ? 'LEADER' : `+${gaps[pos].toFixed(1)}s`;
+    const isLeader = pos === 0;
+    const isSelected = selectedTeam === id;
+    const isWinner = isComplete && pos === 0;
+
+    html += `<div style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-bottom:1px solid #111;
+      background:${isWinner ? 'rgba(0,255,136,0.08)' : isSelected ? 'rgba(255,255,255,0.03)' : 'transparent'};
+      border-left:3px solid ${isLeader ? '#00ff88' : isSelected ? team.color : 'transparent'}">
+      <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:${isLeader ? '#fff' : '#666'};width:20px">${pos + 1}</span>
+      <img src="${team.logo}" alt="${id}" style="width:22px;height:22px;border-radius:50%;object-fit:cover">
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:700;color:${isLeader ? '#fff' : '#ccc'}">$${id}</div>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;color:${changeColor};font-weight:700;width:28px;text-align:center">${changeStr}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;color:${isLeader ? '#00ff88' : '#888'};width:55px;text-align:right">${gap}</span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isComplete) {
+  const el = document.getElementById('leaderboard');
+  let html = '';
+
+  positions.forEach((id, pos) => {
+    const team = TEAMS.find(t => t.id === id);
+    const gridPos = team.gridPos;
+    const gridChange = gridPos - (pos + 1);
+    const gridStr = gridChange > 0 ? `▲${gridChange}` : gridChange < 0 ? `▼${Math.abs(gridChange)}` : '—';
+    const gridColor = gridChange > 0 ? '#00ff88' : gridChange < 0 ? '#ff4444' : '#555';
+    const gap = pos === 0 ? (isComplete ? 'WINNER' : 'LEADER') : `+${gaps[pos].toFixed(1)}s`;
+    const isLeader = pos === 0;
+    const isWinner = isComplete && pos === 0;
+
+    html += `<div class="lb-row" style="background:${isWinner ? 'rgba(0,255,136,0.06)' : isLeader ? 'rgba(255,255,255,0.02)' : 'transparent'};
+      border-left:2px solid ${isLeader ? '#00ff88' : 'transparent'}">
+      <span style="font-size:12px;font-weight:800;color:${isWinner ? '#00ff88' : isLeader ? '#fff' : '#666'};font-family:'Orbitron',sans-serif">${pos + 1}</span>
+      <img src="${team.logo}" alt="${id}" style="width:18px;height:18px;border-radius:50%;object-fit:cover">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#eee">$${id}</div>
+        <div style="font-size:7px;color:#444">P${gridPos} START</div>
+      </div>
+      <span style="text-align:center;font-size:9px;font-family:'Space Mono',monospace;color:${gridColor};font-weight:700">${gridStr}</span>
+      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isLeader ? '#00ff88' : '#888'};font-weight:${isLeader ? 700 : 400}">${gap}</span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ═══ INIT ═══
+initTeamPicker();
+requestAnimationFrame(update);
+</script>
+</body>
+</html>
