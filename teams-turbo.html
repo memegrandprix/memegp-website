@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Turbo Racing — $TURBO | MEME GP Season 2</title>
+<meta name="description" content="$TURBO confirmed for Season 2. Driver, car, stats — the AI Turbo Racing reveal.">
+<meta property="og:title" content="AI Turbo Racing — $TURBO joins Season 2">
+<meta property="og:description" content="The first AI-built memecoin races. Driver. Car. Stats.">
+<meta property="og:image" content="turbo-car.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+  --turbo-blue:#1e7fd9;
+  --turbo-blue-glow:#3aa0ff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;z-index:0;
+}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(4,4,8,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-left{display:flex;align-items:center;gap:14px}
+.live-flag{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--gold);
+  background:rgba(255,204,0,.08);
+  padding:3px 10px;border-radius:3px;
+  font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;
+  color:var(--gold);letter-spacing:2px;
+}
+.live-flag .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.4s infinite}
+.brand-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:900;letter-spacing:2.5px;
+  background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.nav-back{
+  font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:1px;
+}
+.nav-back:hover{color:var(--text)}
+
+/* BANNER */
+.banner{position:relative;margin:32px auto 0;max-width:1280px;padding:0 24px}
+.banner-inner{
+  position:relative;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line-bright);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  aspect-ratio:16/4;min-height:200px;
+}
+.banner-bg{
+  position:absolute;inset:0;
+  background-image:url('grid-hero.png');
+  background-size:cover;background-position:center 35%;
+  z-index:1;
+}
+.banner-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(4,4,8,.4) 0%,rgba(4,4,8,.6) 60%,rgba(4,4,8,.92) 100%),
+    radial-gradient(ellipse at 30% 50%,rgba(255,204,0,.10) 0%,transparent 60%);
+}
+.banner-content{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:32px 48px;
+}
+.banner-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;
+  animation:fadeUp .8s ease both;
+}
+.banner-eyebrow::before{content:'';width:60px;height:1px;background:var(--gold)}
+.banner-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,6vw,68px);font-weight:900;letter-spacing:-1px;
+  line-height:.95;margin-bottom:10px;
+  animation:fadeUp .9s ease .15s both;
+}
+.banner-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.banner-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(12px,1.2vw,16px);font-weight:700;letter-spacing:4px;
+  color:var(--muted);
+  animation:fadeUp .9s ease .3s both;
+}
+.banner-sub strong{color:var(--text)}
+
+/* 3 BLOCKS */
+.three-blocks{
+  max-width:1280px;margin:32px auto 0;padding:0 24px;
+  display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:18px;
+}
+.block{
+  background:linear-gradient(180deg,#1a1a22,#0d0d12);
+  border:1px solid var(--line-bright);
+  border-radius:14px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+  min-height:580px;
+  animation:fadeUp .9s ease both;
+}
+.block:nth-child(2){animation-delay:.1s}
+.block:nth-child(3){animation-delay:.2s}
+
+/* BLOCK 1 — DRIVER */
+.driver-banner{
+  background:linear-gradient(90deg,rgba(30,127,217,.15),rgba(255,204,0,.08));
+  border-bottom:2px solid var(--gold);
+  padding:16px 22px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;z-index:2;
+}
+.driver-banner-logo{
+  width:30px;height:30px;
+  background:linear-gradient(135deg,var(--turbo-blue-glow),var(--turbo-blue));
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:#fff;
+}
+.driver-banner-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);flex:1;
+}
+.driver-banner-name .accent{color:var(--gold)}
+
+.driver-image-area{
+  flex:1;
+  background-image:url('turbo-driver.png');
+  background-size:cover;background-position:center 30%;
+  position:relative;min-height:340px;
+}
+.driver-image-area::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(13,13,18,.95) 100%);
+}
+
+.driver-info-pad{
+  padding:18px 22px 22px;
+  position:relative;z-index:2;
+  background:#0d0d12;border-top:1px solid var(--line);
+}
+.driver-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:34px;font-weight:900;letter-spacing:1.5px;
+  margin-bottom:12px;
+  display:flex;align-items:baseline;gap:6px;
+}
+.driver-ticker .dollar{color:var(--gold);font-size:26px}
+.driver-ticker .ticker{color:var(--text)}
+
+.driver-meta-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:6px 14px;font-size:11px;
+}
+.driver-meta-row{
+  display:flex;justify-content:space-between;
+  padding:5px 0;border-bottom:1px dotted var(--line);
+}
+.driver-meta-label{color:var(--muted);letter-spacing:1px;font-size:10px}
+.driver-meta-value{color:var(--text);font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px}
+
+/* BLOCK 2 — CAR */
+.car-banner{
+  padding:16px 22px;
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(90deg,rgba(30,127,217,.2),rgba(30,127,217,.05));
+  border-bottom:2px solid var(--turbo-blue);
+  position:relative;z-index:2;
+}
+.car-banner-logo{
+  width:32px;height:32px;
+  background:linear-gradient(135deg,var(--turbo-blue-glow),var(--turbo-blue));
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#fff;
+}
+.car-banner-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:var(--turbo-blue-glow);flex:1;
+}
+
+.car-image-area{
+  flex:1;
+  background:linear-gradient(180deg,#0a0a12,#000);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;position:relative;overflow:hidden;
+  min-height:380px;
+}
+.car-image-area::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(30,127,217,.08) 0%,transparent 60%);
+}
+.car-image{
+  width:100%;height:100%;
+  background-image:url('turbo-car.jpg');
+  background-size:cover;background-position:center;
+  border-radius:8px;position:relative;z-index:2;
+}
+
+.car-info-pad{
+  padding:18px 22px;
+  border-top:1px solid var(--line);background:#0d0d12;
+  position:relative;z-index:2;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.car-livery-info{
+  font-size:11px;color:var(--muted);letter-spacing:1px;
+  font-family:'JetBrains Mono',monospace;
+}
+.car-livery-info strong{color:var(--turbo-blue-glow);font-weight:700}
+.car-share-btn{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;
+  color:var(--turbo-blue-glow);text-decoration:none;
+  padding:6px 10px;border:1px solid var(--turbo-blue);
+  border-radius:4px;transition:all .2s;
+}
+.car-share-btn:hover{background:var(--turbo-blue);color:#fff}
+
+/* BLOCK 3 — STATS */
+.block-stats{
+  background:linear-gradient(180deg,#1a1a22,#0d0d12);
+  border:2px solid;
+  border-image:linear-gradient(180deg,#665533,#332211) 1;
+  position:relative;
+}
+.block-stats::before{
+  content:'';position:absolute;inset:0;
+  background-image:repeating-linear-gradient(45deg,transparent 0,transparent 4px,rgba(255,255,255,.012) 4px,rgba(255,255,255,.012) 8px);
+  pointer-events:none;
+}
+
+.stats-header{
+  display:flex;align-items:center;gap:14px;
+  padding:20px 22px;
+  position:relative;z-index:2;
+  border-bottom:1px solid #443322;
+}
+.stats-portrait{
+  width:54px;height:54px;border-radius:50%;
+  background-image:url('turbo-driver.png');
+  background-size:cover;background-position:center 25%;
+  border:2px solid var(--gold);flex-shrink:0;
+}
+.stats-name-block{flex:1;min-width:0}
+.stats-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;font-weight:900;letter-spacing:1.5px;
+  color:#fff;line-height:1;
+}
+.stats-team{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--muted);letter-spacing:1.2px;margin-top:4px;
+}
+.stats-overall{text-align:right}
+.stats-overall-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:36px;font-weight:900;
+  background:linear-gradient(135deg,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.stats-overall-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;color:var(--muted);letter-spacing:2px;margin-top:3px;
+}
+
+.radar-wrap{
+  position:relative;padding:24px 22px 8px;
+  display:flex;justify-content:center;
+}
+.radar-svg{width:240px;height:240px;overflow:visible}
+.radar-grid{stroke:#665533;stroke-width:1;fill:none;opacity:.4}
+.radar-axis{stroke:#665533;stroke-width:.5;opacity:.3}
+.radar-data{
+  fill:rgba(255,204,0,.18);stroke:#ffcc00;stroke-width:2;
+  filter:drop-shadow(0 0 10px rgba(255,204,0,.5));
+}
+.radar-point{fill:#ffcc00;filter:drop-shadow(0 0 6px rgba(255,204,0,.8))}
+.radar-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;
+  fill:#aaa;text-anchor:middle;
+}
+.radar-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;
+  fill:#ffcc00;text-anchor:middle;
+}
+
+.stat-bars{
+  display:flex;flex-direction:column;gap:6px;
+  padding:12px 22px;position:relative;z-index:2;
+}
+.stat-bar{
+  display:grid;grid-template-columns:74px 1fr 32px;
+  gap:8px;align-items:center;
+}
+.stat-label{
+  font-size:10px;letter-spacing:1.2px;color:var(--muted);
+  font-weight:700;font-family:'Orbitron',sans-serif;
+}
+.stat-track{
+  height:7px;background:#0a0a0d;
+  border:1px solid #443322;border-radius:4px;overflow:hidden;
+}
+.stat-fill{height:100%;background:linear-gradient(90deg,#ffcc00,#aa8822)}
+.stat-num{
+  font-size:11px;font-weight:700;color:#fff;
+  text-align:right;font-family:'JetBrains Mono',monospace;
+}
+
+.stats-footer{
+  margin-top:auto;border-top:1px solid #443322;
+  padding:16px 22px;
+  display:flex;justify-content:space-between;
+  position:relative;z-index:2;
+}
+.cf-cell{font-size:10px;color:var(--muted)}
+.cf-label{
+  letter-spacing:1.5px;font-weight:600;margin-bottom:3px;
+  font-family:'Orbitron',sans-serif;font-size:9px;
+}
+.cf-value{
+  font-size:15px;font-weight:700;color:#fff;
+  font-family:'JetBrains Mono',monospace;
+}
+.cf-snapshot{
+  font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* CTA ROW */
+.cta-row{
+  max-width:1280px;margin:32px auto 0;padding:0 24px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-decoration:none;
+  border:1px solid var(--line-bright);
+  color:var(--text);background:transparent;
+  transition:all .2s ease;cursor:pointer;
+}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn.primary{background:var(--turbo-blue);border-color:var(--turbo-blue);color:#fff}
+.btn.primary:hover{
+  background:var(--turbo-blue-glow);border-color:var(--turbo-blue-glow);
+  box-shadow:0 4px 24px rgba(30,127,217,.4);
+}
+
+/* STARTING GRID STRIP BELOW */
+.grid-strip{max-width:1280px;margin:64px auto 0;padding:0 24px}
+.grid-strip-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:18px;flex-wrap:wrap;gap:12px;
+}
+.grid-strip-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:3px;
+  color:var(--muted);
+}
+.grid-strip-link{
+  font-size:11px;color:var(--gold);text-decoration:none;letter-spacing:1px;
+}
+.grid-strip-link:hover{color:var(--text)}
+
+.mini-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;
+}
+.mini-card{
+  display:block;background:var(--bg-card);
+  border:1px solid var(--line);border-radius:8px;padding:12px;
+  text-decoration:none;color:inherit;
+  transition:all .15s;position:relative;
+}
+.mini-card.locked{
+  border-color:rgba(255,204,0,.3);
+  background:linear-gradient(180deg,rgba(255,204,0,.06),var(--bg-card));
+}
+.mini-card.locked.current{
+  border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(255,204,0,.12),var(--bg-card));
+}
+.mini-card.locked:hover{border-color:var(--gold);transform:translateY(-2px)}
+.mini-card.empty{opacity:.6}
+
+.mini-card-row{display:flex;align-items:center;gap:10px}
+.mini-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#333,#1a1a1a);
+  background-size:cover;background-position:center 25%;
+  border:1.5px solid var(--line-bright);flex-shrink:0;
+}
+.mini-card.locked .mini-avatar{border-color:var(--gold)}
+.mini-card.empty .mini-avatar{
+  background:repeating-linear-gradient(45deg,#1a1a26,#1a1a26 3px,#13131c 3px,#13131c 6px);
+  border:1.5px dashed var(--line-bright);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:14px;
+}
+.mini-info{flex:1;min-width:0}
+.mini-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;color:var(--text);line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mini-card.empty .mini-ticker{color:var(--dim)}
+.mini-overall{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.5px;
+}
+.mini-overall strong{color:var(--gold);font-size:11px}
+.mini-card.empty .mini-overall strong{color:var(--dim)}
+
+.foot{
+  margin-top:80px;border-top:1px solid var(--line);
+  padding:24px;
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+  gap:14px;font-size:10px;color:var(--dim);letter-spacing:1.5px;
+}
+.foot a{color:var(--muted);text-decoration:none;margin-right:18px}
+.foot a:hover{color:var(--accent)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .three-blocks{grid-template-columns:1fr;gap:18px}
+  .block{min-height:auto}
+  .driver-image-area{min-height:280px}
+  .car-image-area{min-height:300px}
+}
+@media(max-width:600px){
+  .topnav{padding:8px 14px}
+  .nav-back{display:none}
+  .banner{margin-top:16px;padding:0 12px}
+  .banner-content{padding:24px 24px}
+  .three-blocks{margin-top:18px;padding:0 12px;gap:14px}
+  .block{border-radius:10px}
+  .driver-banner,.car-banner,.stats-header{padding:14px 16px}
+  .driver-info-pad,.car-info-pad,.stat-bars,.stats-footer{padding-left:16px;padding-right:16px}
+  .driver-ticker{font-size:28px}
+  .driver-meta-grid{grid-template-columns:1fr}
+  .stats-overall-num{font-size:28px}
+  .radar-svg{width:200px;height:200px}
+  .cta-row{padding:0 12px;flex-direction:column}
+  .cta-row .btn{width:100%;justify-content:center}
+  .grid-strip{padding:0 12px;margin-top:48px}
+  .mini-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .foot{padding:18px 14px;flex-direction:column;align-items:flex-start}
+}
+
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-left">
+    <span class="live-flag"><span class="dot"></span> SEASON 2 GRID</span>
+    <a href="index.html" class="brand-link">MEME GRAND PRIX</a>
+  </div>
+  <a href="season-2.html" class="nav-back">← BACK TO GRID</a>
+</nav>
+
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-bg" aria-hidden="true"></div>
+    <div class="banner-content">
+      <div class="banner-eyebrow">RACE CONTROL · TEAM REVEAL</div>
+      <h1 class="banner-title">MEME GP <span class="yellow">2026</span></h1>
+      <div class="banner-sub">STARTING GRID · <strong>15 TEAMS</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="three-blocks">
+
+  <!-- BLOCK 1 — DRIVER -->
+  <div class="block">
+    <div class="driver-banner">
+      <div class="driver-banner-logo">AI</div>
+      <div class="driver-banner-name"><span class="accent">AI</span> TURBO RACING</div>
+    </div>
+    <div class="driver-image-area" aria-label="The Frog — AI Turbo Racing driver"></div>
+    <div class="driver-info-pad">
+      <div class="driver-ticker">
+        <span class="dollar">$</span><span class="ticker">TURBO</span>
+      </div>
+      <div class="driver-meta-grid">
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">DRIVER</span>
+          <span class="driver-meta-value">THE FROG</span>
+        </div>
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">CALL SIGN</span>
+          <span class="driver-meta-value">BAGS</span>
+        </div>
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">CAR #</span>
+          <span class="driver-meta-value">69</span>
+        </div>
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">CHAIN</span>
+          <span class="driver-meta-value">ETH</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 2 — CAR -->
+  <div class="block">
+    <div class="car-banner">
+      <div class="car-banner-logo">AI</div>
+      <div class="car-banner-text">THE MACHINE · TURBO BLUE</div>
+    </div>
+    <div class="car-image-area">
+      <div class="car-image" aria-label="AI Turbo Racing F1 car"></div>
+    </div>
+    <div class="car-info-pad">
+      <div class="car-livery-info">
+        Livery: <strong>TURBO BLUE</strong> · Built by <strong>AI</strong>
+      </div>
+      <a href="https://x.com/intent/post?text=AI%20Turbo%20Racing%20joins%20the%20Season%202%20grid%20%F0%9F%8F%81%0A%0A%24TURBO%20brings%20a%207.7%20overall%20to%20the%20fight.%20The%20Frog%20is%20cooking.%0A%0A%40MemeGrandPrix%0A%0A%23MemeGP" target="_blank" rel="noopener" class="car-share-btn">𝕏 SHARE</a>
+    </div>
+  </div>
+
+  <!-- BLOCK 3 — STATS -->
+  <div class="block block-stats">
+    <div class="stats-header">
+      <div class="stats-portrait" aria-hidden="true"></div>
+      <div class="stats-name-block">
+        <div class="stats-ticker">$TURBO</div>
+        <div class="stats-team">AI TURBO RACING</div>
+      </div>
+      <div class="stats-overall">
+        <div class="stats-overall-num">7.7</div>
+        <div class="stats-overall-label">OVERALL</div>
+      </div>
+    </div>
+    <div class="radar-wrap">
+      <svg class="radar-svg" viewBox="0 0 280 280">
+        <g id="radarGrid"></g>
+        <g id="radarAxes"></g>
+        <polygon id="radarData" class="radar-data" points=""/>
+        <g id="radarPoints"></g>
+        <g id="radarLabels"></g>
+      </svg>
+    </div>
+    <div class="stat-bars">
+      <div class="stat-bar">
+        <span class="stat-label">⚡ ENGINE</span>
+        <div class="stat-track"><div class="stat-fill" style="width:95%"></div></div>
+        <span class="stat-num">9.5</span>
+      </div>
+      <div class="stat-bar">
+        <span class="stat-label">💨 AERO</span>
+        <div class="stat-track"><div class="stat-fill" style="width:55%"></div></div>
+        <span class="stat-num">5.5</span>
+      </div>
+      <div class="stat-bar">
+        <span class="stat-label">🔩 CHASSIS</span>
+        <div class="stat-track"><div class="stat-fill" style="width:75%"></div></div>
+        <span class="stat-num">7.5</span>
+      </div>
+      <div class="stat-bar">
+        <span class="stat-label">🌬️ DRAG</span>
+        <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
+        <span class="stat-num">10.0</span>
+      </div>
+      <div class="stat-bar">
+        <span class="stat-label">🔧 PIT</span>
+        <div class="stat-track"><div class="stat-fill" style="width:60%"></div></div>
+        <span class="stat-num">6.0</span>
+      </div>
+    </div>
+    <div class="stats-footer">
+      <div class="cf-cell">
+        <div class="cf-label">MCAP</div>
+        <div class="cf-value">$80M</div>
+        <div class="cf-snapshot">Snapshot · Apr 27</div>
+      </div>
+      <div class="cf-cell" style="text-align:right">
+        <div class="cf-label">24H VOLUME</div>
+        <div class="cf-value">$12M</div>
+        <div class="cf-snapshot">vs 5d avg · ▲</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-row">
+  <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="btn primary">𝕏 FOLLOW @MemeGrandPrix</a>
+  <a href="formula-playground.html" class="btn">HOW STATS ARE CALCULATED →</a>
+  <a href="season-2.html" class="btn">VIEW FULL GRID →</a>
+</div>
+
+<div class="grid-strip">
+  <div class="grid-strip-header">
+    <div class="grid-strip-title">▸ THE STARTING GRID · 1 / 15 LOCKED</div>
+    <a href="season-2.html" class="grid-strip-link">VIEW FULL GRID →</a>
+  </div>
+  <div class="mini-grid" id="miniGrid"></div>
+</div>
+
+<footer class="foot">
+  <div>
+    <a href="index.html">HOME</a>
+    <a href="season-2.html">SEASON 2 GRID</a>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">𝕏 @MemeGrandPrix</a>
+  </div>
+  <div>© 2026 Meme GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+<script>
+function buildRadar() {
+  const cx = 140, cy = 140;
+  const labels = ['ENGINE', 'AERO', 'CHASSIS', 'DRAG', 'PIT'];
+  const angles = [];
+  for (let i = 0; i < 5; i++) {
+    angles.push((Math.PI * 2 * i / 5) - Math.PI / 2);
+  }
+
+  let gridHtml = '';
+  for (let r = 1; r <= 5; r++) {
+    const radius = (r / 5) * 100;
+    const pts = angles.map(a => `${cx + radius * Math.cos(a)},${cy + radius * Math.sin(a)}`).join(' ');
+    gridHtml += `<polygon class="radar-grid" points="${pts}"/>`;
+  }
+  document.getElementById('radarGrid').innerHTML = gridHtml;
+
+  let axesHtml = '';
+  angles.forEach(a => {
+    const x = cx + 100 * Math.cos(a);
+    const y = cy + 100 * Math.sin(a);
+    axesHtml += `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+  });
+  document.getElementById('radarAxes').innerHTML = axesHtml;
+
+  let labelHtml = '';
+  angles.forEach((a, i) => {
+    const labelDist = 122;
+    const x = cx + labelDist * Math.cos(a);
+    const y = cy + labelDist * Math.sin(a) + 4;
+    labelHtml += `<text class="radar-label" x="${x}" y="${y}">${labels[i]}</text>`;
+  });
+  document.getElementById('radarLabels').innerHTML = labelHtml;
+}
+
+function updateRadar(stats) {
+  const cx = 140, cy = 140;
+  const angles = [];
+  for (let i = 0; i < 5; i++) {
+    angles.push((Math.PI * 2 * i / 5) - Math.PI / 2);
+  }
+  const values = [stats.engine, stats.aero, stats.chassis, stats.drag, stats.pit];
+
+  const pts = values.map((v, i) => {
+    const r = (v / 10) * 100;
+    return `${cx + r * Math.cos(angles[i])},${cy + r * Math.sin(angles[i])}`;
+  }).join(' ');
+  document.getElementById('radarData').setAttribute('points', pts);
+
+  let pointsHtml = '';
+  values.forEach((v, i) => {
+    const r = (v / 10) * 100;
+    const x = cx + r * Math.cos(angles[i]);
+    const y = cy + r * Math.sin(angles[i]);
+    pointsHtml += `<circle class="radar-point" cx="${x}" cy="${y}" r="3.5"/>`;
+    const labelDist = (v / 10) * 100 + 12;
+    const lx = cx + labelDist * Math.cos(angles[i]);
+    const ly = cy + labelDist * Math.sin(angles[i]) + 3;
+    pointsHtml += `<text class="radar-value" x="${lx}" y="${ly}">${v.toFixed(1)}</text>`;
+  });
+  document.getElementById('radarPoints').innerHTML = pointsHtml;
+}
+
+const TURBO_STATS = { engine: 9.5, aero: 5.5, chassis: 7.5, drag: 10.0, pit: 6.0 };
+buildRadar();
+updateRadar(TURBO_STATS);
+
+// Mini grid
+const TEAMS = [
+  { ticker: 'TURBO', overall: 7.7, locked: true, current: true, link: 'teams-turbo.html', avatar: 'turbo-driver.png' },
+];
+
+let miniHtml = '';
+TEAMS.forEach(t => {
+  miniHtml += `
+    <a href="${t.link}" class="mini-card locked${t.current ? ' current' : ''}">
+      <div class="mini-card-row">
+        <div class="mini-avatar" style="background-image:url('${t.avatar}')"></div>
+        <div class="mini-info">
+          <div class="mini-ticker">$${t.ticker}</div>
+          <div class="mini-overall">OVR · <strong>${t.overall.toFixed(1)}</strong></div>
+        </div>
+      </div>
+    </a>
+  `;
+});
+
+for (let i = 2; i <= 15; i++) {
+  const num = String(i).padStart(2, '0');
+  miniHtml += `
+    <div class="mini-card empty">
+      <div class="mini-card-row">
+        <div class="mini-avatar">?</div>
+        <div class="mini-info">
+          <div class="mini-ticker">SLOT ${num}</div>
+          <div class="mini-overall">OVR · <strong>—</strong></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+document.getElementById('miniGrid').innerHTML = miniHtml;
+</script>
+
+</body>
+</html>
