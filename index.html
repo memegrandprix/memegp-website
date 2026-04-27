@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — Pit Lane | Returning May 2026</title>
+<meta name="description" content="Meme Grand Prix is in the pit lane. Test Series 1 complete. Building our new grid for May 2026.">
+<meta property="og:title" content="MEME GP — Pit Lane">
+<meta property="og:description" content="Test Series 1 ✅ Complete. Returning bigger in May.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050507;
+  --bg-2:#0a0a10;
+  --line:#1a1a22;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#6a6a78;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --accent-2:#ffcc00;
+  --green:#00ff88;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+/* Subtle grid background */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Diagonal red flag stripe for atmosphere */
+body::after{
+  content:'';
+  position:fixed;
+  top:-30%;
+  right:-20%;
+  width:60vw;
+  height:160vh;
+  background:linear-gradient(135deg,transparent 45%,rgba(255,0,64,.04) 48%,rgba(255,0,64,.08) 50%,rgba(255,0,64,.04) 52%,transparent 55%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Hero image background */
+.hero-image{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:75%;
+  background-image:url('grid-hero.png');
+  background-size:cover;
+  background-position:center 35%;
+  background-repeat:no-repeat;
+  z-index:1;
+  opacity:.55;
+  mask-image:linear-gradient(180deg,#000 0%,#000 55%,rgba(0,0,0,.4) 80%,transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,rgba(0,0,0,.4) 80%,transparent 100%);
+  animation:heroZoom 24s ease-in-out infinite;
+  transform-origin:center 40%;
+  will-change:transform;
+}
+.hero-image::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 50% 30%,rgba(5,5,7,.3) 0%,rgba(5,5,7,.7) 60%,rgba(5,5,7,.95) 100%),
+    linear-gradient(180deg,rgba(5,5,7,.4) 0%,transparent 30%,rgba(5,5,7,.85) 100%);
+}
+
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroZoom{
+  0%{transform:scale(1.0);background-position:center 35%}
+  50%{transform:scale(1.04);background-position:center 38%}
+  100%{transform:scale(1.0);background-position:center 35%}
+}
+
+/* Top bar */
+.top-bar{
+  position:relative;z-index:5;
+  border-bottom:1px solid var(--line);
+  padding:14px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,5,7,.92);
+  backdrop-filter:blur(8px);
+}
+.brand-row{display:flex;align-items:center;gap:14px}
+.live-flag{
+  display:flex;align-items:center;gap:8px;
+  border:1px solid var(--accent);
+  background:rgba(255,0,64,.08);
+  padding:4px 10px;border-radius:3px;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+  color:var(--accent);letter-spacing:2.5px;
+}
+.live-flag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.4s infinite}
+.brand{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:3.5px;
+  background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.tag{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+
+/* Hero block */
+.hero{
+  position:relative;z-index:2;
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 32px 80px;
+  max-width:1100px;width:100%;
+  margin:0 auto;
+}
+.eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--accent);
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:14px;
+  animation:fadeUp .6s ease both;
+}
+.eyebrow::before{content:'';width:40px;height:1px;background:var(--accent)}
+
+.title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(48px,9vw,128px);
+  font-weight:900;
+  letter-spacing:-2px;
+  line-height:.92;
+  margin-bottom:40px;
+  animation:fadeUp .8s ease .1s both;
+}
+.title .lh{color:var(--text)}
+.title .accent{
+  background:linear-gradient(135deg,#ff3333 0%,#ff6644 50%,#ffcc00 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+}
+
+.subtitle{
+  font-size:clamp(15px,1.6vw,19px);
+  color:var(--muted);
+  max-width:680px;
+  line-height:1.55;
+  margin-bottom:48px;
+  animation:fadeUp .8s ease .2s both;
+}
+.subtitle strong{color:var(--text);font-weight:400}
+
+/* Status grid */
+.status-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin-bottom:48px;
+  animation:fadeUp .8s ease .3s both;
+}
+.status-cell{
+  background:var(--bg-2);
+  padding:22px 20px;
+}
+.status-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:2.5px;
+  color:var(--muted);margin-bottom:8px;
+}
+.status-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;font-weight:900;
+  color:var(--text);
+}
+.status-value.green{color:var(--green)}
+.status-value.accent{color:var(--accent-2)}
+.status-cell .sub{
+  font-size:10px;color:var(--dim);margin-top:6px;letter-spacing:1px;
+}
+
+/* Winner cell with portrait */
+.status-cell.winner{
+  display:flex;align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+}
+.status-cell.winner .winner-portrait{
+  width:54px;height:54px;border-radius:50%;
+  background-image:url('floki-winner.png');
+  background-size:cover;
+  background-position:center 25%;
+  border:2px solid var(--accent-2);
+  box-shadow:0 0 16px rgba(255,204,0,.35),inset 0 0 0 1px rgba(0,0,0,.4);
+  flex-shrink:0;
+  position:relative;
+}
+.status-cell.winner .winner-portrait::after{
+  content:'1';
+  position:absolute;
+  bottom:-4px;right:-4px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--accent-2);
+  color:#1a1200;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg-2);
+}
+.status-cell.winner .winner-info{
+  flex:1;min-width:0;
+}
+.status-cell.winner::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 25% 50%,rgba(255,204,0,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+/* CTA row */
+.cta-row{
+  display:flex;flex-wrap:wrap;gap:14px;
+  margin-bottom:64px;
+  animation:fadeUp .8s ease .4s both;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;
+  text-decoration:none;
+  border:1px solid var(--line-bright);
+  color:var(--text);
+  background:transparent;
+  transition:all .2s ease;
+  cursor:pointer;
+  position:relative;
+}
+.btn:hover{
+  border-color:var(--accent);
+  background:rgba(255,0,64,.06);
+  transform:translateY(-1px);
+}
+.btn.primary{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+.btn.primary:hover{
+  background:#ff1a55;border-color:#ff1a55;
+  box-shadow:0 4px 24px rgba(255,0,64,.3);
+}
+.btn.live::before{
+  content:'';width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 10px var(--green);animation:blink 1.4s infinite;
+}
+
+/* Roadmap block */
+.roadmap{
+  border:1px solid var(--line);
+  background:var(--bg-2);
+  padding:28px 28px 24px;
+  margin-bottom:32px;
+  animation:fadeUp .8s ease .5s both;
+}
+.roadmap-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:var(--muted);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.roadmap-title::after{content:'';flex:1;height:1px;background:var(--line)}
+.roadmap-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  position:relative;
+}
+.roadmap-grid::before{
+  content:'';position:absolute;top:24px;left:6%;right:6%;height:1px;
+  background:linear-gradient(90deg,var(--green),var(--green) 25%,var(--accent) 25%,var(--accent) 60%,var(--dim) 60%);
+}
+.r-stage{position:relative;padding-top:8px}
+.r-dot{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bg-2);border:2px solid var(--dim);
+  margin:0 auto 16px;position:relative;z-index:2;
+}
+.r-stage.done .r-dot{background:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(0,255,136,.4)}
+.r-stage.now .r-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(255,0,64,.5);animation:pulse 1.8s infinite}
+.r-stage .month{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-align:center;color:var(--muted);margin-bottom:6px}
+.r-stage.done .month{color:var(--green)}
+.r-stage.now .month{color:var(--accent)}
+.r-stage .label{text-align:center;font-size:11px;color:var(--text);line-height:1.4;font-weight:400}
+.r-stage .sub{text-align:center;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:1px}
+
+/* Ticker */
+.ticker-bar{
+  position:relative;z-index:2;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--bg-2);
+  overflow:hidden;
+  padding:16px 0;
+  margin-bottom:0;
+}
+.ticker-track{
+  display:flex;white-space:nowrap;
+  animation:tickerScroll 60s linear infinite;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--muted);
+  letter-spacing:1.5px;
+  line-height:1.4;
+}
+.ticker-track span{padding:0 28px;display:inline-flex;align-items:center;gap:10px}
+.ticker-track .sep{color:var(--accent);font-weight:700;font-size:14px}
+
+/* Footer */
+.foot{
+  position:relative;z-index:2;
+  border-top:1px solid var(--line);
+  padding:20px 32px;
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;
+  font-size:10px;color:var(--dim);letter-spacing:1.5px;
+}
+.foot a{color:var(--muted);text-decoration:none;margin-right:18px;transition:color .2s}
+.foot a:hover{color:var(--accent)}
+.foot .disclaimer{font-size:9px;max-width:480px;line-height:1.5;color:var(--dim)}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .ticker-track{animation:none}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .top-bar{padding:10px 16px;flex-wrap:wrap;gap:8px}
+  .tag{display:none}
+  .hero{padding:36px 18px 60px}
+  .eyebrow{font-size:10px;letter-spacing:4px;margin-bottom:18px}
+  .title{margin-bottom:24px}
+  .subtitle{margin-bottom:32px;font-size:14px}
+  .status-grid{grid-template-columns:repeat(2,1fr);margin-bottom:32px}
+  .status-cell.winner{gap:10px;padding:18px 14px}
+  .status-cell.winner .winner-portrait{width:42px;height:42px}
+  .status-cell.winner .winner-portrait::after{width:14px;height:14px;font-size:8px;bottom:-2px;right:-2px}
+  .cta-row{margin-bottom:40px}
+  .btn{flex:1;justify-content:center;padding:12px 14px;font-size:10px;letter-spacing:1.5px}
+  .roadmap{padding:20px 18px}
+  .roadmap-grid{grid-template-columns:repeat(4,1fr)}
+  .roadmap-grid::before{left:8%;right:8%}
+  .r-stage .label{font-size:9px}
+  .r-stage .sub{display:none}
+  .foot{padding:16px;flex-direction:column;align-items:flex-start;text-align:left}
+  .foot .disclaimer{font-size:8px}
+  .hero-image{
+    height:60%;
+    background-position:center 30%;
+    opacity:.45;
+  }
+  .ticker-bar{padding:12px 0}
+  .ticker-track{font-size:11px}
+  .ticker-track span{padding:0 18px;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="brand-row">
+    <div class="live-flag"><span class="dot"></span> PIT LANE</div>
+    <span class="brand">MEME GRAND PRIX</span>
+  </div>
+  <span class="tag">Season 1 · Off-Track</span>
+</header>
+
+<div class="hero-image" aria-hidden="true"></div>
+
+<main class="hero">
+
+  <div class="eyebrow">RACE CONTROL · STATUS UPDATE</div>
+
+  <h1 class="title">
+    <span class="lh">WE'RE IN</span>
+    <span class="accent">THE PIT LANE.</span>
+  </h1>
+
+  <p class="subtitle">
+    Test Series 1 just delivered our first Grand Prix at Degen Speedway. <strong>$FLOKI took the inaugural win.</strong> Now we're rebuilding the platform for what comes next — bigger sim, bigger grid, bigger races. Back on track in May.
+  </p>
+
+  <!-- Status grid -->
+  <div class="status-grid">
+    <div class="status-cell">
+      <div class="status-label">TEST SERIES 1</div>
+      <div class="status-value green">✓ COMPLETE</div>
+      <div class="sub">10 teams · 1 race</div>
+    </div>
+    <div class="status-cell winner">
+      <div class="winner-portrait" aria-label="FLOKI — Race 1 Winner"></div>
+      <div class="winner-info">
+        <div class="status-label">WINNER</div>
+        <div class="status-value accent">$FLOKI</div>
+        <div class="sub">Degen Speedway GP</div>
+      </div>
+    </div>
+    <div class="status-cell">
+      <div class="status-label">BUILDING OUR NEW GRID</div>
+      <div class="status-value">MAY 2026</div>
+      <div class="sub">Low/medium cap grid</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-label">MINI-SEASON</div>
+      <div class="status-value">JUNE 2026</div>
+      <div class="sub">15 teams · more excitement + better sim</div>
+    </div>
+  </div>
+
+  <!-- CTAs -->
+  <div class="cta-row">
+    <a href="https://x.com/MemeGrandPrix" class="btn primary" target="_blank" rel="noopener">
+      𝕏 &nbsp; FOLLOW @MemeGrandPrix
+    </a>
+    <a href="race.html" class="btn live">REWATCH RACE 1</a>
+    <a href="quali.html" class="btn">QUALIFYING</a>
+    <a href="fp1.html" class="btn">FP1</a>
+    <a href="fp2.html" class="btn">FP2</a>
+  </div>
+
+  <!-- Roadmap -->
+  <div class="roadmap">
+    <div class="roadmap-title">SEASON 1 ROADMAP</div>
+    <div class="roadmap-grid">
+      <div class="r-stage done">
+        <div class="r-dot"></div>
+        <div class="month">APRIL</div>
+        <div class="label">Test Series 1</div>
+        <div class="sub">$FLOKI wins R1</div>
+      </div>
+      <div class="r-stage now">
+        <div class="r-dot"></div>
+        <div class="month">MAY</div>
+        <div class="label">Rebuild Grid</div>
+        <div class="sub">4 races · low/med cap</div>
+      </div>
+      <div class="r-stage">
+        <div class="r-dot"></div>
+        <div class="month">JUNE</div>
+        <div class="label">Mini-Season</div>
+        <div class="sub">15 teams · better sim</div>
+      </div>
+      <div class="r-stage">
+        <div class="r-dot"></div>
+        <div class="month">JULY+</div>
+        <div class="label">Full Season</div>
+        <div class="sub">TBA</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Ticker -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <span><span class="sep">▸</span> TEST SERIES 1 COMPLETE</span>
+    <span><span class="sep">▸</span> $FLOKI WINS DEGEN SPEEDWAY GP</span>
+    <span><span class="sep">▸</span> @POLONIEX REPOSTED THE GRID</span>
+    <span><span class="sep">▸</span> CAT WARS LIVE ON 𝕏</span>
+    <span><span class="sep">▸</span> SITE REBUILD IN PROGRESS</span>
+    <span><span class="sep">▸</span> NEXT LIGHTS OUT — MAY 2026</span>
+    <!-- duplicate for seamless loop -->
+    <span><span class="sep">▸</span> TEST SERIES 1 COMPLETE</span>
+    <span><span class="sep">▸</span> $FLOKI WINS DEGEN SPEEDWAY GP</span>
+    <span><span class="sep">▸</span> @POLONIEX REPOSTED THE GRID</span>
+    <span><span class="sep">▸</span> CAT WARS LIVE ON 𝕏</span>
+    <span><span class="sep">▸</span> SITE REBUILD IN PROGRESS</span>
+    <span><span class="sep">▸</span> NEXT LIGHTS OUT — MAY 2026</span>
+  </div>
+</div>
+
+<footer class="foot">
+  <div>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">𝕏 @MemeGrandPrix</a>
+    <a href="mailto:letsrace@memegrandprix.com">letsrace@memegrandprix.com</a>
+  </div>
+  <div class="disclaimer">
+    © 2026 Meme GP · Entertainment only · Not financial advice · DYOR
+  </div>
+</footer>
+
+</body>
+</html>
