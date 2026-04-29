@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Season 2 Roadmap — MEME GP</title>
+<meta name="description" content="The MEME GP Season 2 roadmap. From team locks to lights out, the full timeline to Race 1.">
+
+<meta property="og:title" content="MEME GP Season 2 — Roadmap">
+<meta property="og:description" content="From team locks to lights out. The full timeline to Race 1, June 2026.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://memegrandprix.com/roadmap.html">
+<meta property="og:site_name" content="MEME GP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:title" content="MEME GP Season 2 — Roadmap">
+<meta name="twitter:description" content="From team locks to lights out. The full timeline to Race 1, June 2026.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  z-index:1;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 12px rgba(255,204,0,.4),0 0 24px rgba(255,204,0,.2)}
+  50%{box-shadow:0 0 18px rgba(255,204,0,.7),0 0 36px rgba(255,204,0,.35)}
+}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:10px 18px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  min-height:56px;
+}
+.tnav-badge{
+  justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 18px;
+  border-radius:4px;
+  transition:all .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{
+  width:1px;height:14px;
+  background:var(--line-bright);
+  flex-shrink:0;
+}
+.tnav-exit{
+  justify-self:end;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+@media(max-width:780px){
+  .topnav-pro{
+    grid-template-columns:1fr auto;
+    padding:8px 12px;
+    gap:8px;
+  }
+  .tnav-center{
+    grid-column:1 / -1;
+    order:3;
+    justify-self:stretch;
+    justify-content:center;
+  }
+  .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:420px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 8px}
+  .tnav-sep{display:none}
+}
+.tnav-accent{
+  position:sticky;
+  top:56px;
+  z-index:49;
+  height:18px;
+  pointer-events:none;
+  margin-bottom:-18px;
+  background:#040408;
+}
+.tnav-accent svg{
+  display:block;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+/* ===== PAGE LAYOUT ===== */
+.page{
+  position:relative;
+  z-index:2;
+  max-width:1280px;
+  margin:0 auto;
+  padding:32px 24px 80px;
+}
+.page-header{
+  text-align:center;
+  margin-bottom:48px;
+  animation:fadeUp .8s ease both;
+}
+.page-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);
+  margin-bottom:14px;
+}
+.page-eyebrow::before,
+.page-eyebrow::after{
+  content:'';width:50px;height:1px;background:var(--gold);
+}
+.page-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,5.5vw,64px);
+  font-weight:900;
+  letter-spacing:-1px;
+  line-height:1;
+  margin-bottom:16px;
+}
+.page-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-subtitle{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(13px,1.4vw,16px);
+  font-weight:700;letter-spacing:4px;
+  color:var(--muted);
+}
+.page-subtitle strong{color:var(--text)}
+
+/* ===== TIMELINE ===== */
+.timeline{
+  position:relative;
+  margin:0 auto;
+  max-width:980px;
+  padding:24px 0 0;
+}
+
+/* central spine */
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:50%;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    var(--gold) 8%,
+    var(--gold) 92%,
+    transparent 100%);
+  transform:translateX(-50%);
+  box-shadow:0 0 12px rgba(255,204,0,.3);
+}
+
+/* milestones */
+.milestone{
+  position:relative;
+  margin-bottom:48px;
+  display:grid;
+  grid-template-columns:1fr 80px 1fr;
+  gap:0;
+  animation:fadeUp .8s ease both;
+}
+.milestone:nth-child(odd) .milestone-card{grid-column:1; text-align:right}
+.milestone:nth-child(even) .milestone-card{grid-column:3}
+
+/* node — circle on the spine */
+.milestone-node{
+  grid-column:2;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.milestone-node-inner{
+  width:54px;height:54px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:2px solid var(--line-bright);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:900;
+  color:var(--muted);
+  letter-spacing:.5px;
+  position:relative;
+  z-index:2;
+}
+
+/* status variants */
+.milestone.done .milestone-node-inner{
+  border-color:var(--green);
+  background:linear-gradient(180deg,rgba(0,255,136,.15),var(--bg-card));
+  color:var(--green);
+  box-shadow:0 0 12px rgba(0,255,136,.4);
+}
+.milestone.live .milestone-node-inner{
+  border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(255,204,0,.18),var(--bg-card));
+  color:var(--gold);
+  animation:pulseGlow 2s infinite;
+}
+.milestone.upcoming .milestone-node-inner{
+  border-color:var(--accent);
+  background:linear-gradient(180deg,rgba(255,0,64,.1),var(--bg-card));
+  color:var(--accent);
+}
+
+/* card */
+.milestone-card{
+  background:var(--bg-card);
+  border:1px solid var(--line-bright);
+  border-radius:12px;
+  padding:22px 24px;
+  position:relative;
+  transition:all .2s ease;
+}
+.milestone-card:hover{
+  border-color:var(--gold);
+  transform:translateY(-2px);
+}
+
+/* connector line from spine to card */
+.milestone-card::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  width:24px;height:1px;
+  background:var(--line-bright);
+}
+.milestone:nth-child(odd) .milestone-card::before{right:-24px}
+.milestone:nth-child(even) .milestone-card::before{left:-24px}
+
+.milestone.done .milestone-card{
+  border-color:rgba(0,255,136,.3);
+}
+.milestone.live .milestone-card{
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px var(--gold), 0 8px 24px rgba(255,204,0,.15);
+}
+.milestone.upcoming .milestone-card{
+  border-color:rgba(255,0,64,.25);
+}
+
+.milestone-date{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.milestone.done .milestone-date{color:var(--green)}
+.milestone.live .milestone-date{color:var(--gold)}
+.milestone.upcoming .milestone-date{color:var(--accent)}
+
+.milestone-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;
+  letter-spacing:.5px;
+  color:var(--text);
+  margin-bottom:10px;
+  line-height:1.2;
+}
+.milestone-desc{
+  font-size:14px;
+  line-height:1.55;
+  color:var(--muted);
+}
+.milestone-desc strong{color:var(--text);font-weight:600}
+
+.milestone-status{
+  display:inline-block;
+  margin-top:12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:1.5px;
+  padding:4px 10px;
+  border-radius:3px;
+  text-transform:uppercase;
+}
+.milestone.done .milestone-status{
+  background:rgba(0,255,136,.1);
+  color:var(--green);
+  border:1px solid rgba(0,255,136,.3);
+}
+.milestone.live .milestone-status{
+  background:rgba(255,204,0,.1);
+  color:var(--gold);
+  border:1px solid rgba(255,204,0,.3);
+}
+.milestone.upcoming .milestone-status{
+  background:rgba(255,0,64,.08);
+  color:var(--accent);
+  border:1px solid rgba(255,0,64,.25);
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:780px){
+  .timeline::before{left:30px}
+  .milestone{
+    grid-template-columns:60px 1fr;
+    gap:18px;
+  }
+  .milestone-node{grid-column:1}
+  .milestone:nth-child(odd) .milestone-card,
+  .milestone:nth-child(even) .milestone-card{
+    grid-column:2;
+    text-align:left;
+  }
+  .milestone:nth-child(odd) .milestone-card::before,
+  .milestone:nth-child(even) .milestone-card::before{
+    left:-18px;
+    right:auto;
+  }
+  .milestone-node-inner{width:44px;height:44px;font-size:10px}
+  .milestone-card{padding:16px 18px}
+  .milestone-title{font-size:16px}
+  .milestone-desc{font-size:13px}
+  .page{padding:24px 16px 60px}
+}
+
+/* ===== SECTION SEPARATOR ===== */
+.section-divider{
+  display:flex;align-items:center;gap:18px;
+  margin:64px 0 40px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:5px;
+  color:var(--gold);
+}
+.section-divider::before,
+.section-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.section-divider .text{padding:0 8px}
+
+/* ===== FOOTER CTA ===== */
+.footer-cta{
+  margin-top:64px;
+  padding:48px 32px;
+  background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-card-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:16px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.footer-cta::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 70%,rgba(255,0,64,.06) 0%,transparent 60%);
+}
+.footer-cta-content{position:relative;z-index:1}
+.footer-cta-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:5px;
+  color:var(--accent);
+  margin-bottom:12px;
+}
+.footer-cta-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(24px,3vw,36px);font-weight:900;
+  margin-bottom:14px;
+}
+.footer-cta-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.footer-cta-desc{
+  color:var(--muted);
+  margin-bottom:24px;
+  max-width:560px;margin-left:auto;margin-right:auto;
+  line-height:1.6;
+}
+.footer-cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:2px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),#cc0033);
+  border:none;
+  padding:14px 28px;
+  border-radius:6px;
+  text-decoration:none;
+  transition:all .2s ease;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(255,0,64,.3);
+}
+.footer-cta-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 30px rgba(255,0,64,.5);
+}
+.footer-cta-btn svg{width:16px;height:16px}
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav-pro">
+  <a href="season-2.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>SEASON 2 GRID</span>
+  </a>
+  <div class="tnav-center">
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link active">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="index.html" class="tnav-link">PIT LANE</a>
+  </div>
+  <a href="#join-grid" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<!-- Angled gold accent line -->
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
+<div class="page">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="page-eyebrow">RACE CONTROL · ROADMAP</div>
+    <h1 class="page-title">SEASON 2 <span class="yellow">TIMELINE</span></h1>
+    <div class="page-subtitle">FROM TEAM LOCKS TO <strong>LIGHTS OUT</strong></div>
+  </header>
+
+  <!-- Timeline -->
+  <div class="timeline">
+
+    <!-- DONE -->
+    <div class="milestone done">
+      <div class="milestone-card">
+        <div class="milestone-date">APRIL 2026</div>
+        <div class="milestone-title">Season 2 Concept Locked</div>
+        <div class="milestone-desc">15-team grid format confirmed. F1-style season structure with 20 simulated races. <strong>$MEMEGP</strong> token launched on pump.fun.</div>
+        <span class="milestone-status">Complete</span>
+      </div>
+      <div class="milestone-node">
+        <div class="milestone-node-inner">✓</div>
+      </div>
+    </div>
+
+    <div class="milestone done">
+      <div class="milestone-node">
+        <div class="milestone-node-inner">✓</div>
+      </div>
+      <div class="milestone-card">
+        <div class="milestone-date">APR 27, 2026</div>
+        <div class="milestone-title">Team #1 — $TURBO</div>
+        <div class="milestone-desc"><strong>AI Turbo Racing</strong> joins the grid. Built-by-AI livery, ETH-native, the first frog on the grid. Engine 9.5, Drag 10.0.</div>
+        <span class="milestone-status">Locked</span>
+      </div>
+    </div>
+
+    <div class="milestone done">
+      <div class="milestone-card">
+        <div class="milestone-date">APR 29, 2026</div>
+        <div class="milestone-title">Team #2 — $MASK</div>
+        <div class="milestone-desc"><strong>Mask Stays On Racing</strong> joins the grid. Stealth black livery, POKG sponsorship, the first cat on the grid. Drag 9.4 — corners belong to them.</div>
+        <span class="milestone-status">Locked</span>
+      </div>
+      <div class="milestone-node">
+        <div class="milestone-node-inner">✓</div>
+      </div>
+    </div>
+
+    <!-- LIVE / IN PROGRESS -->
+    <div class="milestone live">
+      <div class="milestone-node">
+        <div class="milestone-node-inner">●</div>
+      </div>
+      <div class="milestone-card">
+        <div class="milestone-date">MAY 2026</div>
+        <div class="milestone-title">Team Acquisition · The 13</div>
+        <div class="milestone-desc">Outreach to remaining communities. <strong>13 seats</strong> still up for grabs. Vetting on community engagement, brand fit, and chain diversity.</div>
+        <span class="milestone-status">In Progress</span>
+      </div>
+    </div>
+
+    <!-- UPCOMING -->
+    <div class="milestone upcoming">
+      <div class="milestone-card">
+        <div class="milestone-date">MID-MAY 2026</div>
+        <div class="milestone-title">Driver Reveals · The Faces of the Grid</div>
+        <div class="milestone-desc">Each locked team gets their <strong>driver reveal</strong> — character art, name, livery, signature stat. The starting grid lineup completes.</div>
+        <span class="milestone-status">Scheduled</span>
+      </div>
+      <div class="milestone-node">
+        <div class="milestone-node-inner">04</div>
+      </div>
+    </div>
+
+    <div class="milestone upcoming">
+      <div class="milestone-node">
+        <div class="milestone-node-inner">05</div>
+      </div>
+      <div class="milestone-card">
+        <div class="milestone-date">LATE MAY 2026</div>
+        <div class="milestone-title">Pre-Season Testing</div>
+        <div class="milestone-desc">AI race engine simulations. Stat calibration across all 15 teams. Race format dry-runs. <strong>Practice content</strong> drops on @MemeGrandPrix.</div>
+        <span class="milestone-status">Scheduled</span>
+      </div>
+    </div>
+
+    <div class="milestone upcoming">
+      <div class="milestone-card">
+        <div class="milestone-date">JUNE 2026</div>
+        <div class="milestone-title">RACE 1 · LIGHTS OUT</div>
+        <div class="milestone-desc">Season 2 begins. <strong>20-race calendar</strong> kicks off. Live broadcast format. Race results, post-race coverage, championship standings.</div>
+        <span class="milestone-status">Race Day</span>
+      </div>
+      <div class="milestone-node">
+        <div class="milestone-node-inner">🏁</div>
+      </div>
+    </div>
+
+    <div class="milestone upcoming">
+      <div class="milestone-node">
+        <div class="milestone-node-inner">07</div>
+      </div>
+      <div class="milestone-card">
+        <div class="milestone-date">JUN — DEC 2026</div>
+        <div class="milestone-title">The Championship</div>
+        <div class="milestone-desc">20 races across the calendar. Driver standings, team championships, mid-season rivalries. Race recaps, livery updates, in-season storylines.</div>
+        <span class="milestone-status">Season Run</span>
+      </div>
+    </div>
+
+    <div class="milestone upcoming">
+      <div class="milestone-card">
+        <div class="milestone-date">DECEMBER 2026</div>
+        <div class="milestone-title">Season 2 Finale</div>
+        <div class="milestone-desc">Final race. Champion crowned. Trophy ceremony. Season highlights reel. <strong>Hall of Fame</strong> entries for memorable moments.</div>
+        <span class="milestone-status">Finale</span>
+      </div>
+      <div class="milestone-node">
+        <div class="milestone-node-inner">🏆</div>
+      </div>
+    </div>
+
+    <!-- FUTURE -->
+    <div class="milestone upcoming">
+      <div class="milestone-node">
+        <div class="milestone-node-inner">∞</div>
+      </div>
+      <div class="milestone-card">
+        <div class="milestone-date">SEASON 3 · 2027</div>
+        <div class="milestone-title">The Next Grid</div>
+        <div class="milestone-desc">New season, new teams, new rivalries. Promotion/relegation between seasons. Returning champions vs new challengers. <strong>JOIN THE GRID</strong> waitlist opens early.</div>
+        <span class="milestone-status">Future</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-divider">
+    <span class="text">END OF ROADMAP</span>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="footer-cta">
+    <div class="footer-cta-content">
+      <div class="footer-cta-eyebrow">▸ THE GRID IS FILLING UP</div>
+      <h2 class="footer-cta-title">13 SEATS <span class="yellow">REMAINING</span></h2>
+      <p class="footer-cta-desc">If your community wants a place on the Season 2 starting grid, get on the waitlist. Reveals roll out through May.</p>
+      <a href="#join-grid" class="footer-cta-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/>
+        </svg>
+        JOIN THE GRID
+      </a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
