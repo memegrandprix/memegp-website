@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Turbo Racing — $TURBO | MEME GP Season 2</title>
+<meta name="description" content="$TURBO confirmed for Season 2. Driver, car, stats — the AI Turbo Racing reveal.">
+
+<!-- Open Graph (Facebook, LinkedIn, Discord, etc.) -->
+<meta property="og:title" content="AI Turbo Racing — $TURBO joins MEME GP Season 2">
+<meta property="og:description" content="The Frog is cooking. 7.7 overall · Engine 9.5 · Drag 10.0. The first AI-built memecoin races.">
+<meta property="og:image" content="https://memegrandprix.com/turbo-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://memegrandprix.com/teams-turbo.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MEME GP">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:creator" content="@MemeGrandPrix">
+<meta name="twitter:title" content="AI Turbo Racing — $TURBO joins MEME GP Season 2">
+<meta name="twitter:description" content="The Frog is cooking. 7.7 overall · Engine 9.5 · Drag 10.0.">
+<meta name="twitter:image" content="https://memegrandprix.com/turbo-card.png">
+<meta name="twitter:image:alt" content="$TURBO reveal card — AI Turbo Racing on the MEME GP Season 2 grid">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+  --turbo-blue:#1e7fd9;
+  --turbo-blue-glow:#3aa0ff;
+
+  /* === UNIFIED HEADER TOKENS === */
+  --header-h:64px;          /* fixed height for all 3 block headers */
+  --header-pad-x:20px;      /* horizontal padding */
+  --header-logo:36px;       /* unified logo/portrait size */
+
+  /* === UNIFIED FOOTER TOKEN === */
+  --footer-min-h:72px;      /* min height for the bottom row of each block */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;z-index:0;
+}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,204,0,.25);
+  box-shadow:0 1px 0 rgba(255,204,0,.10), 0 0 24px rgba(255,204,0,.05);
+  padding:10px 18px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  min-height:56px;
+}
+.tnav-badge{
+  justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 18px;
+  border-radius:4px;
+  transition:all .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{
+  width:1px;height:14px;
+  background:var(--line-bright);
+  flex-shrink:0;
+}
+.tnav-exit{
+  justify-self:end;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+@media(max-width:780px){
+  .topnav-pro{
+    grid-template-columns:1fr auto;
+    padding:8px 12px;
+    gap:8px;
+  }
+  .tnav-center{
+    grid-column:1 / -1;
+    order:3;
+    justify-self:stretch;
+    justify-content:center;
+  }
+  .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:420px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 8px}
+  .tnav-sep{display:none}
+}
+.topnav{display:none}
+
+/* BANNER */
+.banner{position:relative;margin:32px auto 0;max-width:1280px;padding:0 24px}
+.banner-inner{
+  position:relative;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line-bright);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  aspect-ratio:16/4;min-height:200px;
+}
+.banner-bg{
+  position:absolute;inset:0;
+  background-image:url('grid-hero.png');
+  background-size:cover;background-position:center 35%;
+  z-index:1;
+}
+.banner-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(4,4,8,.4) 0%,rgba(4,4,8,.6) 60%,rgba(4,4,8,.92) 100%),
+    radial-gradient(ellipse at 30% 50%,rgba(255,204,0,.10) 0%,transparent 60%);
+}
+.banner-content{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:32px 48px;
+}
+.banner-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;
+  animation:fadeUp .8s ease both;
+}
+.banner-eyebrow::before{content:'';width:60px;height:1px;background:var(--gold)}
+.banner-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,6vw,68px);font-weight:900;letter-spacing:-1px;
+  line-height:.95;margin-bottom:10px;
+  animation:fadeUp .9s ease .15s both;
+}
+.banner-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.banner-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(12px,1.2vw,16px);font-weight:700;letter-spacing:4px;
+  color:var(--muted);
+  animation:fadeUp .9s ease .3s both;
+}
+.banner-sub strong{color:var(--text)}
+
+/* 3 BLOCKS */
+.three-blocks{
+  max-width:1280px;margin:32px auto 0;padding:0 24px;
+  display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:18px;
+}
+.block{
+  background:linear-gradient(180deg,#1a1a22,#0d0d12);
+  border:1px solid var(--line-bright);
+  border-radius:14px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+  min-height:580px;
+  animation:fadeUp .9s ease both;
+}
+.block:nth-child(2){animation-delay:.1s}
+.block:nth-child(3){animation-delay:.2s}
+
+/* === UNIFIED HEADER STRIP (shared by all 3 blocks) === */
+.block-header{
+  height:var(--header-h);
+  padding:0 var(--header-pad-x);
+  display:flex;align-items:center;gap:12px;
+  position:relative;z-index:2;
+  flex-shrink:0;
+}
+.block-header-logo{
+  width:var(--header-logo);
+  height:var(--header-logo);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;font-weight:900;color:#fff;
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--turbo-blue-glow),var(--turbo-blue));
+}
+.block-header-logo.portrait{
+  border-radius:50%;
+  background-image:url('turbo-driver.png');
+  background-size:cover;
+  background-position:center 25%;
+  border:2px solid var(--gold);
+}
+.block-header-text{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.block-header-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);
+  line-height:1.1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.block-header-title .accent{color:var(--gold)}
+.block-header-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--muted);
+  letter-spacing:1.2px;
+  margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.block-header-right{
+  flex-shrink:0;
+  text-align:right;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.block-header-overall-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.block-header-overall-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;color:var(--muted);
+  letter-spacing:2px;margin-top:2px;
+}
+
+/* Per-block header accent borders */
+.block-header.driver{
+  background:linear-gradient(90deg,rgba(30,127,217,.15),rgba(255,204,0,.08));
+  border-bottom:2px solid var(--gold);
+}
+.block-header.car{
+  background:linear-gradient(90deg,rgba(30,127,217,.2),rgba(30,127,217,.05));
+  border-bottom:2px solid var(--turbo-blue);
+}
+.block-header.car .block-header-title{
+  color:var(--turbo-blue-glow);
+  font-size:11px;
+  letter-spacing:3px;
+}
+.block-header.stats{
+  background:linear-gradient(90deg,rgba(30,127,217,.15),rgba(255,204,0,.08));
+  border-bottom:2px solid var(--gold);
+}
+
+/* BLOCK 1 — DRIVER body */
+.driver-image-area{
+  flex:1;
+  background-image:url('turbo-driver.png');
+  background-size:cover;background-position:center 30%;
+  position:relative;min-height:340px;
+}
+.driver-image-area::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(13,13,18,.95) 100%);
+}
+
+.driver-info-pad{
+  padding:18px 22px 18px;
+  position:relative;z-index:2;
+  background:#0d0d12;
+  display:flex;flex-direction:column;
+  flex-shrink:0;
+}
+.driver-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:34px;font-weight:900;letter-spacing:1.5px;
+  margin-bottom:14px;
+  display:flex;align-items:baseline;gap:6px;
+}
+.driver-ticker .dollar{color:var(--gold);font-size:26px}
+.driver-ticker .ticker{color:var(--text)}
+
+.driver-meta-grid{
+  width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px 18px;
+}
+.driver-meta-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:7px 0;
+}
+.driver-meta-label{
+  color:var(--muted);
+  letter-spacing:1.2px;
+  font-size:12px;
+  font-weight:600;
+  font-family:'Orbitron',sans-serif;
+}
+.driver-meta-value{
+  color:var(--text);
+  font-weight:700;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+}
+
+/* === UNIFIED BLOCK FOOTER === */
+/* Bottom row in each block — matches height + alignment across all 3 */
+.block-footer{
+  min-height:var(--footer-min-h);
+  padding:14px 22px;
+  border-top:1px solid var(--line);
+  background:#0a0a12;
+  display:flex;align-items:center;
+  position:relative;z-index:2;
+  margin-top:auto;
+}
+
+/* BLOCK 2 — CAR body (flush like Block 1) */
+.car-image-area{
+  flex:1;
+  background-image:url('turbo-car.jpg');
+  background-size:cover;background-position:center;
+  position:relative;min-height:380px;
+}
+.car-image-area::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(13,13,18,.95) 100%);
+}
+
+.car-info-pad{
+  min-height:var(--footer-min-h);
+  padding:14px 22px;
+  border-top:1px solid var(--line);
+  background:#0a0a12;
+  position:relative;z-index:2;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:auto;
+}
+.car-livery-info{
+  font-size:11px;color:var(--muted);letter-spacing:1px;
+  font-family:'JetBrains Mono',monospace;
+}
+.car-livery-info strong{color:var(--turbo-blue-glow);font-weight:700}
+.car-share-btn{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;
+  color:var(--turbo-blue-glow);text-decoration:none;
+  padding:6px 10px;border:1px solid var(--turbo-blue);
+  border-radius:4px;transition:all .2s;
+}
+.car-share-btn:hover{background:var(--turbo-blue);color:#fff}
+
+/* === BLOCK 3 — STATS body (grid-row style stat list) === */
+.block-stats{
+  background:linear-gradient(180deg,#1a1a22,#0d0d12);
+  position:relative;
+}
+
+/* Stat list — visually mirrors the season-2 grid rows */
+.stat-list{
+  flex:1;
+  padding:18px 18px 14px;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;z-index:2;
+  justify-content:center;
+}
+.stat-row{
+  display:flex;align-items:stretch;
+  background:#0a0a12;
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  height:54px;
+  position:relative;
+}
+
+/* Left cell — icon block (mirrors position number cell) */
+.stat-row-icon{
+  width:60px;
+  display:flex;align-items:center;justify-content:center;
+  background:#13131c;
+  border-right:1px solid var(--line);
+  flex-shrink:0;
+}
+.stat-row-icon img{
+  width:46px;height:46px;
+  object-fit:contain;
+}
+/* AERO and DRAG icons are wider than tall — bump them up so they read at similar visual weight */
+.stat-row-icon img.wide{
+  width:54px;height:54px;
+}
+
+/* Score fill bar — IS the visual fill (replaces color stripe) */
+.stat-row-fill{
+  width:8px;
+  flex-shrink:0;
+  background:linear-gradient(180deg,#ffcc00,#aa8822);
+  position:relative;
+}
+
+/* Main area — stat name + value */
+.stat-row-main{
+  flex:1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;
+  gap:14px;
+  position:relative;
+  /* Background fill grows left-to-right based on score */
+  background:linear-gradient(90deg,
+    rgba(255,204,0,.18) 0%,
+    rgba(255,204,0,.18) var(--score-pct,0%),
+    transparent var(--score-pct,0%),
+    transparent 100%);
+}
+.stat-row-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);
+}
+.stat-row-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:20px;font-weight:900;
+  color:var(--gold);
+  letter-spacing:.5px;
+}
+
+/* MCAP strip — full width below the stat list (matches unified footer) */
+.mcap-strip{
+  min-height:var(--footer-min-h);
+  padding:14px 22px;
+  border-top:1px solid var(--line);
+  background:#0a0a12;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:2;
+  margin-top:auto;
+  gap:14px;
+}
+.mcap-strip-left{
+  display:flex;align-items:center;gap:14px;
+}
+.mcap-strip-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+}
+.mcap-strip-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;font-weight:900;
+  color:#fff;
+  line-height:1;
+}
+.mcap-strip-value .currency{color:var(--gold);font-size:16px;margin-right:2px}
+.mcap-strip-right{
+  text-align:right;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:.5px;
+}
+.mcap-strip-right .vol{color:var(--text);font-weight:700}
+.mcap-strip-right .arrow-up{color:var(--green);margin-left:3px}
+.mcap-strip-right .snapshot{
+  display:block;
+  color:var(--dim);
+  font-size:9px;
+  margin-top:3px;
+}
+
+/* === SHARE CARD SECTION === */
+.share-card-cta{
+  max-width:1280px;
+  margin:24px auto 0;
+  padding:0 24px;
+}
+.share-card-inner{
+  background:linear-gradient(135deg,rgba(255,204,0,.10),rgba(30,127,217,.08));
+  border:1px solid var(--line-bright);
+  border-radius:14px;
+  padding:24px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.share-card-text{
+  flex:1;min-width:240px;
+}
+.share-card-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.share-card-sub{
+  font-size:11px;color:var(--muted);letter-spacing:.5px;
+}
+.share-card-sub strong{color:var(--gold)}
+.share-btn-big{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 24px;
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;font-weight:700;letter-spacing:2px;
+  text-decoration:none;
+  background:#000;
+  color:#fff;
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.share-btn-big:hover{
+  border-color:var(--gold);
+  background:#0d0d12;
+  transform:translateY(-1px);
+  box-shadow:0 4px 24px rgba(255,204,0,.2);
+}
+.share-btn-big:disabled{opacity:.5;cursor:wait}
+
+/* Loading state for share */
+.share-status{
+  font-size:10px;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:.5px;
+  margin-top:6px;
+  min-height:14px;
+}
+.share-status.success{color:var(--green)}
+.share-status.error{color:var(--accent)}
+
+/* Hide a section while capturing for cleaner card */
+.capture-mode .topnav,
+.capture-mode .cta-row,
+.capture-mode .grid-strip,
+.capture-mode .share-card-cta,
+.capture-mode .foot{
+  display:none !important;
+}
+
+/* === SHARE SUCCESS MODAL === */
+.share-modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(4,4,8,.85);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:200;
+  display:none;
+  align-items:center;justify-content:center;
+  padding:20px;
+  animation:fadeIn .2s ease;
+}
+.share-modal-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.share-modal{
+  background:linear-gradient(180deg,#1a1a22,#0d0d12);
+  border:1px solid var(--gold);
+  border-radius:14px;
+  padding:32px 28px;
+  max-width:480px;width:100%;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(255,204,0,.1);
+  animation:fadeUp .3s ease;
+}
+.share-modal-close{
+  position:absolute;top:14px;right:14px;
+  width:30px;height:30px;
+  background:transparent;border:1px solid var(--line-bright);
+  border-radius:6px;
+  color:var(--muted);
+  font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.share-modal-close:hover{border-color:var(--accent);color:var(--text)}
+
+.share-modal-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:1.5px;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+.share-modal-sub{
+  font-size:13px;color:var(--muted);
+  margin-bottom:22px;line-height:1.5;
+}
+
+.share-steps{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:24px;
+}
+.share-step{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:14px;
+  background:rgba(255,204,0,.04);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+.share-step-num{
+  flex-shrink:0;
+  width:26px;height:26px;
+  background:var(--gold);color:#000;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;font-weight:900;
+}
+.share-step-text{
+  font-size:13px;color:var(--text);line-height:1.45;
+}
+.share-step-text strong{color:var(--gold)}
+.share-step-text code{
+  background:#0a0a0d;
+  border:1px solid var(--line-bright);
+  padding:2px 6px;
+  border-radius:3px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--gold);
+}
+
+.share-modal-actions{
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.share-modal-btn{
+  flex:1;min-width:140px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 18px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-decoration:none;
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+  transition:all .15s;
+}
+.share-modal-btn:hover{border-color:var(--gold);color:var(--gold)}
+.share-modal-btn.primary{
+  background:#000;border-color:#000;color:#fff;
+}
+.share-modal-btn.primary:hover{
+  background:#1a1a22;border-color:var(--gold);color:#fff;
+}
+
+.copy-feedback{
+  font-size:11px;color:var(--green);
+  font-family:'JetBrains Mono',monospace;
+  margin-top:10px;
+  letter-spacing:.5px;
+  opacity:0;
+  transition:opacity .2s;
+  text-align:center;
+}
+.copy-feedback.show{opacity:1}
+
+.cta-row{
+  max-width:1280px;margin:32px auto 0;padding:0 24px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-decoration:none;
+  border:1px solid var(--line-bright);
+  color:var(--text);background:transparent;
+  transition:all .2s ease;cursor:pointer;
+}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn.primary{background:var(--turbo-blue);border-color:var(--turbo-blue);color:#fff}
+.btn.primary:hover{
+  background:var(--turbo-blue-glow);border-color:var(--turbo-blue-glow);
+  box-shadow:0 4px 24px rgba(30,127,217,.4);
+}
+
+/* STARTING GRID STRIP BELOW */
+.grid-strip{max-width:1280px;margin:64px auto 0;padding:0 24px}
+.grid-strip-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:18px;flex-wrap:wrap;gap:12px;
+}
+.grid-strip-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:3px;
+  color:var(--muted);
+}
+.grid-strip-link{
+  font-size:11px;color:var(--gold);text-decoration:none;letter-spacing:1px;
+}
+.grid-strip-link:hover{color:var(--text)}
+
+.mini-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;
+}
+.mini-card{
+  display:block;background:var(--bg-card);
+  border:1px solid var(--line);border-radius:8px;padding:12px;
+  text-decoration:none;color:inherit;
+  transition:all .15s;position:relative;
+}
+.mini-card.locked{
+  border-color:rgba(255,204,0,.3);
+  background:linear-gradient(180deg,rgba(255,204,0,.06),var(--bg-card));
+}
+.mini-card.locked.current{
+  border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(255,204,0,.12),var(--bg-card));
+}
+.mini-card.locked:hover{border-color:var(--gold);transform:translateY(-2px)}
+.mini-card.empty{opacity:.6}
+
+.mini-card-row{display:flex;align-items:center;gap:10px}
+.mini-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#333,#1a1a1a);
+  background-size:cover;background-position:center 25%;
+  border:1.5px solid var(--line-bright);flex-shrink:0;
+}
+.mini-card.locked .mini-avatar{border-color:var(--gold)}
+.mini-card.empty .mini-avatar{
+  background:repeating-linear-gradient(45deg,#1a1a26,#1a1a26 3px,#13131c 3px,#13131c 6px);
+  border:1.5px dashed var(--line-bright);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:14px;
+}
+.mini-info{flex:1;min-width:0}
+.mini-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;color:var(--text);line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mini-card.empty .mini-ticker{color:var(--dim)}
+.mini-overall{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.5px;
+}
+.mini-overall strong{color:var(--gold);font-size:11px}
+.mini-card.empty .mini-overall strong{color:var(--dim)}
+
+.foot{
+  margin-top:80px;border-top:1px solid var(--line);
+  padding:24px;
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+  gap:14px;font-size:10px;color:var(--dim);letter-spacing:1.5px;
+}
+.foot a{color:var(--muted);text-decoration:none;margin-right:18px}
+.foot a:hover{color:var(--accent)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .three-blocks{grid-template-columns:1fr;gap:18px}
+  .block{min-height:auto}
+  .driver-image-area,.car-image-area{min-height:280px}
+}
+@media(max-width:600px){
+  .banner{margin-top:16px;padding:0 12px}
+  .banner-content{padding:24px 24px}
+  .three-blocks{margin-top:18px;padding:0 12px;gap:14px}
+  .block{border-radius:10px}
+  :root{--header-pad-x:16px}
+  .driver-info-pad,.car-info-pad{padding-left:16px;padding-right:16px}
+  .stat-list{padding-left:14px;padding-right:14px}
+  .mcap-strip{margin-left:14px;margin-right:14px}
+  .driver-ticker{font-size:28px}
+  .driver-meta-grid{grid-template-columns:1fr}
+  .cta-row{padding:0 12px;flex-direction:column}
+  .cta-row .btn{width:100%;justify-content:center}
+  .grid-strip{padding:0 12px;margin-top:48px}
+  .mini-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .foot{padding:18px 14px;flex-direction:column;align-items:flex-start}
+}
+
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<nav class="topnav-pro">
+  <a href="season-2.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>SEASON 2 GRID</span>
+  </a>
+  <div class="tnav-center">
+    <a href="season-2.html" class="tnav-link active">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="#" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="index.html" class="tnav-link">PIT LANE</a>
+  </div>
+  <a href="#join-grid" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-bg" aria-hidden="true"></div>
+    <div class="banner-content">
+      <div class="banner-eyebrow">RACE CONTROL · TEAM REVEAL</div>
+      <h1 class="banner-title">MEME GP <span class="yellow">2026</span></h1>
+      <div class="banner-sub">STARTING GRID · <strong>15 TEAMS</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="three-blocks" id="captureTarget">
+
+  <!-- BLOCK 1 — DRIVER -->
+  <div class="block">
+    <div class="block-header driver">
+      <div class="block-header-logo">AI</div>
+      <div class="block-header-text">
+        <div class="block-header-title"><span class="accent">AI</span> TURBO RACING</div>
+        <div class="block-header-sub">DRIVER PROFILE</div>
+      </div>
+    </div>
+    <div class="driver-image-area" aria-label="The Frog — AI Turbo Racing driver"></div>
+    <div class="driver-info-pad">
+      <div class="driver-ticker">
+        <span class="dollar">$</span><span class="ticker">TURBO</span>
+      </div>
+    </div>
+    <div class="block-footer">
+      <div class="driver-meta-grid">
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">CAR #</span>
+          <span class="driver-meta-value">69</span>
+        </div>
+        <div class="driver-meta-row">
+          <span class="driver-meta-label">CHAIN</span>
+          <span class="driver-meta-value">ETH</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 2 — CAR -->
+  <div class="block">
+    <div class="block-header car">
+      <div class="block-header-logo">AI</div>
+      <div class="block-header-text">
+        <div class="block-header-title">THE MACHINE · TURBO BLUE</div>
+        <div class="block-header-sub">LIVERY · BUILT BY AI</div>
+      </div>
+    </div>
+    <div class="car-image-area" aria-label="AI Turbo Racing F1 car"></div>
+    <div class="car-info-pad">
+      <div class="car-livery-info">
+        Livery: <strong>TURBO BLUE</strong> · Built by <strong>AI</strong>
+      </div>
+      <a href="#" id="carShareBtn" class="car-share-btn">𝕏 SHARE CARD</a>
+    </div>
+  </div>
+
+  <!-- BLOCK 3 — STATS -->
+  <div class="block block-stats">
+    <div class="block-header stats">
+      <div class="block-header-logo portrait" aria-hidden="true"></div>
+      <div class="block-header-text">
+        <div class="block-header-title">$TURBO</div>
+        <div class="block-header-sub">AI TURBO RACING</div>
+      </div>
+      <div class="block-header-right">
+        <div class="block-header-overall-num">7.7</div>
+        <div class="block-header-overall-label">OVERALL</div>
+      </div>
+    </div>
+    <div class="stat-list">
+      <div class="stat-row" style="--score-pct:95%">
+        <div class="stat-row-icon"><img src="icon-engine.png" alt=""></div>
+        <div class="stat-row-fill"></div>
+        <div class="stat-row-main">
+          <span class="stat-row-name">ENGINE</span>
+          <span class="stat-row-value">9.5</span>
+        </div>
+      </div>
+      <div class="stat-row" style="--score-pct:55%">
+        <div class="stat-row-icon"><img src="icon-aero.png" alt="" class="wide"></div>
+        <div class="stat-row-fill"></div>
+        <div class="stat-row-main">
+          <span class="stat-row-name">AERO</span>
+          <span class="stat-row-value">5.5</span>
+        </div>
+      </div>
+      <div class="stat-row" style="--score-pct:75%">
+        <div class="stat-row-icon"><img src="icon-chassis.png" alt=""></div>
+        <div class="stat-row-fill"></div>
+        <div class="stat-row-main">
+          <span class="stat-row-name">CHASSIS</span>
+          <span class="stat-row-value">7.5</span>
+        </div>
+      </div>
+      <div class="stat-row" style="--score-pct:100%">
+        <div class="stat-row-icon"><img src="icon-drag.png" alt="" class="wide"></div>
+        <div class="stat-row-fill"></div>
+        <div class="stat-row-main">
+          <span class="stat-row-name">DRAG</span>
+          <span class="stat-row-value">10.0</span>
+        </div>
+      </div>
+      <div class="stat-row" style="--score-pct:60%">
+        <div class="stat-row-icon"><img src="icon-pit.png" alt=""></div>
+        <div class="stat-row-fill"></div>
+        <div class="stat-row-main">
+          <span class="stat-row-name">PIT</span>
+          <span class="stat-row-value">6.0</span>
+        </div>
+      </div>
+    </div>
+    <div class="mcap-strip">
+      <div class="mcap-strip-left">
+        <div class="mcap-strip-label">MARKET CAP</div>
+        <div class="mcap-strip-value"><span class="currency">$</span>80M</div>
+      </div>
+      <div class="mcap-strip-right">
+        24H VOL · <span class="vol">$12M</span><span class="arrow-up">▲</span>
+        <span class="snapshot">Snapshot · Apr 27</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SHARE THIS CARD -->
+<div class="share-card-cta">
+  <div class="share-card-inner">
+    <div class="share-card-text">
+      <div class="share-card-title">📸 SHARE THIS REVEAL CARD</div>
+      <div class="share-card-sub">Snap an image of the full $TURBO reveal and post it to <strong>𝕏</strong>. Tag <strong>@MemeGrandPrix</strong>.</div>
+      <div class="share-status" id="shareStatus"></div>
+    </div>
+    <button class="share-btn-big" id="shareCardBtn">
+      <span>𝕏</span>
+      <span>SHARE CARD</span>
+    </button>
+  </div>
+</div>
+
+<div class="cta-row">
+  <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="btn primary">𝕏 FOLLOW @MemeGrandPrix</a>
+  <a href="formula-playground.html" class="btn">HOW STATS ARE CALCULATED →</a>
+  <a href="season-2.html" class="btn">VIEW FULL GRID →</a>
+</div>
+
+<div class="grid-strip">
+  <div class="grid-strip-header">
+    <div class="grid-strip-title">▸ THE STARTING GRID · 2 / 15 LOCKED</div>
+    <a href="season-2.html" class="grid-strip-link">VIEW FULL GRID →</a>
+  </div>
+  <div class="mini-grid" id="miniGrid"></div>
+</div>
+
+<footer class="foot">
+  <div>
+    <a href="index.html">HOME</a>
+    <a href="season-2.html">SEASON 2 GRID</a>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">𝕏 @MemeGrandPrix</a>
+  </div>
+  <div>© 2026 Meme GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+<!-- SHARE SUCCESS MODAL -->
+<div class="share-modal-overlay" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+  <div class="share-modal">
+    <button class="share-modal-close" id="shareModalClose" aria-label="Close">×</button>
+    <div class="share-modal-title" id="shareModalTitle">📸 CARD READY!</div>
+    <div class="share-modal-sub">Your $TURBO reveal card has been saved. Now post it on 𝕏 in 3 steps:</div>
+    <div class="share-steps">
+      <div class="share-step">
+        <div class="share-step-num">1</div>
+        <div class="share-step-text">Card image was downloaded as <code>memegp-turbo-reveal.png</code> — check your Downloads folder.</div>
+      </div>
+      <div class="share-step">
+        <div class="share-step-num">2</div>
+        <div class="share-step-text">Click <strong>OPEN 𝕏</strong> below — the tweet text is already copied to your clipboard.</div>
+      </div>
+      <div class="share-step">
+        <div class="share-step-num">3</div>
+        <div class="share-step-text">Paste the text, then drag <code>memegp-turbo-reveal.png</code> into the tweet box. Post it 🏁</div>
+      </div>
+    </div>
+    <div class="share-modal-actions">
+      <a href="#" id="shareModalOpenX" class="share-modal-btn primary" target="_blank" rel="noopener">𝕏 OPEN X</a>
+      <button class="share-modal-btn" id="shareModalCopyText">COPY TEXT AGAIN</button>
+    </div>
+    <div class="copy-feedback" id="copyFeedback">✓ Tweet text copied to clipboard</div>
+  </div>
+</div>
+
+<script>
+// Mini grid
+const TEAMS = [
+  { ticker: 'TURBO', overall: 7.7, locked: true, current: true,  link: 'teams-turbo.html', avatar: 'turbo-driver.png' },
+  { ticker: 'MASK',  overall: 5.5, locked: true, current: false, link: 'teams-mask.html',  avatar: 'mask-driver.png' },
+];
+
+let miniHtml = '';
+TEAMS.forEach(t => {
+  miniHtml += `
+    <a href="${t.link}" class="mini-card locked${t.current ? ' current' : ''}">
+      <div class="mini-card-row">
+        <div class="mini-avatar" style="background-image:url('${t.avatar}')"></div>
+        <div class="mini-info">
+          <div class="mini-ticker">$${t.ticker}</div>
+          <div class="mini-overall">OVR · <strong>${t.overall.toFixed(1)}</strong></div>
+        </div>
+      </div>
+    </a>
+  `;
+});
+
+for (let i = 3; i <= 15; i++) {
+  const num = String(i).padStart(2, '0');
+  miniHtml += `
+    <div class="mini-card empty">
+      <div class="mini-card-row">
+        <div class="mini-avatar" style="background-image:url('helmet.png')"></div>
+        <div class="mini-info">
+          <div class="mini-ticker">SLOT ${num}</div>
+          <div class="mini-overall">OVR · <strong>—</strong></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+document.getElementById('miniGrid').innerHTML = miniHtml;
+
+// === SHARE CARD AS IMAGE ===
+const SHARE_TWEET_TEXT = `🏁 $TURBO is on the Season 2 grid.
+
+The Frog is cooking. 7.7 overall.
+Engine 9.5 · Drag 10.0 · Pit 6.0
+
+@MemeGrandPrix · #MemeGP`;
+
+const PAGE_URL = 'https://memegrandprix.com/teams-turbo.html';
+const TWEET_INTENT_URL = 'https://x.com/intent/post?text=' + encodeURIComponent(SHARE_TWEET_TEXT) + '&url=' + encodeURIComponent(PAGE_URL);
+
+const shareBtn = document.getElementById('shareCardBtn');
+const shareStatus = document.getElementById('shareStatus');
+const shareModal = document.getElementById('shareModal');
+const shareModalClose = document.getElementById('shareModalClose');
+const shareModalOpenX = document.getElementById('shareModalOpenX');
+const shareModalCopyText = document.getElementById('shareModalCopyText');
+const copyFeedback = document.getElementById('copyFeedback');
+
+// Set the X intent URL on the modal button
+shareModalOpenX.href = TWEET_INTENT_URL;
+
+function setStatus(msg, type){
+  shareStatus.textContent = msg || '';
+  shareStatus.className = 'share-status' + (type ? ' ' + type : '');
+}
+
+function showCopyFeedback(){
+  copyFeedback.classList.add('show');
+  setTimeout(() => copyFeedback.classList.remove('show'), 2200);
+}
+
+async function copyTweetText(){
+  try {
+    await navigator.clipboard.writeText(SHARE_TWEET_TEXT);
+    showCopyFeedback();
+    return true;
+  } catch(err) {
+    console.warn('Clipboard write failed:', err);
+    return false;
+  }
+}
+
+function openShareModal(){
+  shareModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeShareModal(){
+  shareModal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+shareModalClose.addEventListener('click', closeShareModal);
+shareModal.addEventListener('click', (e) => {
+  if (e.target === shareModal) closeShareModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && shareModal.classList.contains('active')) closeShareModal();
+});
+shareModalCopyText.addEventListener('click', copyTweetText);
+
+async function captureCard(){
+  const target = document.getElementById('captureTarget');
+  document.body.classList.add('capture-mode');
+  await new Promise(r => setTimeout(r, 60));
+
+  const canvas = await html2canvas(target, {
+    backgroundColor: '#040408',
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false,
+    windowWidth: target.scrollWidth,
+    windowHeight: target.scrollHeight,
+  });
+
+  document.body.classList.remove('capture-mode');
+  return canvas;
+}
+
+function canvasToBlob(canvas){
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+}
+
+async function shareCard(){
+  shareBtn.disabled = true;
+  setStatus('Snapping the card…');
+
+  try {
+    const canvas = await captureCard();
+    const blob = await canvasToBlob(canvas);
+    const file = new File([blob], 'memegp-turbo-reveal.png', { type: 'image/png' });
+
+    // MOBILE PATH — Web Share API: image attaches directly, no modal needed
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      setStatus('Opening share sheet…');
+      try {
+        await navigator.share({
+          files: [file],
+          text: SHARE_TWEET_TEXT,
+          url: PAGE_URL,
+        });
+        setStatus('✓ Shared!', 'success');
+        shareBtn.disabled = false;
+        return;
+      } catch(err){
+        if (err.name === 'AbortError') {
+          setStatus('');
+          shareBtn.disabled = false;
+          return;
+        }
+        // Fall through to desktop path on other errors
+      }
+    }
+
+    // DESKTOP PATH — download PNG + copy text + show guidance modal
+    setStatus('Card saved · text copied to clipboard');
+
+    // Download the image
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'memegp-turbo-reveal.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Copy tweet text to clipboard so they can paste straight into X
+    await copyTweetText();
+
+    // Show the guidance modal — this replaces the "open in new tab and figure it out" UX
+    setTimeout(openShareModal, 250);
+
+  } catch(err){
+    console.error(err);
+    setStatus('Something went wrong. Try again.', 'error');
+  } finally {
+    shareBtn.disabled = false;
+  }
+}
+
+shareBtn.addEventListener('click', shareCard);
+
+// Block 2 share button — same behaviour
+const carShareBtn = document.getElementById('carShareBtn');
+if (carShareBtn) {
+  carShareBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    shareCard();
+    document.getElementById('shareCardBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+</script>
+
+</body>
+</html>
