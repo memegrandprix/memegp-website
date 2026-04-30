@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — MEME GP</title>
+<meta name="description" content="The complete guide to MEME GP: how the racing format works, what each stat means, how communities influence outcomes, and how the AI simulation runs the season.">
+
+<meta property="og:title" content="How It Works — MEME GP">
+<meta property="og:description" content="Inside the world's first F1-style memecoin racing league. Stats, sectors, sessions, and how your community shapes the season.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://memegrandprix.com/how-it-works.html">
+<meta property="og:site_name" content="MEME GP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:title" content="How It Works — MEME GP">
+<meta name="twitter:description" content="Inside the world's first F1-style memecoin racing league.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+  --chrome-1:#e8e8ee;
+  --chrome-2:#a4a4b0;
+  --chrome-3:#5a5a66;
+  --chrome-deep:#2a2a36;
+  /* Stat colors */
+  --stat-engine:#ff6644;
+  --stat-aero:#3ad0ff;
+  --stat-chassis:#ffcc00;
+  --stat-drag:#a878ff;
+  --stat-pit:#00ff88;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;z-index:1;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseGoldGlow{
+  0%,100%{box-shadow:0 0 14px rgba(255,204,0,.5),0 0 28px rgba(255,204,0,.25)}
+  50%{box-shadow:0 0 22px rgba(255,204,0,.8),0 0 44px rgba(255,204,0,.4)}
+}
+@keyframes scrollX{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:10px 18px;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:18px;min-height:56px;
+}
+.tnav-badge{
+  justify-self:start;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+.tnav-center{
+  justify-self:center;display:flex;align-items:center;gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);text-decoration:none;
+  padding:8px 14px;border-radius:4px;
+  transition:all .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{width:1px;height:14px;background:var(--line-bright);flex-shrink:0}
+.tnav-exit{
+  justify-self:end;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;transition:all .15s ease;white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+@media(max-width:920px){
+  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .tnav-center{grid-column:1 / -1;order:3;justify-self:stretch;justify-content:center}
+  .tnav-link{padding:6px 8px;font-size:10px;letter-spacing:1.2px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:480px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 6px;font-size:9px}
+  .tnav-sep{display:none}
+}
+.tnav-accent{
+  position:sticky;top:56px;z-index:49;height:18px;
+  pointer-events:none;margin-bottom:-18px;background:#040408;
+}
+.tnav-accent svg{
+  display:block;width:100%;height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+/* ===== PAGE LAYOUT ===== */
+.hiw-wrapper{
+  position:relative;z-index:2;
+  padding:32px 24px 80px;
+  max-width:1280px;margin:0 auto;
+}
+.hiw-panel{
+  position:relative;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,204,0,.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,204,0,.04) 0%, transparent 60%),
+    linear-gradient(180deg, #0d0d12 0%, #050508 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:16px;
+  padding:48px 40px 56px;
+  overflow:hidden;
+}
+.hiw-panel::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,204,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,204,0,.04) 1px, transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;opacity:.6;
+  mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+
+/* ===== HERO ===== */
+.page-header{
+  text-align:center;margin-bottom:64px;
+  position:relative;z-index:2;
+  animation:fadeUp .8s ease both;
+}
+.page-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--chrome-1);margin-bottom:14px;
+}
+.page-eyebrow::before,
+.page-eyebrow::after{
+  content:'';width:50px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--chrome-1),transparent);
+}
+.page-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(40px,6vw,72px);font-weight:900;
+  letter-spacing:-1px;line-height:1;margin-bottom:18px;
+}
+.page-title .silver{
+  background:linear-gradient(180deg,#ffffff 0%,#d8d8e0 35%,#8a8a96 55%,#d8d8e0 75%,#ffffff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
+.page-title .yellow{
+  background:linear-gradient(180deg,#fff5b8 0%,#ffd633 30%,#cc9900 55%,#ffd633 80%,#fff5b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 6px rgba(255,204,0,.4));
+}
+.page-subtitle{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(13px,1.4vw,16px);
+  font-weight:700;letter-spacing:5px;color:var(--chrome-2);
+  max-width:780px;margin:0 auto;line-height:1.6;
+}
+.page-subtitle strong{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,.3)}
+
+/* ===== TLDR HEADLINE BLOCK ===== */
+.tldr-block{
+  max-width:880px;margin:0 auto 80px;
+  padding:28px 32px;
+  background:
+    radial-gradient(ellipse at center, rgba(255,204,0,.08) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(20,20,28,.6) 0%, rgba(13,13,18,.8) 100%);
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:12px;
+  text-align:center;position:relative;z-index:2;
+  box-shadow:0 0 32px rgba(255,204,0,.1);
+  animation:fadeUp .9s ease .2s both;
+}
+.tldr-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:4px;
+  color:var(--gold);margin-bottom:10px;
+}
+.tldr-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(15px,1.8vw,21px);font-weight:700;
+  color:var(--text);line-height:1.5;letter-spacing:.5px;
+}
+.tldr-text .accent{color:var(--gold)}
+
+/* ===== SECTION HEADER ===== */
+.section-header{
+  text-align:center;margin-bottom:36px;
+  position:relative;z-index:2;
+}
+.section-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;
+  background:radial-gradient(circle at 35% 25%, rgba(255,255,255,.4) 0%, transparent 50%),
+    linear-gradient(135deg, var(--chrome-1) 0%, var(--chrome-2) 30%, var(--chrome-deep) 60%, var(--chrome-2) 100%);
+  border:2px solid var(--chrome-1);
+  border-radius:50%;
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;font-weight:900;color:#0d0d14;
+  margin-bottom:14px;
+  box-shadow:inset 0 -2px 4px rgba(0,0,0,.4),inset 0 2px 4px rgba(255,255,255,.3),0 4px 14px rgba(0,0,0,.5);
+}
+.section-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(22px,2.6vw,32px);
+  font-weight:900;letter-spacing:1px;
+  color:var(--text);margin-bottom:8px;
+}
+.section-title .accent{color:var(--gold)}
+.section-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:4px;
+  color:var(--chrome-2);
+}
+
+.section-block{
+  position:relative;z-index:2;
+  margin-bottom:80px;
+  animation:fadeUp .8s ease both;
+}
+
+/* ===== SECTION 1: RACE WEEKEND (4 SESSIONS) ===== */
+.weekend-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  max-width:1100px;margin:0 auto;
+}
+.weekend-card{
+  position:relative;padding:24px 22px;
+  background:linear-gradient(180deg, #1a1a24 0%, #14141c 30%, #0e0e16 70%, #1a1a24 100%);
+  clip-path:polygon(
+    14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+  transition:transform .25s ease;
+}
+.weekend-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg, var(--chrome-1) 0%, transparent 35%) top left / 50% 60% no-repeat,
+    linear-gradient(45deg, var(--chrome-3) 0%, transparent 35%) bottom left / 50% 60% no-repeat;
+  opacity:.18;
+  clip-path:polygon(
+    14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+}
+.weekend-card:hover{transform:translateY(-3px)}
+.weekend-card-day{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);margin-bottom:6px;
+  position:relative;z-index:1;
+}
+.weekend-card-session{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);margin-bottom:4px;
+  position:relative;z-index:1;
+}
+.weekend-card-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--chrome-2);margin-bottom:14px;
+  letter-spacing:1px;
+  position:relative;z-index:1;
+}
+.weekend-card-desc{
+  font-size:13px;line-height:1.55;color:var(--chrome-2);
+  position:relative;z-index:1;
+}
+.weekend-card-desc strong{color:var(--text);font-weight:700}
+
+@media(max-width:980px){
+  .weekend-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .weekend-grid{grid-template-columns:1fr;gap:10px}
+}
+
+/* ===== SECTION 2: THE 5 STATS ===== */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
+  max-width:1200px;margin:0 auto;
+}
+.stat-card{
+  position:relative;
+  padding:24px 18px 22px;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:10px;
+  overflow:hidden;
+  text-align:center;
+}
+.stat-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:3px;
+  background:var(--stat-color, var(--gold));
+  box-shadow:0 0 12px var(--stat-color, var(--gold));
+}
+.stat-card-glyph{
+  height:48px;
+  margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.15));
+}
+.stat-card-glyph img{
+  height:48px;width:auto;
+  object-fit:contain;
+}
+.stat-card-glyph img.wide{
+  height:54px;
+}
+.stat-card-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);margin-bottom:6px;
+  text-align:center;
+}
+.stat-card-meaning{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:2.5px;
+  margin-bottom:14px;
+  color:var(--stat-color, var(--gold));
+  text-align:center;
+}
+.stat-card-formula{
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:8px 10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--chrome-2);
+  margin-bottom:12px;line-height:1.4;
+  text-align:center;
+}
+.stat-card-formula .label{
+  display:block;font-size:8px;letter-spacing:1.5px;
+  color:var(--chrome-3);margin-bottom:3px;text-transform:uppercase;
+  text-align:center;
+}
+.stat-card-desc{
+  font-size:12px;line-height:1.5;color:var(--chrome-2);
+  text-align:center;
+}
+.stat-card-desc strong{color:var(--text);font-weight:700}
+
+@media(max-width:1080px){
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:680px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:1fr}
+}
+
+/* ===== SECTION 3: SECTORS / TRACK ===== */
+.sectors-block{max-width:1100px;margin:0 auto}
+.track-visual{
+  position:relative;
+  background:
+    linear-gradient(90deg,
+      rgba(255,102,68,.12) 0%, rgba(255,102,68,.12) 33%,
+      rgba(58,208,255,.12) 33%, rgba(58,208,255,.12) 66%,
+      rgba(0,255,136,.10) 66%, rgba(0,255,136,.10) 100%),
+    linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;padding:26px 24px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:24px;
+}
+.sector-block{
+  position:relative;padding:18px 16px;
+  text-align:center;
+  border-left:3px solid var(--sector-color);
+  background:linear-gradient(180deg, rgba(0,0,0,.3), transparent);
+}
+.sector-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:3px;
+  color:var(--sector-color);margin-bottom:4px;
+}
+.sector-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);margin-bottom:14px;
+}
+.sector-stats{
+  display:flex;justify-content:center;gap:6px;flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.sector-stat-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:14px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--pill-color);
+  color:var(--pill-color);
+}
+.sector-desc{
+  font-size:12px;line-height:1.5;color:var(--chrome-2);
+}
+
+@media(max-width:780px){
+  .track-visual{grid-template-columns:1fr;gap:12px}
+}
+
+/* ===== SECTION 4: FRIDAY SNAPSHOT ===== */
+.friday-block{
+  max-width:1040px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:24px;
+  align-items:stretch;
+}
+.friday-visual{
+  background:
+    radial-gradient(ellipse at center, rgba(255,204,0,.12) 0%, transparent 70%),
+    linear-gradient(135deg, #1a1a24 0%, #0e0e14 100%);
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:12px;
+  padding:32px 24px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.friday-day{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:5px;
+  color:var(--chrome-2);margin-bottom:6px;
+}
+.friday-time{
+  font-family:'Orbitron',sans-serif;
+  font-size:64px;font-weight:900;line-height:1;
+  background:linear-gradient(180deg,#fff5b8 0%,#ffd633 30%,#cc9900 55%,#ffd633 80%,#fff5b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 8px rgba(255,204,0,.4));
+  margin-bottom:10px;letter-spacing:-1px;
+}
+.friday-zone{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--chrome-3);letter-spacing:2px;
+  margin-bottom:18px;
+}
+.friday-tagline{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);
+  text-shadow:0 0 8px rgba(255,204,0,.3);
+}
+
+.friday-explainer{
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  padding:28px 26px;
+}
+.friday-step{
+  display:flex;gap:14px;margin-bottom:18px;
+}
+.friday-step:last-child{margin-bottom:0}
+.friday-step-num{
+  flex-shrink:0;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+  color:#0d0d14;
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;
+}
+.friday-step-text{
+  flex:1;
+  font-size:13px;line-height:1.55;color:var(--chrome-2);padding-top:5px;
+}
+.friday-step-text strong{color:var(--text);font-weight:700}
+
+@media(max-width:780px){
+  .friday-block{grid-template-columns:1fr}
+  .friday-time{font-size:48px}
+}
+
+/* ===== SECTION 5: COMMUNITY INFLUENCE ===== */
+.influence-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+  max-width:1100px;margin:0 auto;
+}
+.influence-card{
+  position:relative;padding:24px 22px;
+  background:linear-gradient(180deg, rgba(255,204,0,.04) 0%, transparent 50%, rgba(255,204,0,.04) 100%),
+             linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid rgba(255,204,0,.2);
+  border-radius:10px;
+}
+.influence-card-icon{
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+  border-radius:8px;
+  background:linear-gradient(135deg, var(--chrome-deep) 0%, #0d0d14 100%);
+  border:1px solid rgba(255,204,0,.3);
+}
+.influence-card-icon svg{width:20px;height:20px;color:var(--gold)}
+.influence-card-action{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);margin-bottom:6px;
+}
+.influence-card-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);margin-bottom:10px;line-height:1.3;
+}
+.influence-card-desc{
+  font-size:13px;line-height:1.55;color:var(--chrome-2);
+}
+.influence-card-desc strong{color:var(--text);font-weight:700}
+.influence-card-impact{
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line-bright);
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:1.5px;
+  color:var(--chrome-2);
+}
+.influence-card-impact strong{color:var(--gold);font-weight:700}
+
+@media(max-width:880px){
+  .influence-grid{grid-template-columns:1fr;gap:12px}
+}
+
+/* ===== SECTION 5 v2: 5-card grid mapped to stats ===== */
+.influence-grid-5{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;
+  max-width:1200px;margin:0 auto;
+}
+.influence-card-mini{
+  position:relative;padding:24px 18px 22px;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:10px;
+  overflow:hidden;
+  transition:transform .25s ease, border-color .25s ease;
+  text-align:center;
+}
+.influence-card-mini::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:3px;
+  background:var(--accent-color, var(--gold));
+  box-shadow:0 0 12px var(--accent-color, var(--gold));
+}
+.influence-card-mini:hover{
+  transform:translateY(-3px);
+  border-color:var(--accent-color);
+}
+.influence-card-mini-icon{
+  height:48px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.12));
+}
+.influence-card-mini-icon img{
+  height:48px;width:auto;object-fit:contain;
+}
+.influence-card-mini-icon img.wide{height:54px}
+.influence-card-mini-stat{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:900;letter-spacing:1.5px;
+  color:var(--accent-color);
+  margin-bottom:4px;
+  text-align:center;
+}
+.influence-card-mini-action{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2.5px;
+  color:var(--text);
+  margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line-bright);
+  text-align:center;
+}
+.influence-card-mini-desc{
+  font-size:12px;line-height:1.55;color:var(--chrome-2);
+  text-align:center;
+}
+.influence-card-mini-desc strong{color:var(--text);font-weight:700}
+
+@media(max-width:1080px){
+  .influence-grid-5{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:680px){
+  .influence-grid-5{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .influence-grid-5{grid-template-columns:1fr}
+}
+
+/* ===== SECTION 6: SEASON ARC TIMELINE ===== */
+.season-arc{
+  max-width:1080px;margin:0 auto;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:14px;
+  padding:34px 32px 30px;
+  position:relative;
+}
+.arc-week-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:10px;
+  position:relative;
+}
+.arc-track-line{
+  position:absolute;
+  top:60px;left:16px;right:16px;height:2px;
+  background:repeating-linear-gradient(90deg,
+    var(--chrome-1) 0, var(--chrome-1) 8px,
+    transparent 8px, transparent 16px);
+  z-index:0;
+}
+.arc-week{
+  position:relative;z-index:1;
+  text-align:center;
+}
+.arc-week-dot{
+  width:48px;height:48px;border-radius:50%;
+  margin:0 auto 12px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, var(--chrome-1) 0%, var(--chrome-2) 30%, var(--chrome-deep) 60%, var(--chrome-2) 100%);
+  border:2px solid var(--chrome-1);
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:900;color:#0d0d14;
+  box-shadow:inset 0 -2px 4px rgba(0,0,0,.4), inset 0 2px 4px rgba(255,255,255,.3),
+    0 4px 12px rgba(0,0,0,.6),
+    0 0 0 4px var(--bg);
+}
+.arc-week.race .arc-week-dot{
+  background:radial-gradient(circle at 35% 25%, rgba(255,255,255,.4) 0%, transparent 50%),
+    linear-gradient(135deg, #ffe066 0%, #ffcc00 50%, #aa8822 100%);
+  border-color:#fff5b8;
+}
+.arc-week.finale .arc-week-dot{
+  background:radial-gradient(circle at 35% 25%, rgba(255,255,255,.4) 0%, transparent 50%),
+    linear-gradient(135deg, var(--accent) 0%, #cc0033 100%);
+  border-color:#ff5577;color:#fff;
+}
+.arc-week-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);margin-bottom:4px;
+}
+.arc-week-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);margin-bottom:6px;line-height:1.2;
+}
+.arc-week-desc{
+  font-size:11px;line-height:1.4;color:var(--chrome-2);
+}
+
+.arc-footer{
+  margin-top:24px;padding-top:24px;
+  border-top:1px solid var(--line-bright);
+  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+}
+.arc-footer-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 16px;
+  background:rgba(0,255,136,.08);
+  border:1px solid rgba(0,255,136,.3);
+  border-radius:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--green);
+  text-shadow:0 0 8px rgba(0,255,136,.4);
+}
+
+@media(max-width:780px){
+  .arc-week-grid{grid-template-columns:1fr;gap:18px}
+  .arc-track-line{display:none}
+  .arc-week{display:flex;gap:14px;align-items:center;text-align:left}
+  .arc-week-dot{margin:0;flex-shrink:0}
+}
+
+/* ===== FOOTER CTA ===== */
+.footer-cta{
+  margin:48px auto 0;padding:48px 32px;
+  background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-card-2) 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:16px;text-align:center;
+  position:relative;overflow:hidden;
+  max-width:1040px;z-index:2;
+}
+.footer-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 70%,rgba(255,0,64,.06) 0%,transparent 60%);
+}
+.footer-cta-content{position:relative;z-index:1}
+.footer-cta-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);
+  margin-bottom:12px;
+}
+.footer-cta-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:14px;
+}
+.footer-cta-title .yellow{
+  background:linear-gradient(180deg,#fff5b8 0%,#ffcc00 50%,#aa8822 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.footer-cta-desc{
+  color:var(--chrome-2);margin-bottom:24px;
+  max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;
+}
+.footer-cta-buttons{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+}
+.footer-cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:2px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),#cc0033);
+  border:none;padding:14px 28px;border-radius:6px;
+  text-decoration:none;transition:all .2s ease;cursor:pointer;
+  box-shadow:0 0 20px rgba(255,0,64,.3);
+}
+.footer-cta-btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(255,0,64,.5)}
+.footer-cta-btn svg{width:16px;height:16px}
+.footer-cta-btn.secondary{
+  background:transparent;
+  border:1px solid var(--chrome-3);
+  color:var(--text);
+  box-shadow:none;
+}
+.footer-cta-btn.secondary:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+  box-shadow:0 0 20px rgba(255,204,0,.2);
+}
+
+@media(max-width:780px){
+  .hiw-panel{padding:32px 20px 40px}
+  .hiw-wrapper{padding:24px 12px 60px}
+  .section-block{margin-bottom:60px}
+}
+
+/* ============================================ */
+/* SECTION 04: THE RACE — track + leaderboard   */
+/* ============================================ */
+.race-section{
+  max-width:1180px;margin:0 auto;
+  display:grid;grid-template-columns:1.6fr 1fr;
+  gap:18px;align-items:stretch;
+}
+.race-track-panel{
+  position:relative;
+  background:linear-gradient(180deg, #14141c 0%, #0a0a12 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  padding:22px 22px 18px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.race-track-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;padding-bottom:12px;
+  border-bottom:1px solid var(--line-bright);
+}
+.race-track-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);
+  display:flex;align-items:center;gap:8px;
+}
+.race-track-eyebrow .live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 8px var(--accent);
+  animation:blink 1.4s infinite;
+}
+.race-track-lap{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--chrome-2);letter-spacing:1.5px;
+}
+.race-track-lap strong{color:var(--text);font-weight:700}
+.race-track-svg-wrap{
+  position:relative;width:100%;flex:1;min-height:340px;
+  display:flex;align-items:center;justify-content:center;
+}
+.race-track-svg{
+  width:100%;height:auto;max-height:380px;display:block;
+}
+.race-track-legend{
+  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line-bright);
+}
+.race-track-legend-item{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:var(--chrome-2);
+}
+.race-track-legend-dot{
+  width:9px;height:9px;border-radius:2px;
+  background:var(--legend-color);
+  box-shadow:0 0 6px var(--legend-color);
+}
+
+/* Leaderboard panel */
+.race-leaderboard{
+  background:linear-gradient(180deg, #14141c 0%, #0a0a12 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  padding:22px 18px 14px;
+  display:flex;flex-direction:column;
+}
+.race-leaderboard-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;padding-bottom:12px;
+  border-bottom:1px solid var(--line-bright);
+}
+.race-leaderboard-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:3px;
+  color:var(--text);
+}
+.race-leaderboard-flag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--gold);letter-spacing:1.5px;
+}
+.race-leaderboard-list{
+  display:flex;flex-direction:column;gap:4px;flex:1;
+}
+.lb-row{
+  display:grid;grid-template-columns:24px 14px 1fr auto;
+  gap:10px;align-items:center;
+  padding:7px 10px;
+  background:linear-gradient(90deg, rgba(255,204,0,.04), transparent);
+  border-left:2px solid var(--row-color, var(--chrome-3));
+  border-radius:0 4px 4px 0;
+  font-family:'Orbitron',sans-serif;
+  transition:background .15s ease;
+}
+.lb-row:hover{background:linear-gradient(90deg, rgba(255,204,0,.10), transparent)}
+.lb-row.p1{--row-color:#ffd633}
+.lb-row.p2{--row-color:#c8c8d0}
+.lb-row.p3{--row-color:#cd7f32}
+.lb-team-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--team-color);
+  box-shadow:0 0 6px var(--team-color);
+  border:1px solid rgba(255,255,255,.2);
+}
+.lb-pos{
+  font-size:11px;font-weight:900;
+  color:var(--row-color, var(--chrome-2));
+  text-align:center;
+}
+.lb-team{
+  font-size:11px;font-weight:800;letter-spacing:1px;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.lb-team .ticker-prefix{color:var(--gold);font-weight:700}
+.lb-gap{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--chrome-2);
+  text-align:right;letter-spacing:.5px;
+}
+.lb-gap.leader{color:var(--gold);font-weight:700}
+
+@media(max-width:880px){
+  .race-section{grid-template-columns:1fr;gap:14px}
+}
+
+/* ============================================ */
+/* SECTION 05: SCORING                          */
+/* ============================================ */
+.scoring-section{
+  max-width:1180px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:18px;align-items:stretch;
+}
+.points-panel{
+  background:linear-gradient(180deg, #14141c 0%, #0a0a12 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  padding:24px 22px 22px;
+  display:flex;flex-direction:column;
+}
+.points-header{
+  margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--line-bright);
+}
+.points-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);margin-bottom:6px;
+}
+.points-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);
+}
+.points-table{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;
+}
+.points-cell{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;
+  background:linear-gradient(90deg, rgba(255,204,0,.04), transparent);
+  border-left:2px solid var(--cell-color, var(--chrome-3));
+  border-radius:0 4px 4px 0;
+}
+.points-cell.podium-1{--cell-color:#ffd633}
+.points-cell.podium-2{--cell-color:#c8c8d0}
+.points-cell.podium-3{--cell-color:#cd7f32}
+.points-cell-pos{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:1px;
+  color:var(--cell-color, var(--chrome-2));
+}
+.points-cell-pts{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:900;color:var(--text);
+}
+.bonus-block{
+  margin-top:18px;padding:12px 14px;
+  background:linear-gradient(180deg, rgba(255,204,0,.06) 0%, transparent 100%);
+  border:1px solid rgba(255,204,0,.25);
+  border-radius:6px;
+}
+.bonus-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);margin-bottom:8px;
+}
+.bonus-list{display:flex;flex-direction:column;gap:5px}
+.bonus-item{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--chrome-2);
+}
+.bonus-item strong{color:var(--gold);font-weight:700}
+
+.standings-panel{
+  background:linear-gradient(180deg, #14141c 0%, #0a0a12 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  padding:24px 22px 18px;
+  display:flex;flex-direction:column;
+}
+.standings-header{
+  margin-bottom:14px;padding-bottom:14px;
+  border-bottom:1px solid var(--line-bright);
+}
+.standings-list{display:flex;flex-direction:column;gap:4px}
+.st-row{
+  display:grid;grid-template-columns:30px 14px 1fr auto;
+  gap:10px;align-items:center;
+  padding:7px 12px;
+  background:linear-gradient(90deg, rgba(255,255,255,.02), transparent);
+  border-left:3px solid var(--row-color, var(--chrome-3));
+  border-radius:0 4px 4px 0;
+  font-family:'Orbitron',sans-serif;
+  transition:transform .15s ease;
+}
+.st-row.qualified{
+  background:linear-gradient(90deg, rgba(0,255,136,.10), transparent);
+  border-left-color:var(--green);
+  box-shadow:0 0 12px rgba(0,255,136,.08), inset 0 1px 0 rgba(0,255,136,.05);
+}
+.st-row.qualified:hover{transform:translateX(2px)}
+.st-row.below{opacity:.55}
+.st-pos{
+  font-size:13px;font-weight:900;
+  color:var(--chrome-2);text-align:center;
+}
+.st-row.qualified .st-pos{
+  color:var(--green);
+  text-shadow:0 0 8px rgba(0,255,136,.4);
+}
+.st-team{
+  font-size:11px;font-weight:800;letter-spacing:1px;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.st-team .ticker-prefix{color:var(--gold);font-weight:700}
+.st-row.qualified .st-team .ticker-prefix{color:var(--green)}
+.st-points{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;font-weight:700;
+  color:var(--chrome-2);text-align:right;
+}
+.st-row.qualified .st-points{color:var(--green);font-weight:900}
+.qualify-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-left:8px;padding:2px 8px;
+  background:rgba(0,255,136,.15);
+  border:1px solid var(--green);
+  border-radius:3px;
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;font-weight:800;letter-spacing:1.5px;
+  color:var(--green);
+  text-shadow:0 0 6px rgba(0,255,136,.5);
+}
+.standings-divider{
+  margin:8px 0;
+  display:flex;align-items:center;gap:10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  color:var(--chrome-3);
+}
+.standings-divider::before,
+.standings-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg, transparent, var(--line-bright), transparent);
+}
+
+@media(max-width:880px){
+  .scoring-section{grid-template-columns:1fr;gap:14px}
+  .points-table{grid-template-columns:1fr 1fr}
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav-pro">
+  <a href="index.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>SEASON 2 GRID</span>
+  </a>
+  <div class="tnav-center">
+    <a href="how-it-works.html" class="tnav-link active">HOW IT WORKS</a>
+    <span class="tnav-sep"></span>
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="paddock.html" class="tnav-link">PADDOCK</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
+<div class="hiw-wrapper">
+
+<div class="hiw-panel">
+
+  <!-- HERO -->
+  <header class="page-header">
+    <div class="page-eyebrow">RACE CONTROL · BRIEFING</div>
+    <h1 class="page-title"><span class="silver">HOW IT</span> <span class="yellow">WORKS</span></h1>
+    <div class="page-subtitle">A complete F1 weekend, every week. <strong>Memecoin data drives every car.</strong> AI runs the race. Your community decides the season.</div>
+  </header>
+
+  <!-- TLDR -->
+  <div class="tldr-block">
+    <div class="tldr-eyebrow">▸ THE 30-SECOND VERSION</div>
+    <div class="tldr-text">
+      Memecoin communities own racing teams.<br>
+      Every coin's <span class="accent">on-chain data</span> becomes the car's <span class="accent">5 stats</span>.<br>
+      AI simulates a full <span class="accent">F1 weekend</span> every week.<br>
+      The communities that <span class="accent">trade, post, and rally hardest</span> climb the standings.
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: THE RACE WEEKEND (4 SESSIONS)    -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2 class="section-title">The <span class="accent">Race Weekend</span></h2>
+      <div class="section-sub">FOUR SESSIONS · MIRRORS A REAL F1 GRAND PRIX</div>
+    </div>
+
+    <div class="weekend-grid">
+      <div class="weekend-card">
+        <div class="weekend-card-day">SESSION 01</div>
+        <div class="weekend-card-session">FP1</div>
+        <div class="weekend-card-name">FREE PRACTICE 1</div>
+        <div class="weekend-card-desc">Sector times only. <strong>Which car is fastest in each part of the track?</strong> First read on the form. Posted live.</div>
+      </div>
+
+      <div class="weekend-card">
+        <div class="weekend-card-day">SESSION 02</div>
+        <div class="weekend-card-session">FP2</div>
+        <div class="weekend-card-name">FREE PRACTICE 2</div>
+        <div class="weekend-card-desc">Full lap times + head-to-heads. <strong>Storylines start emerging.</strong> Who's racing whom? Who's struggling?</div>
+      </div>
+
+      <div class="weekend-card">
+        <div class="weekend-card-day">SESSION 03</div>
+        <div class="weekend-card-session">QUALI</div>
+        <div class="weekend-card-name">QUALIFYING</div>
+        <div class="weekend-card-desc">One-shot qualifying lap per car. <strong>Sets the grid for race day.</strong> Pole position decided. Tension peaks.</div>
+      </div>
+
+      <div class="weekend-card">
+        <div class="weekend-card-day">SESSION 04</div>
+        <div class="weekend-card-session">RACE</div>
+        <div class="weekend-card-name">GRAND PRIX</div>
+        <div class="weekend-card-desc">Full simulated race. Overtakes, gaps, pit strategy, drama. <strong>Champion of the weekend crowned.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: THE 5 STATS                       -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2 class="section-title">The <span class="accent">5 Stats</span></h2>
+      <div class="section-sub">EVERY STAT IS DERIVED FROM YOUR COIN'S ON-CHAIN DATA</div>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card" style="--stat-color:var(--stat-engine)">
+        <div class="stat-card-glyph"><img src="icon-engine.png" alt="Engine icon"></div>
+        <div class="stat-card-name">ENGINE</div>
+        <div class="stat-card-meaning">RAW POWER</div>
+        <div class="stat-card-formula">
+          <span class="label">Source</span>
+          log10(MCAP) normalized 1-10
+        </div>
+        <div class="stat-card-desc">Higher market cap = bigger engine. <strong>Top end speed</strong> on the straights.</div>
+      </div>
+
+      <div class="stat-card" style="--stat-color:var(--stat-aero)">
+        <div class="stat-card-glyph"><img src="icon-aero.png" alt="Aero icon" class="wide"></div>
+        <div class="stat-card-name">AERO</div>
+        <div class="stat-card-meaning">DOWNFORCE</div>
+        <div class="stat-card-formula">
+          <span class="label">Source</span>
+          24h Volume / MCAP
+        </div>
+        <div class="stat-card-desc">Trading velocity = aero efficiency. <strong>Cornering speed</strong> in the technical sectors.</div>
+      </div>
+
+      <div class="stat-card" style="--stat-color:var(--stat-chassis)">
+        <div class="stat-card-glyph"><img src="icon-chassis.png" alt="Chassis icon"></div>
+        <div class="stat-card-name">CHASSIS</div>
+        <div class="stat-card-meaning">STIFFNESS</div>
+        <div class="stat-card-formula">
+          <span class="label">Source</span>
+          log10(Liquidity USD)
+        </div>
+        <div class="stat-card-desc">Liquidity depth = chassis rigidity. <strong>Corner stability</strong>. Doesn't get punted off track.</div>
+      </div>
+
+      <div class="stat-card" style="--stat-color:var(--stat-drag)">
+        <div class="stat-card-glyph"><img src="icon-drag.png" alt="Drag icon" class="wide"></div>
+        <div class="stat-card-name">DRAG</div>
+        <div class="stat-card-meaning">STABILITY</div>
+        <div class="stat-card-formula">
+          <span class="label">Source</span>
+          100 - abs(24h price change %)
+        </div>
+        <div class="stat-card-desc">Less volatility = lower drag. <strong>Steady straight-line speed</strong>. Doesn't blow up under load.</div>
+      </div>
+
+      <div class="stat-card" style="--stat-color:var(--stat-pit)">
+        <div class="stat-card-glyph"><img src="icon-pit.png" alt="Pit icon"></div>
+        <div class="stat-card-name">PIT</div>
+        <div class="stat-card-meaning">CREW + TYRES</div>
+        <div class="stat-card-formula">
+          <span class="label">Source</span>
+          Community engagement score
+        </div>
+        <div class="stat-card-desc">Holders + engagement + community size. <strong>Faster pit stops + slower tyre wear.</strong> Two strategic levers, one stat.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 3: THE 3 SECTORS                     -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2 class="section-title">The <span class="accent">3 Sectors</span></h2>
+      <div class="section-sub">EACH SECTOR REWARDS DIFFERENT STATS · NO TEAM DOMINATES EVERYWHERE</div>
+    </div>
+
+    <div class="sectors-block">
+      <div class="track-visual">
+
+        <div class="sector-block" style="--sector-color:var(--stat-engine)">
+          <div class="sector-num">SECTOR 01</div>
+          <div class="sector-name">SPEED ZONE</div>
+          <div class="sector-stats">
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-engine)">⚡ ENGINE</span>
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-drag)">🌬️ DRAG</span>
+          </div>
+          <div class="sector-desc">Long straights and heavy braking zones. <strong>Raw power + a stable car at top speed</strong> dominate here.</div>
+        </div>
+
+        <div class="sector-block" style="--sector-color:var(--stat-aero)">
+          <div class="sector-num">SECTOR 02</div>
+          <div class="sector-name">CORNERING ZONE</div>
+          <div class="sector-stats">
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-chassis)">🔩 CHASSIS</span>
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-aero)">💨 AERO</span>
+          </div>
+          <div class="sector-desc">Flowing high-speed corners and technical changes of direction. <strong>Stiff chassis + downforce</strong> wins through here.</div>
+        </div>
+
+        <div class="sector-block" style="--sector-color:var(--stat-pit)">
+          <div class="sector-num">SECTOR 03</div>
+          <div class="sector-name">STRATEGY ZONE</div>
+          <div class="sector-stats">
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-pit)">🔧 PIT</span>
+            <span class="sector-stat-pill" style="--pill-color:var(--stat-pit)">⏱️ TYRES</span>
+          </div>
+          <div class="sector-desc">Tight technical section + pit lane decisions. <strong>Pit stop speed and tyre management</strong> decide who wins or loses here.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 04: THE RACE                          -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2 class="section-title">The <span class="accent">Race</span></h2>
+      <div class="section-sub">A LIVE BROADCAST · 25 LAPS · 15 CARS · ONE WINNER</div>
+    </div>
+
+    <div class="race-section">
+
+      <!-- LEFT: Track view -->
+      <div class="race-track-panel">
+        <div class="race-track-header">
+          <div class="race-track-eyebrow">
+            <span class="live-dot"></span>
+            <span>LIVE · LAP 18 / 25</span>
+          </div>
+          <div class="race-track-lap"><strong>SECTOR 02</strong> · CORNERING ZONE</div>
+        </div>
+
+        <div class="race-track-svg-wrap">
+          <svg class="race-track-svg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Speed blue gradient (for fast straights) -->
+              <linearGradient id="speedBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1845b0"/>
+                <stop offset="50%" stop-color="#2563eb"/>
+                <stop offset="100%" stop-color="#1845b0"/>
+              </linearGradient>
+              <!-- Danger red (for slow corners) -->
+              <linearGradient id="dangerRed" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#b01818"/>
+                <stop offset="50%" stop-color="#dc2626"/>
+                <stop offset="100%" stop-color="#b01818"/>
+              </linearGradient>
+              <!-- Pit green -->
+              <linearGradient id="pitGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0d8045"/>
+                <stop offset="50%" stop-color="#10a050"/>
+                <stop offset="100%" stop-color="#0d8045"/>
+              </linearGradient>
+              <!-- Start/finish pattern -->
+              <pattern id="startFin" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="3" height="3" fill="#fff"/>
+                <rect x="3" y="3" width="3" height="3" fill="#fff"/>
+                <rect x="3" y="0" width="3" height="3" fill="#000"/>
+                <rect x="0" y="3" width="3" height="3" fill="#000"/>
+              </pattern>
+              <!-- Glow filter for leader car -->
+              <filter id="leaderGlow">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- ============================================ -->
+            <!-- TRACK — built as separate colored segments    -->
+            <!-- BLUE = straights / fast curves                -->
+            <!-- RED  = slow / heavy braking corners           -->
+            <!-- GREEN = pit lane                              -->
+            <!-- ============================================ -->
+
+            <!-- All track segments use stroke-width 32 (track width)  -->
+            <!-- White edge underlay (gives that broadcast TV outline) -->
+
+            <!-- TRACK BORDER UNDERLAY (white, slightly wider) -->
+            <g stroke="#fff" stroke-width="36" stroke-linecap="butt" stroke-linejoin="miter" fill="none">
+              <!-- left straight (start/finish) -->
+              <path d="M 80 105 L 80 360"/>
+              <!-- bottom-left to bottom-right curve in -->
+              <path d="M 80 360 Q 80 410 130 410"/>
+              <!-- bottom long straight -->
+              <path d="M 130 410 L 670 410"/>
+              <!-- bottom-right curve up -->
+              <path d="M 670 410 Q 720 410 720 360"/>
+              <!-- right straight going up -->
+              <path d="M 720 360 L 720 200"/>
+              <!-- chicane on right side -->
+              <path d="M 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100"/>
+              <!-- top straight going left -->
+              <path d="M 690 100 L 250 100"/>
+              <!-- hairpin top-left -->
+              <path d="M 250 100 Q 200 100 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220"/>
+              <!-- final left curve back to start -->
+              <path d="M 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 L 80 105"/>
+            </g>
+
+            <!-- COLORED TRACK SEGMENTS -->
+            <!-- =====  BLUE — STRAIGHTS / FAST  ===== -->
+            <!-- Left start/finish straight (long fast section into T1) -->
+            <path d="M 80 105 L 80 320" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- Bottom main straight (DRS-style long one) -->
+            <path d="M 175 410 L 625 410" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- Right main straight up -->
+            <path d="M 720 360 L 720 230" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- Top main straight (right to left) -->
+            <path d="M 660 100 L 290 100" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+
+            <!-- =====  RED — SLOW CORNERS / DANGER  ===== -->
+            <!-- T10: tight final corner before start finish (bottom-left) -->
+            <path d="M 80 320 Q 80 410 130 410 L 175 410" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- T6: bottom-right hairpin -->
+            <path d="M 625 410 L 670 410 Q 720 410 720 360" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- T3-T4-T5: chicane on right -->
+            <path d="M 720 230 L 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100 L 660 100" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- T2: top-right slow corner -->
+            <path d="M 290 100 L 250 100 Q 200 100 200 145" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+            <!-- T1: the big hairpin loop top-left -->
+            <path d="M 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 L 80 105" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
+
+            <!-- =====  GREEN — PIT LANE (parallel to bottom straight)  ===== -->
+            <path d="M 200 440 L 600 440" stroke="url(#pitGreen)" stroke-width="20" fill="none" stroke-linecap="butt"/>
+            <!-- Pit lane entry (curves in from bottom straight) -->
+            <path d="M 175 410 Q 180 425 200 440" stroke="url(#pitGreen)" stroke-width="14" fill="none" stroke-linecap="butt"/>
+            <!-- Pit lane exit -->
+            <path d="M 600 440 Q 620 425 625 410" stroke="url(#pitGreen)" stroke-width="14" fill="none" stroke-linecap="butt"/>
+
+            <!-- DASHED CENTER LINE (white) — runs through middle of all segments -->
+            <path d="M 80 105 L 80 360 Q 80 410 130 410 L 670 410 Q 720 410 720 360 L 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100 L 250 100 Q 200 100 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 Z"
+                  fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-dasharray="5 7"/>
+
+            <!-- START/FINISH LINE (checkered, on left straight) -->
+            <rect x="62" y="190" width="36" height="8" fill="url(#startFin)"/>
+            <text x="48" y="196" font-family="Orbitron" font-size="7" font-weight="800"
+                  letter-spacing="1.5" fill="#fff" text-anchor="end">START</text>
+
+            <!-- TURN NUMBERS — positioned at corner apexes -->
+            <g font-family="Orbitron" font-size="9" font-weight="800" fill="#fff">
+              <!-- T1 hairpin top-left -->
+              <circle cx="252" cy="218" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="252" y="222" text-anchor="middle">1</text>
+              <!-- T2 -->
+              <circle cx="218" cy="113" r="9" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="218" y="117" text-anchor="middle">2</text>
+              <!-- T3 chicane -->
+              <circle cx="660" cy="115" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="660" y="119" text-anchor="middle" font-size="8">3</text>
+              <!-- T4 -->
+              <circle cx="685" cy="148" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="685" y="151" text-anchor="middle" font-size="8">4</text>
+              <!-- T5 -->
+              <circle cx="708" cy="180" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="708" y="184" text-anchor="middle" font-size="8">5</text>
+              <!-- T6 hairpin bottom-right -->
+              <circle cx="700" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="700" y="399" text-anchor="middle">6</text>
+              <!-- T10 final corner -->
+              <circle cx="100" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+              <text x="100" y="399" text-anchor="middle">10</text>
+            </g>
+
+            <!-- PIT LANE LABEL -->
+            <text x="400" y="453" font-family="Orbitron" font-size="9" font-weight="900"
+                  letter-spacing="3" fill="#10a050" text-anchor="middle">▸ PIT LANE ◂</text>
+
+            <!-- SECTOR DIVIDER POSTS (small gold flags around the track) -->
+            <!-- Sector 1 ends at T2 / Sector 2 ends at T6 / Sector 3 ends at start -->
+            <g font-family="Orbitron" font-weight="900">
+              <!-- S1 → S2 boundary marker (after T1, between T2 and top straight) -->
+              <rect x="176" y="80" width="3" height="20" fill="#ffcc00"/>
+              <text x="160" y="76" font-size="9" fill="#ffcc00" text-anchor="middle" letter-spacing="1">S1▸S2</text>
+              <!-- S2 → S3 boundary marker (after T6, before bottom straight pit zone) -->
+              <rect x="630" y="395" width="3" height="20" fill="#ffcc00"/>
+              <text x="668" y="392" font-size="9" fill="#ffcc00" text-anchor="middle" letter-spacing="1">S2▸S3</text>
+              <!-- S3 → S1 boundary marker (after T10 / start of straight) -->
+              <rect x="62" y="345" width="20" height="3" fill="#ffcc00"/>
+              <text x="48" y="343" font-size="9" fill="#ffcc00" text-anchor="end" letter-spacing="1">S3▸S1</text>
+            </g>
+
+            <!-- BIG SECTOR LABELS (in negative space inside the loop) -->
+            <g font-family="Orbitron" font-weight="900" letter-spacing="3" opacity=".6">
+              <text x="40" y="160" font-size="11" fill="#3ad0ff" text-anchor="middle"
+                    transform="rotate(-90 40 160)">SECTOR 1 · SPEED</text>
+              <text x="490" y="60" font-size="11" fill="#3ad0ff" text-anchor="middle">SECTOR 2 · CORNERING</text>
+              <text x="400" y="380" font-size="11" fill="#00ff88" text-anchor="middle">SECTOR 3 · STRATEGY</text>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- CARS ON TRACK — positioned along the circuit -->
+            <!-- Branded color rings (logo swap pending)      -->
+            <!-- ============================================ -->
+
+            <!-- P1 LEADER · BRETT — top straight, leading -->
+            <g transform="translate(580, 100)" filter="url(#leaderGlow)">
+              <circle r="11" fill="#1FCC1F" stroke="#fff" stroke-width="2"/>
+              <circle r="7" fill="#0a3a0a"/>
+              <text y="2.5" font-family="Orbitron" font-size="8" font-weight="900" text-anchor="middle" fill="#fff">B</text>
+              <text x="0" y="-16" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#ffd633">P1</text>
+            </g>
+            <!-- P2 · DOGE -->
+            <g transform="translate(530, 100)">
+              <circle r="10" fill="#BA9F33" stroke="#fff" stroke-width="1.5"/>
+              <circle r="6.5" fill="#3a2f10"/>
+              <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">D</text>
+              <text x="0" y="-15" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#c8c8d0">P2</text>
+            </g>
+            <!-- P3 · PENGU -->
+            <g transform="translate(480, 100)">
+              <circle r="10" fill="#2B6CB0" stroke="#fff" stroke-width="1.5"/>
+              <circle r="6.5" fill="#0a1a30"/>
+              <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">P</text>
+              <text x="0" y="-15" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#cd7f32">P3</text>
+            </g>
+            <!-- P4 · TURBO -->
+            <g transform="translate(420, 100)">
+              <circle r="9" fill="#1e7fd9" stroke="#fff" stroke-width="1.5"/>
+              <circle r="6" fill="#0a1f3a"/>
+              <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">T</text>
+            </g>
+            <!-- P5 · BONK -->
+            <g transform="translate(370, 100)">
+              <circle r="9" fill="#FF8800" stroke="#fff" stroke-width="1.5"/>
+              <circle r="6" fill="#3a1f00"/>
+              <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">B</text>
+            </g>
+            <!-- P6 · MASK -->
+            <g transform="translate(320, 100)">
+              <circle r="9" fill="#e02838" stroke="#fff" stroke-width="1.5"/>
+              <circle r="6" fill="#3a0a10"/>
+              <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">M</text>
+            </g>
+            <!-- P7 · WIF — exiting T1 hairpin -->
+            <g transform="translate(232, 175)">
+              <circle r="8" fill="#FF66B2" stroke="#fff" stroke-width="1"/>
+              <circle r="5.5" fill="#3a1028"/>
+              <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">W</text>
+            </g>
+            <!-- P8 · SHIB — on left straight -->
+            <g transform="translate(80, 280)">
+              <circle r="8" fill="#FFA409" stroke="#fff" stroke-width="1"/>
+              <circle r="5.5" fill="#3a2a08"/>
+              <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">S</text>
+            </g>
+            <!-- P9 · MOG — bottom straight -->
+            <g transform="translate(420, 410)">
+              <circle r="8" fill="#B77F4A" stroke="#fff" stroke-width="1"/>
+              <circle r="5.5" fill="#2a1d10"/>
+              <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">M</text>
+            </g>
+            <!-- P10 · PEPE — in pit lane (lapped/strategy) -->
+            <g transform="translate(380, 440)" opacity=".75">
+              <circle r="8" fill="#4FAE51" stroke="#fff" stroke-width="1"/>
+              <circle r="5.5" fill="#0d2a0e"/>
+              <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">P</text>
+            </g>
+
+          </svg>
+        </div>
+
+        <div class="race-track-legend">
+          <span class="race-track-legend-item">
+            <span class="race-track-legend-dot" style="--legend-color:#2563eb"></span>
+            STRAIGHTS · FAST
+          </span>
+          <span class="race-track-legend-item">
+            <span class="race-track-legend-dot" style="--legend-color:#dc2626"></span>
+            CORNERS · SLOW
+          </span>
+          <span class="race-track-legend-item">
+            <span class="race-track-legend-dot" style="--legend-color:#10a050"></span>
+            PIT LANE
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Live Leaderboard -->
+      <div class="race-leaderboard">
+        <div class="race-leaderboard-header">
+          <span class="race-leaderboard-title">▸ LEADERBOARD</span>
+          <span class="race-leaderboard-flag">🏁 LAP 18</span>
+        </div>
+
+        <div class="race-leaderboard-list">
+          <div class="lb-row p1">
+            <span class="lb-pos">P1</span>
+            <span class="lb-team-dot" style="--team-color:#1FCC1F"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>BRETT</span>
+            <span class="lb-gap leader">LEADER</span>
+          </div>
+          <div class="lb-row p2">
+            <span class="lb-pos">P2</span>
+            <span class="lb-team-dot" style="--team-color:#BA9F33"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>DOGE</span>
+            <span class="lb-gap">+0.482</span>
+          </div>
+          <div class="lb-row p3">
+            <span class="lb-pos">P3</span>
+            <span class="lb-team-dot" style="--team-color:#2B6CB0"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>PENGU</span>
+            <span class="lb-gap">+1.124</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P4</span>
+            <span class="lb-team-dot" style="--team-color:#1e7fd9"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>TURBO</span>
+            <span class="lb-gap">+2.890</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P5</span>
+            <span class="lb-team-dot" style="--team-color:#FF8800"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>BONK</span>
+            <span class="lb-gap">+4.211</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P6</span>
+            <span class="lb-team-dot" style="--team-color:#e02838"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>MASK</span>
+            <span class="lb-gap">+5.604</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P7</span>
+            <span class="lb-team-dot" style="--team-color:#FF66B2"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>WIF</span>
+            <span class="lb-gap">+7.122</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P8</span>
+            <span class="lb-team-dot" style="--team-color:#FFA409"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>SHIB</span>
+            <span class="lb-gap">+9.018</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P9</span>
+            <span class="lb-team-dot" style="--team-color:#B77F4A"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>MOG</span>
+            <span class="lb-gap">+11.45</span>
+          </div>
+          <div class="lb-row">
+            <span class="lb-pos">P10</span>
+            <span class="lb-team-dot" style="--team-color:#4FAE51"></span>
+            <span class="lb-team"><span class="ticker-prefix">$</span>PEPE</span>
+            <span class="lb-gap">+13.82</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="text-align:center;max-width:780px;margin:24px auto 0;color:var(--chrome-2);font-size:13px;line-height:1.6;position:relative;z-index:2;font-style:italic;">
+      Demo view. Real race UI ships with <strong style="color:var(--text);font-style:normal;">Race 1 in June 2026</strong>.
+    </p>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 05: THE SCORING                       -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2 class="section-title">The <span class="accent">Scoring</span></h2>
+      <div class="section-sub">POINTS PER RACE · SEASON STANDINGS · TOP 4 ADVANCE</div>
+    </div>
+
+    <div class="scoring-section">
+
+      <!-- BLOCK A: Points per race -->
+      <div class="points-panel">
+        <div class="points-header">
+          <div class="points-eyebrow">▸ BLOCK A</div>
+          <div class="points-title">Points per race</div>
+        </div>
+
+        <div class="points-table">
+          <div class="points-cell podium-1">
+            <span class="points-cell-pos">P1</span>
+            <span class="points-cell-pts">25</span>
+          </div>
+          <div class="points-cell podium-2">
+            <span class="points-cell-pos">P2</span>
+            <span class="points-cell-pts">20</span>
+          </div>
+          <div class="points-cell podium-3">
+            <span class="points-cell-pos">P3</span>
+            <span class="points-cell-pts">16</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P4</span>
+            <span class="points-cell-pts">13</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P5</span>
+            <span class="points-cell-pts">11</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P6</span>
+            <span class="points-cell-pts">10</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P7</span>
+            <span class="points-cell-pts">9</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P8</span>
+            <span class="points-cell-pts">8</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P9</span>
+            <span class="points-cell-pts">7</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P10</span>
+            <span class="points-cell-pts">6</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P11</span>
+            <span class="points-cell-pts">5</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P12</span>
+            <span class="points-cell-pts">4</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P13</span>
+            <span class="points-cell-pts">3</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P14</span>
+            <span class="points-cell-pts">2</span>
+          </div>
+          <div class="points-cell">
+            <span class="points-cell-pos">P15</span>
+            <span class="points-cell-pts">1</span>
+          </div>
+        </div>
+
+        <div class="bonus-block">
+          <div class="bonus-title">▸ BONUS POINTS</div>
+          <div class="bonus-list">
+            <div class="bonus-item">
+              <span>🏁 Pole position</span>
+              <strong>+1 pt</strong>
+            </div>
+            <div class="bonus-item">
+              <span>⚡ Fastest lap</span>
+              <strong>+1 pt</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK B: Hypothetical season standings -->
+      <div class="standings-panel">
+        <div class="standings-header">
+          <div class="points-eyebrow">▸ BLOCK B · END OF SEASON 2 · HYPOTHETICAL</div>
+          <div class="points-title">Final standings · 4 races complete</div>
+        </div>
+
+        <div class="standings-list">
+
+          <!-- Top 4 — qualified -->
+          <div class="st-row qualified">
+            <span class="st-pos">1</span>
+            <span class="lb-team-dot" style="--team-color:#1FCC1F"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>BRETT <span class="qualify-badge">S3</span></span>
+            <span class="st-points">98</span>
+          </div>
+          <div class="st-row qualified">
+            <span class="st-pos">2</span>
+            <span class="lb-team-dot" style="--team-color:#BA9F33"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>DOGE <span class="qualify-badge">S3</span></span>
+            <span class="st-points">86</span>
+          </div>
+          <div class="st-row qualified">
+            <span class="st-pos">3</span>
+            <span class="lb-team-dot" style="--team-color:#2B6CB0"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>PENGU <span class="qualify-badge">S3</span></span>
+            <span class="st-points">71</span>
+          </div>
+          <div class="st-row qualified">
+            <span class="st-pos">4</span>
+            <span class="lb-team-dot" style="--team-color:#1e7fd9"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>TURBO <span class="qualify-badge">S3</span></span>
+            <span class="st-points">63</span>
+          </div>
+
+          <div class="standings-divider">▾ AUTO-QUALIFY LINE · TOP 4 ADVANCE</div>
+
+          <!-- The rest -->
+          <div class="st-row below">
+            <span class="st-pos">5</span>
+            <span class="lb-team-dot" style="--team-color:#FF8800"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>BONK</span>
+            <span class="st-points">52</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">6</span>
+            <span class="lb-team-dot" style="--team-color:#e02838"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>MASK</span>
+            <span class="st-points">44</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">7</span>
+            <span class="lb-team-dot" style="--team-color:#FF66B2"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>WIF</span>
+            <span class="st-points">38</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">8</span>
+            <span class="lb-team-dot" style="--team-color:#FFA409"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>SHIB</span>
+            <span class="st-points">31</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">9</span>
+            <span class="lb-team-dot" style="--team-color:#B77F4A"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>MOG</span>
+            <span class="st-points">26</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">10</span>
+            <span class="lb-team-dot" style="--team-color:#4FAE51"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>PEPE</span>
+            <span class="st-points">21</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">11</span>
+            <span class="lb-team-dot" style="--team-color:#F26B22"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>FLOKI</span>
+            <span class="st-points">17</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">12</span>
+            <span class="lb-team-dot" style="--team-color:#5DB2FF"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>WEN</span>
+            <span class="st-points">12</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">13</span>
+            <span class="lb-team-dot" style="--team-color:#F5A6CA"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>POPCAT</span>
+            <span class="st-points">9</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">14</span>
+            <span class="lb-team-dot" style="--team-color:#4FBE6E"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>SPX</span>
+            <span class="st-points">5</span>
+          </div>
+          <div class="st-row below">
+            <span class="st-pos">15</span>
+            <span class="lb-team-dot" style="--team-color:#3a3a44"></span>
+            <span class="st-team"><span class="ticker-prefix">$</span>GIGA</span>
+            <span class="st-points">2</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <p style="text-align:center;max-width:780px;margin:24px auto 0;color:var(--chrome-2);font-size:13px;line-height:1.6;position:relative;z-index:2;font-style:italic;">
+      Demo standings. <strong style="color:var(--green);font-style:normal;">Top 4 always auto-qualify for the next season</strong> — no auctions, no bidding. Survive the grid, keep the seat.
+    </p>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 06: THE FRIDAY SNAPSHOT               -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2 class="section-title">The <span class="accent">Friday Snapshot</span></h2>
+      <div class="section-sub">EVERY FRIDAY · STATS REFRESH · COMMUNITIES STRATEGIZE</div>
+    </div>
+
+    <div class="friday-block">
+
+      <div class="friday-visual">
+        <div class="friday-day">FRIDAY</div>
+        <div class="friday-time">18:00</div>
+        <div class="friday-zone">UTC · WEEKLY</div>
+        <div class="friday-tagline">▸ STATS DROP</div>
+      </div>
+
+      <div class="friday-explainer">
+        <div class="friday-step">
+          <div class="friday-step-num">1</div>
+          <div class="friday-step-text">Every Friday at <strong>18:00 UTC</strong>, we pull <strong>7-day averages</strong> from DexScreener for every team's coin.</div>
+        </div>
+        <div class="friday-step">
+          <div class="friday-step-num">2</div>
+          <div class="friday-step-text">Stats are <strong>recalculated</strong> using the public formulas. Updated cars are published.</div>
+        </div>
+        <div class="friday-step">
+          <div class="friday-step-num">3</div>
+          <div class="friday-step-text">These stats are <strong>locked for the upcoming weekend</strong>: FP1, FP2, Quali, Race all run on these numbers.</div>
+        </div>
+        <div class="friday-step">
+          <div class="friday-step-num">4</div>
+          <div class="friday-step-text">Communities have <strong>7 days</strong> to influence next week's snapshot before the cycle repeats.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 07: HOW COMMUNITIES DRIVE             -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <h2 class="section-title">How <span class="accent">Communities</span> Drive the Race</h2>
+      <div class="section-sub">EVERY STAT IS A COMMUNITY ACTION · YOUR CREW BUILDS THE CAR</div>
+    </div>
+
+    <p style="text-align:center;max-width:760px;margin:0 auto 32px;color:var(--chrome-2);font-size:14px;line-height:1.6;position:relative;z-index:2;">
+      <strong style="color:var(--text);">Your car isn't built by us.</strong> It's built by everything your community does between Friday and Friday — trading, holding, growing, posting, defending. Every action moves the needle on a different stat.
+    </p>
+
+    <div class="influence-grid-5">
+
+      <div class="influence-card-mini" style="--accent-color:var(--stat-engine)">
+        <div class="influence-card-mini-icon"><img src="icon-engine.png" alt=""></div>
+        <div class="influence-card-mini-stat">ENGINE</div>
+        <div class="influence-card-mini-action">GROW THE COMMUNITY</div>
+        <div class="influence-card-mini-desc">Raising your market cap raises your engine. <strong>Onboard more wallets, drive new buyers, expand the holder base</strong> — top-end speed comes from the size of the army.</div>
+      </div>
+
+      <div class="influence-card-mini" style="--accent-color:var(--stat-aero)">
+        <div class="influence-card-mini-icon"><img src="icon-aero.png" alt="" class="wide"></div>
+        <div class="influence-card-mini-stat">AERO</div>
+        <div class="influence-card-mini-action">TRADE THE COIN</div>
+        <div class="influence-card-mini-desc">High volume relative to mcap = aero efficiency. <strong>Active markets, real trading, communities moving in and out</strong> — every trade tunes the downforce.</div>
+      </div>
+
+      <div class="influence-card-mini" style="--accent-color:var(--stat-chassis)">
+        <div class="influence-card-mini-icon"><img src="icon-chassis.png" alt=""></div>
+        <div class="influence-card-mini-stat">CHASSIS</div>
+        <div class="influence-card-mini-action">HOLD THE LINE</div>
+        <div class="influence-card-mini-desc">Liquidity depth = chassis stiffness. <strong>Diamond hands, deep LP, no panic selling</strong> — the more stable the holder base, the harder your car is to knock off-line.</div>
+      </div>
+
+      <div class="influence-card-mini" style="--accent-color:var(--stat-drag)">
+        <div class="influence-card-mini-icon"><img src="icon-drag.png" alt="" class="wide"></div>
+        <div class="influence-card-mini-stat">DRAG</div>
+        <div class="influence-card-mini-action">DEFEND THE PRICE</div>
+        <div class="influence-card-mini-desc">Less volatility = less drag. <strong>Calm, confident, organised communities</strong> hold price action steady — the car doesn't shake at top speed.</div>
+      </div>
+
+      <div class="influence-card-mini" style="--accent-color:var(--stat-pit)">
+        <div class="influence-card-mini-icon"><img src="icon-pit.png" alt=""></div>
+        <div class="influence-card-mini-stat">PIT</div>
+        <div class="influence-card-mini-action">SHOW UP LOUDLY</div>
+        <div class="influence-card-mini-desc">Posts, memes, replies, race-day energy on @MemeGrandPrix. Loud communities = <strong>faster pit stops</strong>. Loyal holders = <strong>slower tyre wear</strong>. Two strategic levers, both controlled by your crew.</div>
+      </div>
+
+    </div>
+
+    <div style="max-width:760px;margin:32px auto 0;padding:18px 24px;background:linear-gradient(180deg, rgba(255,204,0,.06) 0%, transparent 100%);border:1px solid rgba(255,204,0,.25);border-radius:8px;text-align:center;position:relative;z-index:2;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;color:var(--gold);margin-bottom:8px;">▸ THE BIG INSIGHT</div>
+      <div style="font-size:14px;line-height:1.6;color:var(--chrome-2);">
+        Big-cap coins start with raw <strong style="color:var(--text);">ENGINE</strong>. But <strong style="color:var(--text);">AERO, CHASSIS, DRAG, and PIT are won by communities, not market caps.</strong> A scrappy coin with a rabid community can outclass the giants in 4 of 5 stats — and that's where championships are decided.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 08: THE SEASON ARC                   -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <h2 class="section-title">The <span class="accent">Season Arc</span></h2>
+      <div class="section-sub">FOUR WEEKS · FOUR RACES · TOP 4 ADVANCE</div>
+    </div>
+
+    <div class="season-arc">
+      <div class="arc-track-line"></div>
+      <div class="arc-week-grid">
+
+        <div class="arc-week race">
+          <div class="arc-week-dot">R1</div>
+          <div class="arc-week-label">WEEK 01</div>
+          <div class="arc-week-title">Race 1</div>
+          <div class="arc-week-desc">Lights out. The first standings. Pure data, no upgrades yet.</div>
+        </div>
+
+        <div class="arc-week race">
+          <div class="arc-week-dot">R2</div>
+          <div class="arc-week-label">WEEK 02</div>
+          <div class="arc-week-title">Race 2</div>
+          <div class="arc-week-desc">Friday snapshot kicks in. Stats shift. New storylines.</div>
+        </div>
+
+        <div class="arc-week race">
+          <div class="arc-week-dot">R3</div>
+          <div class="arc-week-label">WEEK 03</div>
+          <div class="arc-week-title">Race 3</div>
+          <div class="arc-week-desc">Mid-season form takes shape. Communities tune their strategy.</div>
+        </div>
+
+        <div class="arc-week finale">
+          <div class="arc-week-dot">R4</div>
+          <div class="arc-week-label">WEEK 04</div>
+          <div class="arc-week-title">Finale</div>
+          <div class="arc-week-desc">Champion crowned. Top 4 punch their ticket to Season 3.</div>
+        </div>
+
+        <div class="arc-week">
+          <div class="arc-week-dot">S3</div>
+          <div class="arc-week-label">JUNE 2026</div>
+          <div class="arc-week-title">Auctions Open</div>
+          <div class="arc-week-desc">16 new teams join. The grid expands to 20.</div>
+        </div>
+
+      </div>
+
+      <div class="arc-footer">
+        <span class="arc-footer-pill">✓ TOP 4 AUTO-QUALIFY FOR SEASON 3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 09: NOT GAMBLING                     -->
+  <!-- ============================================ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <h2 class="section-title">What This <span class="accent">Isn't</span></h2>
+      <div class="section-sub">CLEARING UP COMMON QUESTIONS</div>
+    </div>
+
+    <div class="influence-grid">
+
+      <div class="influence-card" style="border-color:rgba(255,0,64,.25);background:linear-gradient(180deg, rgba(255,0,64,.04) 0%, transparent 50%, rgba(255,0,64,.04) 100%), linear-gradient(180deg, #14141c 0%, #0e0e14 100%)">
+        <div class="influence-card-icon" style="border-color:rgba(255,0,64,.3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>
+          </svg>
+        </div>
+        <div class="influence-card-action" style="color:var(--accent)">▸ NOT GAMBLING</div>
+        <div class="influence-card-title">Pure entertainment</div>
+        <div class="influence-card-desc">No betting on race outcomes. No staking. No wagers. <strong>AI-driven simulation</strong> for entertainment, not chance-based gameplay.</div>
+      </div>
+
+      <div class="influence-card" style="border-color:rgba(255,0,64,.25);background:linear-gradient(180deg, rgba(255,0,64,.04) 0%, transparent 50%, rgba(255,0,64,.04) 100%), linear-gradient(180deg, #14141c 0%, #0e0e14 100%)">
+        <div class="influence-card-icon" style="border-color:rgba(255,0,64,.3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>
+          </svg>
+        </div>
+        <div class="influence-card-action" style="color:var(--accent)">▸ NOT A TOKEN LAUNCH</div>
+        <div class="influence-card-title">No allocations</div>
+        <div class="influence-card-desc">We don't ask for tokens from your community. <strong>Free to join the grid.</strong> $MEMEGP exists but isn't required for participation.</div>
+      </div>
+
+      <div class="influence-card" style="border-color:rgba(255,0,64,.25);background:linear-gradient(180deg, rgba(255,0,64,.04) 0%, transparent 50%, rgba(255,0,64,.04) 100%), linear-gradient(180deg, #14141c 0%, #0e0e14 100%)">
+        <div class="influence-card-icon" style="border-color:rgba(255,0,64,.3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>
+          </svg>
+        </div>
+        <div class="influence-card-action" style="color:var(--accent)">▸ NOT AN INVESTMENT</div>
+        <div class="influence-card-title">No financial promises</div>
+        <div class="influence-card-desc">Race results don't generate yield. <strong>Communities show up because the format is fun</strong>, not for returns. DYOR on any token decisions.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+  <!-- Footer CTA -->
+  <div class="footer-cta">
+    <div class="footer-cta-content">
+      <div class="footer-cta-eyebrow">▸ READY TO RACE?</div>
+      <h2 class="footer-cta-title">CLAIM A SEAT ON THE <span class="yellow">GRID</span></h2>
+      <p class="footer-cta-desc">Now you know how it works. <strong>13 seats remain</strong> for Season 2. Apply to bring your community to the grid, or check out the live teams already locked in.</p>
+      <div class="footer-cta-buttons">
+        <a href="join.html" class="footer-cta-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/>
+          </svg>
+          JOIN THE GRID
+        </a>
+        <a href="season-2.html" class="footer-cta-btn secondary">
+          VIEW THE GRID
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
