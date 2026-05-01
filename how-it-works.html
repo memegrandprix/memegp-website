@@ -1318,33 +1318,47 @@ body::before{
         </div>
 
         <div class="race-track-svg-wrap">
-          <svg class="race-track-svg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+          <svg class="race-track-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- Speed blue gradient (for fast straights) -->
-              <linearGradient id="speedBlue" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#1845b0"/>
+              <!-- Asphalt base -->
+              <linearGradient id="asphalt" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#2a2a32"/>
+                <stop offset="100%" stop-color="#1a1a22"/>
+              </linearGradient>
+              <!-- Speed blue (fast sections) -->
+              <linearGradient id="speedBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1d4ed8"/>
                 <stop offset="50%" stop-color="#2563eb"/>
                 <stop offset="100%" stop-color="#1845b0"/>
               </linearGradient>
-              <!-- Danger red (for slow corners) -->
-              <linearGradient id="dangerRed" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#b01818"/>
-                <stop offset="50%" stop-color="#dc2626"/>
-                <stop offset="100%" stop-color="#b01818"/>
+              <!-- Danger red (slow corners) -->
+              <linearGradient id="dangerRed" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#dc2626"/>
+                <stop offset="50%" stop-color="#b91c1c"/>
+                <stop offset="100%" stop-color="#991b1b"/>
               </linearGradient>
               <!-- Pit green -->
-              <linearGradient id="pitGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#0d8045"/>
-                <stop offset="50%" stop-color="#10a050"/>
-                <stop offset="100%" stop-color="#0d8045"/>
+              <linearGradient id="pitGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="100%" stop-color="#059669"/>
               </linearGradient>
-              <!-- Start/finish pattern -->
+              <!-- Kerb pattern (red/white painted curbs) -->
+              <pattern id="kerbPattern" x="0" y="0" width="8" height="6" patternUnits="userSpaceOnUse">
+                <rect width="4" height="6" fill="#dc2626"/>
+                <rect x="4" width="4" height="6" fill="#fff"/>
+              </pattern>
+              <!-- Start/finish checkered pattern -->
               <pattern id="startFin" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
                 <rect x="0" y="0" width="3" height="3" fill="#fff"/>
                 <rect x="3" y="3" width="3" height="3" fill="#fff"/>
                 <rect x="3" y="0" width="3" height="3" fill="#000"/>
                 <rect x="0" y="3" width="3" height="3" fill="#000"/>
               </pattern>
+              <!-- Ground shadow gradient (3D depth) -->
+              <radialGradient id="groundShadow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#000" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+              </radialGradient>
               <!-- Glow filter for leader car -->
               <filter id="leaderGlow">
                 <feGaussianBlur stdDeviation="2" result="blur"/>
@@ -1353,194 +1367,384 @@ body::before{
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
+              <!-- Track shadow (cast underneath for 3D) -->
+              <filter id="trackShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feGaussianBlur stdDeviation="6"/>
+                <feOffset dx="0" dy="8"/>
+                <feFlood flood-color="#000" flood-opacity=".55"/>
+                <feComposite in2="SourceAlpha" operator="in"/>
+                <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
             </defs>
 
             <!-- ============================================ -->
-            <!-- TRACK — built as separate colored segments    -->
-            <!-- BLUE = straights / fast curves                -->
-            <!-- RED  = slow / heavy braking corners           -->
-            <!-- GREEN = pit lane                              -->
+            <!-- GROUND SHADOW under whole track (3D depth)   -->
             <!-- ============================================ -->
-
-            <!-- All track segments use stroke-width 32 (track width)  -->
-            <!-- White edge underlay (gives that broadcast TV outline) -->
-
-            <!-- TRACK BORDER UNDERLAY (white, slightly wider) -->
-            <g stroke="#fff" stroke-width="36" stroke-linecap="butt" stroke-linejoin="miter" fill="none">
-              <!-- left straight (start/finish) -->
-              <path d="M 80 105 L 80 360"/>
-              <!-- bottom-left to bottom-right curve in -->
-              <path d="M 80 360 Q 80 410 130 410"/>
-              <!-- bottom long straight -->
-              <path d="M 130 410 L 670 410"/>
-              <!-- bottom-right curve up -->
-              <path d="M 670 410 Q 720 410 720 360"/>
-              <!-- right straight going up -->
-              <path d="M 720 360 L 720 200"/>
-              <!-- chicane on right side -->
-              <path d="M 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100"/>
-              <!-- top straight going left -->
-              <path d="M 690 100 L 250 100"/>
-              <!-- hairpin top-left -->
-              <path d="M 250 100 Q 200 100 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220"/>
-              <!-- final left curve back to start -->
-              <path d="M 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 L 80 105"/>
-            </g>
-
-            <!-- COLORED TRACK SEGMENTS -->
-            <!-- =====  BLUE — STRAIGHTS / FAST  ===== -->
-            <!-- Left start/finish straight (long fast section into T1) -->
-            <path d="M 80 105 L 80 320" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- Bottom main straight (DRS-style long one) -->
-            <path d="M 175 410 L 625 410" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- Right main straight up -->
-            <path d="M 720 360 L 720 230" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- Top main straight (right to left) -->
-            <path d="M 660 100 L 290 100" stroke="url(#speedBlue)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-
-            <!-- =====  RED — SLOW CORNERS / DANGER  ===== -->
-            <!-- T10: tight final corner before start finish (bottom-left) -->
-            <path d="M 80 320 Q 80 410 130 410 L 175 410" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- T6: bottom-right hairpin -->
-            <path d="M 625 410 L 670 410 Q 720 410 720 360" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- T3-T4-T5: chicane on right -->
-            <path d="M 720 230 L 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100 L 660 100" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- T2: top-right slow corner -->
-            <path d="M 290 100 L 250 100 Q 200 100 200 145" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-            <!-- T1: the big hairpin loop top-left -->
-            <path d="M 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 L 80 105" stroke="url(#dangerRed)" stroke-width="32" fill="none" stroke-linecap="butt"/>
-
-            <!-- =====  GREEN — PIT LANE (parallel to bottom straight)  ===== -->
-            <path d="M 200 440 L 600 440" stroke="url(#pitGreen)" stroke-width="20" fill="none" stroke-linecap="butt"/>
-            <!-- Pit lane entry (curves in from bottom straight) -->
-            <path d="M 175 410 Q 180 425 200 440" stroke="url(#pitGreen)" stroke-width="14" fill="none" stroke-linecap="butt"/>
-            <!-- Pit lane exit -->
-            <path d="M 600 440 Q 620 425 625 410" stroke="url(#pitGreen)" stroke-width="14" fill="none" stroke-linecap="butt"/>
-
-            <!-- DASHED CENTER LINE (white) — runs through middle of all segments -->
-            <path d="M 80 105 L 80 360 Q 80 410 130 410 L 670 410 Q 720 410 720 360 L 720 200 Q 720 165 685 165 Q 660 165 660 130 Q 660 100 690 100 L 250 100 Q 200 100 200 145 Q 200 175 235 175 Q 270 175 270 215 Q 270 250 230 250 Q 200 250 200 220 Q 200 200 175 200 L 130 200 Q 80 200 80 150 Z"
-                  fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-dasharray="5 7"/>
-
-            <!-- START/FINISH LINE (checkered, on left straight) -->
-            <rect x="62" y="190" width="36" height="8" fill="url(#startFin)"/>
-            <text x="48" y="196" font-family="Orbitron" font-size="7" font-weight="800"
-                  letter-spacing="1.5" fill="#fff" text-anchor="end">START</text>
-
-            <!-- TURN NUMBERS — positioned at corner apexes -->
-            <g font-family="Orbitron" font-size="9" font-weight="800" fill="#fff">
-              <!-- T1 hairpin top-left -->
-              <circle cx="252" cy="218" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="252" y="222" text-anchor="middle">1</text>
-              <!-- T2 -->
-              <circle cx="218" cy="113" r="9" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="218" y="117" text-anchor="middle">2</text>
-              <!-- T3 chicane -->
-              <circle cx="660" cy="115" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="660" y="119" text-anchor="middle" font-size="8">3</text>
-              <!-- T4 -->
-              <circle cx="685" cy="148" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="685" y="151" text-anchor="middle" font-size="8">4</text>
-              <!-- T5 -->
-              <circle cx="708" cy="180" r="8" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="708" y="184" text-anchor="middle" font-size="8">5</text>
-              <!-- T6 hairpin bottom-right -->
-              <circle cx="700" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="700" y="399" text-anchor="middle">6</text>
-              <!-- T10 final corner -->
-              <circle cx="100" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
-              <text x="100" y="399" text-anchor="middle">10</text>
-            </g>
-
-            <!-- PIT LANE LABEL -->
-            <text x="400" y="453" font-family="Orbitron" font-size="9" font-weight="900"
-                  letter-spacing="3" fill="#10a050" text-anchor="middle">▸ PIT LANE ◂</text>
-
-            <!-- SECTOR DIVIDER POSTS (small gold flags around the track) -->
-            <!-- Sector 1 ends at T2 / Sector 2 ends at T6 / Sector 3 ends at start -->
-            <g font-family="Orbitron" font-weight="900">
-              <!-- S1 → S2 boundary marker (after T1, between T2 and top straight) -->
-              <rect x="176" y="80" width="3" height="20" fill="#ffcc00"/>
-              <text x="160" y="76" font-size="9" fill="#ffcc00" text-anchor="middle" letter-spacing="1">S1▸S2</text>
-              <!-- S2 → S3 boundary marker (after T6, before bottom straight pit zone) -->
-              <rect x="630" y="395" width="3" height="20" fill="#ffcc00"/>
-              <text x="668" y="392" font-size="9" fill="#ffcc00" text-anchor="middle" letter-spacing="1">S2▸S3</text>
-              <!-- S3 → S1 boundary marker (after T10 / start of straight) -->
-              <rect x="62" y="345" width="20" height="3" fill="#ffcc00"/>
-              <text x="48" y="343" font-size="9" fill="#ffcc00" text-anchor="end" letter-spacing="1">S3▸S1</text>
-            </g>
-
-            <!-- BIG SECTOR LABELS (in negative space inside the loop) -->
-            <g font-family="Orbitron" font-weight="900" letter-spacing="3" opacity=".6">
-              <text x="40" y="160" font-size="11" fill="#3ad0ff" text-anchor="middle"
-                    transform="rotate(-90 40 160)">SECTOR 1 · SPEED</text>
-              <text x="490" y="60" font-size="11" fill="#3ad0ff" text-anchor="middle">SECTOR 2 · CORNERING</text>
-              <text x="400" y="380" font-size="11" fill="#00ff88" text-anchor="middle">SECTOR 3 · STRATEGY</text>
-            </g>
+            <ellipse cx="400" cy="430" rx="360" ry="40" fill="url(#groundShadow)"/>
 
             <!-- ============================================ -->
-            <!-- CARS ON TRACK — positioned along the circuit -->
-            <!-- Branded color rings (logo swap pending)      -->
+            <!-- TRACK GROUP — perspective-tilted             -->
+            <!-- transform creates the slight 3D racing-game  -->
+            <!-- viewing angle. Cars stay flat readable.      -->
+            <!-- ============================================ -->
+            <g transform="matrix(1, 0, 0, 0.86, 0, 32)" filter="url(#trackShadow)">
+
+              <!-- ============================================ -->
+              <!-- TRACK SURFACE — single asphalt path with    -->
+              <!-- colored sections layered on top              -->
+              <!-- ============================================ -->
+
+              <!-- Track outline — broad white stroke gives broadcast feel -->
+              <path d="
+                M 70 380
+                L 70 200
+                Q 70 130 140 130
+                L 250 130
+                Q 290 130 305 165
+                Q 320 200 290 220
+                Q 260 240 285 270
+                Q 305 290 345 280
+                Q 380 270 380 230
+                L 380 180
+                Q 380 130 430 130
+                L 600 130
+                Q 660 130 695 165
+                Q 730 200 730 240
+                L 730 320
+                Q 730 380 670 380
+                L 590 380
+                Q 555 380 540 360
+                Q 525 340 495 350
+                Q 465 360 460 380
+                L 130 380
+                Q 70 380 70 380 Z"
+                fill="url(#asphalt)"
+                stroke="rgba(255,255,255,.9)"
+                stroke-width="2"/>
+
+              <!-- ============================================ -->
+              <!-- BLUE SEGMENTS — STRAIGHTS / FAST SECTIONS    -->
+              <!-- (drawn as wide strokes following racing path)-->
+              <!-- ============================================ -->
+
+              <!-- Bottom DRS straight (the long one, hero of the lap) -->
+              <path d="M 130 380 L 460 380"
+                    stroke="url(#speedBlue)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- Left start/finish straight -->
+              <path d="M 70 200 L 70 360"
+                    stroke="url(#speedBlue)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- Top straight (between hairpin and esses) -->
+              <path d="M 250 130 L 380 130"
+                    stroke="url(#speedBlue)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- Top-right "Maggotts" approach (medium-fast straight before esses) -->
+              <path d="M 430 130 L 600 130"
+                    stroke="url(#speedBlue)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- Right back straight (going down the right side) -->
+              <path d="M 730 240 L 730 320"
+                    stroke="url(#speedBlue)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- ============================================ -->
+              <!-- RED SEGMENTS — SLOW CORNERS / HEAVY BRAKING -->
+              <!-- ============================================ -->
+
+              <!-- T1: Final corner (bottom-left, leading onto start straight) -->
+              <path d="M 130 380 Q 70 380 70 360"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- T2: Left-side hairpin entry (top-left turn-in) -->
+              <path d="M 70 200 Q 70 130 140 130 L 250 130"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"
+                    style="display:none"/>
+              <!-- Note: top straight covers this section in blue, but we show entry as red -->
+              <path d="M 70 200 Q 70 130 140 130"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- T3-T4-T5: SIGNATURE CHICANE / hairpin loop top-middle -->
+              <!-- (this is the Suzuka-S / Maggotts-Becketts inspired section) -->
+              <path d="M 380 130
+                       Q 380 180 380 230
+                       Q 380 270 345 280
+                       Q 305 290 285 270
+                       Q 260 240 290 220
+                       Q 320 200 305 165
+                       Q 290 130 250 130"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- T6-T7: Right-side esses + entry to back straight -->
+              <path d="M 600 130 Q 660 130 695 165 Q 730 200 730 240"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- T8: Bottom-right hairpin -->
+              <path d="M 730 320 Q 730 380 670 380 L 590 380"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- T9-T10: Bottom chicane -->
+              <path d="M 590 380 Q 555 380 540 360 Q 525 340 495 350 Q 465 360 460 380"
+                    stroke="url(#dangerRed)" stroke-width="34" fill="none"
+                    stroke-linecap="butt"/>
+
+              <!-- ============================================ -->
+              <!-- KERBS — red/white painted curbs at apexes   -->
+              <!-- ============================================ -->
+              <!-- T1 apex -->
+              <path d="M 92 380 Q 70 380 70 358" fill="none" stroke="url(#kerbPattern)" stroke-width="6"/>
+              <!-- T2 apex (top-left hairpin) -->
+              <path d="M 70 162 Q 70 130 102 130" fill="none" stroke="url(#kerbPattern)" stroke-width="6"/>
+              <!-- T3-T5 chicane apexes -->
+              <path d="M 360 240 Q 365 268 340 275" fill="none" stroke="url(#kerbPattern)" stroke-width="5"/>
+              <path d="M 308 248 Q 290 230 305 215" fill="none" stroke="url(#kerbPattern)" stroke-width="5"/>
+              <!-- T6 (right entry) -->
+              <path d="M 670 145 Q 700 165 712 188" fill="none" stroke="url(#kerbPattern)" stroke-width="6"/>
+              <!-- T8 hairpin apex (bottom-right) -->
+              <path d="M 712 358 Q 730 358 730 332" fill="none" stroke="url(#kerbPattern)" stroke-width="6"/>
+              <!-- T9-T10 chicane -->
+              <path d="M 522 358 Q 540 350 552 360" fill="none" stroke="url(#kerbPattern)" stroke-width="5"/>
+
+              <!-- ============================================ -->
+              <!-- DASHED CENTER LINE around the entire circuit-->
+              <!-- ============================================ -->
+              <path d="
+                M 70 380
+                L 70 200
+                Q 70 130 140 130
+                L 250 130
+                Q 290 130 305 165
+                Q 320 200 290 220
+                Q 260 240 285 270
+                Q 305 290 345 280
+                Q 380 270 380 230
+                L 380 180
+                Q 380 130 430 130
+                L 600 130
+                Q 660 130 695 165
+                Q 730 200 730 240
+                L 730 320
+                Q 730 380 670 380
+                L 590 380
+                Q 555 380 540 360
+                Q 525 340 495 350
+                Q 465 360 460 380
+                L 130 380
+                Q 70 380 70 380 Z"
+                fill="none"
+                stroke="rgba(255,255,255,.6)"
+                stroke-width="1.5"
+                stroke-dasharray="6 9"/>
+
+              <!-- ============================================ -->
+              <!-- PIT LANE (green) — runs parallel to bottom    -->
+              <!-- straight, slightly below it                   -->
+              <!-- ============================================ -->
+              <path d="M 165 415 L 460 415"
+                    stroke="url(#pitGreen)" stroke-width="20" fill="none"
+                    stroke-linecap="butt"/>
+              <!-- Pit entry (curves down from bottom straight) -->
+              <path d="M 145 380 Q 150 400 165 415"
+                    stroke="url(#pitGreen)" stroke-width="14" fill="none"
+                    stroke-linecap="butt"/>
+              <!-- Pit exit (curves back up) -->
+              <path d="M 460 415 Q 475 400 480 380"
+                    stroke="url(#pitGreen)" stroke-width="14" fill="none"
+                    stroke-linecap="butt"/>
+              <!-- Pit lane white edge dashes -->
+              <path d="M 165 415 L 460 415" fill="none"
+                    stroke="rgba(255,255,255,.5)" stroke-width="1.2"
+                    stroke-dasharray="5 7"/>
+
+              <!-- ============================================ -->
+              <!-- START / FINISH LINE                           -->
+              <!-- ============================================ -->
+              <rect x="55" y="285" width="30" height="6" fill="url(#startFin)"/>
+
+              <!-- ============================================ -->
+              <!-- TURN NUMBER MARKERS                          -->
+              <!-- ============================================ -->
+              <g font-family="Orbitron" font-weight="900" font-size="9">
+                <!-- T1 -->
+                <circle cx="100" cy="395" r="11" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="100" y="399" text-anchor="middle" fill="#fff">1</text>
+                <!-- T2 -->
+                <circle cx="100" cy="115" r="11" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="100" y="119" text-anchor="middle" fill="#fff">2</text>
+                <!-- T3 -->
+                <circle cx="395" cy="118" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="395" y="122" text-anchor="middle" fill="#fff" font-size="8">3</text>
+                <!-- T4 -->
+                <circle cx="328" cy="293" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="328" y="297" text-anchor="middle" fill="#fff" font-size="8">4</text>
+                <!-- T5 -->
+                <circle cx="265" cy="247" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="265" y="251" text-anchor="middle" fill="#fff" font-size="8">5</text>
+                <!-- T6 -->
+                <circle cx="615" cy="115" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="615" y="119" text-anchor="middle" fill="#fff" font-size="8">6</text>
+                <!-- T7 -->
+                <circle cx="745" cy="220" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="745" y="224" text-anchor="middle" fill="#fff" font-size="8">7</text>
+                <!-- T8 -->
+                <circle cx="700" cy="395" r="11" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="700" y="399" text-anchor="middle" fill="#fff">8</text>
+                <!-- T9 -->
+                <circle cx="555" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="555" y="399" text-anchor="middle" fill="#fff" font-size="8">9</text>
+                <!-- T10 -->
+                <circle cx="475" cy="395" r="10" fill="#0a0a12" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="475" y="399" text-anchor="middle" fill="#fff" font-size="8">10</text>
+              </g>
+
+              <!-- ============================================ -->
+              <!-- SECTOR BOUNDARY POSTS                        -->
+              <!-- ============================================ -->
+              <g>
+                <!-- S1→S2 boundary (after T2) -->
+                <rect x="155" y="115" width="3" height="20" fill="#ffcc00"/>
+                <text x="155" y="108" font-family="Orbitron" font-size="8" font-weight="800"
+                      letter-spacing="1" fill="#ffcc00" text-anchor="middle">S1▸S2</text>
+                <!-- S2→S3 boundary (after T8 area) -->
+                <rect x="640" y="362" width="3" height="20" fill="#ffcc00"/>
+                <text x="640" y="358" font-family="Orbitron" font-size="8" font-weight="800"
+                      letter-spacing="1" fill="#ffcc00" text-anchor="middle">S2▸S3</text>
+                <!-- S3→S1 boundary (after T1, on left straight) -->
+                <rect x="55" y="320" width="20" height="3" fill="#ffcc00"/>
+                <text x="48" y="318" font-family="Orbitron" font-size="8" font-weight="800"
+                      letter-spacing="1" fill="#ffcc00" text-anchor="end">S3▸S1</text>
+              </g>
+
+              <!-- ============================================ -->
+              <!-- BIG SECTOR LABELS in negative space          -->
+              <!-- ============================================ -->
+              <g font-family="Orbitron" font-weight="900" letter-spacing="3" opacity=".55">
+                <text x="38" y="290" font-size="11" fill="#3ad0ff" text-anchor="middle"
+                      transform="rotate(-90 38 290)">S1 · SPEED</text>
+                <text x="500" y="105" font-size="11" fill="#3ad0ff" text-anchor="middle">S2 · CORNERING</text>
+                <text x="395" y="448" font-size="11" fill="#10b981" text-anchor="middle">S3 · STRATEGY</text>
+              </g>
+
+            </g>
+
+            <!-- ============================================ -->
+            <!-- START/FINISH GANTRY (bridge above start line) -->
+            <!-- Drawn OUTSIDE the tilted track group so it    -->
+            <!-- stays straight + flat for the viewer          -->
+            <!-- ============================================ -->
+            <g transform="translate(70, 200)">
+              <!-- Gantry left support -->
+              <rect x="-22" y="-12" width="6" height="64" fill="#1a1a22" stroke="#3a3a44" stroke-width="1"/>
+              <!-- Gantry right support -->
+              <rect x="38" y="-12" width="6" height="64" fill="#1a1a22" stroke="#3a3a44" stroke-width="1"/>
+              <!-- Gantry top bar (the bridge) -->
+              <rect x="-26" y="-22" width="74" height="14" rx="2" fill="#0a0a12"
+                    stroke="#ffcc00" stroke-width="1.5"/>
+              <!-- MEME GP logo on the gantry -->
+              <text x="11" y="-12" font-family="Orbitron" font-size="9" font-weight="900"
+                    letter-spacing="1.5" fill="#ffcc00" text-anchor="middle">MEME GP</text>
+              <!-- Subtle red checkered accent strip above the bar -->
+              <rect x="-26" y="-26" width="74" height="3" fill="url(#startFin)" opacity=".7"/>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- PIT LANE LABEL (outside tilted group)        -->
+            <!-- ============================================ -->
+            <text x="312" y="478" font-family="Orbitron" font-size="10" font-weight="900"
+                  letter-spacing="3" fill="#10b981" text-anchor="middle">▸ PIT LANE ◂</text>
+
+            <!-- ============================================ -->
+            <!-- TRACK NAME WATERMARK (top-right corner)      -->
+            <!-- ============================================ -->
+            <g transform="translate(780, 30)">
+              <text font-family="Orbitron" font-size="9" font-weight="800"
+                    letter-spacing="2.5" fill="#ffcc00" text-anchor="end" opacity=".85">
+                MEME INTERNATIONAL AUTODROME
+              </text>
+              <text y="14" font-family="JetBrains Mono" font-size="8"
+                    fill="#7a7a88" text-anchor="end" letter-spacing="1.5" opacity=".7">
+                10 TURNS · 5.4 KM · COUNTER-CLOCKWISE
+              </text>
+            </g>
+
+            <!-- ============================================ -->
+            <!-- CARS ON TRACK — kept flat, drawn last so     -->
+            <!-- they sit on top of all track layers          -->
+            <!-- Positioned along the actual racing line      -->
             <!-- ============================================ -->
 
-            <!-- P1 LEADER · BRETT — top straight, leading -->
-            <g transform="translate(580, 100)" filter="url(#leaderGlow)">
+            <!-- P1 LEADER · BRETT — exiting T2 onto top straight -->
+            <g transform="translate(280, 134)" filter="url(#leaderGlow)">
               <circle r="11" fill="#1FCC1F" stroke="#fff" stroke-width="2"/>
               <circle r="7" fill="#0a3a0a"/>
               <text y="2.5" font-family="Orbitron" font-size="8" font-weight="900" text-anchor="middle" fill="#fff">B</text>
               <text x="0" y="-16" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#ffd633">P1</text>
             </g>
-            <!-- P2 · DOGE -->
-            <g transform="translate(530, 100)">
+            <!-- P2 · DOGE — chasing -->
+            <g transform="translate(220, 134)">
               <circle r="10" fill="#BA9F33" stroke="#fff" stroke-width="1.5"/>
               <circle r="6.5" fill="#3a2f10"/>
               <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">D</text>
               <text x="0" y="-15" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#c8c8d0">P2</text>
             </g>
-            <!-- P3 · PENGU -->
-            <g transform="translate(480, 100)">
+            <!-- P3 · PENGU — top hairpin entry -->
+            <g transform="translate(170, 134)">
               <circle r="10" fill="#2B6CB0" stroke="#fff" stroke-width="1.5"/>
               <circle r="6.5" fill="#0a1a30"/>
               <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">P</text>
               <text x="0" y="-15" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#cd7f32">P3</text>
             </g>
-            <!-- P4 · TURBO -->
-            <g transform="translate(420, 100)">
+            <!-- P4 · TURBO — exiting T2 -->
+            <g transform="translate(118, 138)">
               <circle r="9" fill="#1e7fd9" stroke="#fff" stroke-width="1.5"/>
               <circle r="6" fill="#0a1f3a"/>
               <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">T</text>
             </g>
-            <!-- P5 · BONK -->
-            <g transform="translate(370, 100)">
+            <!-- P5 · BONK — left straight -->
+            <g transform="translate(72, 245)">
               <circle r="9" fill="#FF8800" stroke="#fff" stroke-width="1.5"/>
               <circle r="6" fill="#3a1f00"/>
               <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">B</text>
             </g>
-            <!-- P6 · MASK -->
-            <g transform="translate(320, 100)">
+            <!-- P6 · MASK — entering T1 -->
+            <g transform="translate(165, 380)">
               <circle r="9" fill="#e02838" stroke="#fff" stroke-width="1.5"/>
               <circle r="6" fill="#3a0a10"/>
               <text y="2" font-family="Orbitron" font-size="7" font-weight="900" text-anchor="middle" fill="#fff">M</text>
             </g>
-            <!-- P7 · WIF — exiting T1 hairpin -->
-            <g transform="translate(232, 175)">
+            <!-- P7 · WIF — bottom straight -->
+            <g transform="translate(310, 380)">
               <circle r="8" fill="#FF66B2" stroke="#fff" stroke-width="1"/>
               <circle r="5.5" fill="#3a1028"/>
               <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">W</text>
             </g>
-            <!-- P8 · SHIB — on left straight -->
-            <g transform="translate(80, 280)">
+            <!-- P8 · SHIB — bottom-right hairpin entry -->
+            <g transform="translate(680, 380)">
               <circle r="8" fill="#FFA409" stroke="#fff" stroke-width="1"/>
               <circle r="5.5" fill="#3a2a08"/>
               <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">S</text>
             </g>
-            <!-- P9 · MOG — bottom straight -->
-            <g transform="translate(420, 410)">
+            <!-- P9 · MOG — right back straight -->
+            <g transform="translate(730, 290)">
               <circle r="8" fill="#B77F4A" stroke="#fff" stroke-width="1"/>
               <circle r="5.5" fill="#2a1d10"/>
               <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">M</text>
             </g>
             <!-- P10 · PEPE — in pit lane (lapped/strategy) -->
-            <g transform="translate(380, 440)" opacity=".75">
+            <g transform="translate(380, 415)" opacity=".75">
               <circle r="8" fill="#4FAE51" stroke="#fff" stroke-width="1"/>
               <circle r="5.5" fill="#0d2a0e"/>
               <text y="2" font-family="Orbitron" font-size="6" font-weight="900" text-anchor="middle" fill="#fff">P</text>
