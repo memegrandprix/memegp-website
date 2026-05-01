@@ -1,0 +1,164 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "notes": [
+      "ITEMS IN THE 'items' ARRAY ARE WHAT GETS RENDERED.",
+      "Order does not matter — news-loader.js sorts by timestamp DESC.",
+      "Newest items appear first in both the ticker (top 3) and full feed.",
+      "",
+      "Required fields per item: id, type, timestamp, headline, body, team, tweet.",
+      "Optional: tag, stat_change.",
+      "",
+      "type values: 'upgrade' | 'downgrade' | 'new_team' | 'penalty' | 'result' | 'paddock'",
+      "  upgrade  = green left bar + ⬆ icon (stat went up)",
+      "  downgrade= red left bar + ⬇ icon (stat went down)",
+      "  new_team = gold left bar + 🆕 icon (joining grid)",
+      "  penalty  = orange left bar + ⚠ icon (incident, ban, investigation)",
+      "  result   = blue left bar + 🏁 icon (post-race recap)",
+      "  paddock  = chrome left bar + 📰 icon (editorial / commentary / power rankings)",
+      "",
+      "team object: { ticker, name, color, logo }",
+      "  - ticker: '$BRETT', '$DOGE', etc.",
+      "  - name: full team name (e.g. 'BRETT IS BACK')",
+      "  - color: hex color used for the card accent (matches grid)",
+      "  - logo: filename in same dir (e.g. 'brett.png'), optional, for future use",
+      "",
+      "stat_change object (optional, only for upgrade/downgrade):",
+      "  { stat: 'ENGINE'|'AERO'|'CHASSIS'|'DRAG'|'PIT', from: number, to: number }",
+      "",
+      "tweet: the exact copy that gets pushed to clipboard / pre-filled in X intent.",
+      "  Keep under 280 chars. Use \\n for line breaks. Add '$TICKER' for crypto refs.",
+      "",
+      "TO ADD A NEW ITEM: append to the 'items' array, save the file. Done."
+    ]
+  },
+  "items": [
+    {
+      "id": "2026-05-01-power-rankings-r1",
+      "type": "paddock",
+      "timestamp": "2026-05-01T13:00:00Z",
+      "tag": "RACE WEEK",
+      "team": {
+        "ticker": "$BRETT",
+        "name": "BRETT IS BACK",
+        "color": "#1F6DFF"
+      },
+      "headline": "ROUND 1 POWER RANKINGS · WHO'S IN FORM FOR SATOSHI SPEEDWAY",
+      "body": "BRETT enters Round 1 as the consensus favourite after a flawless pre-season testing programme. DOGE's race pace looks ominous, PENGU is the dark horse on fresh upgrades, and SHIB looks vulnerable in the midfield. Full grid analysis inside.",
+      "tweet": "🏁 ROUND 1 POWER RANKINGS\n\n⭐ Title favourites: $BRETT, $DOGE\n🐎 Dark horse: $PENGU\n⚠️ At risk: $SHIB\n\nSatoshi Speedway, June 2026. Form guide is up at memegrandprix.com/gp-central.html\n\n#MEMEGP #MemeRacing"
+    },
+    {
+      "id": "2026-04-30-turbo-pit-up",
+      "type": "upgrade",
+      "timestamp": "2026-04-30T18:30:00Z",
+      "tag": "PIT UPGRADE",
+      "team": {
+        "ticker": "$TURBO",
+        "name": "AI TURBO RACING",
+        "color": "#7C5CFF"
+      },
+      "headline": "TURBO REWIRES THE PIT WALL",
+      "body": "Pit Ops rating climbs from 5 → 7 after $TURBO's off-season tooling overhaul. Faster tyre changes, sharper strategy calls. The mid-grid just got a serious threat.",
+      "stat_change": {
+        "stat": "PIT",
+        "from": 5,
+        "to": 7
+      },
+      "tweet": "🏁 PIT UPGRADE\n\n$TURBO Pit Ops: 5 → 7\n\nThe @AiTurboRacing crew has been busy in the off-season and the numbers don't lie. Faster stops, sharper calls. Mid-grid just got dangerous.\n\n#MEMEGP $TURBO"
+    },
+    {
+      "id": "2026-04-29-pepe-investigation",
+      "type": "penalty",
+      "timestamp": "2026-04-29T20:15:00Z",
+      "tag": "STEWARDS' ROOM",
+      "team": {
+        "ticker": "$PEPE",
+        "name": "PEPE RACING",
+        "color": "#1AB47A"
+      },
+      "headline": "PEPE UNDER INVESTIGATION FOR PRE-SEASON INCIDENT WITH WIF",
+      "body": "Race control has summoned PEPE Racing over a contact incident with $WIF during the final shakedown session. A 5-place grid penalty for Round 1 is on the table. Decision expected within 48 hours.",
+      "tweet": "🏁 STEWARDS' ROOM\n\n$PEPE summoned over contact with $WIF in pre-season testing.\n\n5-place Round 1 grid penalty under review. Decision: 48 hours.\n\nThis is exactly why we love this sport.\n\n#MEMEGP"
+    },
+    {
+      "id": "2026-04-28-mog-chassis-down",
+      "type": "downgrade",
+      "timestamp": "2026-04-28T11:45:00Z",
+      "tag": "STAT DROP",
+      "team": {
+        "ticker": "$MOG",
+        "name": "MOG WORKS",
+        "color": "#FF8A1A"
+      },
+      "headline": "MOG WOBBLES · CHASSIS RATING SLIDES",
+      "body": "Chassis stiffness drops from 9 → 8 as $MOG liquidity contracts in the run-up to Round 1. Cornering stability takes a hit and the engineers won't be happy. Time to shore up the foundations.",
+      "stat_change": {
+        "stat": "CHASSIS",
+        "from": 9,
+        "to": 8
+      },
+      "tweet": "🏁 CHASSIS DOWNGRADE\n\n$MOG: 9 → 8\n\nLiquidity contraction = corner stability hit. Engineers in the @MogWorks garage have work to do before Round 1.\n\nThis is why depth matters, friends. 🛠️\n\n#MEMEGP $MOG"
+    },
+    {
+      "id": "2026-04-26-bonk-engine-up",
+      "type": "upgrade",
+      "timestamp": "2026-04-26T14:00:00Z",
+      "tag": "ENGINE UPGRADE",
+      "team": {
+        "ticker": "$BONK",
+        "name": "BONK RACING",
+        "color": "#F0B321"
+      },
+      "headline": "BONK FINDS HORSEPOWER · ENGINE 7 → 8",
+      "body": "$BONK breaks through a key market cap threshold and the dyno responds. Engine rating jumps from 7 → 8 just in time for Round 1. Top-end speed is suddenly a Bonk problem for the rest of the grid.",
+      "stat_change": {
+        "stat": "ENGINE",
+        "from": 7,
+        "to": 8
+      },
+      "tweet": "🏁 ENGINE UPGRADE\n\n$BONK: 7 → 8 ⚡\n\nMarket cap breakthrough triggers a dyno win. @bonk_inu suddenly has top-end speed they didn't have a week ago.\n\nWho's catching them down the Satoshi Speedway main straight now?\n\n#MEMEGP $BONK"
+    },
+    {
+      "id": "2026-04-23-floki-confirmed",
+      "type": "new_team",
+      "timestamp": "2026-04-23T09:30:00Z",
+      "tag": "GRID ANNOUNCEMENT",
+      "team": {
+        "ticker": "$FLOKI",
+        "name": "FLOKI MOTORSPORT",
+        "color": "#F58A1F"
+      },
+      "headline": "$FLOKI CONFIRMED FOR SEASON 2 GRID",
+      "body": "FLOKI Motorsport has signed paperwork and is officially on the Season 2 grid. Eleven cars confirmed, the field is filling out. Full driver lineup to be announced ahead of Round 1.",
+      "tweet": "🏁 NEW TEAM ON THE GRID\n\nWelcome @RealFlokiInu to Season 2. 🐺\n\nThe field is now 11 strong and the grid is filling out fast. Round 1 at Satoshi Speedway can't come soon enough.\n\n#MEMEGP $FLOKI"
+    },
+    {
+      "id": "2026-04-20-brett-paddock-piece",
+      "type": "paddock",
+      "timestamp": "2026-04-20T16:00:00Z",
+      "tag": "PADDOCK NOTEBOOK",
+      "team": {
+        "ticker": "$BRETT",
+        "name": "BRETT IS BACK",
+        "color": "#1F6DFF"
+      },
+      "headline": "WHY BRETT'S PRE-SEASON PACE HAS THE PADDOCK WORRIED",
+      "body": "Three test sessions, three fastest laps. BRETT is doing what champions do — turning up early and leaving nothing on the table. Rivals are downplaying the times publicly while their engineers privately recalibrate. This is starting to look like a coronation.",
+      "tweet": "🏁 PADDOCK NOTEBOOK\n\nThree test sessions. Three fastest laps. $BRETT is doing what champions do.\n\nRivals are smiling for the cameras. Their engineers are not smiling at the data.\n\nIs Round 1 already over?\n\n#MEMEGP $BRETT"
+    },
+    {
+      "id": "2026-04-15-s1-finale-recap",
+      "type": "result",
+      "timestamp": "2026-04-15T22:00:00Z",
+      "tag": "SEASON 1 ARCHIVE",
+      "team": {
+        "ticker": "$BRETT",
+        "name": "BRETT IS BACK",
+        "color": "#1F6DFF"
+      },
+      "headline": "SEASON 1 FINALE · BRETT TAKES TITLE IN LAST-CORNER PASS",
+      "body": "The kind of finish you tell your grandchildren about. BRETT down by 0.4s on the final lap, found a sliver of inside line at the last hairpin, and snatched the championship by a tenth. DOGE will replay this corner for years.",
+      "tweet": "🏁 SEASON 1 FINALE · ARCHIVED\n\nLast lap. Last corner. 0.4s gap.\n\n$BRETT found the inside line and stole the title from $DOGE by a TENTH.\n\nThis is why we built Meme GP. Season 2 starts July 1. 🍿\n\n#MEMEGP"
+    }
+  ]
+}
