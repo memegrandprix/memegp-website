@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP 2026 — Starting Grid | Season 2</title>
+<meta name="description" content="The starting grid for MEME GP Season 2. 15 teams. 2 confirmed. 13 seats remaining.">
+<meta property="og:title" content="MEME GP 2026 — STARTING GRID">
+<meta property="og:description" content="15 teams. 2 confirmed. 13 seats up for grabs.">
+<meta property="og:image" content="grid-hero.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+  --turbo-blue:#1e7fd9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;
+  z-index:0;
+}
+
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+
+/* ===== TOPNAV PRO — F1 broadcast styled ===== */
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  /* The angled accent line is rendered separately below */
+  padding:10px 18px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  min-height:56px;
+}
+
+/* Angled gold accent line — sits directly below nav, follows the badge bevels */
+.tnav-accent{
+  position:sticky;
+  top:56px;
+  z-index:49;
+  height:18px;
+  pointer-events:none;
+  margin-bottom:-18px;
+  /* Fully opaque dark fill — blocks all scrolling content underneath */
+  background:#040408;
+}
+.tnav-accent svg{
+  display:block;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+/* Left badge — SEASON 2 GRID with clipped corner */
+.tnav-badge{
+  justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+
+/* Center nav */
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;
+  gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 18px;
+  border-radius:4px;
+  transition:all .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{
+  width:1px;height:14px;
+  background:var(--line-bright);
+  flex-shrink:0;
+}
+
+/* Right EXIT button with reverse-angled corners */
+.tnav-exit{
+  justify-self:end;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+
+/* Mobile collapse */
+@media(max-width:780px){
+  .topnav-pro{
+    grid-template-columns:1fr auto;
+    padding:8px 12px;
+    gap:8px;
+  }
+  .tnav-center{
+    grid-column:1 / -1;
+    order:3;
+    justify-self:stretch;
+    justify-content:center;
+  }
+  .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:420px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 8px}
+  .tnav-sep{display:none}
+}
+
+/* Hide the old topnav styles — keep them as fallback */
+.topnav{display:none}
+
+/* === BANNER === */
+.banner{
+  position:relative;
+  margin:32px auto 0;
+  max-width:1280px;
+  padding:0 24px;
+}
+.banner-inner{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--line-bright);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  aspect-ratio:16/5.5;
+  min-height:280px;
+}
+.banner-bg{
+  position:absolute;inset:0;
+  background-image:url('grid-hero.png');
+  background-size:cover;
+  background-position:center 50%;
+  z-index:1;
+}
+.banner-bg::after{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(4,4,8,.85) 0%,
+      rgba(4,4,8,.55) 25%,
+      rgba(4,4,8,.15) 50%,
+      rgba(4,4,8,.55) 85%,
+      rgba(4,4,8,.92) 100%),
+    radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.10) 0%,transparent 60%);
+}
+.banner-content{
+  position:relative;z-index:2;
+  height:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:24px 36px 22px;
+  text-align:center;
+}
+.banner-top{
+  display:flex;flex-direction:column;align-items:center;
+}
+.banner-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  justify-content:center;
+  animation:fadeUp .8s ease both;
+}
+.banner-eyebrow::before{content:'';width:50px;height:1px;background:var(--gold)}
+.banner-eyebrow::after{content:'';width:50px;height:1px;background:var(--gold)}
+.banner-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,6.5vw,76px);
+  font-weight:900;
+  letter-spacing:-1px;
+  line-height:.95;
+  margin-bottom:8px;
+  animation:fadeUp .9s ease .15s both;
+}
+.banner-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.banner-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(13px,1.5vw,18px);
+  font-weight:700;letter-spacing:5px;
+  color:var(--text);
+  text-shadow:0 2px 8px rgba(0,0,0,.7);
+  animation:fadeUp .9s ease .3s both;
+}
+.banner-sub strong{color:var(--gold);font-weight:900}
+.banner-stats{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .9s ease .45s both;
+}
+.banner-stat{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(13,13,18,.85);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  border:1px solid var(--line-bright);
+  padding:10px 18px;
+  border-radius:4px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted);
+  letter-spacing:2px;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.banner-stat strong{color:var(--text);font-weight:900}
+
+/* TRAFFIC LIGHT — green / red / amber */
+.banner-stat.locked{
+  border-color:var(--green);
+  color:var(--green);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.5),
+    0 0 18px rgba(0,255,136,.45),
+    0 0 36px rgba(0,255,136,.2),
+    inset 0 0 12px rgba(0,255,136,.08);
+}
+.banner-stat.locked strong{color:var(--green);text-shadow:0 0 8px rgba(0,255,136,.5)}
+
+.banner-stat.open{
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.5),
+    0 0 18px rgba(255,0,64,.45),
+    0 0 36px rgba(255,0,64,.2),
+    inset 0 0 12px rgba(255,0,64,.08);
+}
+.banner-stat.open strong{color:var(--accent);text-shadow:0 0 8px rgba(255,0,64,.5)}
+
+.banner-stat.race{
+  border-color:var(--gold);
+  color:var(--gold);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.5),
+    0 0 18px rgba(255,204,0,.45),
+    0 0 36px rgba(255,204,0,.2),
+    inset 0 0 12px rgba(255,204,0,.08);
+}
+.banner-stat.race strong{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,.5)}
+.banner-stat.open strong{color:var(--accent)}
+
+/* === SECTION INTRO === */
+.intro-row{
+  max-width:1280px;
+  margin:48px auto 24px;
+  padding:0 24px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:20px;
+}
+.intro-left h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:32px;
+  font-weight:900;letter-spacing:3px;
+  color:var(--text);
+  margin-bottom:10px;
+}
+.intro-left p{
+  font-size:15px;
+  color:var(--muted);
+  letter-spacing:.5px;
+  max-width:560px;
+}
+.intro-progress{
+  display:flex;align-items:center;gap:18px;
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:var(--muted);letter-spacing:2.5px;
+}
+.progress-track{
+  width:240px;height:14px;
+  background:var(--bg-card);
+  border:1px solid var(--line-bright);
+  border-radius:4px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.6);
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--accent));
+  width:13.33%; /* 2 of 15 */
+  border-radius:3px;
+  box-shadow:
+    0 0 12px rgba(255,204,0,.5),
+    0 0 24px rgba(255,0,64,.3);
+  position:relative;
+}
+.progress-fill::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,transparent 50%);
+  border-radius:3px;
+}
+
+/* ============================================ */
+/* POWER RANKINGS SECTION (pr-*)                 */
+/* Sits between THE GRID and THE CIRCUITS.       */
+/* Anchor id="power-rankings" for deep linking.  */
+/* ============================================ */
+.pr-section{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 24px 80px;
+  scroll-margin-top:90px; /* offset for sticky topnav when deep-linked */
+}
+.pr-section .intro-row{margin-top:0}
+#power-rankings-mount{
+  display:flex;flex-direction:column;
+  gap:18px;
+}
+
+/* Week tabs — sit at top of mount */
+.pr-tabs{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding:6px;
+  background:rgba(20,20,30,0.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  align-self:flex-start;
+}
+.pr-tab{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--muted);
+  background:transparent;
+  border:none;
+  padding:8px 16px;
+  border-radius:4px;
+  cursor:pointer;
+  transition:all .15s ease;
+  position:relative;
+}
+.pr-tab:hover{color:var(--text);background:rgba(255,204,0,0.05)}
+.pr-tab.active{
+  color:var(--gold);
+  background:rgba(255,204,0,0.12);
+  text-shadow:0 0 8px rgba(255,204,0,0.4);
+}
+.pr-tab--stub:not(.active){
+  opacity:0.55;
+}
+.pr-tab--stub:not(.active)::after{
+  content:'';
+  position:absolute;
+  top:6px;right:6px;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--dim);
+}
+
+/* Week sub-header */
+.pr-week-head{
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;
+  font-family:'Orbitron',sans-serif;
+  padding:0 4px;
+}
+.pr-week-subtitle{
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--text);
+}
+.pr-week-tag{
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:var(--gold);
+  padding:3px 8px;
+  background:rgba(255,204,0,0.08);
+  border:1px solid rgba(255,204,0,0.3);
+  border-radius:3px;
+}
+
+/* Rankings rows container */
+.pr-rows{
+  display:flex;flex-direction:column;
+  gap:10px;
+}
+
+/* Single ranking row — broadcast layout */
+.pr-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:46px 56px 1fr 78px 2fr auto 60px;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px 14px 22px;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:7px;
+  overflow:hidden;
+  transition:transform .15s ease, border-color .15s ease, box-shadow .2s ease;
+}
+.pr-row:hover{
+  transform:translateY(-1px);
+  border-color:var(--row-color, var(--line-bright));
+  box-shadow:0 4px 14px rgba(0,0,0,0.4);
+}
+/* Podium accents */
+.pr-row--p1{
+  background:linear-gradient(180deg,
+    rgba(255,204,0,0.06) 0%,
+    var(--bg-2) 100%);
+  border-color:rgba(255,204,0,0.3);
+}
+.pr-row--p2{
+  background:linear-gradient(180deg,
+    rgba(192,192,192,0.04) 0%,
+    var(--bg-2) 100%);
+}
+.pr-row--p3{
+  background:linear-gradient(180deg,
+    rgba(205,127,50,0.04) 0%,
+    var(--bg-2) 100%);
+}
+
+.pr-row-rail{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:var(--row-color, var(--gold));
+  box-shadow:0 0 8px var(--row-color, var(--gold));
+}
+
+/* Rank pill */
+.pr-row-rank{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;
+}
+.pr-row-rank-num{
+  font-size:24px;font-weight:900;
+  color:var(--text);
+  line-height:1;
+  letter-spacing:-0.5px;
+}
+.pr-row--p1 .pr-row-rank-num{color:var(--gold);text-shadow:0 0 12px rgba(255,204,0,0.5)}
+.pr-row--p2 .pr-row-rank-num{color:#d8d8e0}
+.pr-row--p3 .pr-row-rank-num{color:#cd9a5b}
+
+/* Movement column */
+.pr-row-mv{
+  display:flex;align-items:center;justify-content:center;
+}
+.pr-mv{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:0.5px;
+  padding:4px 8px;
+  border-radius:4px;
+  border:1px solid;
+}
+.pr-mv-arrow{font-size:10px;line-height:1}
+.pr-mv-delta{font-family:'JetBrains Mono',monospace;font-size:11px}
+.pr-mv--up{
+  color:var(--green);
+  background:rgba(0,255,136,0.08);
+  border-color:rgba(0,255,136,0.4);
+  text-shadow:0 0 6px rgba(0,255,136,0.4);
+}
+.pr-mv--down{
+  color:var(--accent);
+  background:rgba(255,0,64,0.08);
+  border-color:rgba(255,0,64,0.4);
+  text-shadow:0 0 6px rgba(255,0,64,0.4);
+}
+.pr-mv--flat{
+  color:var(--muted);
+  background:rgba(255,255,255,0.03);
+  border-color:rgba(255,255,255,0.08);
+  font-size:14px;
+  letter-spacing:0;
+  padding:3px 10px;
+}
+.pr-mv--new{
+  color:var(--gold);
+  background:rgba(255,204,0,0.12);
+  border-color:rgba(255,204,0,0.5);
+  text-shadow:0 0 6px rgba(255,204,0,0.5);
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* Team identity column */
+.pr-row-team{
+  display:flex;flex-direction:column;
+  gap:2px;min-width:0;
+}
+.pr-row-ticker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:16px;font-weight:700;
+  color:var(--text);
+  letter-spacing:0.5px;
+  line-height:1;
+}
+.pr-row--p1 .pr-row-ticker{color:var(--gold)}
+.pr-row-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:9.5px;font-weight:700;letter-spacing:1.5px;
+  color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* Score column */
+.pr-row-score{
+  display:flex;flex-direction:column;align-items:flex-end;
+  gap:2px;
+}
+.pr-row-score-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:18px;font-weight:700;
+  color:var(--text);
+  line-height:1;
+}
+.pr-row--p1 .pr-row-score-val{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,0.4)}
+.pr-row-score-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;font-weight:800;letter-spacing:1.5px;
+  color:var(--muted);
+}
+
+/* Commentary */
+.pr-row-comment{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;font-weight:400;
+  color:var(--text);
+  opacity:0.85;
+  line-height:1.4;
+  letter-spacing:0.2px;
+}
+
+/* Copy button */
+.pr-row-actions{
+  display:flex;align-items:center;justify-content:center;
+}
+.pr-row-copy{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.2px;
+  color:var(--muted);
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line-bright);
+  border-radius:4px;
+  padding:7px 10px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.pr-row-copy:hover{
+  color:var(--gold);
+  border-color:rgba(255,204,0,0.4);
+  background:rgba(255,204,0,0.06);
+}
+.pr-row-copy.copied{
+  color:var(--green);
+  border-color:rgba(0,255,136,0.5);
+  background:rgba(0,255,136,0.1);
+}
+.pr-row-copy-icon{font-size:11px}
+
+/* Floating logo (mirrors gp-central card pattern) */
+.pr-logo{
+  width:48px;height:48px;
+  border-radius:50%;
+  overflow:hidden;
+  border:2px solid var(--gold);
+  background:#0a0a14;
+  box-shadow:0 0 10px var(--logo-color, var(--gold)),
+             0 3px 8px rgba(0,0,0,0.5);
+  pointer-events:none;
+  flex-shrink:0;
+}
+.pr-logo img{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+}
+.pr-logo--fallback{
+  background:radial-gradient(circle at 30% 30%,
+    color-mix(in srgb, var(--logo-color, var(--gold)) 60%, #0a0a14) 0%,
+    #0a0a14 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.pr-logo--fallback::before{
+  content:attr(data-ticker);
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:900;letter-spacing:0.5px;
+  color:var(--gold);
+  text-align:center;line-height:1;
+  padding:0 2px;
+  text-shadow:0 0 5px rgba(255,204,0,0.5),
+              0 1px 2px rgba(0,0,0,0.9);
+  word-break:break-all;
+}
+
+/* Stub state (week not yet archived) */
+.pr-stub{
+  display:flex;flex-direction:column;align-items:center;
+  gap:10px;
+  padding:60px 20px;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px dashed var(--line-bright);
+  border-radius:7px;
+  text-align:center;
+}
+.pr-stub-icon{font-size:32px;opacity:0.4}
+.pr-stub-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--muted);
+}
+.pr-stub-sub{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;
+  color:var(--dim);
+}
+
+/* Mobile collapse — stack the row vertically */
+@media(max-width:880px){
+  .pr-row{
+    grid-template-columns:46px 56px 1fr auto 48px;
+    grid-template-areas:
+      "rank mv team score logo"
+      "comment comment comment comment comment"
+      "actions actions actions actions actions";
+    gap:8px 12px;
+    padding:12px 14px 12px 20px;
+  }
+  .pr-row-rank   {grid-area:rank}
+  .pr-row-mv     {grid-area:mv}
+  .pr-row-team   {grid-area:team}
+  .pr-row-score  {grid-area:score}
+  .pr-logo       {grid-area:logo;width:42px;height:42px}
+  .pr-row-comment{grid-area:comment;padding-top:6px;border-top:1px dashed var(--line)}
+  .pr-row-actions{grid-area:actions;justify-content:flex-start}
+  .pr-row-rank-num{font-size:20px}
+  .pr-row-ticker{font-size:14px}
+  .pr-row-score-val{font-size:15px}
+  .pr-row-comment{font-size:12.5px}
+}
+@media(max-width:520px){
+  .pr-section{padding:0 14px 60px}
+  .pr-row{
+    grid-template-columns:38px 50px 1fr 38px;
+    grid-template-areas:
+      "rank mv team logo"
+      "score score score score"
+      "comment comment comment comment"
+      "actions actions actions actions";
+  }
+  .pr-row-score{flex-direction:row;justify-content:flex-start;gap:8px;align-items:baseline}
+  .pr-logo{width:38px;height:38px}
+  .pr-tab{font-size:10px;padding:6px 12px;letter-spacing:1.2px}
+}
+
+/* === F1-STYLE GRID LIST === */
+.grid-section{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 24px 80px;
+}
+
+.grid-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 18px;
+}
+
+.grid-row{
+  display:flex;align-items:stretch;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+  height:64px;
+  position:relative;
+  transition:transform .15s ease, border-color .15s ease;
+  animation:slideIn .4s ease both;
+}
+.grid-row:nth-child(2){animation-delay:.03s}
+.grid-row:nth-child(3){animation-delay:.06s}
+.grid-row:nth-child(4){animation-delay:.09s}
+.grid-row:nth-child(5){animation-delay:.12s}
+.grid-row:nth-child(6){animation-delay:.15s}
+.grid-row:nth-child(7){animation-delay:.18s}
+.grid-row:nth-child(8){animation-delay:.21s}
+
+/* Position number block */
+.row-position{
+  width:74px;
+  display:flex;align-items:center;justify-content:center;
+  background:#0a0a12;
+  border-right:1px solid var(--line);
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:var(--text);
+  flex-shrink:0;
+}
+.row-position .ord{font-size:11px;color:var(--muted);font-weight:700;margin-left:1px;letter-spacing:.5px}
+
+/* Coloured team bar — F1 style */
+.row-color{
+  width:8px;
+  flex-shrink:0;
+  background:var(--row-color, var(--dim));
+}
+
+/* Main content area */
+.row-main{
+  flex:1;
+  display:flex;align-items:center;
+  padding:0 18px;
+  gap:14px;
+  min-width:0;
+  background:linear-gradient(90deg,var(--row-color-faded, transparent) 0%,transparent 50%);
+}
+.row-ticker{
+  font-family:'Orbitron',sans-serif;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:1.2px;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex-shrink:1;
+  min-width:0;
+}
+.row-team-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:1.2px;
+  color:var(--muted);
+  text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex-shrink:1;
+  min-width:0;
+}
+
+/* Right-side logo/avatar */
+.row-logo{
+  width:48px;height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#333,#1a1a1a);
+  background-size:cover;background-position:center 25%;
+  border:2px solid var(--line-bright);
+  flex-shrink:0;
+  margin-right:14px;
+  align-self:center;
+}
+
+/* LOCKED state */
+.grid-row.locked{
+  border-color:rgba(255,204,0,.35);
+}
+.grid-row.locked .row-position{
+  background:linear-gradient(180deg,rgba(255,204,0,.10),#0a0a12);
+  color:var(--gold);
+}
+.grid-row.locked .row-logo{
+  border-color:var(--gold);
+}
+.grid-row.locked:hover{
+  border-color:var(--gold);
+  transform:translateX(2px);
+}
+
+/* EMPTY state */
+.grid-row.empty{
+  cursor:default;
+  background:linear-gradient(90deg,rgba(255,0,64,.03),var(--bg-card) 60%);
+  border:1px dashed var(--line-bright);
+}
+.grid-row.empty:hover{
+  border-color:var(--accent);
+}
+.grid-row.empty .row-position{
+  color:var(--dim);
+  background:transparent;
+  border-right:1px dashed var(--line-bright);
+}
+.grid-row.empty .row-color{
+  background:repeating-linear-gradient(45deg,var(--line) 0,var(--line) 4px,transparent 4px,transparent 8px);
+}
+.grid-row.empty .row-ticker{color:var(--dim)}
+.grid-row.empty .row-team-name{color:var(--dim)}
+.grid-row.empty .row-logo{
+  background-image:url('helmet.png');
+  background-size:cover;
+  background-position:center center;
+  background-color:#0a0a12;
+  border:2px solid var(--line-bright);
+}
+
+/* SEAT OPEN sits in the team-name slot — same font, same alignment as locked rows */
+.row-status-inline{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11px !important;
+  letter-spacing:1.5px !important;
+  color:var(--accent) !important;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+.row-arrow{
+  display:none;
+}
+
+/* CTA section */
+.cta-section{
+  max-width:1280px;
+  margin:0 auto 80px;
+  padding:0 24px;
+  text-align:center;
+}
+.cta-card{
+  background:linear-gradient(135deg,rgba(255,204,0,.08),rgba(255,0,64,.06));
+  border:1px solid var(--line-bright);
+  border-radius:12px;
+  padding:40px 32px;
+}
+.cta-card h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(22px,3vw,32px);font-weight:900;
+  letter-spacing:1px;margin-bottom:12px;
+}
+.cta-card p{
+  color:var(--muted);font-size:14px;line-height:1.6;
+  max-width:560px;margin:0 auto 24px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-decoration:none;
+  border:1px solid var(--line-bright);
+  color:var(--text);
+  background:transparent;
+  transition:all .2s ease;
+  cursor:pointer;
+}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn.primary{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+.btn.primary:hover{
+  background:#ff1a55;
+  box-shadow:0 4px 24px rgba(255,0,64,.3);
+}
+
+/* Footer */
+.foot{
+  border-top:1px solid var(--line);
+  padding:24px;
+  display:flex;flex-wrap:wrap;
+  justify-content:space-between;align-items:center;
+  gap:14px;
+  font-size:10px;color:var(--dim);letter-spacing:1.5px;
+}
+.foot a{color:var(--muted);text-decoration:none;margin-right:18px}
+.foot a:hover{color:var(--accent)}
+
+/* === CIRCUITS SECTION === */
+.circuits-section{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 24px 80px;
+}
+.circuits-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+.circuit-card{
+  background:var(--bg-card);
+  border:1px solid var(--circuit-color, var(--line-bright));
+  border-radius:10px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  position:relative;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  box-shadow:0 0 0 transparent;
+}
+.circuit-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 28px rgba(0,0,0,.4), 0 0 24px var(--circuit-color-faded, transparent);
+}
+.circuit-art{
+  position:relative;
+  height:200px;
+  background:
+    radial-gradient(ellipse at center, var(--circuit-color-faded, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, #0a0a14 0%, #13131c 100%);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.circuit-art::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:30px 30px;
+  pointer-events:none;
+}
+/* ============================================ */
+/* TRACK TEASE · blurred SVG silhouette          */
+/* Sits absolute behind the overlay text         */
+/* Different blur per track: revealed=light,     */
+/* hidden=heavy. Slow drift animation gives life.*/
+/* ============================================ */
+.circuit-tease{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.circuit-tease svg{
+  width:75%;height:auto;max-height:80%;
+  /* Drift animation — barely-perceptible horizontal float */
+  animation:teaseDrift 14s ease-in-out infinite;
+  /* Filter applied per-card via --tease-blur var so each track */
+  /* can have its own blur level (Satoshi reveals more)         */
+  filter:blur(var(--tease-blur, 6px))
+         drop-shadow(0 0 8px var(--circuit-color, var(--gold)))
+         drop-shadow(0 0 16px var(--circuit-color-faded, transparent));
+  opacity:0.85;
+}
+.circuit-tease svg path{
+  stroke:var(--circuit-color, var(--gold));
+  stroke-width:6;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+@keyframes teaseDrift{
+  0%,100%{transform:translateX(-3px) translateY(0)}
+  33%{transform:translateX(3px) translateY(-2px)}
+  66%{transform:translateX(2px) translateY(2px)}
+}
+@media (prefers-reduced-motion: reduce){
+  .circuit-tease svg{animation:none}
+}
+/* Overlay sits on top of the blurred track tease.            */
+/* No background scrim — text shadows alone keep readability   */
+/* and let the track glow bleed through naturally behind text. */
+.circuit-overlay{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;
+  z-index:2;
+  padding:0 20px;
+}
+.circuit-overlay-line{
+  width:80px;height:1px;
+  background:linear-gradient(90deg, transparent, var(--circuit-color, var(--gold)), transparent);
+  opacity:.6;
+}
+.circuit-overlay-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:4px;
+  color:var(--text);
+  text-align:center;
+  text-shadow:0 0 12px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
+  line-height:1.1;
+}
+.circuit-overlay-text:nth-child(2){
+  color:var(--circuit-color, var(--text));
+  font-size:22px;
+  text-shadow:0 0 14px var(--circuit-color-faded, rgba(255,255,255,.2)),
+              0 1px 3px rgba(0,0,0,0.9);
+}
+.circuit-label{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 18px;
+  background:linear-gradient(90deg, var(--circuit-color-faded, transparent) 0%, transparent 70%);
+  border-top:1px solid var(--circuit-color, var(--line));
+}
+.circuit-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;
+  font-weight:900;
+  color:var(--circuit-color, var(--gold));
+  letter-spacing:1px;
+}
+.circuit-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  color:var(--text);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid-list{grid-template-columns:1fr}
+  .circuits-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .banner{margin-top:16px;padding:0 12px}
+  .banner-content{padding:18px 16px 16px}
+  .banner-stats{gap:6px}
+  .banner-stat{font-size:9px;padding:7px 10px;letter-spacing:1.2px}
+  .intro-row{margin:32px auto 16px;padding:0 14px}
+  .intro-left h2{font-size:24px}
+  .intro-left p{font-size:13px}
+  .progress-track{width:160px;height:12px}
+  .grid-section{padding:0 14px 60px}
+  .grid-row{height:60px}
+  .row-position{width:60px;font-size:16px}
+  .row-ticker{font-size:17px}
+  .row-team-name{font-size:10px}
+  .row-logo{width:42px;height:42px;margin-right:10px}
+  .row-main{padding:0 12px;gap:10px}
+  .circuits-section{padding:0 14px 60px}
+  .circuit-art{height:160px}
+  .circuit-overlay-text{font-size:15px;letter-spacing:3px}
+  .circuit-overlay-text:nth-child(2){font-size:18px}
+  .circuit-label{padding:12px 14px}
+  .circuit-num{font-size:16px}
+  .circuit-name{font-size:13px;letter-spacing:1.2px}
+  .cta-section{padding:0 14px}
+  .cta-card{padding:28px 20px}
+  .foot{padding:18px 14px;flex-direction:column;align-items:flex-start}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms!important}
+}
+
+/* ============================================ */
+/* GP CENTRAL TICKER (gpt-*)                    */
+/* Thin bar above the topnav. Populated by JS.  */
+/* ============================================ */
+.gp-ticker{
+  position:relative;
+  z-index:51;
+  background:linear-gradient(90deg, #0a0a12 0%, #13131c 50%, #0a0a12 100%);
+  border-bottom:1px solid var(--line-bright);
+  display:flex;align-items:center;
+  gap:14px;
+  padding:0 16px;
+  height:32px;
+  font-family:'Orbitron',sans-serif;
+  overflow:hidden;
+}
+.gpt-badge{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9px;font-weight:900;letter-spacing:2px;
+  color:var(--gold);
+  text-decoration:none;
+  padding:3px 10px;
+  background:rgba(255,204,0,0.08);
+  border:1px solid rgba(255,204,0,0.4);
+  border-radius:3px;
+  white-space:nowrap;
+}
+.gpt-badge:hover{background:rgba(255,204,0,0.16);color:var(--gold)}
+.gpt-badge-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 6px var(--accent);
+  animation:blink 1.4s infinite;
+}
+.gpt-items{flex:1;display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
+.gpt-item{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9.5px;font-weight:600;letter-spacing:0.6px;
+  color:var(--muted);
+  text-decoration:none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:280px;
+  transition:color .15s ease;
+}
+.gpt-item:hover{color:var(--text)}
+.gpt-item-icon{font-size:11px;flex-shrink:0}
+.gpt-item-headline{
+  font-family:'Chakra Petch',sans-serif;
+  text-transform:uppercase;font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.gpt-sep{color:var(--dim);font-size:11px;flex-shrink:0;user-select:none}
+.gpt-all{
+  flex-shrink:0;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:var(--gold);
+  text-decoration:none;
+  padding:3px 8px;
+  border:1px solid rgba(255,204,0,0.25);
+  border-radius:3px;
+  white-space:nowrap;
+  transition:all .15s ease;
+}
+.gpt-all:hover{
+  border-color:var(--gold);
+  background:rgba(255,204,0,0.08);
+  text-shadow:0 0 6px rgba(255,204,0,0.5);
+}
+@media(max-width:780px){
+  .gp-ticker{padding:0 10px;gap:8px;height:30px}
+  .gpt-badge{font-size:8px;padding:2px 8px;letter-spacing:1.5px}
+  .gpt-item{font-size:9px;max-width:200px}
+  .gpt-item:nth-child(n+2){display:none}
+  .gpt-sep{display:none}
+  .gpt-all{font-size:8px;padding:2px 6px;letter-spacing:1.2px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- GP CENTRAL TICKER -->
+<div class="gp-ticker" id="gp-ticker" role="region" aria-label="Latest news ticker">
+  <a href="gp-central.html" class="gpt-badge">
+    <span class="gpt-badge-dot"></span>
+    <span class="gpt-badge-text">GP CENTRAL</span>
+  </a>
+</div>
+
+<!-- TOP NAV -->
+<nav class="topnav-pro">
+  <a href="season-2.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>SEASON 2 GRID</span>
+  </a>
+  <div class="tnav-center">
+    <a href="how-it-works.html" class="tnav-link">HOW IT WORKS</a>
+    <span class="tnav-sep"></span>
+    <a href="season-2.html" class="tnav-link active">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="gp-central.html" class="tnav-link">GP CENTRAL</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="about.html" class="tnav-link">ABOUT</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<!-- Angled gold accent line that mirrors the badge bevels -->
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-bg" aria-hidden="true"></div>
+    <div class="banner-content">
+      <div class="banner-top">
+        <div class="banner-eyebrow">RACE CONTROL · STARTING GRID</div>
+        <h1 class="banner-title">
+          MEME GP <span class="yellow">2026</span>
+        </h1>
+        <div class="banner-sub">STARTING GRID · <strong>15 TEAMS</strong></div>
+      </div>
+      <div class="banner-stats">
+        <span class="banner-stat locked">✓ LOCKED · <strong>2</strong></span>
+        <span class="banner-stat open">SEATS OPEN · <strong>13</strong></span>
+        <span class="banner-stat race">RACE 1 · <strong>JUNE 2026</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="intro-row">
+  <div class="intro-left">
+    <h2>THE GRID</h2>
+    <p>15 teams will line up for Season 2. Click any locked team to view their full reveal.</p>
+  </div>
+  <div class="intro-progress">
+    <span>GRID PROGRESS</span>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+    <span><strong style="color:var(--gold);font-size:20px;text-shadow:0 0 8px rgba(255,204,0,.4)">2</strong> / 15</span>
+  </div>
+</div>
+
+<!-- F1-STYLE GRID LIST -->
+<div class="grid-section">
+  <div class="grid-list" id="gridList"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- POWER RANKINGS SECTION                       -->
+<!-- Anchor for deep linking: #power-rankings     -->
+<!-- Rendered by rankings-loader.js into mount    -->
+<!-- ============================================ -->
+<section id="power-rankings" class="pr-section" aria-labelledby="pr-heading">
+  <div class="intro-row">
+    <div class="intro-left">
+      <h2 id="pr-heading">POWER RANKINGS</h2>
+      <p>Updated weekly. The teams to beat, the teams on the rise, the teams in trouble. Score, movement, and one-line analyst notes — straight from the paddock.</p>
+    </div>
+  </div>
+  <div id="power-rankings-mount">
+    <div class="pr-stub">
+      <div class="pr-stub-icon">🏁</div>
+      <div class="pr-stub-text">LOADING RANKINGS…</div>
+    </div>
+  </div>
+</section>
+
+<!-- CIRCUITS INTRO -->
+<div class="intro-row">
+  <div class="intro-left">
+    <h2>THE CIRCUITS</h2>
+    <p>4 races. 4 circuits. Every Season 2 round runs on a unique AI-generated track designed for chaos, overtakes, and meme-fuelled drama. Layouts drop closer to race day.</p>
+  </div>
+</div>
+
+<!-- CIRCUITS GRID -->
+<div class="circuits-section">
+  <div class="circuits-grid">
+
+    <!-- 1. Satoshi Speedway -->
+    <div class="circuit-card" style="--circuit-color:#1e7fd9;--circuit-color-faded:rgba(30,127,217,.15);--tease-blur:3px">
+      <div class="circuit-art">
+        <!-- Track tease: simplified Satoshi Speedway shape, light blur (already revealed) -->
+        <div class="circuit-tease">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 80 60
+                     L 260 55
+                     C 290 60, 295 75, 290 88
+                     C 320 95, 350 100, 360 115
+                     C 370 130, 360 145, 340 145
+                     C 320 150, 305 138, 290 130
+                     C 260 135, 220 145, 180 150
+                     C 170 165, 185 175, 200 178
+                     C 180 188, 145 192, 110 178
+                     C 90 175, 80 168, 70 170
+                     C 55 175, 50 162, 45 145
+                     C 50 110, 65 80, 75 62
+                     C 78 60, 80 60, 80 60 Z"/>
+          </svg>
+        </div>
+        <div class="circuit-overlay">
+          <div class="circuit-overlay-line"></div>
+          <div class="circuit-overlay-text">LAYOUT</div>
+          <div class="circuit-overlay-text">TO BE DROPPED</div>
+          <div class="circuit-overlay-text">SOON</div>
+          <div class="circuit-overlay-line"></div>
+        </div>
+      </div>
+      <div class="circuit-label">
+        <span class="circuit-num">1.</span>
+        <span class="circuit-name">SATOSHI SPEEDWAY</span>
+      </div>
+    </div>
+
+    <!-- 2. Solana Slam Circuit -->
+    <div class="circuit-card" style="--circuit-color:#16d169;--circuit-color-faded:rgba(22,209,105,.15);--tease-blur:7px">
+      <div class="circuit-art">
+        <!-- Track tease: high-speed flowing esses + stadium loop (Suzuka-inspired) -->
+        <div class="circuit-tease">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 50 100
+                     C 80 60, 120 60, 140 90
+                     C 160 120, 180 120, 200 90
+                     C 220 60, 250 60, 270 90
+                     C 290 115, 320 110, 340 95
+                     C 360 80, 365 105, 350 125
+                     C 335 145, 305 155, 280 145
+                     C 255 138, 240 145, 230 158
+                     C 215 175, 180 175, 165 158
+                     C 145 138, 110 138, 90 155
+                     C 70 168, 45 160, 42 138
+                     C 40 120, 45 108, 50 100 Z"/>
+          </svg>
+        </div>
+        <div class="circuit-overlay">
+          <div class="circuit-overlay-line"></div>
+          <div class="circuit-overlay-text">LAYOUT</div>
+          <div class="circuit-overlay-text">TO BE DROPPED</div>
+          <div class="circuit-overlay-text">SOON</div>
+          <div class="circuit-overlay-line"></div>
+        </div>
+      </div>
+      <div class="circuit-label">
+        <span class="circuit-num">2.</span>
+        <span class="circuit-name">SOLANA SLAM CIRCUIT</span>
+      </div>
+    </div>
+
+    <!-- 3. Ape Autodrone -->
+    <div class="circuit-card" style="--circuit-color:#ffcc00;--circuit-color-faded:rgba(255,204,0,.15);--tease-blur:7px">
+      <div class="circuit-art">
+        <!-- Track tease: figure-8 chaos + banked oval (intentionally goofy) -->
+        <div class="circuit-tease">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 100 60
+                     C 70 60, 50 80, 50 100
+                     C 50 130, 80 145, 110 130
+                     C 140 115, 170 130, 195 105
+                     C 220 80, 250 75, 280 95
+                     C 320 105, 360 95, 365 120
+                     C 370 145, 340 158, 310 150
+                     C 285 145, 265 155, 250 145
+                     C 225 130, 200 145, 175 155
+                     C 150 160, 125 145, 130 125
+                     C 138 105, 110 95, 95 110
+                     C 80 130, 110 145, 90 155
+                     C 65 162, 45 140, 55 115
+                     C 65 90, 85 65, 100 60 Z"/>
+          </svg>
+        </div>
+        <div class="circuit-overlay">
+          <div class="circuit-overlay-line"></div>
+          <div class="circuit-overlay-text">LAYOUT</div>
+          <div class="circuit-overlay-text">TO BE DROPPED</div>
+          <div class="circuit-overlay-text">SOON</div>
+          <div class="circuit-overlay-line"></div>
+        </div>
+      </div>
+      <div class="circuit-label">
+        <span class="circuit-num">3.</span>
+        <span class="circuit-name">APE AUTODROME</span>
+      </div>
+    </div>
+
+    <!-- 4. Rug Pull Raceway -->
+    <div class="circuit-card" style="--circuit-color:#e62538;--circuit-color-faded:rgba(230,37,56,.15);--tease-blur:7px">
+      <div class="circuit-art">
+        <!-- Track tease: long deceptive straight then sharp drop into hairpin maze -->
+        <div class="circuit-tease">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 50 75
+                     L 280 70
+                     C 310 72, 325 88, 320 105
+                     C 340 110, 355 125, 345 140
+                     C 335 155, 310 152, 295 142
+                     C 280 135, 270 145, 265 155
+                     C 280 165, 290 175, 270 180
+                     C 240 182, 215 168, 205 152
+                     C 200 138, 215 130, 200 122
+                     C 180 118, 165 132, 150 140
+                     C 135 148, 115 145, 110 132
+                     C 108 120, 125 115, 115 105
+                     C 95 100, 75 110, 65 125
+                     C 55 138, 38 130, 40 110
+                     C 42 90, 48 78, 50 75 Z"/>
+          </svg>
+        </div>
+        <div class="circuit-overlay">
+          <div class="circuit-overlay-line"></div>
+          <div class="circuit-overlay-text">LAYOUT</div>
+          <div class="circuit-overlay-text">TO BE DROPPED</div>
+          <div class="circuit-overlay-text">SOON</div>
+          <div class="circuit-overlay-line"></div>
+        </div>
+      </div>
+      <div class="circuit-label">
+        <span class="circuit-num">4.</span>
+        <span class="circuit-name">RUG PULL RACEWAY</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-card">
+    <h3>WANT YOUR COIN ON THE GRID?</h3>
+    <p>13 seats remaining for Season 2. We're vetting low and medium-cap meme coin communities — engagement matters more than market cap.</p>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="btn primary">DM @MemeGrandPrix →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div>
+    <a href="index.html">HOME</a>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">𝕏 @MemeGrandPrix</a>
+  </div>
+  <div>© 2026 Meme GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+<script>
+// === TEAM REGISTRY ===
+// Add teams here as they get locked in. Order = grid position (1st, 2nd, 3rd...)
+const TEAMS = [
+  {
+    position: 1,
+    ticker: 'TURBO',
+    teamName: 'AI Turbo Racing',
+    color: '#1e7fd9',         // Turbo Blue
+    logo: 'turbo-driver.png',
+    link: 'teams-turbo.html',
+    locked: true,
+  },
+  {
+    position: 2,
+    ticker: 'MASK',
+    teamName: 'Mask Stays On Racing',
+    color: '#e62538',         // MASK Red
+    logo: 'mask-driver.jpg',
+    link: 'teams-mask.html',
+    locked: true,
+  },
+  // Future teams go here — example:
+  // { position: 3, ticker: 'PEPE', teamName: 'Pepe Racing', color: '#16d169', logo: 'pepe.png', link: 'teams-pepe.html', locked: true },
+];
+
+const TOTAL_SEATS = 15;
+
+function ordinal(n){
+  const s=['TH','ST','ND','RD'], v=n%100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+
+function hexToRgba(hex, alpha){
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+const gridList = document.getElementById('gridList');
+let html = '';
+
+// Render all 15 slots in order
+for (let pos = 1; pos <= TOTAL_SEATS; pos++) {
+  const team = TEAMS.find(t => t.position === pos);
+
+  if (team && team.locked) {
+    const fadedColor = hexToRgba(team.color, 0.10);
+    const ord = ordinal(pos).replace(/(\d+)/, '<span class="num">$1</span>').replace(/(TH|ST|ND|RD)/, '<span class="ord">$1</span>');
+    html += `
+      <a href="${team.link}" class="grid-row locked"
+         style="--row-color:${team.color};--row-color-faded:${fadedColor}">
+        <div class="row-position">${ord}</div>
+        <div class="row-color"></div>
+        <div class="row-main">
+          <span class="row-ticker">$${team.ticker}</span>
+          <span class="row-team-name">${team.teamName}</span>
+        </div>
+        <div class="row-logo" style="background-image:url('${team.logo}')"></div>
+      </a>
+    `;
+  } else {
+    const ord = ordinal(pos).replace(/(\d+)/, '<span class="num">$1</span>').replace(/(TH|ST|ND|RD)/, '<span class="ord">$1</span>');
+    html += `
+      <div class="grid-row empty">
+        <div class="row-position">${ord}</div>
+        <div class="row-color"></div>
+        <div class="row-main">
+          <span class="row-ticker">$ ? ? ?</span>
+          <span class="row-team-name row-status-inline">SEAT OPEN</span>
+        </div>
+        <div class="row-logo"></div>
+      </div>
+    `;
+  }
+}
+
+gridList.innerHTML = html;
+</script>
+
+<script src="news-loader.js"></script>
+<script src="rankings-loader.js"></script>
+
+</body>
+</html>
