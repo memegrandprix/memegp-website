@@ -224,6 +224,212 @@ body::before{
 }
 .page-subtitle strong{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,.3)}
 
+/* ============================================ */
+/* HIW HERO BANNER · Season-2 styled            */
+/* Background image: how-it-works.png            */
+/* (with CSS fallback if image missing)         */
+/* Light vignette only — image stays visible    */
+/* ============================================ */
+.hiw-hero{
+  position:relative;
+  margin-bottom:48px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(255,204,0,0.4);
+  box-shadow:0 8px 28px rgba(0,0,0,0.5),
+             0 0 0 1px rgba(0,0,0,0.4),
+             inset 0 0 60px rgba(0,0,0,0.4);
+  aspect-ratio:21 / 9;
+  min-height:260px;
+  max-height:520px;
+  z-index:2;
+  animation:fadeUp .8s ease both;
+}
+/* Layer 0: pure-CSS fallback (visible if image missing) */
+.hiw-hero-fallback{
+  position:absolute;inset:0;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,204,0,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,204,0,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(31,109,255,0.10) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0a14 0%, #040408 100%);
+  overflow:hidden;
+}
+.hiw-hero-fallback::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:60px 60px;
+  opacity:0.7;
+}
+.hiw-hero-fallback::after{
+  content:'';
+  position:absolute;inset:-20% -10%;
+  background:
+    linear-gradient(115deg, transparent 30%, rgba(255,204,0,0.06) 45%, transparent 60%),
+    linear-gradient(65deg,  transparent 30%, rgba(255,255,255,0.04) 50%, transparent 70%);
+  animation:stageLight 18s ease-in-out infinite;
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+@keyframes stageLight{
+  0%,100% { transform:translateX(-8%) translateY(-2%) }
+  50%     { transform:translateX(8%)  translateY(2%) }
+}
+@media (prefers-reduced-motion: reduce){
+  .hiw-hero-fallback::after{animation:none}
+}
+/* Layer 1: real image (overlays fallback when present) */
+.hiw-hero-bg{
+  position:absolute;inset:0;
+  z-index:1;
+  background-image:url('how-it-works.png');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+/* Layer 2: light vignette — clear centre, dark corners only */
+.hiw-hero-scrim{
+  position:absolute;inset:0;
+  z-index:2;
+  background:
+    radial-gradient(ellipse 80% 75% at 50% 50%,
+      transparent 0%,
+      transparent 40%,
+      rgba(4,4,8,0.4) 80%,
+      rgba(4,4,8,0.78) 100%);
+  pointer-events:none;
+}
+/* Layer 3: content */
+.hiw-hero-content{
+  position:relative;
+  z-index:3;
+  height:100%;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;
+  padding:36px 32px;
+  gap:14px;
+}
+.hiw-hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);
+  text-shadow:
+    0 0 2px rgba(0,0,0,0.95),
+    0 0 8px rgba(0,0,0,0.85),
+    0 0 18px rgba(0,0,0,0.6);
+}
+.hiw-hero-eyebrow::before,
+.hiw-hero-eyebrow::after{
+  content:'';
+  display:block;
+  width:42px;height:1px;
+  background:repeating-linear-gradient(90deg,
+    var(--gold) 0, var(--gold) 4px,
+    transparent 4px, transparent 8px);
+  opacity:0.7;
+  filter:drop-shadow(0 0 4px rgba(0,0,0,0.7));
+}
+/* Title — preserves silver/yellow gradient typography from old page-title */
+.hiw-hero-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(40px, 6vw, 64px);
+  font-weight:900;
+  letter-spacing:-0.5px;
+  line-height:0.95;
+  margin:0;
+  /* Drop-shadow on the parent (works with gradient text fills below) */
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.85))
+         drop-shadow(0 0 14px rgba(0,0,0,0.6));
+}
+.hiw-hero-title .silver{
+  background:linear-gradient(180deg,#ffffff 0%,#d8d8e0 35%,#8a8a96 55%,#d8d8e0 75%,#ffffff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hiw-hero-title .yellow{
+  background:linear-gradient(180deg,#fff5b8 0%,#ffd633 30%,#cc9900 55%,#ffd633 80%,#fff5b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hiw-hero-subtitle{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:3.5px;
+  color:var(--gold);
+  text-shadow:
+    0 0 2px rgba(0,0,0,0.95),
+    0 0 8px rgba(0,0,0,0.85),
+    0 0 16px rgba(0,0,0,0.55);
+}
+.hiw-hero-blurb{
+  max-width:580px;
+  font-family:'Chakra Petch',sans-serif;
+  font-size:14px;color:rgba(240,240,245,0.92);
+  letter-spacing:0.4px;
+  line-height:1.55;
+  text-shadow:
+    0 0 2px rgba(0,0,0,0.95),
+    0 0 8px rgba(0,0,0,0.8),
+    0 1px 4px rgba(0,0,0,0.7);
+}
+.hiw-hero-blurb strong{
+  color:var(--gold);
+  font-weight:700;
+}
+.hiw-hero-stats{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:10px;
+  margin-top:6px;
+}
+.hiw-hero-stat{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  padding:9px 16px;
+  background:rgba(8,8,16,0.65);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,204,0,0.5);
+  border-radius:5px;
+  color:var(--gold);
+  white-space:nowrap;
+  box-shadow:inset 0 0 12px rgba(255,204,0,0.05);
+}
+.hiw-hero-stat-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;font-weight:700;
+  letter-spacing:0;
+  color:var(--text);
+}
+
+/* Mobile sizing */
+@media(max-width:780px){
+  .hiw-hero{
+    aspect-ratio:4 / 3;
+    min-height:340px;
+    border-radius:10px;
+    margin-bottom:36px;
+  }
+  .hiw-hero-content{padding:24px 18px;gap:10px}
+  .hiw-hero-title{font-size:clamp(32px, 7vw, 44px);letter-spacing:-0.3px}
+  .hiw-hero-eyebrow{font-size:9px;letter-spacing:2px;gap:10px}
+  .hiw-hero-eyebrow::before,
+  .hiw-hero-eyebrow::after{width:24px}
+  .hiw-hero-subtitle{font-size:11px;letter-spacing:2.5px}
+  .hiw-hero-blurb{font-size:12.5px}
+  .hiw-hero-stat{font-size:9px;padding:7px 12px;letter-spacing:1.5px}
+  .hiw-hero-stat-num{font-size:12px}
+}
+@media(max-width:480px){
+  .hiw-hero{aspect-ratio:1 / 1;min-height:380px}
+  .hiw-hero-title{font-size:34px}
+  .hiw-hero-eyebrow::before,
+  .hiw-hero-eyebrow::after{display:none}
+}
+
 /* ===== TLDR HEADLINE BLOCK ===== */
 .tldr-block{
   max-width:880px;margin:0 auto 80px;
@@ -1556,11 +1762,41 @@ body::before{
 
 <div class="hiw-panel">
 
-  <!-- HERO -->
-  <header class="page-header">
-    <div class="page-eyebrow">RACE CONTROL · BRIEFING</div>
-    <h1 class="page-title"><span class="silver">HOW IT</span> <span class="yellow">WORKS</span></h1>
-    <div class="page-subtitle">A complete F1-style weekend, every week. <strong>Memecoin data drives every car.</strong> AI runs the race. Your community decides the season.</div>
+  <!-- ============================================ -->
+  <!-- HERO BANNER · Season-2 styled                 -->
+  <!-- Background image: how-it-works.png            -->
+  <!-- (drops in later, CSS fallback shows until)    -->
+  <!-- ============================================ -->
+  <header class="hiw-hero">
+    <!-- Layer 0: pure-CSS fallback (visible if image missing) -->
+    <div class="hiw-hero-fallback" aria-hidden="true"></div>
+    <!-- Layer 1: real image (overlays the fallback when present) -->
+    <div class="hiw-hero-bg" aria-hidden="true"></div>
+    <!-- Layer 2: light vignette for text legibility -->
+    <div class="hiw-hero-scrim" aria-hidden="true"></div>
+    <!-- Layer 3: content -->
+    <div class="hiw-hero-content">
+      <div class="hiw-hero-eyebrow">
+        <span>RACE CONTROL · BRIEFING</span>
+      </div>
+      <h1 class="hiw-hero-title"><span class="silver">HOW IT</span> <span class="yellow">WORKS</span></h1>
+      <div class="hiw-hero-subtitle">F1-STYLE WEEKEND · EVERY WEEK</div>
+      <p class="hiw-hero-blurb"><strong>Memecoin data drives every car.</strong> AI runs the race. Your community decides the season.</p>
+      <div class="hiw-hero-stats">
+        <span class="hiw-hero-stat">
+          <span class="hiw-hero-stat-num">15</span>
+          <span>TEAMS</span>
+        </span>
+        <span class="hiw-hero-stat">
+          <span class="hiw-hero-stat-num">4</span>
+          <span>RACES</span>
+        </span>
+        <span class="hiw-hero-stat">
+          <span class="hiw-hero-stat-num">1</span>
+          <span>MEME CHAMPION</span>
+        </span>
+      </div>
+    </div>
   </header>
 
   <!-- TLDR -->
