@@ -1,0 +1,8 @@
+# MEME GP — robots.txt
+# All web crawlers welcome. Index everything public.
+
+User-agent: *
+Allow: /
+
+# Sitemap location for search engines
+Sitemap: https://memegrandprix.com/sitemap.xml
