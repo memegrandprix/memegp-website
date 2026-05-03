@@ -1,0 +1,177 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "notes": [
+      "POWER RANKINGS DATA — single source of truth.",
+      "rankings-loader.js reads this file, renders into #power-rankings-mount.",
+      "",
+      "Structure: { weeks: [ ... ] }",
+      "Each week has: id, label, subtitle, tag, rankings[]",
+      "  - id: stable URL fragment-friendly slug ('wk-3'). Used for tab buttons.",
+      "  - label: short tab label ('WK 3').",
+      "  - subtitle: longer description shown in section header ('WEEK OF MAY 1, 2026').",
+      "  - tag: small contextual label ('RACE WEEK', 'PRE-SEASON', etc.) shown next to subtitle.",
+      "  - rankings: array of team entries (10 ideal, but can be fewer).",
+      "",
+      "WEEKS ORDER: weeks[0] is the LATEST (current) week — renders by default.",
+      "Older weeks (weeks[1], weeks[2]...) are accessible via tabs.",
+      "Empty rankings[] array = stub week, shows 'rankings not yet archived' state.",
+      "",
+      "Each ranking entry: { rank, previous_rank, ticker, team_name, color, logo, score, commentary, tweet }",
+      "  - rank: integer position (1 = leader)",
+      "  - previous_rank: integer (last week's rank). Used to compute movement arrow.",
+      "                   Set to null for new entries → renders 'NEW' badge.",
+      "  - ticker: '$BRETT' (with $ prefix)",
+      "  - team_name: full name ('BRETT IS BACK')",
+      "  - color: hex color used for left rail + accent",
+      "  - logo: filename in same dir ('brett.png'). Falls back to ticker badge if missing.",
+      "  - score: float 0-100 (display only — logic to be defined)",
+      "  - commentary: 1-line analyst note (~80 chars ideal)",
+      "  - tweet: per-team copy-to-clipboard tweet text. \\n for line breaks.",
+      "",
+      "MOVEMENT ARROWS (auto-computed from previous_rank - rank):",
+      "  positive  → ▲ green   ('+2', '+5')",
+      "  negative  → ▼ red     ('-1', '-3')",
+      "  zero      → —  chrome ('—')",
+      "  null prev → NEW gold badge",
+      "",
+      "TO ADD A NEW WEEK: prepend a new object to weeks[]. Done.",
+      "TO UPDATE CURRENT WEEK: edit weeks[0] in place.",
+      "TO ARCHIVE: keep old week objects, the loader renders them as additional tabs."
+    ]
+  },
+  "weeks": [
+    {
+      "id": "wk-3",
+      "label": "WK 3",
+      "subtitle": "WEEK OF MAY 1, 2026",
+      "tag": "RACE WEEK",
+      "rankings": [
+        {
+          "rank": 1,
+          "previous_rank": 3,
+          "ticker": "$BRETT",
+          "team_name": "BRETT IS BACK",
+          "color": "#1F6DFF",
+          "logo": "brett.png",
+          "score": 98.2,
+          "commentary": "Three test sessions, three fastest laps. The paddock is whispering 'coronation' and BRETT isn't doing anything to dispel it. Untouchable on outright pace.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#1 (▲+2) $BRETT — 98.2\n\nThree tests. Three fastest laps. Untouchable.\n\nThe paddock isn't whispering anymore. It's shouting.\n\n#MEMEGP $BRETT"
+        },
+        {
+          "rank": 2,
+          "previous_rank": 1,
+          "ticker": "$DOGE",
+          "team_name": "DOGE MOTORSPORT",
+          "color": "#C69D3A",
+          "logo": "doge.png",
+          "score": 91.4,
+          "commentary": "Lost the top spot but the long-run race pace is still ominous. DOGE wins races, BRETT wins qualifying. Sunday will be DOGE's day if strategy goes right.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#2 (▼-1) $DOGE — 91.4\n\nDropped the top slot but don't get it twisted: long-run pace still terrifies the grid.\n\nDOGE wins races. BRETT wins qualifying.\n\n#MEMEGP $DOGE"
+        },
+        {
+          "rank": 3,
+          "previous_rank": 8,
+          "ticker": "$PENGU",
+          "team_name": "PENGU GRAND PRIX",
+          "color": "#7C5CFF",
+          "logo": "pengu.png",
+          "score": 87.6,
+          "commentary": "The biggest mover on the grid. Fresh upgrades, fresh tyres, and a driver suddenly looking dangerous in the high-speed sectors. Dark horse no more.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#3 (▲+5) $PENGU — 87.6\n\nBIGGEST MOVER OF THE WEEK.\n\nFresh upgrades. Fresh tyres. Suddenly fast everywhere.\n\nWatch this one.\n\n#MEMEGP $PENGU"
+        },
+        {
+          "rank": 4,
+          "previous_rank": 4,
+          "ticker": "$TURBO",
+          "team_name": "AI TURBO RACING",
+          "color": "#7C5CFF",
+          "logo": "turbo.png",
+          "score": 82.9,
+          "commentary": "Pit Ops upgrade from 5 to 7 quietly transforms TURBO from a midfield team into a strategic threat. The undercut is now their weapon. Hold for now, rising.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#4 (—) $TURBO — 82.9\n\nPit Ops 5→7. The undercut is now a weapon.\n\nHolding station this week but the trajectory is up. @AiTurboRacing playing the long game.\n\n#MEMEGP $TURBO"
+        },
+        {
+          "rank": 5,
+          "previous_rank": 6,
+          "ticker": "$BONK",
+          "team_name": "BONK RACING",
+          "color": "#F0B321",
+          "logo": "bonk.png",
+          "score": 78.4,
+          "commentary": "Engine 7→8 lights up the speed traps but the chassis hasn't quite caught up. Dangerous in a straight line, vulnerable through the high-speed corners.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#5 (▲+1) $BONK — 78.4\n\nEngine 7→8 makes them lethal on the straights.\n\nNow they need the chassis to keep up. One-trick podium contender or full title threat?\n\n#MEMEGP $BONK"
+        },
+        {
+          "rank": 6,
+          "previous_rank": 5,
+          "ticker": "$MASK",
+          "team_name": "MASK RACING",
+          "color": "#FF3366",
+          "logo": "mask.png",
+          "score": 74.1,
+          "commentary": "Slipping. Other teams have upgraded harder this week and MASK's stat profile is starting to look pre-season. Time for a response from the engineering room.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#6 (▼-1) $MASK — 74.1\n\nThe grid keeps upgrading. MASK keeps standing still.\n\nThe engineering room needs an answer before Round 1 or this slide continues.\n\n#MEMEGP $MASK"
+        },
+        {
+          "rank": 7,
+          "previous_rank": 7,
+          "ticker": "$WIF",
+          "team_name": "DOGWIFHAT VELOCE",
+          "color": "#FFB3D1",
+          "logo": "wif.png",
+          "score": 69.8,
+          "commentary": "Inconsistent. The pace is there in flashes but WIF can't seem to stitch a clean weekend together. A driver issue or a setup issue? The paddock is split.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#7 (—) $WIF — 69.8\n\nThe pace is there. The weekends are not.\n\nDriver problem or setup problem? @dogwifcoin needs to figure it out fast.\n\n#MEMEGP $WIF"
+        },
+        {
+          "rank": 8,
+          "previous_rank": 2,
+          "ticker": "$SHIB",
+          "team_name": "SHIBA INU GP",
+          "color": "#F5A623",
+          "logo": "shiba.png",
+          "score": 64.3,
+          "commentary": "The week's biggest faller. SHIB looked dominant in pre-season but the rest of the grid has caught up and overtaken. Vulnerable in the midfield, scrapping for points.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#8 (▼-6) $SHIB — 64.3\n\nBIGGEST FALLER OF THE WEEK.\n\nLooked dominant in pre-season. Now scrapping in the midfield. The grid found a gear, $SHIB didn't.\n\n#MEMEGP $SHIB"
+        },
+        {
+          "rank": 9,
+          "previous_rank": 9,
+          "ticker": "$MOG",
+          "team_name": "MOG WORKS",
+          "color": "#FF8A1A",
+          "logo": "mog.png",
+          "score": 58.7,
+          "commentary": "Chassis 9→8 is hurting. Cornering stability gone, lap times suffering, and the engineers haven't found the fix. Damage limitation mode until upgrades arrive.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#9 (—) $MOG — 58.7\n\nChassis 9→8. The cornering stability isn't coming back this week.\n\nDamage limitation until the next upgrade window. @MogWorks need it badly.\n\n#MEMEGP $MOG"
+        },
+        {
+          "rank": 10,
+          "previous_rank": null,
+          "ticker": "$FLOKI",
+          "team_name": "FLOKI MOTORSPORT",
+          "color": "#F58A1F",
+          "logo": "floki.png",
+          "score": 52.3,
+          "commentary": "New entry. FLOKI debuts at the back but the technical package looks stronger than the rookie position suggests. Don't write them off — surprises coming.",
+          "tweet": "🏁 POWER RANKINGS · WK 3\n\n#10 (NEW) $FLOKI — 52.3\n\nWelcome to the grid, @RealFlokiInu.\n\nDebuts at the back but the package is stronger than the rank suggests. The Wolf isn't finished talking yet.\n\n#MEMEGP $FLOKI"
+        }
+      ]
+    },
+    {
+      "id": "wk-2",
+      "label": "WK 2",
+      "subtitle": "WEEK OF APR 24, 2026",
+      "tag": "PRE-SEASON",
+      "rankings": []
+    },
+    {
+      "id": "wk-1",
+      "label": "WK 1",
+      "subtitle": "WEEK OF APR 17, 2026",
+      "tag": "TESTING",
+      "rankings": []
+    }
+  ]
+}
