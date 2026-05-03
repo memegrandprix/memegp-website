@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — F1-Style Memecoin Racing League</title>
+<meta name="description" content="The world's first F1-style memecoin racing league. Memecoin data drives every car. AI runs the season. Your community decides everything else.">
+<meta property="og:title" content="MEME GP — F1-Style Memecoin Racing League">
+<meta property="og:description" content="15 teams. 4 races. 1 meme champion. Round 1 lights out June 1, 2026.">
+<meta property="og:image" content="grid-hero.png">
+<meta property="og:url" content="https://memegrandprix.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MEME GP — F1-Style Memecoin Racing League">
+<meta name="twitter:description" content="15 teams. 4 races. 1 meme champion. Round 1 lights out June 1, 2026.">
+<meta name="twitter:image" content="grid-hero.png">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smoothoverflow-x:hidden;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;
+  z-index:0;
+}
+
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============================================ */
+/* GP CENTRAL TICKER (gpt-*)                    */
+/* ============================================ */
+.gp-ticker{
+  position:relative;
+  z-index:51;
+  background:linear-gradient(90deg, #0a0a12 0%, #13131c 50%, #0a0a12 100%);
+  border-bottom:1px solid var(--line-bright);
+  display:flex;align-items:center;
+  gap:14px;
+  padding:0 16px;
+  height:32px;
+  font-family:'Orbitron',sans-serif;
+  overflow:hidden;
+}
+.gpt-badge{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9px;font-weight:900;letter-spacing:2px;
+  color:var(--gold);
+  text-decoration:none;
+  padding:3px 10px;
+  background:rgba(255,204,0,0.08);
+  border:1px solid rgba(255,204,0,0.4);
+  border-radius:3px;
+  white-space:nowrap;
+}
+.gpt-badge:hover{background:rgba(255,204,0,0.16);color:var(--gold)}
+.gpt-badge-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 6px var(--accent);
+  animation:blink 1.4s infinite;
+}
+.gpt-items{flex:1;display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
+.gpt-item{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9.5px;font-weight:600;letter-spacing:0.6px;
+  color:var(--muted);
+  text-decoration:none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:280px;
+  transition:color .15s ease;
+}
+.gpt-item:hover{color:var(--text)}
+.gpt-item-icon{font-size:11px;flex-shrink:0}
+.gpt-item-headline{
+  font-family:'Chakra Petch',sans-serif;
+  text-transform:uppercase;font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.gpt-sep{color:var(--dim);font-size:11px;flex-shrink:0;user-select:none}
+.gpt-all{
+  flex-shrink:0;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:var(--gold);
+  text-decoration:none;
+  padding:3px 8px;
+  border:1px solid rgba(255,204,0,0.25);
+  border-radius:3px;
+  white-space:nowrap;
+  transition:all .15s ease;
+}
+.gpt-all:hover{
+  border-color:var(--gold);
+  background:rgba(255,204,0,0.08);
+  text-shadow:0 0 6px rgba(255,204,0,0.5);
+}
+@media(max-width:780px){
+  .gp-ticker{padding:0 10px;gap:8px;height:30px}
+  .gpt-badge{font-size:8px;padding:2px 8px;letter-spacing:1.5px}
+  .gpt-item{font-size:9px;max-width:200px}
+  .gpt-item:nth-child(n+2){display:none}
+  .gpt-sep{display:none}
+  .gpt-all{font-size:8px;padding:2px 6px;letter-spacing:1.2px}
+}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:10px 18px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  min-height:56px;
+}
+.tnav-accent{
+  position:sticky;
+  top:56px;
+  z-index:49;
+  height:18px;
+  pointer-events:none;
+  margin-bottom:-18px;
+  background:#040408;
+}
+.tnav-accent svg{
+  display:block;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+.tnav-badge{
+  justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;
+  gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:7px 14px;
+  border-radius:3px;
+  transition:all .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{width:1px;height:14px;background:var(--line-bright);flex-shrink:0}
+.tnav-exit{
+  justify-self:end;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 14px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+}
+@media(max-width:780px){
+  .topnav-pro{grid-template-columns:auto 1fr auto;padding:8px 10px;gap:10px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-link{padding:6px 9px;font-size:10px;letter-spacing:1.2px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:560px){
+  .tnav-link{padding:5px 7px}
+  .tnav-sep{display:none}
+}
+
+/* ============================================ */
+/* SHARED BANNER · standardised across all pages */
+/* (matches season-2/gp-central/how-it-works)    */
+/* ============================================ */
+.banner{
+  position:relative;
+  margin:32px auto 0;
+  max-width:1280px;
+  padding:0 24px;
+}
+.banner-inner{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--line-bright);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  aspect-ratio:16/5.5;
+  min-height:280px;
+}
+.banner-bg{
+  position:absolute;inset:0;
+  background-image:var(--banner-image, none);
+  background-size:cover;
+  background-position:var(--banner-pos, center 50%);
+  z-index:1;
+}
+.banner-bg::after{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(4,4,8,.85) 0%,
+      rgba(4,4,8,.55) 25%,
+      rgba(4,4,8,.15) 50%,
+      rgba(4,4,8,.55) 85%,
+      rgba(4,4,8,.92) 100%),
+    radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.10) 0%,transparent 60%);
+}
+.banner-fallback{
+  position:absolute;inset:0;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,204,0,.18) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0a14 0%, #040408 100%);
+}
+.banner-content{
+  position:relative;z-index:2;
+  height:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:24px 36px 22px;
+  text-align:center;
+}
+.banner-top{
+  display:flex;flex-direction:column;align-items:center;
+}
+.banner-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  justify-content:center;
+  animation:fadeUp .8s ease both;
+}
+.banner-eyebrow::before{content:'';width:50px;height:1px;background:var(--gold)}
+.banner-eyebrow::after {content:'';width:50px;height:1px;background:var(--gold)}
+.banner-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,6.5vw,76px);
+  font-weight:900;
+  letter-spacing:-1px;
+  line-height:.95;
+  margin-bottom:8px;
+  animation:fadeUp .9s ease .15s both;
+}
+.banner-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.banner-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(13px,1.5vw,18px);
+  font-weight:700;letter-spacing:5px;
+  color:var(--text);
+  text-shadow:0 2px 8px rgba(0,0,0,.7);
+  animation:fadeUp .9s ease .3s both;
+}
+.banner-sub strong{color:var(--gold);font-weight:900}
+.banner-blurb{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;
+  font-weight:400;
+  color:rgba(240,240,245,0.85);
+  letter-spacing:.4px;
+  line-height:1.5;
+  max-width:580px;
+  margin:10px auto 0;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+  animation:fadeUp .9s ease .4s both;
+}
+.banner-blurb strong{color:var(--gold);font-weight:700}
+/* CTA inside banner — primary call-to-action */
+.banner-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:900;letter-spacing:3px;
+  color:#0a0a12;
+  background:linear-gradient(135deg,#ffe066 0%,#ffcc00 50%,#cc9900 100%);
+  border:none;
+  padding:14px 26px;
+  border-radius:5px;
+  text-decoration:none;
+  margin-top:6px;
+  box-shadow:0 6px 20px rgba(255,204,0,.4),
+             0 0 0 1px rgba(255,204,0,.6),
+             inset 0 1px 0 rgba(255,255,255,.4);
+  transition:all .15s ease;
+  animation:fadeUp .9s ease .55s both;
+  cursor:pointer;
+}
+.banner-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px rgba(255,204,0,.5),
+             0 0 0 1px var(--gold),
+             0 0 24px rgba(255,204,0,.4),
+             inset 0 1px 0 rgba(255,255,255,.5);
+}
+.banner-cta-arrow{
+  display:inline-block;
+  transition:transform .2s ease;
+}
+.banner-cta:hover .banner-cta-arrow{transform:translateX(4px)}
+
+@media(max-width:780px){
+  .banner-content{padding:18px 16px 16px}
+  .banner-blurb{font-size:12px;max-width:90%}
+  .banner-cta{font-size:11px;padding:12px 20px;letter-spacing:2px}
+}
+
+/* ============================================ */
+/* COUNTDOWN BLOCK                                */
+/* ============================================ */
+.countdown-wrapper{
+  max-width:1280px;
+  margin:60px auto 0;
+  padding:0 24px;
+}
+.countdown-block{
+  position:relative;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255,204,0,.06) 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:14px;
+  padding:36px 32px;
+  text-align:center;
+  overflow:hidden;
+}
+.countdown-block::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,204,0,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,204,0,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  opacity:.6;
+}
+.countdown-content{position:relative;z-index:1}
+.countdown-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:4px;
+  color:var(--gold);
+  margin-bottom:14px;
+}
+.countdown-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(22px,3.5vw,36px);
+  font-weight:900;
+  letter-spacing:1px;
+  color:var(--text);
+  margin-bottom:6px;
+}
+.countdown-title .accent{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.countdown-circuit{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;letter-spacing:1.2px;
+  color:var(--muted);
+  margin-bottom:28px;
+  text-transform:uppercase;
+}
+.countdown-circuit strong{color:var(--gold);font-weight:700}
+.countdown-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
+  max-width:680px;
+  margin:0 auto;
+}
+.countdown-cell{
+  background:rgba(8,8,16,.7);
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  padding:18px 8px;
+  position:relative;
+}
+.countdown-cell-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(28px,5vw,44px);
+  font-weight:700;
+  color:var(--gold);
+  line-height:1;
+  letter-spacing:-1px;
+  text-shadow:0 0 12px rgba(255,204,0,.4);
+  display:block;
+  margin-bottom:8px;
+}
+.countdown-cell-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  color:var(--muted);
+}
+.countdown-passed{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:2px;
+  color:var(--green);
+  text-shadow:0 0 10px rgba(0,255,136,.4);
+  padding:18px 0;
+}
+@media(max-width:560px){
+  .countdown-grid{grid-template-columns:repeat(2, 1fr);gap:10px}
+  .countdown-block{padding:28px 18px}
+  .countdown-cell{padding:14px 8px}
+}
+
+/* ============================================ */
+/* THREE-CARD OVERVIEW                            */
+/* ============================================ */
+.overview-wrapper{
+  max-width:1280px;
+  margin:80px auto 0;
+  padding:0 24px;
+}
+.overview-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:4px;
+  color:var(--gold);
+  text-align:center;
+  margin-bottom:14px;
+}
+.overview-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(26px,4vw,40px);
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:var(--text);
+  text-align:center;
+  margin-bottom:48px;
+}
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+}
+.overview-card{
+  position:relative;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:10px;
+  padding:28px 26px;
+  text-decoration:none;
+  color:inherit;
+  transition:all .2s ease;
+  overflow:hidden;
+}
+.overview-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, var(--card-color, var(--gold)) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .2s ease;
+  pointer-events:none;
+}
+.overview-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--card-color, var(--gold));
+  box-shadow:0 14px 28px rgba(0,0,0,.5),
+             0 0 0 1px var(--card-color, var(--gold));
+}
+.overview-card:hover::before{opacity:.04}
+.overview-card-rail{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:var(--card-color, var(--gold));
+  box-shadow:0 0 8px var(--card-color, var(--gold));
+}
+.overview-card-icon{
+  width:48px;height:48px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  background:rgba(255,204,0,.06);
+  border:1px solid var(--card-color, var(--gold));
+  border-radius:8px;
+  margin-bottom:18px;
+}
+.overview-card-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2.5px;
+  color:var(--card-color, var(--gold));
+  margin-bottom:8px;
+}
+.overview-card-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:20px;font-weight:900;letter-spacing:0.5px;
+  color:var(--text);
+  margin-bottom:12px;
+  line-height:1.1;
+}
+.overview-card-blurb{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13.5px;line-height:1.55;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+.overview-card-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:2px;
+  color:var(--card-color, var(--gold));
+  text-transform:uppercase;
+}
+.overview-card-cta-arrow{
+  transition:transform .15s ease;
+}
+.overview-card:hover .overview-card-cta-arrow{transform:translateX(3px)}
+@media(max-width:880px){
+  .overview-grid{grid-template-columns:1fr;gap:14px}
+}
+
+/* ============================================ */
+/* ============================================ */
+/* PRE-SEASON / PROJECTED LABEL — shared utility */
+/* ============================================ */
+.preseason-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9.5px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  background:rgba(255,204,0,.10);
+  border:1px solid rgba(255,204,0,.45);
+  border-radius:3px;
+  padding:5px 10px;
+  vertical-align:middle;
+  white-space:nowrap;
+}
+.preseason-badge::before{
+  content:'';
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 6px rgba(255,204,0,.7);
+}
+.preseason-badge--inline{margin-left:14px}
+
+/* LATEST NEWS BLOCK                              */
+/* ============================================ */
+.latest-wrapper{
+  max-width:1280px;
+  margin:80px auto 0;
+  padding:0 24px;
+}
+.latest-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:16px;
+  margin-bottom:32px;
+}
+.latest-head-left h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:32px;
+  font-weight:900;letter-spacing:3px;
+  color:var(--text);
+  margin-bottom:8px;
+}
+.latest-head-left p{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:14px;
+  color:var(--muted);
+}
+.latest-head-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  text-decoration:none;
+  padding:10px 16px;
+  background:rgba(255,204,0,.06);
+  border:1px solid rgba(255,204,0,.4);
+  border-radius:4px;
+  transition:all .15s ease;
+}
+.latest-head-link:hover{
+  background:rgba(255,204,0,.16);
+  border-color:var(--gold);
+}
+.latest-list{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+}
+@media(max-width:880px){
+  .latest-list{grid-template-columns:1fr;gap:12px}
+}
+
+/* Mini news card — purpose-built for landing */
+.latest-card{
+  position:relative;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  padding:18px 18px 16px 24px;
+  text-decoration:none;
+  color:inherit;
+  transition:all .15s ease;
+  overflow:hidden;
+}
+.latest-card-rail{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:var(--card-accent, var(--gold));
+}
+.latest-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--card-accent, var(--gold));
+}
+.latest-card-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;
+}
+.latest-card-type{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.2px;
+}
+.latest-card-time{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.2px;
+  color:var(--dim);
+  margin-left:auto;
+}
+.latest-card-headline{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:0.4px;
+  color:var(--text);
+  margin-bottom:8px;
+  line-height:1.25;
+}
+.latest-card-body{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:12.5px;line-height:1.45;
+  color:var(--muted);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.latest-empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:40px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:2px;
+  color:var(--muted);
+  border:1px dashed var(--line-bright);
+  border-radius:8px;
+}
+
+/* ============================================ */
+/* TOKEN BLOCK                                    */
+/* ============================================ */
+.token-wrapper{
+  max-width:1280px;
+  margin:80px auto 0;
+  padding:0 24px;
+}
+.token-block{
+  background:
+    radial-gradient(ellipse at 80% 0%, rgba(31,127,217,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 100%, rgba(255,204,0,.06) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:14px;
+  padding:36px 36px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:28px;
+  align-items:center;
+}
+.token-info-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.token-info-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(20px,3vw,28px);
+  font-weight:900;
+  letter-spacing:1px;
+  color:var(--text);
+  margin-bottom:8px;
+}
+.token-info-title .ticker{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.token-info-tagline{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13.5px;
+  color:var(--muted);
+  margin-bottom:18px;
+  line-height:1.5;
+}
+.token-info-tagline strong{color:var(--gold);font-weight:700}
+.token-ca-row{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(8,8,16,.7);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:10px 14px;
+  max-width:540px;
+  flex-wrap:wrap;
+}
+.token-ca-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  color:var(--muted);
+  flex-shrink:0;
+}
+.token-ca-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--gold);
+  word-break:break-all;
+  flex:1;
+  min-width:0;
+}
+.token-ca-copy{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:var(--muted);
+  background:transparent;
+  border:1px solid var(--line-bright);
+  border-radius:4px;
+  padding:6px 10px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.token-ca-copy:hover{
+  color:var(--gold);
+  border-color:rgba(255,204,0,.5);
+  background:rgba(255,204,0,.06);
+}
+.token-ca-copy.copied{
+  color:var(--green);
+  border-color:rgba(0,255,136,.5);
+  background:rgba(0,255,136,.08);
+}
+.token-cta-stack{
+  display:flex;flex-direction:column;gap:10px;
+}
+.token-cta-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  text-decoration:none;
+  padding:11px 22px;
+  border-radius:5px;
+  white-space:nowrap;
+  transition:all .15s ease;
+  min-width:180px;
+}
+.token-cta-btn--primary{
+  color:#0a0a12;
+  background:linear-gradient(135deg,#ffe066 0%,#ffcc00 50%,#cc9900 100%);
+  border:1px solid var(--gold);
+}
+.token-cta-btn--primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(255,204,0,.4);
+}
+.token-cta-btn--secondary{
+  color:var(--text);
+  background:transparent;
+  border:1px solid var(--line-bright);
+}
+.token-cta-btn--secondary:hover{
+  color:var(--gold);
+  border-color:var(--gold);
+  background:rgba(255,204,0,.05);
+}
+@media(max-width:780px){
+  .token-block{
+    grid-template-columns:1fr;
+    padding:28px 22px;
+    gap:22px;
+  }
+  .token-cta-stack{flex-direction:row;flex-wrap:wrap}
+  .token-cta-btn{min-width:0;flex:1;font-size:10px;padding:10px 16px;letter-spacing:1.5px}
+}
+
+/* ============================================ */
+/* FOOTER                                         */
+/* ============================================ */
+.site-foot{
+  max-width:1280px;
+  margin:80px auto 0;
+  padding:32px 24px 40px;
+  border-top:1px solid var(--line);
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.site-foot a{color:var(--gold);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+.site-foot-disclaimer{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:11px;letter-spacing:0.4px;
+  color:var(--dim);
+  max-width:680px;
+  line-height:1.5;
+}
+@media(max-width:780px){
+  .banner{padding:0 14px;margin-top:18px}
+  .banner-inner{aspect-ratio:auto;min-height:240px;height:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- GP CENTRAL TICKER -->
+<div class="gp-ticker" id="gp-ticker" role="region" aria-label="Latest news ticker">
+  <a href="gp-central.html" class="gpt-badge">
+    <span class="gpt-badge-dot"></span>
+    <span class="gpt-badge-text">GP CENTRAL</span>
+  </a>
+</div>
+
+<!-- TOP NAV -->
+<nav class="topnav-pro">
+  <a href="index.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>MEME GP</span>
+  </a>
+  <div class="tnav-center">
+    <a href="how-it-works.html" class="tnav-link">HOW IT WORKS</a>
+    <span class="tnav-sep"></span>
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="gp-central.html" class="tnav-link">GP CENTRAL</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="about.html" class="tnav-link">ABOUT</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
+<!-- ============================================ -->
+<!-- HERO BANNER · primary landing visual          -->
+<!-- Reuses Season 2's grid-hero.png as placeholder-->
+<!-- Single primary CTA → SEASON 2                 -->
+<!-- ============================================ -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-fallback" aria-hidden="true"></div>
+    <div class="banner-bg" aria-hidden="true" style="--banner-image:url('grid-hero.png')"></div>
+    <div class="banner-content">
+      <div class="banner-top">
+        <div class="banner-eyebrow">RACE CONTROL · MEME GP 2026</div>
+        <h1 class="banner-title">
+          MEME <span class="yellow">GP</span>
+        </h1>
+        <div class="banner-sub">F1-STYLE · <strong>MEMECOIN RACING LEAGUE</strong></div>
+        <p class="banner-blurb">Memecoin communities own racing teams. <strong>AI runs the season.</strong> Your community decides everything else.</p>
+      </div>
+      <a href="season-2.html" class="banner-cta">
+        VIEW THE GRID <span class="banner-cta-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- COUNTDOWN · Round 1 Satoshi Speedway          -->
+<!-- Updates live via JS. Target: June 1 2026     -->
+<!-- ============================================ -->
+<div class="countdown-wrapper">
+  <div class="countdown-block">
+    <div class="countdown-content">
+      <div class="countdown-eyebrow">▸ LIGHTS OUT IN</div>
+      <h2 class="countdown-title">ROUND 1 · <span class="accent">SATOSHI SPEEDWAY</span></h2>
+      <div class="countdown-circuit">June 1, 2026 · <strong>Season 2 Launch</strong></div>
+      <div class="countdown-grid" id="countdown-grid">
+        <div class="countdown-cell">
+          <span class="countdown-cell-num" id="cd-days">--</span>
+          <span class="countdown-cell-label">DAYS</span>
+        </div>
+        <div class="countdown-cell">
+          <span class="countdown-cell-num" id="cd-hours">--</span>
+          <span class="countdown-cell-label">HOURS</span>
+        </div>
+        <div class="countdown-cell">
+          <span class="countdown-cell-num" id="cd-minutes">--</span>
+          <span class="countdown-cell-label">MINUTES</span>
+        </div>
+        <div class="countdown-cell">
+          <span class="countdown-cell-num" id="cd-seconds">--</span>
+          <span class="countdown-cell-label">SECONDS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- THREE-CARD OVERVIEW                           -->
+<!-- Triage layer: send visitors to right page    -->
+<!-- ============================================ -->
+<div class="overview-wrapper">
+  <div class="overview-eyebrow">▸ START HERE</div>
+  <h2 class="overview-title">EXPLORE THE LEAGUE</h2>
+  <div class="overview-grid">
+    <a href="how-it-works.html" class="overview-card" style="--card-color:#1f7fd9">
+      <div class="overview-card-rail"></div>
+      <div class="overview-card-icon">📖</div>
+      <div class="overview-card-eyebrow">▸ THE FORMAT</div>
+      <h3 class="overview-card-title">HOW IT WORKS</h3>
+      <p class="overview-card-blurb">F1-style weekend, every week. Memecoin data drives every car. Stats, sectors, sessions, scoring — all explained.</p>
+      <span class="overview-card-cta">LEARN THE FORMAT <span class="overview-card-cta-arrow">→</span></span>
+    </a>
+    <a href="season-2.html" class="overview-card" style="--card-color:#ffcc00">
+      <div class="overview-card-rail"></div>
+      <div class="overview-card-icon">🏁</div>
+      <div class="overview-card-eyebrow">▸ THE GRID</div>
+      <h3 class="overview-card-title">SEASON 2</h3>
+      <p class="overview-card-blurb">15 teams. 4 races. 1 meme champion. See who's locked, who's racing, and where the season unfolds.</p>
+      <span class="overview-card-cta">VIEW THE GRID <span class="overview-card-cta-arrow">→</span></span>
+    </a>
+    <a href="gp-central.html" class="overview-card" style="--card-color:#ff0040">
+      <div class="overview-card-rail"></div>
+      <div class="overview-card-icon">📰</div>
+      <div class="overview-card-eyebrow">▸ THE STORY</div>
+      <h3 class="overview-card-title">GP CENTRAL</h3>
+      <p class="overview-card-blurb">Every upgrade, signing, and result from across the grid. Live from the paddock, told by the data.</p>
+      <span class="overview-card-cta">READ THE NEWS <span class="overview-card-cta-arrow">→</span></span>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- LATEST NEWS                                   -->
+<!-- Top 3 from news.json via news-loader.js       -->
+<!-- ============================================ -->
+<div class="latest-wrapper">
+  <div class="latest-head">
+    <div class="latest-head-left">
+      <h2>FROM THE PADDOCK <span class="preseason-badge preseason-badge--inline">PRE-SEASON · SCENARIO</span></h2>
+      <p>Pre-season storylines and projected upgrades. Round 1 has not yet taken place.</p>
+    </div>
+    <a href="gp-central.html" class="latest-head-link">ALL NEWS →</a>
+  </div>
+  <div class="latest-list" id="home-latest">
+    <div class="latest-empty">Loading paddock feed…</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- TOKEN BLOCK · $MEMEGP                         -->
+<!-- ============================================ -->
+<div class="token-wrapper">
+  <div class="token-block">
+    <div>
+      <div class="token-info-eyebrow">▸ THE TOKEN</div>
+      <h2 class="token-info-title"><span class="ticker">$MEMEGP</span> · <span style="color:var(--muted);font-weight:700">on Solana</span></h2>
+      <p class="token-info-tagline">The platform's anchor token, launched on pump.fun. <strong>Not used for race outcomes.</strong> Independent of team auctions and sponsorships.</p>
+      <div class="token-ca-row">
+        <span class="token-ca-label">CA</span>
+        <span class="token-ca-value" id="token-ca-value">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+        <button class="token-ca-copy" id="token-ca-copy" aria-label="Copy contract address">
+          <span>📋</span> COPY
+        </button>
+      </div>
+    </div>
+    <div class="token-cta-stack">
+      <a href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener" class="token-cta-btn token-cta-btn--primary">
+        VIEW ON PUMP.FUN →
+      </a>
+      <a href="https://twitter.com/MemeGrandPrix" target="_blank" rel="noopener" class="token-cta-btn token-cta-btn--secondary">
+        🐦 FOLLOW @MemeGrandPrix
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- FOOTER                                        -->
+<!-- ============================================ -->
+<footer class="site-foot">
+  <div>MEME GP · 2026 SEASON · <a href="how-it-works.html">FORMAT</a> · <a href="about.html">ABOUT</a> · <a href="roadmap.html">ROADMAP</a></div>
+  <div class="site-foot-disclaimer">
+    MEME GP is an entertainment and storytelling platform built on memecoin culture. Race outcomes are AI-simulated. The $MEMEGP token is not a security and grants no rights to outcomes. Not financial advice.
+  </div>
+</footer>
+
+<!-- ============================================ -->
+<!-- COUNTDOWN SCRIPT                              -->
+<!-- Single config constant: SEASON_LAUNCH         -->
+<!-- ============================================ -->
+<script>
+(function(){
+  'use strict';
+
+  // === Config: change this single date to update the countdown target ===
+  // Format: YYYY-MM-DDTHH:mm:ssZ (UTC). Default: June 1, 2026 00:00 UTC
+  var SEASON_LAUNCH = new Date('2026-06-01T00:00:00Z').getTime();
+
+  var els = {
+    days:    document.getElementById('cd-days'),
+    hours:   document.getElementById('cd-hours'),
+    minutes: document.getElementById('cd-minutes'),
+    seconds: document.getElementById('cd-seconds'),
+    grid:    document.getElementById('countdown-grid')
+  };
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    var now = Date.now();
+    var diff = SEASON_LAUNCH - now;
+
+    if (diff <= 0) {
+      // Race started — replace grid with celebratory message
+      els.grid.innerHTML =
+        '<div class="countdown-passed" style="grid-column:1/-1">' +
+          '🏁 LIGHTS OUT · SEASON 2 IS LIVE 🏁' +
+        '</div>';
+      return false; // stop ticking
+    }
+
+    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    var m = Math.floor((diff / (1000 * 60)) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+
+    els.days.textContent    = pad(d);
+    els.hours.textContent   = pad(h);
+    els.minutes.textContent = pad(m);
+    els.seconds.textContent = pad(s);
+    return true;
+  }
+
+  // Initial tick + interval
+  if (tick()) {
+    setInterval(function(){
+      if (!tick()) clearInterval();
+    }, 1000);
+  }
+})();
+</script>
+
+<!-- ============================================ -->
+<!-- TOKEN COPY-TO-CLIPBOARD                       -->
+<!-- ============================================ -->
+<script>
+(function(){
+  'use strict';
+
+  var btn = document.getElementById('token-ca-copy');
+  var val = document.getElementById('token-ca-value');
+  if (!btn || !val) return;
+
+  btn.addEventListener('click', function(){
+    var text = val.textContent.trim();
+    var done = function(){
+      var prev = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✓</span> COPIED';
+      setTimeout(function(){
+        btn.classList.remove('copied');
+        btn.innerHTML = prev;
+      }, 1600);
+    };
+    try {
+      navigator.clipboard.writeText(text).then(done, function(){
+        // Fallback for non-https or older browsers
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch(e){}
+        document.body.removeChild(ta);
+      });
+    } catch(e) {
+      // Same fallback
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch(err){}
+      document.body.removeChild(ta);
+    }
+  });
+})();
+</script>
+
+<!-- ============================================ -->
+<!-- HOME LATEST NEWS · pulls top 3 from news.json -->
+<!-- Self-contained renderer (no news-loader.js   -->
+<!-- dependency since this view is unique).        -->
+<!-- ============================================ -->
+<script>
+(function(){
+  'use strict';
+
+  var TYPE_META = {
+    upgrade:   { icon: '⬆',  label: 'UPGRADE',         color: '#00ff88' },
+    downgrade: { icon: '⬇',  label: 'DOWNGRADE',       color: '#ff0040' },
+    new_team:  { icon: '🆕', label: 'NEW TEAM',        color: '#ffcc00' },
+    result:    { icon: '🏁', label: 'RACE RESULT',     color: '#1f7fd9' },
+    paddock:   { icon: '📰', label: 'PADDOCK',         color: '#a4a4b0' }
+  };
+
+  function escapeHTML(s){
+    if (s == null) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function formatRelative(iso){
+    var then = new Date(iso).getTime();
+    var now = Date.now();
+    var diffMin = Math.max(0, Math.floor((now - then) / 60000));
+    if (diffMin < 1)   return 'JUST NOW';
+    if (diffMin < 60)  return diffMin + 'M AGO';
+    var diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24)   return diffHr + 'H AGO';
+    if (diffHr < 48)   return 'YESTERDAY';
+    var diffDay = Math.floor(diffHr / 24);
+    if (diffDay < 7)   return diffDay + 'D AGO';
+    var diffWk = Math.floor(diffDay / 7);
+    if (diffWk < 5)    return diffWk + 'W AGO';
+    return Math.floor(diffDay / 30) + 'MO AGO';
+  }
+
+  function renderCard(it){
+    var meta = TYPE_META[it.type] || TYPE_META.paddock;
+    var color = (it.team && it.team.color) || meta.color;
+    return '' +
+      '<a class="latest-card" href="gp-central.html#' + escapeHTML(it.id) + '" style="--card-accent:' + color + '">' +
+        '<div class="latest-card-rail"></div>' +
+        '<div class="latest-card-head">' +
+          '<span class="latest-card-type" style="color:' + meta.color + '">' +
+            '<span>' + meta.icon + '</span>' +
+            '<span>' + meta.label + '</span>' +
+          '</span>' +
+          '<time class="latest-card-time" datetime="' + escapeHTML(it.timestamp) + '">' +
+            formatRelative(it.timestamp) +
+          '</time>' +
+        '</div>' +
+        '<h3 class="latest-card-headline">' + escapeHTML(it.headline) + '</h3>' +
+        '<p class="latest-card-body">' + escapeHTML(it.body) + '</p>' +
+      '</a>';
+  }
+
+  function init(){
+    var mount = document.getElementById('home-latest');
+    if (!mount) return;
+
+    fetch('news.json', { cache: 'no-cache' })
+      .then(function(r){
+        if (!r.ok) throw new Error('news.json HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data){
+        var items = (data && data.items) || [];
+        items.sort(function(a,b){
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+        var top3 = items.slice(0, 3);
+        if (top3.length === 0) {
+          mount.innerHTML = '<div class="latest-empty">No news yet. Check back soon.</div>';
+          return;
+        }
+        mount.innerHTML = top3.map(renderCard).join('');
+      })
+      .catch(function(err){
+        console.warn('[home-latest] failed to load news.json:', err);
+        mount.innerHTML = '<div class="latest-empty">News feed unavailable. Try refreshing.</div>';
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- Reuse the news-loader for the top ticker bar -->
+<script src="news-loader.js"></script>
+
+</body>
+</html>
