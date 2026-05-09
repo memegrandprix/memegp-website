@@ -1109,6 +1109,7 @@ body::before{
 const TEAMS = [
   { ticker: 'TURBO', overall: 7.7, locked: true, current: false, link: 'teams-turbo.html', avatar: 'turbo-driver.png' },
   { ticker: 'MASK', overall: 5.5, locked: true, current: true, link: 'teams-mask.html', avatar: 'mask-driver.jpg' },
+  { ticker: 'NEURO', overall: 3.7, locked: true, current: false, link: 'teams-neuroticat.html', avatar: 'neuroticat-driver.png' },
 ];
 
 let miniHtml = '';
@@ -1126,7 +1127,7 @@ TEAMS.forEach(t => {
   `;
 });
 
-for (let i = 3; i <= 15; i++) {
+for (let i = 4; i <= 15; i++) {
   const num = String(i).padStart(2, '0');
   miniHtml += `
     <div class="mini-card empty">
