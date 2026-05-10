@@ -35,6 +35,21 @@
   },
   "items": [
     {
+      "id": "2026-05-09-sus-official-team-4",
+      "type": "paddock",
+      "timestamp": "2026-05-09T11:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$SUS",
+        "name": "SUS SPEED RACING",
+        "color": "#C8102E",
+        "logo": "susdog.png"
+      },
+      "headline": "OFFICIAL TEAM 4 - $SUS JOINS THE GRID",
+      "body": "SUS SPEED Racing locked in as the fourth official team for Season 2. Driver: SUS. Livery: crimson red and gloss black. Starting profile: 6.0 overall - solid mid-pack contender with a rock-solid DRAG of 9.5. The grid keeps growing. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 4 - $SUS\n\nSUS SPEED Racing joins the grid.\n\nseason 2:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[locked] $SUS\n[open] x 11\n\nlights out june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-09-neuroticat-official-team-3",
       "type": "paddock",
       "timestamp": "2026-05-09T10:30:00Z",
