@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="robots" content="index,follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mask Stays On Racing — $MASK | MEME GP Season 2</title>
-<meta name="description" content="$MASK confirmed for Season 2. catwifmask joins the grid with Mask Stays On Racing.">
+<title>LOL Racing — $LOL | MEME GP Season 2</title>
+<meta name="description" content="$LOL confirmed for Season 2. Driver, car, stats — the LOL Racing reveal.">
 
 <!-- Open Graph (Facebook, LinkedIn, Discord, etc.) -->
-<meta property="og:title" content="Mask Stays On Racing — $MASK joins MEME GP Season 2">
-<meta property="og:description" content="The mask never comes off. 5.5 overall · Drag 9.4 · Engine 7.2. Team #2 locked.">
-<meta property="og:image" content="https://memegrandprix.com/mask-card.png">
+<meta property="og:title" content="LOL Racing — $LOL joins MEME GP Season 2">
+<meta property="og:description" content="$LOL joins the grid. 3.9 overall — rookie underdog with breakout potential. Real stats from on-chain data.">
+<meta property="og:image" content="https://memegrandprix.com/lol-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://memegrandprix.com/teams-mask.html">
+<meta property="og:url" content="https://memegrandprix.com/teams-lol.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MEME GP">
 
@@ -21,10 +21,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@MemeGrandPrix">
 <meta name="twitter:creator" content="@MemeGrandPrix">
-<meta name="twitter:title" content="Mask Stays On Racing — $MASK joins MEME GP Season 2">
-<meta name="twitter:description" content="The mask never comes off. 5.5 overall · Drag 9.4 · Engine 7.2.">
-<meta name="twitter:image" content="https://memegrandprix.com/mask-card.png">
-<meta name="twitter:image:alt" content="$MASK reveal card — Mask Stays On Racing on the MEME GP Season 2 grid">
+<meta name="twitter:title" content="LOL Racing — $LOL joins MEME GP Season 2">
+<meta name="twitter:description" content="$LOL joins the grid. 3.9 overall — rookie underdog with breakout potential.">
+<meta name="twitter:image" content="https://memegrandprix.com/lol-card.png">
+<meta name="twitter:image:alt" content="$LOL reveal card — LOL Racing on the MEME GP Season 2 grid">
 
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,8 +47,8 @@
   --gold:#ffcc00;
   --gold-dim:#aa8822;
   --green:#00ff88;
-  --mask-red:#e02838;
-  --mask-red-glow:#ff4554;
+  --turbo-blue:#22DD66;
+  --turbo-blue-glow:#E8344C;
 
   /* === UNIFIED HEADER TOKENS === */
   --header-h:64px;          /* fixed height for all 3 block headers */
@@ -285,11 +285,11 @@ body::before{
   font-family:'Orbitron',sans-serif;
   font-size:12px;font-weight:900;color:#fff;
   flex-shrink:0;
-  background:linear-gradient(135deg,var(--mask-red-glow),var(--mask-red));
+  background:linear-gradient(135deg,var(--turbo-blue-glow),var(--turbo-blue));
 }
 .block-header-logo.portrait{
   border-radius:50%;
-  background-image:url('mask-driver.jpg');
+  background-image:url('lol-driver.png');
   background-size:cover;
   background-position:center 25%;
   border:2px solid var(--gold);
@@ -333,27 +333,27 @@ body::before{
 
 /* Per-block header accent borders */
 .block-header.driver{
-  background:linear-gradient(90deg,rgba(224,40,56,.15),rgba(255,204,0,.08));
+  background:linear-gradient(90deg,rgba(30,127,217,.15),rgba(255,204,0,.08));
   border-bottom:2px solid var(--gold);
 }
 .block-header.car{
-  background:linear-gradient(90deg,rgba(224,40,56,.2),rgba(224,40,56,.05));
-  border-bottom:2px solid var(--mask-red);
+  background:linear-gradient(90deg,rgba(30,127,217,.2),rgba(30,127,217,.05));
+  border-bottom:2px solid var(--turbo-blue);
 }
 .block-header.car .block-header-title{
-  color:var(--mask-red-glow);
+  color:var(--turbo-blue-glow);
   font-size:11px;
   letter-spacing:3px;
 }
 .block-header.stats{
-  background:linear-gradient(90deg,rgba(224,40,56,.15),rgba(255,204,0,.08));
+  background:linear-gradient(90deg,rgba(30,127,217,.15),rgba(255,204,0,.08));
   border-bottom:2px solid var(--gold);
 }
 
 /* BLOCK 1 — DRIVER body */
 .driver-image-area{
   flex:1;
-  background-image:url('mask-driver.jpg');
+  background-image:url('lol-driver.png');
   background-size:cover;background-position:center 30%;
   position:relative;min-height:340px;
 }
@@ -416,7 +416,7 @@ body::before{
 /* BLOCK 2 — CAR body (flush like Block 1) */
 .car-image-area{
   flex:1;
-  background-image:url('mask-car.png');
+  background-image:url('lol-car.png');
   background-size:cover;background-position:center;
   position:relative;min-height:380px;
 }
@@ -438,15 +438,15 @@ body::before{
   font-size:11px;color:var(--muted);letter-spacing:1px;
   font-family:'JetBrains Mono',monospace;
 }
-.car-livery-info strong{color:var(--mask-red-glow);font-weight:700}
+.car-livery-info strong{color:var(--turbo-blue-glow);font-weight:700}
 .car-share-btn{
   font-family:'Orbitron',sans-serif;
   font-size:9px;font-weight:700;letter-spacing:1.5px;
-  color:var(--mask-red-glow);text-decoration:none;
-  padding:6px 10px;border:1px solid var(--mask-red);
+  color:var(--turbo-blue-glow);text-decoration:none;
+  padding:6px 10px;border:1px solid var(--turbo-blue);
   border-radius:4px;transition:all .2s;
 }
-.car-share-btn:hover{background:var(--mask-red);color:#fff}
+.car-share-btn:hover{background:var(--turbo-blue);color:#fff}
 
 /* === BLOCK 3 — STATS body (grid-row style stat list) === */
 .block-stats{
@@ -572,7 +572,7 @@ body::before{
   padding:0 24px;
 }
 .share-card-inner{
-  background:linear-gradient(135deg,rgba(255,204,0,.10),rgba(224,40,56,.08));
+  background:linear-gradient(135deg,rgba(255,204,0,.10),rgba(30,127,217,.08));
   border:1px solid var(--line-bright);
   border-radius:14px;
   padding:24px 28px;
@@ -766,10 +766,10 @@ body::before{
   transition:all .2s ease;cursor:pointer;
 }
 .btn:hover{border-color:var(--accent);transform:translateY(-1px)}
-.btn.primary{background:var(--mask-red);border-color:var(--mask-red);color:#fff}
+.btn.primary{background:var(--turbo-blue);border-color:var(--turbo-blue);color:#fff}
 .btn.primary:hover{
-  background:var(--mask-red-glow);border-color:var(--mask-red-glow);
-  box-shadow:0 4px 24px rgba(224,40,56,.4);
+  background:var(--turbo-blue-glow);border-color:var(--turbo-blue-glow);
+  box-shadow:0 4px 24px rgba(30,127,217,.4);
 }
 
 /* STARTING GRID STRIP BELOW */
@@ -952,23 +952,23 @@ body::before{
   <!-- BLOCK 1 — DRIVER -->
   <div class="block">
     <div class="block-header driver">
-      <div class="block-header-logo" style="font-size:9px;letter-spacing:.5px">MASK</div>
+      <div class="block-header-logo">SS</div>
       <div class="block-header-text">
-        <div class="block-header-title"><span class="accent">MASK</span> STAYS ON RACING</div>
+        <div class="block-header-title"><span class="accent">LOL</span> RACING</div>
         <div class="block-header-sub">DRIVER PROFILE</div>
       </div>
     </div>
-    <div class="driver-image-area" aria-label="The Cat — MASK Stays On Racing driver"></div>
+    <div class="driver-image-area" aria-label="LOL Guy — LOL Racing driver"></div>
     <div class="driver-info-pad">
       <div class="driver-ticker">
-        <span class="dollar">$</span><span class="ticker">MASK</span>
+        <span class="dollar">$</span><span class="ticker">LOL</span>
       </div>
     </div>
     <div class="block-footer">
       <div class="driver-meta-grid">
         <div class="driver-meta-row">
           <span class="driver-meta-label">CAR #</span>
-          <span class="driver-meta-value">2</span>
+          <span class="driver-meta-value">5</span>
         </div>
         <div class="driver-meta-row">
           <span class="driver-meta-label">CHAIN</span>
@@ -981,16 +981,16 @@ body::before{
   <!-- BLOCK 2 — CAR -->
   <div class="block">
     <div class="block-header car">
-      <div class="block-header-logo" style="font-size:9px;letter-spacing:.5px">MASK</div>
+      <div class="block-header-logo">SS</div>
       <div class="block-header-text">
-        <div class="block-header-title">THE MACHINE · STEALTH BLACK</div>
-        <div class="block-header-sub">LIVERY · POKG SPONSOR</div>
+        <div class="block-header-title">THE MACHINE · GIGGLE GREEN</div>
+        <div class="block-header-sub">LIVERY · LOL RACING</div>
       </div>
     </div>
-    <div class="car-image-area" aria-label="MASK Stays On Racing F1-style car"></div>
+    <div class="car-image-area" aria-label="LOL Racing F1-style car"></div>
     <div class="car-info-pad">
       <div class="car-livery-info">
-        Livery: <strong>STEALTH BLACK</strong> · Sponsor <strong>POKG</strong>
+        Livery: <strong>GIGGLE GREEN</strong> · Built by <strong>LOL RACING</strong>
       </div>
       <a href="#" id="carShareBtn" class="car-share-btn">𝕏 SHARE CARD</a>
     </div>
@@ -1001,64 +1001,64 @@ body::before{
     <div class="block-header stats">
       <div class="block-header-logo portrait" aria-hidden="true"></div>
       <div class="block-header-text">
-        <div class="block-header-title">$MASK</div>
-        <div class="block-header-sub">MASK STAYS ON RACING</div>
+        <div class="block-header-title">$LOL</div>
+        <div class="block-header-sub">LOL RACING</div>
       </div>
       <div class="block-header-right">
-        <div class="block-header-overall-num">5.5</div>
+        <div class="block-header-overall-num">3.9</div>
         <div class="block-header-overall-label">OVERALL</div>
       </div>
     </div>
     <div class="stat-list">
-      <div class="stat-row" style="--score-pct:72%">
+      <div class="stat-row" style="--score-pct:55%">
         <div class="stat-row-icon"><img src="icon-engine.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">ENGINE</span>
-          <span class="stat-row-value">7.2</span>
+          <span class="stat-row-value">5.2</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:15%">
+      <div class="stat-row" style="--score-pct:37%">
         <div class="stat-row-icon"><img src="icon-aero.png" alt="" class="wide"></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">AERO</span>
-          <span class="stat-row-value">1.5</span>
+          <span class="stat-row-value">3.5</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:45%">
+      <div class="stat-row" style="--score-pct:49%">
         <div class="stat-row-icon"><img src="icon-chassis.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">CHASSIS</span>
-          <span class="stat-row-value">4.5</span>
+          <span class="stat-row-value">4.7</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:94%">
+      <div class="stat-row" style="--score-pct:21%">
         <div class="stat-row-icon"><img src="icon-drag.png" alt="" class="wide"></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">DRAG</span>
-          <span class="stat-row-value">9.4</span>
+          <span class="stat-row-value">2.0</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:60%">
+      <div class="stat-row" style="--score-pct:42%">
         <div class="stat-row-icon"><img src="icon-pit.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">PIT</span>
-          <span class="stat-row-value">6.0</span>
+          <span class="stat-row-value">4.0</span>
         </div>
       </div>
     </div>
     <div class="mcap-strip">
       <div class="mcap-strip-left">
         <div class="mcap-strip-label">MARKET CAP</div>
-        <div class="mcap-strip-value"><span class="currency">$</span>1.43M</div>
+        <div class="mcap-strip-value"><span class="currency">$</span>153K</div>
       </div>
       <div class="mcap-strip-right">
-        24H VOL · <span class="vol">$11.7K</span><span class="arrow-up">▲</span>
-        <span class="snapshot">Snapshot · Apr 29</span>
+        24H VOL · <span class="vol">$23.7K</span>
+        <span class="snapshot">Snapshot · May 9</span>
       </div>
     </div>
   </div>
@@ -1070,7 +1070,7 @@ body::before{
   <div class="share-card-inner">
     <div class="share-card-text">
       <div class="share-card-title">📸 SHARE THIS REVEAL CARD</div>
-      <div class="share-card-sub">Snap an image of the full $MASK reveal and post it to <strong>𝕏</strong>. Tag <strong>@MemeGrandPrix</strong>.</div>
+      <div class="share-card-sub">Snap an image of the full $LOL reveal and post it to <strong>𝕏</strong>. Tag <strong>@MemeGrandPrix</strong>.</div>
       <div class="share-status" id="shareStatus"></div>
     </div>
     <button class="share-btn-big" id="shareCardBtn">
@@ -1108,11 +1108,11 @@ body::before{
   <div class="share-modal">
     <button class="share-modal-close" id="shareModalClose" aria-label="Close">×</button>
     <div class="share-modal-title" id="shareModalTitle">📸 CARD READY!</div>
-    <div class="share-modal-sub">Your $MASK reveal card has been saved. Now post it on 𝕏 in 3 steps:</div>
+    <div class="share-modal-sub">Your $LOL reveal card has been saved. Now post it on 𝕏 in 3 steps:</div>
     <div class="share-steps">
       <div class="share-step">
         <div class="share-step-num">1</div>
-        <div class="share-step-text">Card image was downloaded as <code>memegp-mask-reveal.png</code> — check your Downloads folder.</div>
+        <div class="share-step-text">Card image was downloaded as <code>memegp-lol-reveal.png</code> — check your Downloads folder.</div>
       </div>
       <div class="share-step">
         <div class="share-step-num">2</div>
@@ -1120,7 +1120,7 @@ body::before{
       </div>
       <div class="share-step">
         <div class="share-step-num">3</div>
-        <div class="share-step-text">Paste the text, then drag <code>memegp-mask-reveal.png</code> into the tweet box. Post it 🏁</div>
+        <div class="share-step-text">Paste the text, then drag <code>memegp-lol-reveal.png</code> into the tweet box. Post it 🏁</div>
       </div>
     </div>
     <div class="share-modal-actions">
@@ -1134,11 +1134,11 @@ body::before{
 <script>
 // Mini grid
 const TEAMS = [
-  { ticker: 'TURBO', overall: 7.7, locked: true, current: false, link: 'teams-turbo.html', avatar: 'turbo-driver.png' },
-  { ticker: 'MASK', overall: 5.5, locked: true, current: true, link: 'teams-mask.html', avatar: 'mask-driver.jpg' },
+  { ticker: 'TURBO', overall: 7.7, locked: true, current: false, link: 'teams-turbo.html',      avatar: 'turbo-driver.png' },
+  { ticker: 'MASK',  overall: 5.5, locked: true, current: false, link: 'teams-mask.html',       avatar: 'mask-driver.jpg' },
   { ticker: 'NEURO', overall: 3.7, locked: true, current: false, link: 'teams-neuroticat.html', avatar: 'neuroticat-driver.png' },
-  { ticker: 'SUS', overall: 6.0, locked: true, current: false, link: 'teams-sus.html', avatar: 'susdog-driver.png' },
-  { ticker: 'LOL', overall: 3.9, locked: true, current: false, link: 'teams-lol.html', avatar: 'lol-driver.png' },
+  { ticker: 'SUS',   overall: 6.0, locked: true, current: false, link: 'teams-sus.html',        avatar: 'susdog-driver.png' },
+  { ticker: 'LOL',   overall: 3.9, locked: true, current: true,  link: 'teams-lol.html',        avatar: 'lol-driver.png' },
 ];
 
 let miniHtml = '';
@@ -1173,16 +1173,14 @@ for (let i = 6; i <= 15; i++) {
 document.getElementById('miniGrid').innerHTML = miniHtml;
 
 // === SHARE CARD AS IMAGE ===
-const SHARE_TWEET_TEXT = `🏁 $MASK is on the Season 2 grid.
+const SHARE_TWEET_TEXT = `🏁 $LOL is on the Season 2 grid.
 
-Mask Stays On Racing. Stealth black. POKG-sponsored.
-Drag 9.4 · Engine 7.2 · 5.5 overall.
-
-The mask never comes off.
+LOL Racing. 3.9 overall.
+ENGINE 5.2 · CHASSIS 4.7 · PIT 4.0
 
 @MemeGrandPrix · #MemeGP`;
 
-const PAGE_URL = 'https://memegrandprix.com/teams-mask.html';
+const PAGE_URL = 'https://memegrandprix.com/teams-lol.html';
 const TWEET_INTENT_URL = 'https://x.com/intent/post?text=' + encodeURIComponent(SHARE_TWEET_TEXT) + '&url=' + encodeURIComponent(PAGE_URL);
 
 const shareBtn = document.getElementById('shareCardBtn');
@@ -1264,7 +1262,7 @@ async function shareCard(){
   try {
     const canvas = await captureCard();
     const blob = await canvasToBlob(canvas);
-    const file = new File([blob], 'memegp-mask-reveal.png', { type: 'image/png' });
+    const file = new File([blob], 'memegp-lol-reveal.png', { type: 'image/png' });
 
     // MOBILE PATH — Web Share API: image attaches directly, no modal needed
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -1295,7 +1293,7 @@ async function shareCard(){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'memegp-mask-reveal.png';
+    a.download = 'memegp-lol-reveal.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

@@ -3,18 +3,18 @@
     "version": "1.1",
     "notes": [
       "ITEMS IN THE 'items' ARRAY ARE WHAT GETS RENDERED.",
-      "Order does not matter \u2014 news-loader.js sorts by timestamp DESC.",
+      "Order does not matter — news-loader.js sorts by timestamp DESC.",
       "Newest items appear first in both the ticker (top 3) and full feed.",
       "",
       "Required fields per item: id, type, timestamp, headline, body, team, tweet.",
       "Optional: tag, stat_change.",
       "",
       "type values: 'upgrade' | 'downgrade' | 'new_team' | 'result' | 'paddock'",
-      "  upgrade  = green left bar + \u2b06 icon (stat went up)",
-      "  downgrade= red left bar + \u2b07 icon (stat went down)",
-      "  new_team = gold left bar + \ud83c\udd95 icon (joining grid)",
-      "  result   = blue left bar + \ud83c\udfc1 icon (post-race recap)",
-      "  paddock  = chrome left bar + \ud83d\udcf0 icon (editorial / commentary / power rankings)",
+      "  upgrade  = green left bar + ⬆ icon (stat went up)",
+      "  downgrade= red left bar + ⬇ icon (stat went down)",
+      "  new_team = gold left bar + 🆕 icon (joining grid)",
+      "  result   = blue left bar + 🏁 icon (post-race recap)",
+      "  paddock  = chrome left bar + 📰 icon (editorial / commentary / power rankings)",
       "",
       "team object: { ticker, name, color, logo }",
       "  - ticker: '$BRETT', '$DOGE', etc.",
@@ -34,6 +34,21 @@
     ]
   },
   "items": [
+    {
+      "id": "2026-05-10-lol-official-team-5",
+      "type": "paddock",
+      "timestamp": "2026-05-10T14:30:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$LOL",
+        "name": "LOL RACING",
+        "color": "#22DD66",
+        "logo": "lol.png"
+      },
+      "headline": "OFFICIAL TEAM 5 — $LOL JOINS THE GRID",
+      "body": "LOL Racing locked in as the fifth official team for Season 2. Driver: LOL Guy. Livery: Giggle Green. Starting profile: 3.9 overall — rookie underdog with breakout potential and room to grow into upgrades. The grid keeps building. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 5 - $LOL\n\nLOL Racing joins the grid.\n\nseason 2:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[locked] $SUS\n[locked] $LOL\n[open] x 10\n\nlights out june 1.\n\n$MEMEGP"
+    },
     {
       "id": "2026-05-09-sus-official-team-4",
       "type": "paddock",
@@ -75,9 +90,9 @@
         "color": "#1F6DFF",
         "logo": "brett.png"
       },
-      "headline": "ROUND 1 POWER RANKINGS \u00b7 WHO'S IN FORM FOR SATOSHI SPEEDWAY",
+      "headline": "ROUND 1 POWER RANKINGS · WHO'S IN FORM FOR SATOSHI SPEEDWAY",
       "body": "BRETT enters Round 1 as the consensus favourite after a flawless pre-season testing programme. DOGE's race pace looks ominous, PENGU is the dark horse on fresh upgrades, and SHIB looks vulnerable in the midfield. Full grid analysis inside.",
-      "tweet": "\ud83c\udfc1 ROUND 1 POWER RANKINGS\n\n\u2b50 Title favourites: $BRETT, $DOGE\n\ud83d\udc0e Dark horse: $PENGU\n\u26a0\ufe0f At risk: $SHIB\n\nSatoshi Speedway, June 2026. Form guide is up at memegrandprix.com/gp-central.html\n\n#MEMEGP #MemeRacing"
+      "tweet": "🏁 ROUND 1 POWER RANKINGS\n\n⭐ Title favourites: $BRETT, $DOGE\n🐎 Dark horse: $PENGU\n⚠️ At risk: $SHIB\n\nSatoshi Speedway, June 2026. Form guide is up at memegrandprix.com/gp-central.html\n\n#MEMEGP #MemeRacing"
     },
     {
       "id": "2026-04-30-turbo-pit-up",
@@ -91,13 +106,13 @@
         "logo": "turbo.png"
       },
       "headline": "TURBO REWIRES THE PIT WALL",
-      "body": "Pit Ops rating climbs from 5 \u2192 7 after $TURBO's off-season tooling overhaul. Faster tyre changes, sharper strategy calls. The mid-grid just got a serious threat.",
+      "body": "Pit Ops rating climbs from 5 → 7 after $TURBO's off-season tooling overhaul. Faster tyre changes, sharper strategy calls. The mid-grid just got a serious threat.",
       "stat_change": {
         "stat": "PIT",
         "from": 5,
         "to": 7
       },
-      "tweet": "\ud83c\udfc1 PIT UPGRADE\n\n$TURBO Pit Ops: 5 \u2192 7\n\nThe @AiTurboRacing crew has been busy in the off-season and the numbers don't lie. Faster stops, sharper calls. Mid-grid just got dangerous.\n\n#MEMEGP $TURBO"
+      "tweet": "🏁 PIT UPGRADE\n\n$TURBO Pit Ops: 5 → 7\n\nThe @AiTurboRacing crew has been busy in the off-season and the numbers don't lie. Faster stops, sharper calls. Mid-grid just got dangerous.\n\n#MEMEGP $TURBO"
     },
     {
       "id": "2026-04-28-mog-chassis-down",
@@ -110,14 +125,14 @@
         "color": "#FF8A1A",
         "logo": "mog.png"
       },
-      "headline": "MOG WOBBLES \u00b7 CHASSIS RATING SLIDES",
-      "body": "Chassis stiffness drops from 9 \u2192 8 as $MOG liquidity contracts in the run-up to Round 1. Cornering stability takes a hit and the engineers won't be happy. Time to shore up the foundations.",
+      "headline": "MOG WOBBLES · CHASSIS RATING SLIDES",
+      "body": "Chassis stiffness drops from 9 → 8 as $MOG liquidity contracts in the run-up to Round 1. Cornering stability takes a hit and the engineers won't be happy. Time to shore up the foundations.",
       "stat_change": {
         "stat": "CHASSIS",
         "from": 9,
         "to": 8
       },
-      "tweet": "\ud83c\udfc1 CHASSIS DOWNGRADE\n\n$MOG: 9 \u2192 8\n\nLiquidity contraction = corner stability hit. Engineers in the @MogWorks garage have work to do before Round 1.\n\nThis is why depth matters, friends. \ud83d\udee0\ufe0f\n\n#MEMEGP $MOG"
+      "tweet": "🏁 CHASSIS DOWNGRADE\n\n$MOG: 9 → 8\n\nLiquidity contraction = corner stability hit. Engineers in the @MogWorks garage have work to do before Round 1.\n\nThis is why depth matters, friends. 🛠️\n\n#MEMEGP $MOG"
     },
     {
       "id": "2026-04-26-bonk-engine-up",
@@ -130,14 +145,14 @@
         "color": "#F0B321",
         "logo": "bonk.png"
       },
-      "headline": "BONK FINDS HORSEPOWER \u00b7 ENGINE 7 \u2192 8",
-      "body": "$BONK breaks through a key market cap threshold and the dyno responds. Engine rating jumps from 7 \u2192 8 just in time for Round 1. Top-end speed is suddenly a Bonk problem for the rest of the grid.",
+      "headline": "BONK FINDS HORSEPOWER · ENGINE 7 → 8",
+      "body": "$BONK breaks through a key market cap threshold and the dyno responds. Engine rating jumps from 7 → 8 just in time for Round 1. Top-end speed is suddenly a Bonk problem for the rest of the grid.",
       "stat_change": {
         "stat": "ENGINE",
         "from": 7,
         "to": 8
       },
-      "tweet": "\ud83c\udfc1 ENGINE UPGRADE\n\n$BONK: 7 \u2192 8 \u26a1\n\nMarket cap breakthrough triggers a dyno win. @bonk_inu suddenly has top-end speed they didn't have a week ago.\n\nWho's catching them down the Satoshi Speedway main straight now?\n\n#MEMEGP $BONK"
+      "tweet": "🏁 ENGINE UPGRADE\n\n$BONK: 7 → 8 ⚡\n\nMarket cap breakthrough triggers a dyno win. @bonk_inu suddenly has top-end speed they didn't have a week ago.\n\nWho's catching them down the Satoshi Speedway main straight now?\n\n#MEMEGP $BONK"
     },
     {
       "id": "2026-04-23-floki-confirmed",
@@ -152,7 +167,7 @@
       },
       "headline": "$FLOKI CONFIRMED FOR SEASON 2 GRID",
       "body": "FLOKI Motorsport has signed paperwork and is officially on the Season 2 grid. Eleven cars confirmed, the field is filling out. Full driver lineup to be announced ahead of Round 1.",
-      "tweet": "\ud83c\udfc1 NEW TEAM ON THE GRID\n\nWelcome @RealFlokiInu to Season 2. \ud83d\udc3a\n\nThe field is now 11 strong and the grid is filling out fast. Round 1 at Satoshi Speedway can't come soon enough.\n\n#MEMEGP $FLOKI"
+      "tweet": "🏁 NEW TEAM ON THE GRID\n\nWelcome @RealFlokiInu to Season 2. 🐺\n\nThe field is now 11 strong and the grid is filling out fast. Round 1 at Satoshi Speedway can't come soon enough.\n\n#MEMEGP $FLOKI"
     },
     {
       "id": "2026-04-20-brett-paddock-piece",
@@ -166,8 +181,8 @@
         "logo": "brett.png"
       },
       "headline": "WHY BRETT'S PRE-SEASON PACE HAS THE PADDOCK WORRIED",
-      "body": "Three test sessions, three fastest laps. BRETT is doing what champions do \u2014 turning up early and leaving nothing on the table. Rivals are downplaying the times publicly while their engineers privately recalibrate. This is starting to look like a coronation.",
-      "tweet": "\ud83c\udfc1 PADDOCK NOTEBOOK\n\nThree test sessions. Three fastest laps. $BRETT is doing what champions do.\n\nRivals are smiling for the cameras. Their engineers are not smiling at the data.\n\nIs Round 1 already over?\n\n#MEMEGP $BRETT"
+      "body": "Three test sessions, three fastest laps. BRETT is doing what champions do — turning up early and leaving nothing on the table. Rivals are downplaying the times publicly while their engineers privately recalibrate. This is starting to look like a coronation.",
+      "tweet": "🏁 PADDOCK NOTEBOOK\n\nThree test sessions. Three fastest laps. $BRETT is doing what champions do.\n\nRivals are smiling for the cameras. Their engineers are not smiling at the data.\n\nIs Round 1 already over?\n\n#MEMEGP $BRETT"
     },
     {
       "id": "2026-04-15-s1-finale-recap",
@@ -180,9 +195,9 @@
         "color": "#1F6DFF",
         "logo": "brett.png"
       },
-      "headline": "SEASON 1 FINALE \u00b7 BRETT TAKES TITLE IN LAST-CORNER PASS",
+      "headline": "SEASON 1 FINALE · BRETT TAKES TITLE IN LAST-CORNER PASS",
       "body": "The kind of finish you tell your grandchildren about. BRETT down by 0.4s on the final lap, found a sliver of inside line at the last hairpin, and snatched the championship by a tenth. DOGE will replay this corner for years.",
-      "tweet": "\ud83c\udfc1 SEASON 1 FINALE \u00b7 ARCHIVED\n\nLast lap. Last corner. 0.4s gap.\n\n$BRETT found the inside line and stole the title from $DOGE by a TENTH.\n\nThis is why we built Meme GP. Season 2 starts July 1. \ud83c\udf7f\n\n#MEMEGP"
+      "tweet": "🏁 SEASON 1 FINALE · ARCHIVED\n\nLast lap. Last corner. 0.4s gap.\n\n$BRETT found the inside line and stole the title from $DOGE by a TENTH.\n\nThis is why we built Meme GP. Season 2 starts July 1. 🍿\n\n#MEMEGP"
     }
   ]
 }
