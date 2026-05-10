@@ -416,14 +416,162 @@ body::before{
 @media(max-width:980px){.steps-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.steps-grid{grid-template-columns:1fr;gap:10px}}
 
-/* ===== SECTION 02 — THRESHOLDS ===== */
+/* ===== SECTION 02 — STAT BARS + THRESHOLDS (merged) ===== */
+
+/* "Example team" framing card wrapper */
+.example-team-frame{
+  max-width:1040px;margin:0 auto;
+  padding:32px 28px;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:14px;
+  position:relative;overflow:hidden;
+}
+.example-team-frame::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg, var(--green) 0%, var(--gold) 50%, var(--accent) 100%);
+  box-shadow:0 0 14px rgba(255,204,0,.4);
+}
+.example-team-head{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:16px;flex-wrap:wrap;
+  padding-bottom:18px;margin-bottom:22px;
+  border-bottom:1px solid var(--line-bright);
+}
+.example-team-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);
+}
+.example-team-name .ticker{color:var(--gold);margin-right:8px}
+.example-team-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9.5px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  background:rgba(255,204,0,.10);
+  border:1px solid rgba(255,204,0,.45);
+  border-radius:3px;
+  padding:5px 10px;
+}
+.example-team-tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 6px rgba(255,204,0,.7);
+}
+
+/* The 5 stat rows (image 1 style) */
+.stat-bars{
+  display:flex;flex-direction:column;gap:8px;
+  margin-bottom:28px;
+}
+.stat-bar{
+  position:relative;
+  display:grid;
+  grid-template-columns:54px 4px 1fr 70px;
+  align-items:center;
+  background:var(--bg-card);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.stat-bar.targeted{
+  border-color:var(--gold);
+  box-shadow:0 0 18px rgba(255,204,0,.18), inset 0 0 0 1px rgba(255,204,0,.08);
+}
+.stat-bar:hover{transform:translateX(2px)}
+
+.stat-icon-cell{
+  width:54px;height:54px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg, #1a1a26 0%, #0e0e14 100%);
+  border-right:1px solid var(--line-bright);
+}
+.stat-icon-cell img{
+  width:30px;height:30px;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.25));
+}
+
+.stat-rail{
+  width:4px;height:100%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.5);
+}
+.stat-bar.targeted .stat-rail{
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(255,204,0,.8);
+  animation:pulseGold 2s ease-in-out infinite;
+}
+@keyframes pulseGold{
+  0%,100%{box-shadow:0 0 8px rgba(255,204,0,.5)}
+  50%{box-shadow:0 0 16px rgba(255,204,0,1),0 0 28px rgba(255,204,0,.4)}
+}
+
+.stat-name-cell{
+  display:flex;align-items:center;gap:14px;
+  padding:0 18px;
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:2px;
+  color:var(--text);
+  background:linear-gradient(90deg, rgba(255,204,0,.06) 0%, transparent 80%);
+  height:54px;
+}
+.stat-bar.targeted .stat-name-cell{
+  background:linear-gradient(90deg, rgba(255,204,0,.18) 0%, rgba(255,204,0,.04) 100%);
+}
+.stat-target-badge{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:#0d0d14;
+  background:var(--gold);
+  padding:3px 8px;border-radius:3px;
+  box-shadow:0 0 8px rgba(255,204,0,.6);
+  white-space:nowrap;
+}
+
+.stat-value-cell{
+  font-family:'Orbitron',sans-serif;
+  font-size:28px;font-weight:900;letter-spacing:-0.5px;
+  color:var(--gold);
+  text-align:center;
+  text-shadow:0 0 8px rgba(255,204,0,.35);
+  padding-right:18px;
+}
+.stat-bar.targeted .stat-value-cell{
+  color:var(--gold);
+  text-shadow:0 0 12px rgba(255,204,0,.6);
+}
+
+@media(max-width:560px){
+  .stat-bar{grid-template-columns:46px 4px 1fr 56px}
+  .stat-icon-cell{width:46px;height:46px}
+  .stat-icon-cell img{width:24px;height:24px}
+  .stat-name-cell{font-size:14px;letter-spacing:1.5px;height:46px;padding:0 12px;gap:8px}
+  .stat-target-badge{font-size:8px;padding:2px 6px}
+  .stat-value-cell{font-size:22px;padding-right:12px}
+}
+
+/* Divider with "THIS WEEK'S CYCLE" label */
+.cycle-divider{
+  display:flex;align-items:center;gap:14px;
+  margin:8px 0 22px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);
+}
+.cycle-divider::before,
+.cycle-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,204,0,.4),transparent);
+}
+
+/* Threshold cards (kept structure, with before/after slot) */
 .thresholds-grid{
   display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
-  max-width:980px;margin:0 auto;
 }
 .threshold-card{
-  position:relative;padding:32px 28px;
-  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  position:relative;padding:28px 24px 24px;
+  background:linear-gradient(180deg, #1a1a24 0%, #0e0e14 100%);
   border:1px solid var(--chrome-3);
   border-radius:12px;
   overflow:hidden;
@@ -438,21 +586,22 @@ body::before{
 }
 .threshold-card.likes::before{background:var(--green);box-shadow:0 0 12px rgba(0,255,136,.6)}
 .threshold-card.rts::before{background:var(--accent);box-shadow:0 0 12px rgba(255,0,64,.6)}
+
+.threshold-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
 .threshold-eyebrow{
   font-family:'Orbitron',sans-serif;
   font-size:10px;font-weight:800;letter-spacing:3px;
-  color:var(--chrome-2);margin-bottom:6px;
+  color:var(--chrome-2);margin-bottom:4px;
 }
 .threshold-card.likes .threshold-eyebrow{color:var(--green)}
 .threshold-card.rts .threshold-eyebrow{color:var(--accent)}
 .threshold-target{
   font-family:'Orbitron',sans-serif;
-  display:flex;align-items:baseline;gap:12px;
-  margin-bottom:6px;
+  display:flex;align-items:baseline;gap:10px;
 }
 .threshold-target .num{
-  font-size:64px;font-weight:900;letter-spacing:-2px;
-  color:var(--text);line-height:1;
+  font-size:56px;font-weight:900;letter-spacing:-2px;line-height:1;
+  color:var(--text);
 }
 .threshold-card.likes .threshold-target .num{
   background:linear-gradient(180deg,#a8ffd6 0%,#00ff88 50%,#008844 100%);
@@ -463,34 +612,89 @@ body::before{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 .threshold-target .unit{
-  font-size:14px;font-weight:700;letter-spacing:3px;
+  font-size:13px;font-weight:700;letter-spacing:3px;
   color:var(--chrome-2);text-transform:uppercase;
 }
-.threshold-action{
-  font-family:'JetBrains Mono',monospace;
-  font-size:13px;color:var(--chrome-2);
-  margin-bottom:18px;letter-spacing:.5px;
-}
-.threshold-action strong{color:var(--text)}
-.threshold-which{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px;
-  background:rgba(20,20,28,.6);
+
+/* Before → After visualization */
+.threshold-ba{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:14px;
+  padding:18px 16px;
+  background:var(--bg-card);
   border:1px solid var(--line-bright);
-  border-radius:6px;
+  border-radius:8px;
+  margin-top:6px;
+}
+.ba-side{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ba-side-label{
   font-family:'Orbitron',sans-serif;
-  font-size:11px;font-weight:800;letter-spacing:2px;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  color:var(--chrome-2);
 }
-.threshold-which-pip{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--chrome-2);
+.ba-stat-row{
+  display:flex;align-items:center;gap:8px;
 }
-.threshold-card.likes .threshold-which-pip{background:var(--green);box-shadow:0 0 6px rgba(0,255,136,.6)}
-.threshold-card.rts .threshold-which-pip{background:var(--accent);box-shadow:0 0 6px rgba(255,0,64,.6)}
-.threshold-which-label{color:var(--text)}
+.ba-stat-icon{
+  width:22px;height:22px;
+  filter:drop-shadow(0 0 4px rgba(255,204,0,.3));
+}
+.ba-stat-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:1.5px;
+  color:var(--chrome-2);
+}
+.ba-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:36px;font-weight:900;line-height:1;letter-spacing:-1px;
+  color:var(--chrome-2);
+}
+.ba-side.now .ba-value{color:var(--chrome-2)}
+.threshold-card.likes .ba-side.next .ba-value{
+  color:var(--green);
+  text-shadow:0 0 12px rgba(0,255,136,.5);
+}
+.threshold-card.rts .ba-side.next .ba-value{
+  color:var(--accent);
+  text-shadow:0 0 12px rgba(255,0,64,.5);
+}
+.ba-arrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:900;
+  color:var(--chrome-3);
+  display:grid;place-items:center;
+  width:36px;height:36px;
+  border-radius:50%;
+  background:rgba(20,20,28,.7);
+  border:1px solid var(--line-bright);
+}
+.threshold-card.likes .ba-arrow{
+  color:var(--green);border-color:rgba(0,255,136,.3);
+  box-shadow:0 0 10px rgba(0,255,136,.2);
+}
+.threshold-card.rts .ba-arrow{
+  color:var(--accent);border-color:rgba(255,0,64,.3);
+  box-shadow:0 0 10px rgba(255,0,64,.2);
+}
+.ba-delta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;letter-spacing:.5px;
+}
+.threshold-card.likes .ba-delta{color:var(--green)}
+.threshold-card.rts .ba-delta{color:var(--accent)}
+
+.threshold-caption{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--chrome-2);
+  margin-top:14px;letter-spacing:.4px;line-height:1.55;
+  text-align:center;
+}
+.threshold-caption strong{color:var(--text)}
 
 .threshold-fineprint{
-  max-width:880px;margin:24px auto 0;
+  max-width:880px;margin:28px auto 0;
   text-align:center;
   font-family:'JetBrains Mono',monospace;
   font-size:12px;color:var(--chrome-2);
@@ -500,7 +704,10 @@ body::before{
 
 @media(max-width:760px){
   .thresholds-grid{grid-template-columns:1fr}
-  .threshold-target .num{font-size:52px}
+  .threshold-target .num{font-size:48px}
+  .ba-value{font-size:30px}
+  .threshold-ba{padding:14px 10px;gap:8px}
+  .example-team-frame{padding:22px 16px}
 }
 
 /* ===== SECTION 03 — TWEET MOCK ===== */
@@ -857,43 +1064,131 @@ body::before{
     </div>
   </div>
 
-  <!-- SECTION 02: THRESHOLDS -->
+  <!-- SECTION 02: HOW A CYCLE PLAYS OUT (5 stats + thresholds, merged) -->
   <div class="section-block">
     <div class="section-header">
       <div class="section-num">02</div>
-      <h2 class="section-title">The <span class="accent">Thresholds</span></h2>
-      <div class="section-sub">TWO TARGETS · TWO STATS · EACH ONE INDEPENDENT</div>
+      <h2 class="section-title">How a <span class="accent">Cycle</span> Plays Out</h2>
+      <div class="section-sub">FIVE STATS · TWO TARGETS · ONE WEEK ON THE LINE</div>
     </div>
 
-    <div class="thresholds-grid">
-      <div class="threshold-card likes">
-        <div class="threshold-eyebrow">▸ TARGET A</div>
-        <div class="threshold-target">
-          <span class="num">50</span>
-          <span class="unit">LIKES</span>
+    <div class="example-team-frame">
+      <div class="example-team-head">
+        <div class="example-team-name"><span class="ticker">$EXAMPLE</span>EXAMPLE RACING</div>
+        <div class="example-team-tag">CURRENT STATS · MONDAY MORNING</div>
+      </div>
+
+      <div class="stat-bars">
+        <div class="stat-bar">
+          <div class="stat-icon-cell"><img src="icon-engine.png" alt="Engine"></div>
+          <div class="stat-rail"></div>
+          <div class="stat-name-cell">ENGINE</div>
+          <div class="stat-value-cell">5.5</div>
         </div>
-        <div class="threshold-action">
-          Hit <strong>50 likes</strong> by Friday 23:59 UTC and <strong>+1 lands</strong> on your team's lowest stat.
+        <div class="stat-bar targeted">
+          <div class="stat-icon-cell"><img src="icon-aero.png" alt="Aero"></div>
+          <div class="stat-rail"></div>
+          <div class="stat-name-cell">
+            AERO
+            <span class="stat-target-badge">TARGET A · LOWEST</span>
+          </div>
+          <div class="stat-value-cell">4.3</div>
         </div>
-        <div class="threshold-which">
-          <span class="threshold-which-pip"></span>
-          <span class="threshold-which-label">UPGRADES STAT A · LOWEST</span>
+        <div class="stat-bar targeted">
+          <div class="stat-icon-cell"><img src="icon-chassis.png" alt="Chassis"></div>
+          <div class="stat-rail"></div>
+          <div class="stat-name-cell">
+            CHASSIS
+            <span class="stat-target-badge">TARGET B · 2ND-LOWEST</span>
+          </div>
+          <div class="stat-value-cell">4.5</div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-icon-cell"><img src="icon-drag.png" alt="Drag"></div>
+          <div class="stat-rail"></div>
+          <div class="stat-name-cell">DRAG</div>
+          <div class="stat-value-cell">9.5</div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-icon-cell"><img src="icon-pit.png" alt="Pit"></div>
+          <div class="stat-rail"></div>
+          <div class="stat-name-cell">PIT</div>
+          <div class="stat-value-cell">6.0</div>
         </div>
       </div>
 
-      <div class="threshold-card rts">
-        <div class="threshold-eyebrow">▸ TARGET B</div>
-        <div class="threshold-target">
-          <span class="num">30</span>
-          <span class="unit">RETWEETS</span>
+      <div class="cycle-divider">// THIS WEEK'S CYCLE · IF THE GARAGE GETS LOUD</div>
+
+      <div class="thresholds-grid">
+
+        <!-- TARGET A: 50 likes -> Aero -->
+        <div class="threshold-card likes">
+          <div class="threshold-head">
+            <div>
+              <div class="threshold-eyebrow">▸ TARGET A</div>
+              <div class="threshold-target">
+                <span class="num">50</span>
+                <span class="unit">LIKES</span>
+              </div>
+            </div>
+          </div>
+          <div class="threshold-ba">
+            <div class="ba-side now">
+              <div class="ba-side-label">NOW</div>
+              <div class="ba-stat-row">
+                <img class="ba-stat-icon" src="icon-aero.png" alt="">
+                <span class="ba-stat-name">AERO</span>
+              </div>
+              <div class="ba-value">4.3</div>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-side next">
+              <div class="ba-side-label">NEXT WEEK</div>
+              <div class="ba-stat-row">
+                <img class="ba-stat-icon" src="icon-aero.png" alt="">
+                <span class="ba-stat-name">AERO</span>
+              </div>
+              <div class="ba-value">5.3</div>
+            </div>
+          </div>
+          <div class="ba-delta" style="text-align:center;margin-top:10px">+1.0 PERMANENT FOR THE SEASON</div>
+          <div class="threshold-caption">Hit <strong>50 likes</strong> by Friday 23:59 UTC and Aero levels up.</div>
         </div>
-        <div class="threshold-action">
-          Hit <strong>30 RTs</strong> by Friday 23:59 UTC and <strong>+1 lands</strong> on your team's second-lowest stat.
+
+        <!-- TARGET B: 30 RTs -> Chassis -->
+        <div class="threshold-card rts">
+          <div class="threshold-head">
+            <div>
+              <div class="threshold-eyebrow">▸ TARGET B</div>
+              <div class="threshold-target">
+                <span class="num">30</span>
+                <span class="unit">RETWEETS</span>
+              </div>
+            </div>
+          </div>
+          <div class="threshold-ba">
+            <div class="ba-side now">
+              <div class="ba-side-label">NOW</div>
+              <div class="ba-stat-row">
+                <img class="ba-stat-icon" src="icon-chassis.png" alt="">
+                <span class="ba-stat-name">CHASSIS</span>
+              </div>
+              <div class="ba-value">4.5</div>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-side next">
+              <div class="ba-side-label">NEXT WEEK</div>
+              <div class="ba-stat-row">
+                <img class="ba-stat-icon" src="icon-chassis.png" alt="">
+                <span class="ba-stat-name">CHASSIS</span>
+              </div>
+              <div class="ba-value">5.5</div>
+            </div>
+          </div>
+          <div class="ba-delta" style="text-align:center;margin-top:10px">+1.0 PERMANENT FOR THE SEASON</div>
+          <div class="threshold-caption">Hit <strong>30 RTs</strong> by Friday 23:59 UTC and Chassis levels up.</div>
         </div>
-        <div class="threshold-which">
-          <span class="threshold-which-pip"></span>
-          <span class="threshold-which-label">UPGRADES STAT B · SECOND-LOWEST</span>
-        </div>
+
       </div>
     </div>
 
