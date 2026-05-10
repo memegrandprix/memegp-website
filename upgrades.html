@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upgrades — MEME GP</title>
+<meta name="description" content="How community engagement upgrades your team's car. Every Monday post-race, one tweet, two stats on the line. The garage that gets loudest builds the fastest car.">
+
+<meta property="og:title" content="Upgrades — MEME GP">
+<meta property="og:description" content="One tweet. Two stats on the line. Your community decides how fast your car gets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://memegrandprix.com/upgrades.html">
+<meta property="og:site_name" content="MEME GP">
+<meta property="og:image" content="https://memegrandprix.com/upgrades.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:title" content="Upgrades — MEME GP">
+<meta name="twitter:description" content="One tweet. Two stats on the line. Your community decides how fast your car gets.">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+  --chrome-1:#e8e8ee;
+  --chrome-2:#a4a4b0;
+  --chrome-3:#5a5a66;
+  --chrome-deep:#2a2a36;
+  /* Stat colors — must match how-it-works.html */
+  --stat-engine:#ff6644;
+  --stat-aero:#3ad0ff;
+  --stat-chassis:#ffcc00;
+  --stat-drag:#a878ff;
+  --stat-pit:#00ff88;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;z-index:1;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseAccent{
+  0%,100%{box-shadow:0 0 14px rgba(255,0,64,.4),0 0 28px rgba(255,0,64,.2)}
+  50%{box-shadow:0 0 22px rgba(255,0,64,.7),0 0 44px rgba(255,0,64,.35)}
+}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:10px 18px;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:18px;min-height:56px;
+}
+.tnav-badge{
+  justify-self:start;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+.tnav-center{
+  justify-self:center;display:flex;align-items:center;gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);text-decoration:none;
+  padding:8px 14px;border-radius:4px;
+  transition:all .15s ease;text-align:center;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{width:1px;height:14px;background:var(--line-bright);flex-shrink:0}
+.tnav-exit{
+  justify-self:end;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;transition:all .15s ease;white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+@media(max-width:920px){
+  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .tnav-center{grid-column:1 / -1;order:3;justify-self:stretch;justify-content:center}
+  .tnav-link{padding:6px 8px;font-size:10px;letter-spacing:1.2px}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:480px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 6px;font-size:9px}
+  .tnav-sep{display:none}
+}
+.tnav-accent{
+  position:sticky;top:56px;z-index:49;height:18px;
+  pointer-events:none;margin-bottom:-18px;background:#040408;
+}
+.tnav-accent svg{
+  display:block;width:100%;height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+/* ===== BANNER (shared pattern) ===== */
+.banner{position:relative;margin:32px auto 0;max-width:1280px;padding:0 24px}
+.banner-inner{
+  position:relative;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line-bright);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  aspect-ratio:16/5.5;min-height:280px;
+}
+.banner-bg{
+  position:absolute;inset:0;
+  background-image:var(--banner-image, none);
+  background-size:cover;
+  background-position:var(--banner-pos, center 50%);
+  z-index:1;
+}
+.banner-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(4,4,8,.85) 0%,
+      rgba(4,4,8,.55) 25%,
+      rgba(4,4,8,.15) 50%,
+      rgba(4,4,8,.55) 85%,
+      rgba(4,4,8,.92) 100%),
+    radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.10) 0%,transparent 60%);
+}
+.banner-fallback{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,204,0,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,0,64,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,255,136,.08) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0a14 0%, #040408 100%);
+  overflow:hidden;
+}
+.banner-fallback::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:60px 60px;opacity:.7;
+}
+.banner-content{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:24px 36px 22px;text-align:center;
+}
+.banner-top{display:flex;flex-direction:column;align-items:center}
+.banner-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:6px;
+  color:var(--gold);margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;justify-content:center;
+  animation:fadeUp .8s ease both;
+}
+.banner-eyebrow::before{content:'';width:50px;height:1px;background:var(--gold)}
+.banner-eyebrow::after {content:'';width:50px;height:1px;background:var(--gold)}
+.banner-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,6.5vw,76px);
+  font-weight:900;letter-spacing:-1px;line-height:.95;
+  margin-bottom:8px;animation:fadeUp .9s ease .15s both;
+}
+.banner-title .yellow{
+  background:linear-gradient(135deg,#ffe066,#ffcc00,#aa8822);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.banner-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(13px,1.5vw,18px);
+  font-weight:700;letter-spacing:5px;color:var(--text);
+  text-shadow:0 2px 8px rgba(0,0,0,.7);
+  animation:fadeUp .9s ease .3s both;
+}
+.banner-sub strong{color:var(--gold);font-weight:900}
+.banner-blurb{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;font-weight:400;
+  color:rgba(240,240,245,0.85);
+  letter-spacing:.4px;line-height:1.5;
+  max-width:640px;margin:10px auto 0;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+  animation:fadeUp .9s ease .4s both;
+}
+.banner-blurb strong{color:var(--gold);font-weight:700}
+.banner-stats{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .9s ease .45s both;
+}
+.banner-stat{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(13,13,18,.85);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid var(--line-bright);
+  padding:10px 18px;border-radius:4px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;color:var(--muted);
+  letter-spacing:2px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.banner-stat strong{color:var(--text);font-weight:900}
+.banner-stat.locked{
+  border-color:var(--green);color:var(--green);
+  box-shadow:0 4px 16px rgba(0,0,0,.5),0 0 18px rgba(0,255,136,.45),0 0 36px rgba(0,255,136,.2),inset 0 0 12px rgba(0,255,136,.08);
+}
+.banner-stat.locked strong{color:var(--green);text-shadow:0 0 8px rgba(0,255,136,.5)}
+.banner-stat.open{
+  border-color:var(--accent);color:var(--accent);
+  box-shadow:0 4px 16px rgba(0,0,0,.5),0 0 18px rgba(255,0,64,.45),0 0 36px rgba(255,0,64,.2),inset 0 0 12px rgba(255,0,64,.08);
+}
+.banner-stat.open strong{color:var(--accent);text-shadow:0 0 8px rgba(255,0,64,.5)}
+.banner-stat.race{
+  border-color:var(--gold);color:var(--gold);
+  box-shadow:0 4px 16px rgba(0,0,0,.5),0 0 18px rgba(255,204,0,.45),0 0 36px rgba(255,204,0,.2),inset 0 0 12px rgba(255,204,0,.08);
+}
+.banner-stat.race strong{color:var(--gold);text-shadow:0 0 8px rgba(255,204,0,.5)}
+
+@media(max-width:780px){
+  .banner-content{padding:18px 16px 16px}
+  .banner-stats{gap:6px}
+  .banner-stat{font-size:9px;padding:7px 10px;letter-spacing:1.2px}
+  .banner-blurb{font-size:12px;max-width:90%}
+}
+
+/* ===== PAGE LAYOUT ===== */
+.upg-wrapper{
+  position:relative;z-index:2;
+  padding:32px 24px 80px;max-width:1280px;margin:0 auto;
+}
+.upg-panel{
+  position:relative;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,204,0,.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,0,64,.05) 0%, transparent 60%),
+    linear-gradient(180deg, #0d0d12 0%, #050508 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:16px;
+  padding:48px 40px 56px;
+  overflow:hidden;
+}
+.upg-panel::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,204,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,204,0,.04) 1px, transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;opacity:.6;
+  mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+
+/* ===== TLDR ===== */
+.tldr-block{
+  max-width:880px;margin:0 auto 80px;
+  padding:28px 32px;
+  background:
+    radial-gradient(ellipse at center, rgba(255,204,0,.08) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(20,20,28,.6) 0%, rgba(13,13,18,.8) 100%);
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:12px;
+  text-align:center;position:relative;z-index:2;
+  box-shadow:0 0 32px rgba(255,204,0,.1);
+  animation:fadeUp .9s ease .2s both;
+}
+.tldr-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:4px;
+  color:var(--gold);margin-bottom:10px;
+}
+.tldr-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(15px,1.8vw,21px);font-weight:700;
+  color:var(--text);line-height:1.5;letter-spacing:.5px;
+}
+.tldr-text .accent{color:var(--gold)}
+.tldr-text .red{color:var(--accent)}
+.tldr-text .green{color:var(--green)}
+
+/* ===== SECTION HEADER ===== */
+.section-header{
+  text-align:center;margin-bottom:36px;
+  position:relative;z-index:2;
+}
+.section-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;
+  background:radial-gradient(circle at 35% 25%, rgba(255,255,255,.4) 0%, transparent 50%),
+    linear-gradient(135deg, var(--chrome-1) 0%, var(--chrome-2) 30%, var(--chrome-deep) 60%, var(--chrome-2) 100%);
+  border:2px solid var(--chrome-1);
+  border-radius:50%;
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;font-weight:900;color:#0d0d14;
+  margin-bottom:14px;
+  box-shadow:inset 0 -2px 4px rgba(0,0,0,.4),inset 0 2px 4px rgba(255,255,255,.3),0 4px 14px rgba(0,0,0,.5);
+}
+.section-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(22px,2.6vw,32px);
+  font-weight:900;letter-spacing:1px;
+  color:var(--text);margin-bottom:8px;
+}
+.section-title .accent{color:var(--gold)}
+.section-sub{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:4px;
+  color:var(--chrome-2);
+}
+.section-block{
+  position:relative;z-index:2;
+  margin-bottom:80px;
+  animation:fadeUp .8s ease both;
+}
+
+/* ===== SECTION 01 — STEPS GRID (weekend-card style) ===== */
+.steps-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  max-width:1100px;margin:0 auto;
+}
+.step-card{
+  position:relative;padding:24px 22px;
+  background:linear-gradient(180deg, #1a1a24 0%, #14141c 30%, #0e0e16 70%, #1a1a24 100%);
+  clip-path:polygon(
+    14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+  transition:transform .25s ease;
+}
+.step-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg, var(--chrome-1) 0%, transparent 35%) top left / 50% 60% no-repeat,
+    linear-gradient(45deg, var(--chrome-3) 0%, transparent 35%) bottom left / 50% 60% no-repeat;
+  opacity:.18;
+  clip-path:polygon(
+    14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+}
+.step-card:hover{transform:translateY(-3px)}
+.step-card-day{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);margin-bottom:6px;
+  position:relative;z-index:1;
+}
+.step-card-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:.5px;
+  color:var(--text);margin-bottom:4px;
+  position:relative;z-index:1;
+}
+.step-card-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--chrome-2);margin-bottom:14px;
+  letter-spacing:1px;position:relative;z-index:1;
+}
+.step-card-desc{
+  font-size:13px;line-height:1.55;color:var(--chrome-2);
+  position:relative;z-index:1;
+}
+.step-card-desc strong{color:var(--text);font-weight:700}
+
+@media(max-width:980px){.steps-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.steps-grid{grid-template-columns:1fr;gap:10px}}
+
+/* ===== SECTION 02 — THRESHOLDS ===== */
+.thresholds-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
+  max-width:980px;margin:0 auto;
+}
+.threshold-card{
+  position:relative;padding:32px 28px;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform .2s ease, border-color .2s ease;
+}
+.threshold-card.likes{border-color:rgba(0,255,136,.35)}
+.threshold-card.rts{border-color:rgba(255,0,64,.35)}
+.threshold-card:hover{transform:translateY(-3px)}
+.threshold-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--gold);
+}
+.threshold-card.likes::before{background:var(--green);box-shadow:0 0 12px rgba(0,255,136,.6)}
+.threshold-card.rts::before{background:var(--accent);box-shadow:0 0 12px rgba(255,0,64,.6)}
+.threshold-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--chrome-2);margin-bottom:6px;
+}
+.threshold-card.likes .threshold-eyebrow{color:var(--green)}
+.threshold-card.rts .threshold-eyebrow{color:var(--accent)}
+.threshold-target{
+  font-family:'Orbitron',sans-serif;
+  display:flex;align-items:baseline;gap:12px;
+  margin-bottom:6px;
+}
+.threshold-target .num{
+  font-size:64px;font-weight:900;letter-spacing:-2px;
+  color:var(--text);line-height:1;
+}
+.threshold-card.likes .threshold-target .num{
+  background:linear-gradient(180deg,#a8ffd6 0%,#00ff88 50%,#008844 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.threshold-card.rts .threshold-target .num{
+  background:linear-gradient(180deg,#ff7a99 0%,#ff0040 50%,#990028 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.threshold-target .unit{
+  font-size:14px;font-weight:700;letter-spacing:3px;
+  color:var(--chrome-2);text-transform:uppercase;
+}
+.threshold-action{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--chrome-2);
+  margin-bottom:18px;letter-spacing:.5px;
+}
+.threshold-action strong{color:var(--text)}
+.threshold-which{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;
+  background:rgba(20,20,28,.6);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+}
+.threshold-which-pip{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--chrome-2);
+}
+.threshold-card.likes .threshold-which-pip{background:var(--green);box-shadow:0 0 6px rgba(0,255,136,.6)}
+.threshold-card.rts .threshold-which-pip{background:var(--accent);box-shadow:0 0 6px rgba(255,0,64,.6)}
+.threshold-which-label{color:var(--text)}
+
+.threshold-fineprint{
+  max-width:880px;margin:24px auto 0;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--chrome-2);
+  letter-spacing:.5px;line-height:1.6;
+}
+.threshold-fineprint strong{color:var(--text);font-weight:700}
+
+@media(max-width:760px){
+  .thresholds-grid{grid-template-columns:1fr}
+  .threshold-target .num{font-size:52px}
+}
+
+/* ===== SECTION 03 — TWEET MOCK ===== */
+.tweet-mock-wrap{max-width:560px;margin:0 auto;position:relative}
+.tweet-mock-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  color:var(--gold);text-align:center;margin-bottom:14px;
+}
+.tweet-mock{
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:14px;
+  padding:22px 24px;
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+.tweet-mock-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.tweet-mock-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 30% 25%, #ffe066 0%, #ffcc00 35%, #aa8822 100%);
+  display:grid;place-items:center;
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;color:#0d0d14;font-size:14px;
+  border:1px solid var(--gold-dim);
+  box-shadow:0 0 12px rgba(255,204,0,.35);
+}
+.tweet-mock-name{
+  font-weight:700;color:var(--text);font-size:15px;
+  display:flex;align-items:center;gap:6px;
+}
+.tweet-mock-verified{width:14px;height:14px;flex-shrink:0;color:var(--gold)}
+.tweet-mock-handle{color:var(--muted);font-size:13px}
+.tweet-mock-body{
+  color:var(--text);font-size:14.5px;line-height:1.5;margin-bottom:14px;
+}
+.tweet-mock-body .hl{color:var(--gold);font-weight:700}
+.tweet-mock-body .stat-line{
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:13.5px;
+  margin:4px 0;
+}
+.tweet-mock-body .stat-line.engine{color:var(--stat-engine)}
+.tweet-mock-body .stat-line.pit{color:var(--stat-pit)}
+.tweet-mock-body .stat-icon{font-size:14px}
+.tweet-mock-body .stat-arrow{color:var(--chrome-2);margin:0 6px}
+.tweet-mock-body .stat-target{color:var(--text)}
+.tweet-mock-stats{
+  display:flex;gap:24px;font-size:12.5px;color:var(--muted);
+  padding-top:12px;border-top:1px solid var(--line-bright);
+  font-family:'JetBrains Mono',monospace;
+}
+.tweet-mock-stats span strong{color:var(--text);font-weight:700;margin-right:4px}
+
+/* ===== SECTION 04 — RULES ===== */
+.rules-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+  max-width:1100px;margin:0 auto;
+}
+.rule-row{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:18px 22px;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  transition:border-color .2s ease;
+}
+.rule-row:hover{border-color:var(--chrome-3)}
+.rule-row.yes{border-left:3px solid var(--green)}
+.rule-row.no{border-left:3px solid var(--accent)}
+.rule-mark{
+  flex-shrink:0;width:24px;height:24px;border-radius:6px;
+  display:grid;place-items:center;
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;
+  margin-top:1px;
+}
+.rule-row.yes .rule-mark{
+  background:rgba(0,255,136,.12);color:var(--green);
+  box-shadow:inset 0 0 0 1px rgba(0,255,136,.4);
+}
+.rule-row.no .rule-mark{
+  background:rgba(255,0,64,.12);color:var(--accent);
+  box-shadow:inset 0 0 0 1px rgba(255,0,64,.4);
+}
+.rule-text{font-size:13.5px;line-height:1.55;color:var(--chrome-2)}
+.rule-text strong{color:var(--text);font-weight:700}
+
+@media(max-width:780px){.rules-grid{grid-template-columns:1fr}}
+
+/* ===== SECTION 05 — TRACKER (placeholder) ===== */
+.tracker-empty{
+  max-width:680px;margin:0 auto;
+  padding:48px 32px;text-align:center;
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px dashed var(--chrome-3);
+  border-radius:12px;
+  position:relative;overflow:hidden;
+}
+.tracker-empty::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center, rgba(255,0,64,.05) 0%, transparent 70%);
+  pointer-events:none;
+}
+.tracker-lights{
+  display:inline-flex;gap:10px;margin-bottom:22px;position:relative;
+}
+.tracker-light{
+  width:22px;height:22px;border-radius:50%;
+  background:#1a1a26;
+  border:1px solid var(--line-bright);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+}
+.tracker-light.on{
+  background:radial-gradient(circle at 30% 30%, #ff7a99 0%, var(--accent) 50%, #660020 100%);
+  border-color:var(--accent);
+  box-shadow:0 0 14px rgba(255,0,64,.6),inset 0 1px 2px rgba(255,255,255,.2);
+  animation:pulseAccent 2s ease-in-out infinite;
+}
+.tracker-empty h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:900;letter-spacing:1.5px;
+  color:var(--text);margin-bottom:8px;
+  position:relative;
+}
+.tracker-empty p{
+  font-size:14px;line-height:1.6;color:var(--chrome-2);
+  max-width:460px;margin:0 auto;position:relative;
+}
+.tracker-empty p + p{
+  margin-top:10px;font-size:12px;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;letter-spacing:.5px;
+}
+.tracker-empty p strong{color:var(--text)}
+
+/* ===== SECTION 06 — FAQ ===== */
+.faq-list{max-width:880px;margin:0 auto}
+.faq-item{
+  background:linear-gradient(180deg, var(--bg-card) 0%, var(--bg-2) 100%);
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  margin-bottom:8px;overflow:hidden;
+  transition:border-color .2s ease;
+}
+.faq-item[open]{border-color:var(--chrome-3)}
+.faq-item summary{
+  cursor:pointer;list-style:none;
+  padding:18px 22px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:1.5px;
+  color:var(--text);
+  transition:color .15s ease;
+}
+.faq-item summary:hover{color:var(--gold)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{
+  content:'+';font-size:22px;color:var(--chrome-2);
+  font-family:'JetBrains Mono',monospace;
+  font-weight:400;transition:transform .2s ease, color .2s ease;
+  flex-shrink:0;
+}
+.faq-item[open] summary::after{transform:rotate(45deg);color:var(--gold)}
+.faq-body{
+  padding:0 22px 20px;
+  font-size:13.5px;line-height:1.65;color:var(--chrome-2);
+}
+.faq-body strong{color:var(--text);font-weight:700}
+.faq-body em{color:var(--gold);font-style:normal}
+
+/* ===== FOOTER CTA ===== */
+.footer-cta{
+  margin:48px auto 0;padding:48px 32px;
+  background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-card-2) 100%);
+  border:1px solid var(--chrome-3);
+  border-radius:16px;text-align:center;
+  position:relative;overflow:hidden;
+  max-width:1040px;z-index:2;
+}
+.footer-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 30%,rgba(255,204,0,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 70%,rgba(255,0,64,.06) 0%,transparent 60%);
+}
+.footer-cta-content{position:relative;z-index:1}
+.footer-cta-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);
+  margin-bottom:12px;
+}
+.footer-cta-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:14px;
+}
+.footer-cta-title .yellow{
+  background:linear-gradient(180deg,#fff5b8 0%,#ffcc00 50%,#aa8822 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.footer-cta-desc{
+  color:var(--chrome-2);margin-bottom:24px;
+  max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;
+}
+.footer-cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.footer-cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:2px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),#cc0033);
+  border:none;padding:14px 28px;border-radius:6px;
+  text-decoration:none;transition:all .2s ease;cursor:pointer;
+  box-shadow:0 0 20px rgba(255,0,64,.3);
+}
+.footer-cta-btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(255,0,64,.5)}
+.footer-cta-btn svg{width:16px;height:16px}
+.footer-cta-btn.secondary{
+  background:transparent;border:1px solid var(--chrome-3);
+  color:var(--text);box-shadow:none;
+}
+.footer-cta-btn.secondary:hover{
+  border-color:var(--gold);color:var(--gold);
+  box-shadow:0 0 20px rgba(255,204,0,.2);
+}
+
+/* ===== FOOT ===== */
+.foot{
+  border-top:1px solid var(--line);
+  padding:24px;
+  display:flex;flex-wrap:wrap;
+  justify-content:space-between;align-items:center;
+  gap:14px;
+  font-size:10px;color:var(--dim);letter-spacing:1.5px;
+  font-family:'Orbitron',sans-serif;
+  max-width:1280px;margin:0 auto;
+}
+.foot a{color:var(--muted);text-decoration:none;margin-right:18px}
+.foot a:hover{color:var(--accent)}
+
+@media(max-width:780px){
+  .upg-panel{padding:32px 20px 40px}
+  .upg-wrapper{padding:24px 12px 60px}
+  .section-block{margin-bottom:60px}
+  .foot{padding:18px 14px;flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav-pro">
+  <a href="index.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>MEME GP</span>
+  </a>
+  <div class="tnav-center">
+    <a href="how-it-works.html" class="tnav-link">HOW IT WORKS</a>
+    <span class="tnav-sep"></span>
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="upgrades.html" class="tnav-link active">UPGRADES</a>
+    <span class="tnav-sep"></span>
+    <a href="gp-central.html" class="tnav-link">GP CENTRAL</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="about.html" class="tnav-link">ABOUT</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/><path d="M5 4l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 7l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 10l3 0l0 3l3 0l0 -3l3 0l0 3l3 0M5 13l3 0l0 3"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-fallback" aria-hidden="true"></div>
+    <div class="banner-bg" aria-hidden="true" style="--banner-image:url('upgrades.png')"></div>
+    <div class="banner-content">
+      <div class="banner-top">
+        <div class="banner-eyebrow">RACE CONTROL · UPGRADES</div>
+        <h1 class="banner-title">
+          BUILD YOUR <span class="yellow">CAR</span>
+        </h1>
+        <div class="banner-sub">ONE TWEET · TWO STATS · <strong>EVERY MONDAY</strong></div>
+        <p class="banner-blurb"><strong>Your community decides how fast your car gets.</strong> Every Monday post-race we drop one upgrade tweet per team. Hit the thresholds by Friday 23:59 UTC, your stats go up — permanent for the season.</p>
+      </div>
+      <div class="banner-stats">
+        <span class="banner-stat race">SOFT LAUNCH · <strong>NOW</strong></span>
+        <span class="banner-stat open">FIRST CYCLE · <strong>POST RACE 0</strong></span>
+        <span class="banner-stat locked">CAP · <strong>9.5 / STAT</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="upg-wrapper">
+<div class="upg-panel">
+
+  <!-- TLDR -->
+  <div class="tldr-block">
+    <div class="tldr-eyebrow">▸ THE 30-SECOND VERSION</div>
+    <div class="tldr-text">
+      Every Monday, your team gets <span class="accent">one tweet</span>.<br>
+      It shows your <span class="accent">two lowest stats</span>.<br>
+      <span class="green">50 likes</span> = +1 to the lowest. <span class="red">30 RTs</span> = +1 to the second-lowest.<br>
+      Loudest garage builds the <span class="accent">fastest car</span>.
+    </div>
+  </div>
+
+  <!-- SECTION 01: THE WEEK -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2 class="section-title">The <span class="accent">Upgrade Week</span></h2>
+      <div class="section-sub">FOUR STEPS · MONDAY POST-RACE TO SATURDAY COMMIT</div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-card-day">STEP 01</div>
+        <div class="step-card-num">MON</div>
+        <div class="step-card-name">UPGRADE DROP</div>
+        <div class="step-card-desc">One tweet per team, posted Monday morning. <strong>Your two lowest stats on the line.</strong> Cycle is open.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-day">STEP 02</div>
+        <div class="step-card-num">TUE → THU</div>
+        <div class="step-card-name">THE GARAGE WORKS</div>
+        <div class="step-card-desc">Holders, fans, the curious — <strong>anyone hits like or RT.</strong> Real engagement only. Authenticity reviewed.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-day">STEP 03</div>
+        <div class="step-card-num">FRI 23:59</div>
+        <div class="step-card-name">LIGHTS OUT</div>
+        <div class="step-card-desc">Thresholds checked at <strong>23:59 UTC Friday</strong>. Hit them and the upgrades land. Miss and the cycle closes.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-day">STEP 04</div>
+        <div class="step-card-num">SAT</div>
+        <div class="step-card-name">STATS COMMIT</div>
+        <div class="step-card-desc">Stats update across the site. <strong>Permanent for the season.</strong> Power Rankings recalculated. Next week begins.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 02: THRESHOLDS -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2 class="section-title">The <span class="accent">Thresholds</span></h2>
+      <div class="section-sub">TWO TARGETS · TWO STATS · EACH ONE INDEPENDENT</div>
+    </div>
+
+    <div class="thresholds-grid">
+      <div class="threshold-card likes">
+        <div class="threshold-eyebrow">▸ TARGET A</div>
+        <div class="threshold-target">
+          <span class="num">50</span>
+          <span class="unit">LIKES</span>
+        </div>
+        <div class="threshold-action">
+          Hit <strong>50 likes</strong> by Friday 23:59 UTC and <strong>+1 lands</strong> on your team's lowest stat.
+        </div>
+        <div class="threshold-which">
+          <span class="threshold-which-pip"></span>
+          <span class="threshold-which-label">UPGRADES STAT A · LOWEST</span>
+        </div>
+      </div>
+
+      <div class="threshold-card rts">
+        <div class="threshold-eyebrow">▸ TARGET B</div>
+        <div class="threshold-target">
+          <span class="num">30</span>
+          <span class="unit">RETWEETS</span>
+        </div>
+        <div class="threshold-action">
+          Hit <strong>30 RTs</strong> by Friday 23:59 UTC and <strong>+1 lands</strong> on your team's second-lowest stat.
+        </div>
+        <div class="threshold-which">
+          <span class="threshold-which-pip"></span>
+          <span class="threshold-which-label">UPGRADES STAT B · SECOND-LOWEST</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="threshold-fineprint">
+      Independent thresholds. Both can hit. Neither has to. Max <strong>+1 per stat per week</strong>. All stats capped at <strong>9.5</strong>. If your lowest stat is already maxed, the system picks the next-lowest.
+    </p>
+  </div>
+
+  <!-- SECTION 03: TWEET MOCK -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2 class="section-title">Example <span class="accent">Upgrade Tweet</span></h2>
+      <div class="section-sub">WHAT YOU'LL SEE EVERY MONDAY MORNING</div>
+    </div>
+
+    <div class="tweet-mock-wrap">
+      <div class="tweet-mock-label">// MOCK · NOT A LIVE TWEET</div>
+      <div class="tweet-mock">
+        <div class="tweet-mock-header">
+          <div class="tweet-mock-avatar">🏁</div>
+          <div>
+            <div class="tweet-mock-name">
+              meme grand prix
+              <svg class="tweet-mock-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5a.997.997 0 0 1-1.414.014l-2.5-2.5a1.001 1.001 0 1 1 1.414-1.414l1.674 1.674 3.633-5.45a1.001 1.001 0 0 1 1.664 1.11z"/></svg>
+            </div>
+            <div class="tweet-mock-handle">@MemeGrandPrix · Mon</div>
+          </div>
+        </div>
+        <div class="tweet-mock-body">
+          🏁 <span class="hl">UPGRADE WEEK 1 · $TURBO</span><br><br>
+          AI Turbo Racing rolls into the upgrade window with two stats lagging:<br><br>
+          <span class="stat-line engine"><span class="stat-icon">⚡</span>ENGINE 5.2 <span class="stat-arrow">→</span><span class="stat-target">+1 if 50 likes</span></span>
+          <span class="stat-line pit"><span class="stat-icon">🔧</span>PIT 6.1 <span class="stat-arrow">→</span><span class="stat-target">+1 if 30 RTs</span></span><br>
+          deadline · friday 23:59 UTC<br><br>
+          how loud is the garage? 🏁
+        </div>
+        <div class="tweet-mock-stats">
+          <span><strong>—</strong>replies</span>
+          <span><strong>—</strong>reposts</span>
+          <span><strong>—</strong>likes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 04: RULES -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2 class="section-title">Rules of the <span class="accent">Road</span></h2>
+      <div class="section-sub">WHAT COUNTS · WHAT DOESN'T</div>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rule-row yes">
+        <div class="rule-mark">✓</div>
+        <div class="rule-text"><strong>Organic engagement only.</strong> Real accounts, real likes, real RTs.</div>
+      </div>
+      <div class="rule-row yes">
+        <div class="rule-mark">✓</div>
+        <div class="rule-text"><strong>Authenticity reviewed.</strong> Spam patterns, engagement pods, and obvious bot rings get filtered before counting.</div>
+      </div>
+      <div class="rule-row yes">
+        <div class="rule-mark">✓</div>
+        <div class="rule-text"><strong>Lowest stat already 9.5?</strong> The system picks the next-lowest stat instead.</div>
+      </div>
+      <div class="rule-row yes">
+        <div class="rule-mark">✓</div>
+        <div class="rule-text"><strong>Threshold-based, not score-based.</strong> 50 likes = +1. 500 likes = +1. The cap is the cap.</div>
+      </div>
+      <div class="rule-row no">
+        <div class="rule-mark">✕</div>
+        <div class="rule-text"><strong>No bot likes, no paid pods, no spam.</strong> If it looks engineered, it gets ignored.</div>
+      </div>
+      <div class="rule-row no">
+        <div class="rule-mark">✕</div>
+        <div class="rule-text"><strong>No carryover.</strong> Miss the threshold by Friday and the stat doesn't move that cycle.</div>
+      </div>
+      <div class="rule-row no">
+        <div class="rule-mark">✕</div>
+        <div class="rule-text"><strong>No off-platform engagement.</strong> Only X likes/RTs on the official upgrade tweet count.</div>
+      </div>
+      <div class="rule-row no">
+        <div class="rule-mark">✕</div>
+        <div class="rule-text"><strong>No retroactive upgrades.</strong> The cycle closes Friday 23:59 UTC. Stats commit Saturday.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 05: TRACKER -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2 class="section-title">Cycle <span class="accent">Tracker</span></h2>
+      <div class="section-sub">LIVE BOARD · ACTIVATES POST RACE 0</div>
+    </div>
+
+    <div class="tracker-empty">
+      <div class="tracker-lights">
+        <span class="tracker-light"></span>
+        <span class="tracker-light"></span>
+        <span class="tracker-light"></span>
+        <span class="tracker-light"></span>
+        <span class="tracker-light"></span>
+      </div>
+      <h3>LIGHTS NOT YET OUT</h3>
+      <p>Upgrade cycles begin <strong>after Race 0</strong>. Once we light up, this board shows every team's open cycle, current likes &amp; RTs, and the running tally of stat upgrades earned this season.</p>
+      <p>CHECK BACK MONDAY POST RACE 0</p>
+    </div>
+  </div>
+
+  <!-- SECTION 06: FAQ -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2 class="section-title">Paddock <span class="accent">Questions</span></h2>
+      <div class="section-sub">EVERYTHING WORTH ASKING</div>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>WHY TWO STATS · NOT ALL FIVE?</summary>
+        <div class="faq-body">To keep it focused. One tweet, two clear targets, two clear thresholds. If every stat were on the table every week, the engagement bar gets diluted and the cycles stop meaning anything. <strong>Two lowest stats = the ones that need it most = clearest path to a faster car.</strong></div>
+      </details>
+
+      <details class="faq-item">
+        <summary>WHAT IF MY TEAM'S TWO LOWEST STATS ARE TIED?</summary>
+        <div class="faq-body">We break the tie alphabetically by stat name (Aero before Chassis before Drag, etc.). It's a coin flip dressed up — but it keeps things deterministic and visible.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>CAN I UPGRADE A TEAM I DON'T HOLD?</summary>
+        <div class="faq-body">Yes. The system doesn't check wallets. Anyone on X can like or RT the official upgrade tweet. The only gate is authenticity — real engagement from real accounts. <strong>The loudest garage wins, not the deepest one.</strong></div>
+      </details>
+
+      <details class="faq-item">
+        <summary>WHAT IF A TWEET OVER-PERFORMS?</summary>
+        <div class="faq-body">No bonus upgrades. Max <strong>+1 per stat per week</strong>. 500 likes earns the same upgrade as 50. Once the threshold's crossed, the stat moves. Anything above is bragging rights — and that's the point. We want communities pushing every cycle, not stockpiling one viral tweet.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>HOW DO YOU HANDLE BOT ENGAGEMENT?</summary>
+        <div class="faq-body">We manually review for authenticity before counting. Obvious spam clusters, brand-new accounts with no posting history, coordinated reply rings, paid engagement pods — all filtered. Public guideline: <em>engagement reviewed for authenticity</em>. The spirit: <strong>real fans, real cars, real races.</strong></div>
+      </details>
+
+      <details class="faq-item">
+        <summary>DOES THIS ACTUALLY AFFECT RACE OUTCOMES?</summary>
+        <div class="faq-body">Yes — directly. Stats feed into the simulation engine. A team that consistently hits its upgrades will pull ahead in lap times, tyre management, and overtakes. A team that ignores its cycles falls behind. <strong>The championship will be won partly on track, partly on timeline.</strong></div>
+      </details>
+
+      <details class="faq-item">
+        <summary>WHEN DOES THE FIRST LIVE CYCLE RUN?</summary>
+        <div class="faq-body">We're soft-launching the system now so everyone gets familiar with it. <strong>The first live upgrade cycle — where stats actually move — runs the Monday after Race 0.</strong> Exact date locks when the Race 0 schedule drops.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>WHAT ABOUT TEAMS THAT JOIN MID-SEASON?</summary>
+        <div class="faq-body">Same rules apply from the moment they're locked in. They get their first upgrade cycle the Monday after they join. Late starters can absolutely catch up — <strong>five upgrade cycles per stat is a lot of headroom.</strong></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta">
+    <div class="footer-cta-content">
+      <div class="footer-cta-eyebrow">▸ READY TO RACE?</div>
+      <h3 class="footer-cta-title">YOUR COMMUNITY <span class="yellow">BUILDS THE CAR</span></h3>
+      <p class="footer-cta-desc">15 teams. 4 races. 1 meme champion. The garage that gets loudest builds the fastest car. Soft launch is live — first cycle drops Monday post Race 0.</p>
+      <div class="footer-cta-buttons">
+        <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="footer-cta-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          FOLLOW @MEMEGRANDPRIX
+        </a>
+        <a href="join.html" class="footer-cta-btn secondary">JOIN THE GRID →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /upg-panel -->
+</div><!-- /upg-wrapper -->
+
+<footer class="foot">
+  <div>
+    <a href="index.html">HOME</a>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">𝕏 @MemeGrandPrix</a>
+  </div>
+  <div>© 2026 Meme GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+</body>
+</html>
