@@ -729,19 +729,37 @@ body::before{
 }
 .tweet-mock-avatar{
   width:42px;height:42px;border-radius:50%;
-  background:radial-gradient(circle at 30% 25%, #ffe066 0%, #ffcc00 35%, #aa8822 100%);
+  background:radial-gradient(circle at 30% 25%, #1a1a26 0%, #0a0a12 100%);
   display:grid;place-items:center;
-  font-family:'Orbitron',sans-serif;
-  font-weight:900;color:#0d0d14;font-size:14px;
-  border:1px solid var(--gold-dim);
+  border:1px solid var(--gold);
   box-shadow:0 0 12px rgba(255,204,0,.35);
+  overflow:hidden;
+  flex-shrink:0;
 }
+.tweet-mock-avatar img{
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.tweet-mock-id{flex:1;min-width:0}
 .tweet-mock-name{
   font-weight:700;color:var(--text);font-size:15px;
   display:flex;align-items:center;gap:6px;
 }
 .tweet-mock-verified{width:14px;height:14px;flex-shrink:0;color:var(--gold)}
 .tweet-mock-handle{color:var(--muted);font-size:13px}
+.tweet-mock-team-logo{
+  flex-shrink:0;
+  width:38px;height:38px;border-radius:50%;
+  border:1.5px solid var(--turbo-blue, #1e7fd9);
+  background:#0a0a12;
+  display:grid;place-items:center;
+  overflow:hidden;
+  box-shadow:0 0 10px rgba(30,127,217,.4);
+}
+.tweet-mock-team-logo img{
+  width:100%;height:100%;
+  object-fit:cover;
+}
 .tweet-mock-body{
   color:var(--text);font-size:14.5px;line-height:1.5;margin-bottom:14px;
 }
@@ -753,7 +771,11 @@ body::before{
 }
 .tweet-mock-body .stat-line.engine{color:var(--stat-engine)}
 .tweet-mock-body .stat-line.pit{color:var(--stat-pit)}
-.tweet-mock-body .stat-icon{font-size:14px}
+.tweet-mock-body .stat-icon{
+  width:18px;height:18px;
+  flex-shrink:0;
+  filter:drop-shadow(0 0 4px rgba(255,204,0,.3));
+}
 .tweet-mock-body .stat-arrow{color:var(--chrome-2);margin:0 6px}
 .tweet-mock-body .stat-target{color:var(--text)}
 .tweet-mock-stats{
@@ -1000,7 +1022,6 @@ body::before{
           BUILD YOUR <span class="yellow">CAR</span>
         </h1>
         <div class="banner-sub">ONE TWEET · TWO STATS · <strong>EVERY MONDAY</strong></div>
-        <p class="banner-blurb"><strong>Your community decides how fast your car gets.</strong> Every Monday post-race we drop one upgrade tweet per team. Hit the thresholds by Friday 23:59 UTC, your stats go up — permanent for the season.</p>
       </div>
       <div class="banner-stats">
         <span class="banner-stat race">SOFT LAUNCH · <strong>NOW</strong></span>
@@ -1209,20 +1230,21 @@ body::before{
       <div class="tweet-mock-label">// MOCK · NOT A LIVE TWEET</div>
       <div class="tweet-mock">
         <div class="tweet-mock-header">
-          <div class="tweet-mock-avatar">🏁</div>
-          <div>
+          <div class="tweet-mock-avatar"><img src="helmet.png" alt="MEME GP"></div>
+          <div class="tweet-mock-id">
             <div class="tweet-mock-name">
               meme grand prix
               <svg class="tweet-mock-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5a.997.997 0 0 1-1.414.014l-2.5-2.5a1.001 1.001 0 1 1 1.414-1.414l1.674 1.674 3.633-5.45a1.001 1.001 0 0 1 1.664 1.11z"/></svg>
             </div>
             <div class="tweet-mock-handle">@MemeGrandPrix · Mon</div>
           </div>
+          <div class="tweet-mock-team-logo" title="$TURBO · AI Turbo Racing"><img src="turbo.png" alt="$TURBO"></div>
         </div>
         <div class="tweet-mock-body">
           🏁 <span class="hl">UPGRADE WEEK 1 · $TURBO</span><br><br>
           AI Turbo Racing rolls into the upgrade window with two stats lagging:<br><br>
-          <span class="stat-line engine"><span class="stat-icon">⚡</span>ENGINE 5.2 <span class="stat-arrow">→</span><span class="stat-target">+1 if 50 likes</span></span>
-          <span class="stat-line pit"><span class="stat-icon">🔧</span>PIT 6.1 <span class="stat-arrow">→</span><span class="stat-target">+1 if 30 RTs</span></span><br>
+          <span class="stat-line engine"><img class="stat-icon" src="icon-engine.png" alt="">ENGINE 5.2 <span class="stat-arrow">→</span><span class="stat-target">+1 if 50 likes</span></span>
+          <span class="stat-line pit"><img class="stat-icon" src="icon-pit.png" alt="">PIT 6.1 <span class="stat-arrow">→</span><span class="stat-target">+1 if 30 RTs</span></span><br>
           deadline · friday 23:59 UTC<br><br>
           how loud is the garage? 🏁
         </div>
