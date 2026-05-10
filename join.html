@@ -410,6 +410,28 @@ body::before{
   .form-placeholder{padding:48px 20px}
 }
 
+
+/* === Mobile nav fix v2: wrap 6 items to 2 rows of 3 on phones === */
+@media(max-width:780px){
+  .tnav-center{flex-wrap:wrap;row-gap:4px}
+  .tnav-link{flex:0 0 calc(33.333% - 4px);text-align:center}
+  .tnav-sep{display:none}
+}
+
+/* === Mobile page-header fix v2: stop overflow on phones === */
+@media(max-width:780px){
+  .page-header{margin-bottom:36px;padding:0 12px}
+  .page-eyebrow{font-size:10px;letter-spacing:3px;gap:8px;margin-bottom:10px;flex-wrap:wrap;justify-content:center}
+  .page-eyebrow::before,.page-eyebrow::after{width:24px}
+  .page-title{font-size:clamp(28px,9vw,44px);letter-spacing:0;line-height:1;margin-bottom:10px}
+  .page-subtitle{font-size:11px;letter-spacing:2px;line-height:1.5;max-width:90%}
+}
+@media(max-width:420px){
+  .page-title{font-size:clamp(24px,8.5vw,36px)}
+  .page-subtitle{letter-spacing:1.5px}
+  .page-eyebrow{letter-spacing:2px}
+  .page-eyebrow::before,.page-eyebrow::after{width:18px}
+}
 </style>
 </head>
 <body>
