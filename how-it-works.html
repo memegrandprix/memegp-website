@@ -1661,6 +1661,31 @@ body::before{
   .banner{padding:0 14px;margin-top:18px}
   .banner-inner{aspect-ratio:auto;min-height:240px;height:auto}
 }
+
+/* === Mobile nav fix v2: wrap 6 items to 2 rows of 3 on phones === */
+@media(max-width:780px){
+  .tnav-center{flex-wrap:wrap;row-gap:4px}
+  .tnav-link{flex:0 0 calc(33.333% - 4px);text-align:center}
+  .tnav-sep{display:none}
+}
+
+/* === Mobile banner fix v2: stop horizontal overflow on phones === */
+@media(max-width:780px){
+  .banner{padding:0 12px}
+  .banner-inner{aspect-ratio:auto;min-height:0}
+  .banner-content{padding:18px 14px 18px;gap:12px}
+  .banner-eyebrow{font-size:10px;letter-spacing:3px;gap:8px;margin-bottom:6px}
+  .banner-eyebrow::before,.banner-eyebrow::after{width:24px}
+  .banner-title{font-size:clamp(28px,9vw,44px);letter-spacing:0;line-height:1;margin-bottom:6px}
+  .banner-sub{font-size:11px;letter-spacing:2px;line-height:1.4;margin-bottom:10px}
+  .banner-stats{gap:6px;margin-top:4px}
+  .banner-stat{font-size:9px;padding:6px 10px;letter-spacing:1.2px}
+}
+@media(max-width:420px){
+  .banner-title{font-size:clamp(24px,8.5vw,36px)}
+  .banner-sub{letter-spacing:1.5px}
+  .banner-stat{font-size:8.5px;padding:5px 8px;letter-spacing:1px}
+}
 </style>
 </head>
 <body>
