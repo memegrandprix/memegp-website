@@ -35,6 +35,21 @@
   },
   "items": [
     {
+      "id": "2026-05-11-shih-official-team-6",
+      "type": "paddock",
+      "timestamp": "2026-05-11T13:30:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$SHIH",
+        "name": "SHIH SPEED",
+        "color": "#FFD200",
+        "logo": "shih.png"
+      },
+      "headline": "OFFICIAL TEAM 6 — $SHIH JOINS THE GRID",
+      "body": "SHIH SPEED locked in as the sixth official team for Season 2. Driver: SHIH Pup. Livery: SHYELLOW — vibrant yellow with white and black accents. Starting profile: 5.9 overall — aero specialist with the highest 24h turnover ratio on the grid. The grid keeps building. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 6 - $SHIH\n\nSHIH SPEED joins the grid.\n\nseason 2:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[locked] $SUS\n[locked] $LOL\n[locked] $SHIH\n[open] x 9\n\nlights out june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-10-lol-official-team-5",
       "type": "paddock",
       "timestamp": "2026-05-10T14:30:00Z",
