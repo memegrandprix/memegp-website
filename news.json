@@ -35,6 +35,21 @@
   },
   "items": [
     {
+      "id": "2026-05-12-vibe-official-team-7",
+      "type": "paddock",
+      "timestamp": "2026-05-12T10:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$VIBECOIN",
+        "name": "VIBING CAT",
+        "color": "#E91E63",
+        "logo": "vibe.png"
+      },
+      "headline": "OFFICIAL TEAM 7 — $VIBECOIN JOINS THE GRID",
+      "body": "VIBING CAT locked in as the seventh official team for Season 2. Driver: Vibing Cat. Livery: CATTER — magenta, turquoise, and yellow neon palette. Starting profile: 5.5 overall — heavyweight on cap ($1.7M MCAP, the largest on the grid), real distributed community (2,937 holders), with mainstream-tier follow graph including @elonmusk. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 7 - $VIBECOIN\n\nVIBING CAT joins the grid.\n\nseason 2:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[locked] $SUS\n[locked] $LOL\n[locked] $SHIH\n[locked] $VIBECOIN\n[open] x 8\n\nlights out june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-11-shih-official-team-6",
       "type": "paddock",
       "timestamp": "2026-05-11T13:30:00Z",
