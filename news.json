@@ -35,6 +35,40 @@
   },
   "items": [
     {
+      "id": "2026-05-13-mars-official-team-8",
+      "type": "paddock",
+      "timestamp": "2026-05-13T13:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$MARS",
+        "name": "MARS RACING",
+        "color": "#1A2B5C",
+        "logo": "mars.png",
+        "contract": "EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 8 — $MARS JOINS THE GRID",
+      "body": "MARS RACING locked in as the eighth official team for Season 2 — signal detected, origin unknown. Driver: EELON. Livery: DEEP SPACE, alien cyclops energy with cyan signal accents. Starting profile: 4.2 overall — small-cap challenger with paddock-grade signal: followed by @MyDogeCEO, verified community, recursive Doginals heritage. Real on-chain stats. Real partnership.",
+      "tweet": "🏁 SIGNAL DETECTED — @MarslandersDoge\n\nMARS RACING joins the grid. DEEP SPACE livery, EELON at the wheel, origin unknown.\n\nOFFICIAL TEAM 8. eight locked. seven open.\n\nlights out · june 1.\n\n$MEMEGP"
+    },
+    {
+      "id": "2026-05-12-420blazeit-official-team-8",
+      "type": "paddock",
+      "timestamp": "2026-05-12T14:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$420BLAZEIT",
+        "name": "420BLAZEIT",
+        "color": "#7B2D8E",
+        "logo": "420blazeit.png",
+        "contract": "Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 9 — $420BLAZEIT JOINS THE GRID",
+      "body": "420BLAZEIT locked in as the ninth official team for Season 2. Driver: SplitDaWig. Livery: BLAZE PURPLE — deep purple with sunset highlights. Starting profile: 4.1 overall — rookie underdog driven by an OG founder with mainstream reach (15K personal followers, MyDoge community connections). The grid keeps building. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 9 - $420BLAZEIT\n\n420BLAZEIT joins the grid.\n\nseason 2:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[locked] $SUS\n[locked] $LOL\n[locked] $SHIH\n[locked] $VIBECOIN\n[locked] $420BLAZEIT\n[open] x 7 (after MARS lands)\n\nlights out june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-12-vibe-official-team-7",
       "type": "paddock",
       "timestamp": "2026-05-12T10:00:00Z",
@@ -43,7 +77,9 @@
         "ticker": "$VIBECOIN",
         "name": "VIBING CAT",
         "color": "#E91E63",
-        "logo": "vibe.png"
+        "logo": "vibe.png",
+        "contract": "AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB",
+        "chain": "SOL"
       },
       "headline": "OFFICIAL TEAM 7 — $VIBECOIN JOINS THE GRID",
       "body": "VIBING CAT locked in as the seventh official team for Season 2. Driver: Vibing Cat. Livery: CATTER — magenta, turquoise, and yellow neon palette. Starting profile: 5.5 overall — heavyweight on cap ($1.7M MCAP, the largest on the grid), real distributed community (2,937 holders), with mainstream-tier follow graph including @elonmusk. Real on-chain stats. Real partnership.",
@@ -58,7 +94,9 @@
         "ticker": "$SHIH",
         "name": "SHIH SPEED",
         "color": "#FFD200",
-        "logo": "shih.png"
+        "logo": "shih.png",
+        "contract": "0xfCa5208e4074e06596CC28B47214A109E4c14444",
+        "chain": "BNB"
       },
       "headline": "OFFICIAL TEAM 6 — $SHIH JOINS THE GRID",
       "body": "SHIH SPEED locked in as the sixth official team for Season 2. Driver: SHIH Pup. Livery: SHYELLOW — vibrant yellow with white and black accents. Starting profile: 5.9 overall — aero specialist with the highest 24h turnover ratio on the grid. The grid keeps building. Real on-chain stats. Real partnership.",
@@ -73,7 +111,9 @@
         "ticker": "$LOL",
         "name": "LOL RACING",
         "color": "#22DD66",
-        "logo": "lol.png"
+        "logo": "lol.png",
+        "contract": "53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD",
+        "chain": "SOL"
       },
       "headline": "OFFICIAL TEAM 5 — $LOL JOINS THE GRID",
       "body": "LOL Racing locked in as the fifth official team for Season 2. Driver: LOL Guy. Livery: Giggle Green. Starting profile: 3.9 overall — rookie underdog with breakout potential and room to grow into upgrades. The grid keeps building. Real on-chain stats. Real partnership.",
@@ -88,7 +128,9 @@
         "ticker": "$SUS",
         "name": "SUS SPEED RACING",
         "color": "#C8102E",
-        "logo": "susdog.png"
+        "logo": "susdog.png",
+        "contract": "GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge",
+        "chain": "SOL"
       },
       "headline": "OFFICIAL TEAM 4 - $SUS JOINS THE GRID",
       "body": "SUS SPEED Racing locked in as the fourth official team for Season 2. Driver: SUS. Livery: crimson red and gloss black. Starting profile: 6.0 overall - solid mid-pack contender with a rock-solid DRAG of 9.5. The grid keeps growing. Real on-chain stats. Real partnership.",
@@ -103,131 +145,47 @@
         "ticker": "$NEURO",
         "name": "NEURO RACING",
         "color": "#F58A1F",
-        "logo": "neuroticat.png"
+        "logo": "neuroticat.png",
+        "contract": "0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b",
+        "chain": "CRO"
       },
       "headline": "OFFICIAL TEAM 3 - $NEURO JOINS THE GRID",
       "body": "NEURO Racing locked in as the third official team for Season 2. Driver: NEURO. Livery: cat orange. Starting profile: 3.7 overall - the underdog of the grid, with two clear upgrade paths heading into Race 1. Real on-chain stats. Real partnership. The grid grows.",
       "tweet": "OFFICIAL TEAM 3 - $NEURO\n\nthe @NeurotiCat community brings the chaos. we bring the chassis.\n\nseason 2 grid:\n[locked] $TURBO\n[locked] $MASK\n[locked] $NEURO\n[open] x 12\n\nlights out june 1.\n\n$MEMEGP"
     },
     {
-      "id": "2026-05-01-power-rankings-r1",
+      "id": "2026-04-29-mask-official-team-2",
       "type": "paddock",
-      "timestamp": "2026-05-01T13:00:00Z",
-      "tag": "RACE WEEK",
+      "timestamp": "2026-04-29T12:00:00Z",
+      "tag": "OFFICIAL TEAM",
       "team": {
-        "ticker": "$BRETT",
-        "name": "BRETT IS BACK",
-        "color": "#1F6DFF",
-        "logo": "brett.png"
+        "ticker": "$MASK",
+        "name": "MASK STAYS ON RACING",
+        "color": "#e62538",
+        "logo": "mask.png",
+        "contract": "6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump",
+        "chain": "SOL"
       },
-      "headline": "ROUND 1 POWER RANKINGS · WHO'S IN FORM FOR SATOSHI SPEEDWAY",
-      "body": "BRETT enters Round 1 as the consensus favourite after a flawless pre-season testing programme. DOGE's race pace looks ominous, PENGU is the dark horse on fresh upgrades, and SHIB looks vulnerable in the midfield. Full grid analysis inside.",
-      "tweet": "🏁 ROUND 1 POWER RANKINGS\n\n⭐ Title favourites: $BRETT, $DOGE\n🐎 Dark horse: $PENGU\n⚠️ At risk: $SHIB\n\nSatoshi Speedway, June 2026. Form guide is up at memegrandprix.com/gp-central.html\n\n#MEMEGP #MemeRacing"
+      "headline": "OFFICIAL TEAM 2 — $MASK JOINS THE GRID",
+      "body": "MASK STAYS ON RACING locked in as the second official team for Season 2. Driver: The Cat. Livery: STEALTH BLACK, with POKG sponsorship on the sidepods. Starting profile: 5.5 overall — race-pace DRAG 9.4 is the highest aero-efficient setup on the grid, paired with solid ENGINE 7.2. Real on-chain stats. Real partnership.",
+      "tweet": "OFFICIAL TEAM 2 - $MASK\n\nMASK STAYS ON RACING joins the grid.\n\nDriver: The Cat\nLivery: STEALTH BLACK\nDRAG 9.4 · ENGINE 7.2\n\n@MemeGrandPrix · #MemeGP\n\n$MEMEGP"
     },
     {
-      "id": "2026-04-30-turbo-pit-up",
-      "type": "upgrade",
-      "timestamp": "2026-04-30T18:30:00Z",
-      "tag": "PIT UPGRADE",
+      "id": "2026-04-27-turbo-official-team-1",
+      "type": "paddock",
+      "timestamp": "2026-04-27T12:00:00Z",
+      "tag": "OFFICIAL TEAM",
       "team": {
         "ticker": "$TURBO",
         "name": "AI TURBO RACING",
-        "color": "#7C5CFF",
-        "logo": "turbo.png"
+        "color": "#1e7fd9",
+        "logo": "turbo.png",
+        "contract": "0xa35923162c49cf95e6bf26623385eb431ad920d3",
+        "chain": "ETH"
       },
-      "headline": "TURBO REWIRES THE PIT WALL",
-      "body": "Pit Ops rating climbs from 5 → 7 after $TURBO's off-season tooling overhaul. Faster tyre changes, sharper strategy calls. The mid-grid just got a serious threat.",
-      "stat_change": {
-        "stat": "PIT",
-        "from": 5,
-        "to": 7
-      },
-      "tweet": "🏁 PIT UPGRADE\n\n$TURBO Pit Ops: 5 → 7\n\nThe @AiTurboRacing crew has been busy in the off-season and the numbers don't lie. Faster stops, sharper calls. Mid-grid just got dangerous.\n\n#MEMEGP $TURBO"
-    },
-    {
-      "id": "2026-04-28-mog-chassis-down",
-      "type": "downgrade",
-      "timestamp": "2026-04-28T11:45:00Z",
-      "tag": "STAT DROP",
-      "team": {
-        "ticker": "$MOG",
-        "name": "MOG WORKS",
-        "color": "#FF8A1A",
-        "logo": "mog.png"
-      },
-      "headline": "MOG WOBBLES · CHASSIS RATING SLIDES",
-      "body": "Chassis stiffness drops from 9 → 8 as $MOG liquidity contracts in the run-up to Round 1. Cornering stability takes a hit and the engineers won't be happy. Time to shore up the foundations.",
-      "stat_change": {
-        "stat": "CHASSIS",
-        "from": 9,
-        "to": 8
-      },
-      "tweet": "🏁 CHASSIS DOWNGRADE\n\n$MOG: 9 → 8\n\nLiquidity contraction = corner stability hit. Engineers in the @MogWorks garage have work to do before Round 1.\n\nThis is why depth matters, friends. 🛠️\n\n#MEMEGP $MOG"
-    },
-    {
-      "id": "2026-04-26-bonk-engine-up",
-      "type": "upgrade",
-      "timestamp": "2026-04-26T14:00:00Z",
-      "tag": "ENGINE UPGRADE",
-      "team": {
-        "ticker": "$BONK",
-        "name": "BONK RACING",
-        "color": "#F0B321",
-        "logo": "bonk.png"
-      },
-      "headline": "BONK FINDS HORSEPOWER · ENGINE 7 → 8",
-      "body": "$BONK breaks through a key market cap threshold and the dyno responds. Engine rating jumps from 7 → 8 just in time for Round 1. Top-end speed is suddenly a Bonk problem for the rest of the grid.",
-      "stat_change": {
-        "stat": "ENGINE",
-        "from": 7,
-        "to": 8
-      },
-      "tweet": "🏁 ENGINE UPGRADE\n\n$BONK: 7 → 8 ⚡\n\nMarket cap breakthrough triggers a dyno win. @bonk_inu suddenly has top-end speed they didn't have a week ago.\n\nWho's catching them down the Satoshi Speedway main straight now?\n\n#MEMEGP $BONK"
-    },
-    {
-      "id": "2026-04-23-floki-confirmed",
-      "type": "new_team",
-      "timestamp": "2026-04-23T09:30:00Z",
-      "tag": "GRID ANNOUNCEMENT",
-      "team": {
-        "ticker": "$FLOKI",
-        "name": "FLOKI MOTORSPORT",
-        "color": "#F58A1F",
-        "logo": "floki.png"
-      },
-      "headline": "$FLOKI CONFIRMED FOR SEASON 2 GRID",
-      "body": "FLOKI Motorsport has signed paperwork and is officially on the Season 2 grid. Eleven cars confirmed, the field is filling out. Full driver lineup to be announced ahead of Round 1.",
-      "tweet": "🏁 NEW TEAM ON THE GRID\n\nWelcome @RealFlokiInu to Season 2. 🐺\n\nThe field is now 11 strong and the grid is filling out fast. Round 1 at Satoshi Speedway can't come soon enough.\n\n#MEMEGP $FLOKI"
-    },
-    {
-      "id": "2026-04-20-brett-paddock-piece",
-      "type": "paddock",
-      "timestamp": "2026-04-20T16:00:00Z",
-      "tag": "PADDOCK NOTEBOOK",
-      "team": {
-        "ticker": "$BRETT",
-        "name": "BRETT IS BACK",
-        "color": "#1F6DFF",
-        "logo": "brett.png"
-      },
-      "headline": "WHY BRETT'S PRE-SEASON PACE HAS THE PADDOCK WORRIED",
-      "body": "Three test sessions, three fastest laps. BRETT is doing what champions do — turning up early and leaving nothing on the table. Rivals are downplaying the times publicly while their engineers privately recalibrate. This is starting to look like a coronation.",
-      "tweet": "🏁 PADDOCK NOTEBOOK\n\nThree test sessions. Three fastest laps. $BRETT is doing what champions do.\n\nRivals are smiling for the cameras. Their engineers are not smiling at the data.\n\nIs Round 1 already over?\n\n#MEMEGP $BRETT"
-    },
-    {
-      "id": "2026-04-15-s1-finale-recap",
-      "type": "result",
-      "timestamp": "2026-04-15T22:00:00Z",
-      "tag": "SEASON 1 ARCHIVE",
-      "team": {
-        "ticker": "$BRETT",
-        "name": "BRETT IS BACK",
-        "color": "#1F6DFF",
-        "logo": "brett.png"
-      },
-      "headline": "SEASON 1 FINALE · BRETT TAKES TITLE IN LAST-CORNER PASS",
-      "body": "The kind of finish you tell your grandchildren about. BRETT down by 0.4s on the final lap, found a sliver of inside line at the last hairpin, and snatched the championship by a tenth. DOGE will replay this corner for years.",
-      "tweet": "🏁 SEASON 1 FINALE · ARCHIVED\n\nLast lap. Last corner. 0.4s gap.\n\n$BRETT found the inside line and stole the title from $DOGE by a TENTH.\n\nThis is why we built Meme GP. Season 2 starts July 1. 🍿\n\n#MEMEGP"
+      "headline": "OFFICIAL TEAM 1 — $TURBO JOINS THE GRID",
+      "body": "AI TURBO RACING locked in as the inaugural team for Season 2 — auto-promoted from the most engaged community of the Season 1 build-up. Driver: The Frog. Livery: TURBO BLUE, built by AI. Starting profile: 7.7 overall — a perfect DRAG 10.0 (highest on the grid) paired with a benchmark-setting ENGINE 9.5. Real on-chain stats. Community joined via Season 1 engagement.",
+      "tweet": "OFFICIAL TEAM 1 - $TURBO\n\nAI TURBO RACING joins the grid.\n\nDriver: The Frog\nLivery: TURBO BLUE\nDRAG 10.0 · ENGINE 9.5\n\nfirst team locked. paddock is open.\n\n@MemeGrandPrix · #MemeGP\n\n$MEMEGP"
     }
   ]
 }

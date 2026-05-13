@@ -1088,7 +1088,7 @@ body::before{
 
 <div class="grid-strip">
   <div class="grid-strip-header">
-    <div class="grid-strip-title">▸ THE STARTING GRID · 7 / 15 LOCKED</div>
+    <div class="grid-strip-title">▸ THE STARTING GRID · 8 / 15 LOCKED</div>
     <a href="season-2.html" class="grid-strip-link">VIEW FULL GRID →</a>
   </div>
   <div class="mini-grid" id="miniGrid"></div>
@@ -1141,6 +1141,8 @@ const TEAMS = [
   { ticker: 'LOL', overall: 3.9, locked: true, current: false, link: 'teams-lol.html', avatar: 'lol-driver.png' },
   { ticker: 'SHIH',  overall: 5.9, locked: true, current: false, link: 'teams-shih.html', avatar: 'shih-driver.png' },
   { ticker: 'VIBECOIN',  overall: 5.5, locked: true, current: false, link: 'teams-vibe.html', avatar: 'vibe-driver.png' },
+  { ticker: 'MARS', overall: 4.2, locked: true, current: false, link: 'teams-mars.html', avatar: 'mars-driver.png' },
+  { ticker: '420BLAZEIT', overall: 4.1, locked: true, current: false, link: 'teams-420blazeit.html', avatar: '420blazeit-driver.png' },
 ];
 
 let miniHtml = '';
@@ -1158,7 +1160,7 @@ TEAMS.forEach(t => {
   `;
 });
 
-for (let i = 8; i <= 15; i++) {
+for (let i = 10; i <= 15; i++) {
   const num = String(i).padStart(2, '0');
   miniHtml += `
     <div class="mini-card empty">

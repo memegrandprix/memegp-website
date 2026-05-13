@@ -619,6 +619,134 @@ body::before{
   .page-eyebrow{letter-spacing:2px}
   .page-eyebrow::before,.page-eyebrow::after{width:18px}
 }
+
+/* === COMMUNITY STANDARDS SECTION === */
+.rules-section{
+  position:relative;z-index:2;
+  max-width:980px;margin:0 auto 64px;
+}
+.rules-intro{
+  font-size:15px;line-height:1.6;color:var(--chrome-1);
+  text-align:center;
+  max-width:720px;margin:0 auto 40px;
+  padding:0 12px;
+}
+.rules-intro strong{color:var(--text);font-weight:600}
+.rules-pillars{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:32px;
+}
+.rules-pillar{
+  position:relative;
+  padding:24px;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid #1f1f2a;
+  border-radius:8px;
+}
+.rules-pillar-head{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:14px;
+}
+.rules-pillar-icon{
+  flex-shrink:0;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:900;
+  background:linear-gradient(135deg, rgba(255,204,0,.18), rgba(255,204,0,.06));
+  color:var(--gold);
+  border:1px solid rgba(255,204,0,.3);
+}
+.rules-pillar-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;letter-spacing:1px;
+  color:var(--text);
+  text-transform:uppercase;
+}
+.rules-pillar-list{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:8px;
+}
+.rules-pillar-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;line-height:1.5;color:var(--chrome-2);
+}
+.rules-pillar-list li::before{
+  content:'';flex-shrink:0;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  margin-top:7px;
+}
+.rules-pillar-list li strong{color:var(--text);font-weight:600}
+.rules-redline{border-color:rgba(255,0,64,.2)}
+.rules-redline .rules-pillar-icon{
+  background:linear-gradient(135deg, rgba(255,0,64,.18), rgba(255,0,64,.06));
+  color:var(--accent);
+  border-color:rgba(255,0,64,.3);
+}
+.rules-redline .rules-pillar-list li::before{background:var(--accent)}
+.rules-stewardship{
+  position:relative;
+  padding:24px 28px;
+  background:linear-gradient(180deg, rgba(255,204,0,.06) 0%, rgba(255,204,0,.02) 100%);
+  border:1px solid rgba(255,204,0,.2);
+  border-radius:8px;
+  margin-bottom:18px;
+}
+.rules-stewardship-head{
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  margin-bottom:12px;
+}
+.rules-stewardship-body{
+  font-size:14px;line-height:1.6;color:var(--chrome-1);
+}
+.rules-stewardship-body strong{color:var(--text);font-weight:600}
+.rules-escalation{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+.rules-escalation-step{
+  padding:12px 14px;
+  background:rgba(0,0,0,.3);
+  border:1px solid #1f1f2a;
+  border-radius:6px;
+  text-align:center;
+}
+.rules-escalation-step .step-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:1.5px;
+  color:var(--gold);
+  margin-bottom:4px;
+}
+.rules-escalation-step .step-label{
+  font-size:12px;line-height:1.4;color:var(--chrome-2);
+}
+.rules-reporting{
+  padding:18px 24px;
+  background:#0a0a12;
+  border:1px solid #1f1f2a;
+  border-radius:8px;
+  text-align:center;
+}
+.rules-reporting strong{color:var(--gold);font-weight:700;font-family:'Orbitron',sans-serif;letter-spacing:.5px}
+.rules-reporting-body{
+  font-size:13px;line-height:1.55;color:var(--chrome-2);
+}
+
+@media(max-width:780px){
+  .rules-pillars{grid-template-columns:1fr}
+  .rules-escalation{grid-template-columns:1fr;gap:8px}
+  .rules-stewardship{padding:20px}
+  .rules-pillar{padding:20px}
+}
+
 </style>
 </head>
 <body>
@@ -734,7 +862,7 @@ body::before{
         </div>
         <div class="proof-card-content">
           <div class="proof-card-label">TEAMS LOCKED</div>
-          <div class="proof-card-value highlight">7 / 15 · TURBO + MASK + NEURO + SUS + LOL + SHIH + VIBECOIN</div>
+          <div class="proof-card-value highlight">9 / 15 · TURBO + MASK + NEURO + SUS + LOL + SHIH + VIBECOIN + MARS + 420BLAZEIT</div>
         </div>
         <div class="proof-card-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
@@ -912,9 +1040,75 @@ body::before{
 
       <div class="faq-card">
         <div class="faq-q"><span class="faq-q-icon">?</span>How do we get our community on the grid?</div>
-        <div class="faq-a">DM <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">@MemeGrandPrix</a>. Tell us about your community, your character, your X handle. We'll vet for fit (brand alignment, engagement, no rug history) and reach back. <strong>8 seats remain for Season 2.</strong></div>
+        <div class="faq-a">DM <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener">@MemeGrandPrix</a>. Tell us about your community, your character, your X handle. We'll vet for fit (brand alignment, engagement, no rug history) and reach back. <strong>7 seats remain for Season 2.</strong></div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- COMMUNITY STANDARDS -->
+  <h2 class="section-title">Community <span class="accent">standards</span></h2>
+  <div class="section-sub">FUN AND ENTERTAINMENT · BUT RIVALRY HAS LIMITS</div>
+
+  <div class="rules-section">
+    <div class="rules-intro">
+      MEME GP brings <strong>eight different communities</strong> together onto one paddock, across four chains and countless cultures. The whole point is fun, banter, and watching your team race. <strong>What we won't tolerate is hatred dressed as humor.</strong>
+    </div>
+
+    <div class="rules-pillars">
+      <div class="rules-pillar">
+        <div class="rules-pillar-head">
+          <div class="rules-pillar-icon">✓</div>
+          <div class="rules-pillar-title">What's welcome</div>
+        </div>
+        <ul class="rules-pillar-list">
+          <li><strong>Cheering for your team</strong> — loud, proud, all weekend</li>
+          <li><strong>Banter between communities</strong> — friendly trash talk, race-day rivalry, paddock memes</li>
+          <li><strong>Genuine engagement</strong> with the upgrade mechanic — real likes, real RTs, real community</li>
+          <li><strong>Different cultures</strong> showing up as themselves — Solana degens, BNB pros, anon KOLs, niche brand identities — all of it</li>
+        </ul>
+      </div>
+
+      <div class="rules-pillar rules-redline">
+        <div class="rules-pillar-head">
+          <div class="rules-pillar-icon">✕</div>
+          <div class="rules-pillar-title">Hard lines · won't be tolerated</div>
+        </div>
+        <ul class="rules-pillar-list">
+          <li><strong>Discrimination of any kind</strong> — race, religion, gender, sexuality, nationality. No exceptions, no jokes-that-aren't-jokes.</li>
+          <li><strong>Targeted harassment</strong> of any team member, community member, or individual</li>
+          <li><strong>Doxxing, threats, or coordinated attacks</strong> on other communities</li>
+          <li><strong>Inauthentic engagement</strong> — bot farms, sock puppets, manipulated stats</li>
+          <li><strong>Impersonation of MEME GP</strong> or false sponsorship claims</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rules-stewardship">
+      <div class="rules-stewardship-head">▸ OUR STEWARDSHIP STANCE</div>
+      <div class="rules-stewardship-body">
+        MEME GP is not a neutral platform. Communities racing under our paddock <strong>represent the league</strong>, and we take that responsibility seriously. If a community engages in behavior that crosses the hard lines above, the team is held accountable — up to and including <strong>removal from the grid</strong>. Curating quality is what makes a league worth watching.
+      </div>
+      <div class="rules-escalation">
+        <div class="rules-escalation-step">
+          <div class="step-num">STEP 1</div>
+          <div class="step-label">Private warning to team rep</div>
+        </div>
+        <div class="rules-escalation-step">
+          <div class="step-num">STEP 2</div>
+          <div class="step-label">Temporary stat freeze · public note</div>
+        </div>
+        <div class="rules-escalation-step">
+          <div class="step-num">STEP 3</div>
+          <div class="step-label">Removal from grid · seat reopens</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-reporting">
+      <div class="rules-reporting-body">
+        <strong>How to report:</strong> tag <strong>@MemeGrandPrix</strong> on X with the issue, or DM the account directly. Active monitoring runs weekly during race weekends. Response within 7 days.
+      </div>
     </div>
   </div>
 
