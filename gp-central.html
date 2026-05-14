@@ -833,6 +833,233 @@ body::before{
   .banner-sub{letter-spacing:1.5px}
   .banner-stat{font-size:8.5px;padding:5px 8px;letter-spacing:1px}
 }
+/* ===== PIT WALL CSS (append before </style>) ===== */
+
+/* Tab toggle */
+.gpc-tabs{
+  max-width:1200px;margin:0 auto;
+  padding:0 24px;
+  display:flex;gap:0;align-items:flex-end;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.gpc-tab{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:1.5px;
+  padding:14px 22px;
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  color:var(--muted);cursor:pointer;
+  margin-bottom:-1px;
+  transition:color .15s ease, border-color .15s ease;
+}
+.gpc-tab:hover{color:var(--text)}
+.gpc-tab.active{
+  color:var(--gold);
+  border-bottom-color:var(--gold);
+}
+.gpc-tab-icon{font-size:10px;margin-right:6px;opacity:.6}
+
+/* Tab panels — show/hide */
+.gpc-panel{display:none}
+.gpc-panel.active{display:block;animation:fadeUp .25s ease}
+
+/* Pit Wall hero stats — different from Paddock */
+.gpc-pit-hero-strip{display:none}
+.gpc-pit-hero-strip.active{display:flex}
+
+/* ============ PIT WALL CONTENT ============ */
+.pitwall{
+  padding:24px 0 48px;
+}
+.pitwall-intro{
+  max-width:840px;margin:0 auto 32px;padding:0 24px;
+  text-align:center;
+}
+.pitwall-intro h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:900;letter-spacing:-.3px;
+  color:var(--text);
+  margin-bottom:8px;
+}
+.pitwall-intro h3 .gold{color:var(--gold)}
+.pitwall-intro p{
+  font-size:14px;line-height:1.6;color:var(--muted);
+}
+
+/* Live status bar */
+.pitwall-status{
+  max-width:1200px;margin:0 auto 24px;padding:0 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.5px;
+  color:var(--muted);
+  flex-wrap:wrap;gap:12px;
+}
+.pitwall-status .live-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--green);margin-right:6px;
+  animation:ringPulse 2s infinite;
+}
+.pitwall-status-info{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+
+/* Power rankings table */
+.pitwall-rankings{
+  max-width:1200px;margin:0 auto 32px;padding:0 24px;
+}
+.pitwall-rankings-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:14px;
+  flex-wrap:wrap;gap:12px;
+}
+.pitwall-rankings-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;font-weight:900;letter-spacing:-.2px;
+}
+.pitwall-rankings-title .gold{color:var(--gold)}
+.pitwall-rankings-sub{
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--muted);
+}
+
+.rankings-table{
+  width:100%;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-collapse:collapse;
+}
+.rankings-table th{
+  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;
+  color:var(--muted);
+  text-align:left;padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  font-weight:700;
+}
+.rankings-table th.num{text-align:right}
+.rankings-table td{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--text);
+}
+.rankings-table td.num{text-align:right;font-weight:600}
+.rankings-table tbody tr:last-child td{border-bottom:none}
+.rankings-table tbody tr:hover{background:var(--bg-card-2)}
+.rankings-table tbody tr.skeleton td{color:var(--dim);font-style:italic}
+
+/* Position cell */
+.rank-pos{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;font-weight:900;
+}
+.rank-pos-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;
+  font-size:12px;
+  background:var(--bg-card-2);border:1px solid var(--line);
+  color:var(--gold);
+}
+.rank-move{
+  display:inline-flex;align-items:center;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+  min-width:34px;
+}
+.rank-move.up{color:var(--green)}
+.rank-move.down{color:var(--accent)}
+.rank-move.flat{color:var(--dim)}
+
+/* Team cell */
+.rank-team{
+  display:flex;align-items:center;gap:10px;
+}
+.rank-team-logo{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg-card-2) center/cover no-repeat;
+  border:1px solid var(--line);
+  flex-shrink:0;
+}
+.rank-team-name{display:flex;flex-direction:column;gap:2px}
+.rank-team-ticker{
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;color:var(--text);
+}
+.rank-team-ticker .dollar{color:var(--gold)}
+.rank-team-sub{font-size:10px;color:var(--muted);letter-spacing:.5px}
+
+/* Stat cells */
+.rank-stat{
+  font-family:'JetBrains Mono',monospace;font-weight:600;
+}
+.rank-stat.pos{color:var(--green)}
+.rank-stat.neg{color:var(--accent)}
+.rank-stat-currency{color:var(--gold);margin-right:1px;font-size:11px}
+
+/* Overall pill */
+.rank-overall{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:46px;padding:5px 10px;
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;
+  background:linear-gradient(90deg, rgba(255,204,0,.15), rgba(255,204,0,.05));
+  border:1px solid rgba(255,204,0,.3);
+  color:var(--gold);
+}
+
+/* Movers section */
+.pitwall-movers{
+  max-width:1200px;margin:0 auto 32px;padding:0 24px;
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+}
+.mover-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  padding:18px 20px;
+}
+.mover-card.up{border-color:rgba(0,255,136,.2)}
+.mover-card.down{border-color:rgba(255,0,64,.2)}
+.mover-label{
+  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;
+  color:var(--muted);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.mover-label.up{color:var(--green)}
+.mover-label.down{color:var(--accent)}
+.mover-content{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.mover-ticker{
+  font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;letter-spacing:-.3px;
+}
+.mover-ticker .dollar{color:var(--gold)}
+.mover-change{
+  font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;
+}
+.mover-change.up{color:var(--green)}
+.mover-change.down{color:var(--accent)}
+
+/* Methodology note */
+.pitwall-method{
+  max-width:1200px;margin:32px auto 0;padding:18px 24px;
+  background:var(--bg-card);border:1px solid var(--line);
+  font-size:12px;line-height:1.5;color:var(--muted);
+}
+.pitwall-method strong{color:var(--text);font-weight:600}
+.pitwall-method-title{
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.5px;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+
+@media(max-width:780px){
+  .gpc-tab{padding:12px 14px;font-size:11px;letter-spacing:1px}
+  .pitwall-rankings,.pitwall-movers,.pitwall-status{padding:0 16px}
+  .pitwall-movers{grid-template-columns:1fr}
+  .rankings-table th, .rankings-table td{padding:10px 8px;font-size:11px}
+  .rankings-table th.hide-mobile, .rankings-table td.hide-mobile{display:none}
+  .rank-team-logo{width:22px;height:22px}
+  .rank-team-ticker{font-size:11px}
+  .rank-team-sub{display:none}
+  .rank-pos-num{width:22px;height:22px;font-size:10px}
+}
+
+/* ===== END PIT WALL CSS ===== */
+
 </style>
 </head>
 <body>
@@ -904,22 +1131,112 @@ body::before{
         <span class="banner-stat open">THIS WEEK · <strong>—</strong></span>
         <span class="banner-stat locked">NEXT RACE · <strong>JUNE 1</strong></span>
       </div>
+      <div class="banner-stats gpc-pit-hero-strip" id="gp-pit-counters" aria-live="polite" style="display:none">
+        <span class="banner-stat race">TOTAL MCAP · <strong id="pit-stat-mcap">—</strong></span>
+        <span class="banner-stat open">AVG GROWTH · <strong id="pit-stat-growth">PRE-SEASON</strong></span>
+        <span class="banner-stat locked">BEST TODAY · <strong id="pit-stat-best">—</strong></span>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- GP Central tab toggle -->
+<div class="gpc-tabs" role="tablist">
+  <button class="gpc-tab active" data-tab="paddock" role="tab" aria-selected="true" aria-controls="gpc-panel-paddock">
+    <span class="gpc-tab-icon">▸</span>FROM THE PADDOCK
+  </button>
+  <button class="gpc-tab" data-tab="pitwall" role="tab" aria-selected="false" aria-controls="gpc-panel-pitwall">
+    <span class="gpc-tab-icon">▸</span>FROM THE PIT WALL
+  </button>
 </div>
 
 <!-- PAGE -->
 <main class="gpf-wrapper">
 
-  <!-- Pre-season scenario label — context for the news feed below -->
-  <div class="gpf-section-head">
-    <h2 class="gpf-section-title">FROM THE PADDOCK <span class="preseason-badge preseason-badge--inline">PRE-SEASON · SCENARIO</span></h2>
-    <p class="gpf-section-sub">Pre-season storylines and projected upgrades. Round 1 has not yet taken place.</p>
+  <!-- PADDOCK PANEL -->
+  <div class="gpc-panel active" id="gpc-panel-paddock" role="tabpanel" aria-labelledby="tab-paddock">
+    <!-- Pre-season scenario label — context for the news feed below -->
+    <div class="gpf-section-head">
+      <h2 class="gpf-section-title">FROM THE PADDOCK <span class="preseason-badge preseason-badge--inline">PRE-SEASON · SCENARIO</span></h2>
+      <p class="gpf-section-sub">Pre-season storylines and projected upgrades. Round 1 has not yet taken place.</p>
+    </div>
+
+    <!-- Feed mount point — populated by news-loader.js -->
+    <div id="gp-feed">
+      <div class="gpf-empty">Loading paddock feed…</div>
+    </div>
   </div>
 
-  <!-- Feed mount point — populated by news-loader.js -->
-  <div id="gp-feed">
-    <div class="gpf-empty">Loading paddock feed…</div>
+  <!-- PIT WALL PANEL -->
+  <div class="gpc-panel" id="gpc-panel-pitwall" role="tabpanel" aria-labelledby="tab-pitwall">
+
+    <div class="pitwall">
+
+      <div class="pitwall-intro">
+        <h3>LIVE <span class="gold">POWER RANKINGS</span></h3>
+        <p>The grid sorted by on-chain power, updated daily. Communities have until June 1 to climb. Race-day stats commit Friday 18:00 SAST.</p>
+      </div>
+
+      <div class="pitwall-status">
+        <div class="pitwall-status-info">
+          <span><span class="live-dot"></span>LIVE · DEXSCREENER</span>
+          <span id="pit-last-updated">LAST UPDATED · —</span>
+        </div>
+        <div>
+          <span id="pit-tracking-days">TRACKING · —</span>
+        </div>
+      </div>
+
+      <div class="pitwall-rankings">
+        <div class="pitwall-rankings-head">
+          <div>
+            <div class="pitwall-rankings-title">GRID <span class="gold">RANKINGS</span></div>
+            <div class="pitwall-rankings-sub">SORTED BY CALCULATED OVERALL · LIVE</div>
+          </div>
+        </div>
+
+        <table class="rankings-table" id="rankings-table">
+          <thead>
+            <tr>
+              <th>POS</th>
+              <th>TEAM</th>
+              <th class="num">MCAP</th>
+              <th class="num hide-mobile">24H VOL</th>
+              <th class="num hide-mobile">24H</th>
+              <th class="num">OVERALL</th>
+            </tr>
+          </thead>
+          <tbody id="rankings-body">
+            <tr class="skeleton"><td colspan="6">Loading rankings…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pitwall-movers">
+        <div class="mover-card up" id="mover-up">
+          <div class="mover-label up">▲ GAINER OF THE DAY</div>
+          <div class="mover-content">
+            <div class="mover-ticker"><span class="dollar">$</span><span id="mover-up-ticker">—</span></div>
+            <div class="mover-change up" id="mover-up-change">—</div>
+          </div>
+        </div>
+        <div class="mover-card down" id="mover-down">
+          <div class="mover-label down">▼ LOSER OF THE DAY</div>
+          <div class="mover-content">
+            <div class="mover-ticker"><span class="dollar">$</span><span id="mover-down-ticker">—</span></div>
+            <div class="mover-change down" id="mover-down-change">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pitwall-method">
+        <div class="pitwall-method-title">▸ METHODOLOGY</div>
+        <div>
+          <strong>Rankings</strong> calculated from live DexScreener data: <strong>ENGINE</strong> (market cap), <strong>AERO</strong> (turnover), <strong>CHASSIS</strong> (liquidity), <strong>DRAG</strong> (volatility). PIT stat editorial. Daily snapshot at randomized time within 06:00-12:00 SAST. Race-day stats <strong>commit Friday 18:00 SAST</strong> before each race weekend.
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <footer class="gpf-foot">
@@ -930,6 +1247,295 @@ body::before{
   </footer>
 
 </main>
+
+<script>
+/* ===== PIT WALL JS (insert before <script src="news-loader.js"></script>) ===== */
+(function(){
+  'use strict';
+
+  // ============================================================
+  // TEAMS CONFIG — single source of truth for the 9 grid teams
+  // ============================================================
+  const TEAMS = [
+    { ticker: 'TURBO',     name: 'AI TURBO RACING',  chain: 'ETH', contract: '0xa35923162c49cf95e6bf26623385eb431ad920d3',         dxChain: 'ethereum', color: '#1e7fd9', logo: 'turbo.png',     editorialPit: 6.0 },
+    { ticker: 'MASK',      name: 'MASK STAYS ON',    chain: 'SOL', contract: '6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump',       dxChain: 'solana',   color: '#e62538', logo: 'mask.png',      editorialPit: 6.0 },
+    { ticker: 'NEURO',     name: 'NEURO RACING',     chain: 'CRO', contract: '0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b',         dxChain: 'cronos',   color: '#F58A1F', logo: 'neuroticat.png',editorialPit: 5.5 },
+    { ticker: 'SUS',       name: 'SUS SPEED RACING', chain: 'SOL', contract: 'GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge',       dxChain: 'solana',   color: '#C8102E', logo: 'sus.png',       editorialPit: 6.0 },
+    { ticker: 'LOL',       name: 'LOL RACING',       chain: 'SOL', contract: '53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD',       dxChain: 'solana',   color: '#22DD66', logo: 'lol.png',       editorialPit: 4.0 },
+    { ticker: 'SHIH',      name: 'SHIH SPEED',       chain: 'BNB', contract: '0xfCa5208e4074e06596CC28B47214A109E4c14444',         dxChain: 'bsc',      color: '#FFD200', logo: 'shih.png',      editorialPit: 5.0 },
+    { ticker: 'VIBECOIN',  name: 'VIBING CAT',       chain: 'SOL', contract: 'AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB',       dxChain: 'solana',   color: '#E91E63', logo: 'vibe.png',      editorialPit: 6.5 },
+    { ticker: 'MARS',      name: 'MARS RACING',      chain: 'SOL', contract: 'EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge',       dxChain: 'solana',   color: '#1A2B5C', logo: 'mars.png',      editorialPit: 4.0 },
+    { ticker: '420BLAZEIT',name: '420BLAZEIT',       chain: 'SOL', contract: 'Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge',       dxChain: 'solana',   color: '#7B2D8E', logo: '420blazeit.png',editorialPit: 3.5 },
+  ];
+
+  const TRACK_START = new Date('2026-05-14T00:00:00Z');
+  const SEASON_START = new Date('2026-06-01T00:00:00Z');
+
+  // ============================================================
+  // STAT FORMULAS — mirror site logic
+  // ============================================================
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+  function round(v){ return Math.round(v * 10) / 10; }
+
+  function calcStats(d, editorialPit){
+    if(!d || !d.mcap) return null;
+    const engine = clamp(Math.log10(d.mcap), 1.0, 9.5);
+    const turnover = d.vol / d.mcap;
+    const aero = clamp(turnover * 15 + 1.5, 1.0, 9.5);
+    const chassis = d.liq ? clamp(Math.log10(d.liq), 1.0, 9.5) : null;
+    
+    // DRAG v2: rewards genuine trading, penalizes inactive tokens
+    let drag;
+    if((d.vol || 0) < 500){
+      drag = 1.0;
+    } else {
+      const base = 10 - Math.abs(d.change24h || 0) / 3;
+      const volHealth = clamp(Math.log10((d.vol / d.mcap) * 100) + 2, 0, 1.5);
+      drag = clamp(base * volHealth, 1.0, 9.5);
+    }
+    
+    const pit = editorialPit != null ? editorialPit : 4.0;
+    const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
+    const overall = stats.length ? stats.reduce((a,b)=>a+b,0) / stats.length : null;
+    
+    return {
+      engine: round(engine),
+      aero: round(aero),
+      chassis: chassis !== null ? round(chassis) : null,
+      drag: round(drag),
+      pit: round(pit),
+      overall: overall !== null ? round(overall) : null,
+    };
+  }
+
+  // ============================================================
+  // FORMATTERS
+  // ============================================================
+  function fmtUsd(n){
+    if(n == null) return '—';
+    if(n >= 1_000_000) return '$' + (n/1_000_000).toFixed(2) + 'M';
+    if(n >= 1_000) return '$' + (n/1_000).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+  }
+  function fmtPct(n){
+    if(n == null) return '—';
+    return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+  }
+
+  // ============================================================
+  // FETCH ONE TOKEN
+  // ============================================================
+  async function fetchToken(team){
+    try {
+      const url = `https://api.dexscreener.com/latest/dex/tokens/${team.contract}`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if(!data.pairs || data.pairs.length === 0) return { error: 'no-pairs' };
+      
+      const onChain = data.pairs.filter(p => p.chainId === team.dxChain);
+      const pairs = onChain.length ? onChain : data.pairs;
+      pairs.sort((a,b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
+      const top = pairs[0];
+      
+      return {
+        mcap: top.marketCap || top.fdv || null,
+        price: parseFloat(top.priceUsd) || null,
+        vol: top.volume?.h24 || 0,
+        liq: top.liquidity?.usd || 0,
+        change24h: top.priceChange?.h24 || 0,
+      };
+    } catch (e){
+      return { error: e.message };
+    }
+  }
+
+  // ============================================================
+  // RENDER RANKINGS TABLE
+  // ============================================================
+  function renderRankings(teamData){
+    const valid = teamData.filter(t => t.data && !t.data.error && t.stats);
+    valid.sort((a,b) => (b.stats.overall || 0) - (a.stats.overall || 0));
+
+    const body = document.getElementById('rankings-body');
+    body.innerHTML = valid.map((t, idx) => {
+      const pos = idx + 1;
+      const change24h = t.data.change24h;
+      const changeClass = change24h > 0 ? 'pos' : change24h < 0 ? 'neg' : '';
+      return `
+        <tr>
+          <td>
+            <span class="rank-pos">
+              <span class="rank-pos-num">P${pos}</span>
+            </span>
+          </td>
+          <td>
+            <div class="rank-team">
+              <div class="rank-team-logo" style="background-image:url('${t.team.logo}')"></div>
+              <div class="rank-team-name">
+                <span class="rank-team-ticker"><span class="dollar">$</span>${t.team.ticker}</span>
+                <span class="rank-team-sub">${t.team.chain} · ${t.team.name}</span>
+              </div>
+            </div>
+          </td>
+          <td class="num rank-stat"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.mcap).replace('$','')}</td>
+          <td class="num rank-stat hide-mobile"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.vol).replace('$','')}</td>
+          <td class="num rank-stat ${changeClass} hide-mobile">${fmtPct(change24h)}</td>
+          <td class="num"><span class="rank-overall">${t.stats.overall}</span></td>
+        </tr>
+      `;
+    }).join('');
+
+    // Errored teams at bottom
+    const errored = teamData.filter(t => !t.data || t.data.error);
+    if(errored.length){
+      body.innerHTML += errored.map(t => `
+        <tr class="skeleton">
+          <td>—</td>
+          <td>
+            <div class="rank-team">
+              <div class="rank-team-logo" style="background-image:url('${t.team.logo}')"></div>
+              <div class="rank-team-name">
+                <span class="rank-team-ticker"><span class="dollar">$</span>${t.team.ticker}</span>
+                <span class="rank-team-sub">${t.team.chain} · data unavailable</span>
+              </div>
+            </div>
+          </td>
+          <td colspan="4" class="num" style="color:var(--dim);font-size:11px">no DexScreener pair</td>
+        </tr>
+      `).join('');
+    }
+
+    // Update movers
+    if(valid.length){
+      const byChange = [...valid].sort((a,b) => (b.data.change24h || 0) - (a.data.change24h || 0));
+      const winner = byChange[0];
+      const loser = byChange[byChange.length - 1];
+      if(winner && winner.data.change24h > 0){
+        document.getElementById('mover-up-ticker').textContent = winner.team.ticker;
+        document.getElementById('mover-up-change').textContent = fmtPct(winner.data.change24h);
+      }
+      if(loser && loser.data.change24h < 0){
+        document.getElementById('mover-down-ticker').textContent = loser.team.ticker;
+        document.getElementById('mover-down-change').textContent = fmtPct(loser.data.change24h);
+      }
+    }
+  }
+
+  // ============================================================
+  // RENDER HERO STATS (Pit Wall version)
+  // ============================================================
+  function renderHero(teamData){
+    const valid = teamData.filter(t => t.data && !t.data.error);
+    const totalMcap = valid.reduce((sum, t) => sum + (t.data.mcap || 0), 0);
+    document.getElementById('pit-stat-mcap').textContent = fmtUsd(totalMcap);
+
+    // Avg growth — PRE-SEASON until June 1
+    const now = new Date();
+    if(now < SEASON_START){
+      document.getElementById('pit-stat-growth').textContent = 'PRE-SEASON';
+    } else {
+      // Post-launch: calculate from June 1 baseline (will require history.json — phase 2)
+      document.getElementById('pit-stat-growth').textContent = '+—%';
+    }
+
+    // Best today
+    if(valid.length){
+      const byChange = [...valid].sort((a,b) => (b.data.change24h || 0) - (a.data.change24h || 0));
+      const best = byChange[0];
+      if(best && best.data.change24h > 0){
+        document.getElementById('pit-stat-best').textContent = `$${best.team.ticker} ${fmtPct(best.data.change24h)}`;
+      } else {
+        document.getElementById('pit-stat-best').textContent = '—';
+      }
+    }
+
+    document.getElementById('pit-last-updated').textContent = 'LAST UPDATED · ' + new Date().toLocaleString('en-GB', {hour12:false}).toUpperCase();
+
+    // Days tracked
+    const daysSinceStart = Math.max(1, Math.floor((now - TRACK_START) / (1000 * 60 * 60 * 24)) + 1);
+    const totalDays = Math.floor((SEASON_START - TRACK_START) / (1000 * 60 * 60 * 24));
+    document.getElementById('pit-tracking-days').textContent = `TRACKING · DAY ${daysSinceStart} of ${totalDays}`;
+  }
+
+  // ============================================================
+  // LOAD ALL DATA
+  // ============================================================
+  let dataLoaded = false;
+  async function loadPitWallData(){
+    if(dataLoaded) return;
+    dataLoaded = true;
+
+    const results = await Promise.all(TEAMS.map(t => fetchToken(t)));
+    const teamData = TEAMS.map((team, i) => ({
+      team,
+      data: results[i],
+      stats: results[i] && !results[i].error ? calcStats(results[i], team.editorialPit) : null,
+    }));
+
+    renderRankings(teamData);
+    renderHero(teamData);
+  }
+
+  // ============================================================
+  // TAB TOGGLE LOGIC
+  // ============================================================
+  function setActiveTab(name){
+    document.querySelectorAll('.gpc-tab').forEach(t => {
+      const isActive = t.dataset.tab === name;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive);
+    });
+    document.querySelectorAll('.gpc-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'gpc-panel-' + name);
+    });
+    
+    // Swap hero strip
+    const heroStrip = document.getElementById('gp-hero-counters');
+    const pitStrip = document.getElementById('gp-pit-counters');
+    if(heroStrip && pitStrip){
+      if(name === 'pitwall'){
+        heroStrip.style.display = 'none';
+        pitStrip.classList.add('active');
+        pitStrip.style.display = 'flex';
+        loadPitWallData(); // lazy-load when first visiting Pit Wall
+      } else {
+        heroStrip.style.display = '';
+        pitStrip.classList.remove('active');
+        pitStrip.style.display = '';
+      }
+    }
+    
+    // Update URL hash (no page reload, no scroll jump)
+    if(name === 'pitwall'){
+      if(location.hash !== '#pit-wall'){
+        history.replaceState(null, '', '#pit-wall');
+      }
+    } else {
+      if(location.hash){
+        history.replaceState(null, '', location.pathname);
+      }
+    }
+  }
+
+  document.querySelectorAll('.gpc-tab').forEach(t => {
+    t.addEventListener('click', () => setActiveTab(t.dataset.tab));
+  });
+
+  // Honor URL hash on load — #pit-wall opens Pit Wall directly
+  if(location.hash === '#pit-wall'){
+    setActiveTab('pitwall');
+  }
+
+  // Listen for hash changes (back/forward nav)
+  window.addEventListener('hashchange', () => {
+    const target = location.hash === '#pit-wall' ? 'pitwall' : 'paddock';
+    setActiveTab(target);
+  });
+})();
+/* ===== END PIT WALL JS ===== */
+
+</script>
 
 <script src="news-loader.js"></script>
 </body>
