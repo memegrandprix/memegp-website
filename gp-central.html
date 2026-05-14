@@ -1058,6 +1058,117 @@ body::before{
   .rank-pos-num{width:22px;height:22px;font-size:10px}
 }
 
+
+/* === Bigger ranking table headings === */
+.rankings-table th{
+  font-size:11px;
+  letter-spacing:1.8px;
+  padding:16px 14px;
+  color:var(--chrome-1, var(--text));
+  font-weight:800;
+}
+
+/* === View By stat selector === */
+.viewby-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 0 18px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:0;
+}
+.viewby-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:1.8px;
+  color:var(--muted);
+  margin-right:4px;
+}
+.viewby-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  cursor:pointer;
+  transition:all .15s ease;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:1.2px;
+  color:var(--muted);
+}
+.viewby-pill:hover{
+  border-color:var(--gold-dim);
+  color:var(--text);
+}
+.viewby-pill.active{
+  background:linear-gradient(90deg,rgba(255,204,0,.18),rgba(255,204,0,.06));
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.viewby-pill img{
+  width:16px;height:16px;flex-shrink:0;
+  filter:grayscale(1) brightness(1.5);
+  transition:filter .15s ease;
+}
+.viewby-pill.active img{
+  filter:none;
+}
+.viewby-pill.overall{
+  font-weight:900;
+}
+.viewby-pill.overall::before{
+  content:'★';color:var(--gold);font-size:13px;line-height:1;
+}
+
+/* === Expanded rankings columns: stat cells === */
+.rank-statcell{
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;
+  color:var(--text);
+  text-align:center;
+  padding:14px 8px;
+}
+.rank-statcell.highlight{
+  background:rgba(255,204,0,.08);
+  color:var(--gold);
+}
+.rankings-table th.statcol{
+  text-align:center;
+  padding:14px 8px;
+}
+.rankings-table th.statcol.highlight{
+  background:rgba(255,204,0,.08);
+  color:var(--gold);
+}
+
+/* === Mobile focus mode: hide secondary columns when stat pill selected === */
+@media(max-width:780px){
+  .rankings-table.focus-mode .col-mcap,
+  .rankings-table.focus-mode .col-vol,
+  .rankings-table.focus-mode .col-change{
+    display:none;
+  }
+  .viewby-bar{justify-content:flex-start}
+  .viewby-pill{padding:6px 10px;font-size:9px}
+  .viewby-label{width:100%;margin-bottom:4px}
+  .rank-statcell{font-size:11px;padding:10px 4px}
+}
+
+/* === Banner image stack — for tab-based swap === */
+.banner-bg{
+  transition:opacity .25s ease;
+}
+.banner-bg.is-pitwall{
+  opacity:0;
+  pointer-events:none;
+}
+body.tab-pitwall .banner-bg.is-paddock{
+  opacity:0;
+}
+body.tab-pitwall .banner-bg.is-pitwall{
+  opacity:1;
+}
+
+/* === Eyebrow text toggle === */
+.banner-eyebrow-pitwall{display:none}
+body.tab-pitwall .banner-eyebrow-paddock{display:none}
+body.tab-pitwall .banner-eyebrow-pitwall{display:block}
+
 /* ===== END PIT WALL CSS ===== */
 
 </style>
@@ -1115,10 +1226,12 @@ body::before{
 <div class="banner">
   <div class="banner-inner">
     <div class="banner-fallback" aria-hidden="true"></div>
-    <div class="banner-bg" aria-hidden="true" style="--banner-image:url('gp-central-banner.png'); --banner-pos:center 70%"></div>
+    <div class="banner-bg is-paddock" aria-hidden="true" style="--banner-image:url('gp-central-banner.png'); --banner-pos:center 70%"></div>
+    <div class="banner-bg is-pitwall" aria-hidden="true" style="--banner-image:url('pitwall-banner.png'); --banner-pos:center 70%"></div>
     <div class="banner-content">
       <div class="banner-top">
-        <div class="banner-eyebrow">RACE CONTROL · LIVE FROM THE PADDOCK</div>
+        <div class="banner-eyebrow banner-eyebrow-paddock">RACE CONTROL · LIVE FROM THE PADDOCK</div>
+        <div class="banner-eyebrow banner-eyebrow-pitwall">RACE CONTROL · LIVE FROM THE PIT WALL</div>
         <h1 class="banner-title">
           GP <span class="yellow">CENTRAL</span>
         </h1>
@@ -1189,10 +1302,20 @@ body::before{
 
       <div class="pitwall-rankings">
         <div class="pitwall-rankings-head">
-          <div>
+          <div style="width:100%">
             <div class="pitwall-rankings-title">GRID <span class="gold">RANKINGS</span></div>
-            <div class="pitwall-rankings-sub">SORTED BY CALCULATED OVERALL · LIVE</div>
+            <div class="pitwall-rankings-sub" id="rankings-subtitle">SORTED BY OVERALL · LIVE</div>
           </div>
+        </div>
+
+        <div class="viewby-bar">
+          <span class="viewby-label">VIEW BY:</span>
+          <button class="viewby-pill overall active" data-stat="overall">OVR</button>
+          <button class="viewby-pill" data-stat="engine"><img src="icon-engine.png" alt="">ENG</button>
+          <button class="viewby-pill" data-stat="aero"><img src="icon-aero.png" alt="">AER</button>
+          <button class="viewby-pill" data-stat="chassis"><img src="icon-chassis.png" alt="">CHA</button>
+          <button class="viewby-pill" data-stat="drag"><img src="icon-drag.png" alt="">DRG</button>
+          <button class="viewby-pill" data-stat="pit"><img src="icon-pit.png" alt="">PIT</button>
         </div>
 
         <table class="rankings-table" id="rankings-table">
@@ -1200,14 +1323,19 @@ body::before{
             <tr>
               <th>POS</th>
               <th>TEAM</th>
-              <th class="num">MCAP</th>
-              <th class="num hide-mobile">24H VOL</th>
-              <th class="num hide-mobile">24H</th>
+              <th class="num col-mcap">MCAP</th>
+              <th class="num hide-mobile col-vol">24H VOL</th>
+              <th class="num hide-mobile col-change">24H</th>
+              <th class="statcol" data-statcol="engine">ENG</th>
+              <th class="statcol" data-statcol="aero">AER</th>
+              <th class="statcol" data-statcol="chassis">CHA</th>
+              <th class="statcol" data-statcol="drag">DRG</th>
+              <th class="statcol" data-statcol="pit">PIT</th>
               <th class="num">OVERALL</th>
             </tr>
           </thead>
           <tbody id="rankings-body">
-            <tr class="skeleton"><td colspan="6">Loading rankings…</td></tr>
+            <tr class="skeleton"><td colspan="11">Loading rankings…</td></tr>
           </tbody>
         </table>
       </div>
@@ -1260,7 +1388,7 @@ body::before{
     { ticker: 'TURBO',     name: 'AI TURBO RACING',  chain: 'ETH', contract: '0xa35923162c49cf95e6bf26623385eb431ad920d3',         dxChain: 'ethereum', color: '#1e7fd9', logo: 'turbo.png',     editorialPit: 6.0 },
     { ticker: 'MASK',      name: 'MASK STAYS ON',    chain: 'SOL', contract: '6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump',       dxChain: 'solana',   color: '#e62538', logo: 'mask.png',      editorialPit: 6.0 },
     { ticker: 'NEURO',     name: 'NEURO RACING',     chain: 'CRO', contract: '0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b',         dxChain: 'cronos',   color: '#F58A1F', logo: 'neuroticat.png',editorialPit: 5.5 },
-    { ticker: 'SUS',       name: 'SUS SPEED RACING', chain: 'SOL', contract: 'GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge',       dxChain: 'solana',   color: '#C8102E', logo: 'sus.png',       editorialPit: 6.0 },
+    { ticker: 'SUS',       name: 'SUS SPEED RACING', chain: 'SOL', contract: 'GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge',       dxChain: 'solana',   color: '#C8102E', logo: 'susdog.png',    editorialPit: 6.0 },
     { ticker: 'LOL',       name: 'LOL RACING',       chain: 'SOL', contract: '53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD',       dxChain: 'solana',   color: '#22DD66', logo: 'lol.png',       editorialPit: 4.0 },
     { ticker: 'SHIH',      name: 'SHIH SPEED',       chain: 'BNB', contract: '0xfCa5208e4074e06596CC28B47214A109E4c14444',         dxChain: 'bsc',      color: '#FFD200', logo: 'shih.png',      editorialPit: 5.0 },
     { ticker: 'VIBECOIN',  name: 'VIBING CAT',       chain: 'SOL', contract: 'AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB',       dxChain: 'solana',   color: '#E91E63', logo: 'vibe.png',      editorialPit: 6.5 },
@@ -1353,15 +1481,45 @@ body::before{
   // ============================================================
   // RENDER RANKINGS TABLE
   // ============================================================
+  // State: which stat to sort by
+  let sortBy = 'overall';
+  let cachedTeamData = [];
+
+  const SUBTITLES = {
+    overall: 'SORTED BY OVERALL · LIVE',
+    engine:  'SORTED BY ENGINE · BIGGEST CARS ON THE GRID',
+    aero:    'SORTED BY AERO · MOST ACTIVE TRADERS',
+    chassis: 'SORTED BY CHASSIS · DEEPEST LIQUIDITY POOLS',
+    drag:    'SORTED BY DRAG · SMOOTHEST AT SPEED',
+    pit:     'SORTED BY PIT · COMMUNITY COORDINATION',
+  };
+
   function renderRankings(teamData){
+    cachedTeamData = teamData;
     const valid = teamData.filter(t => t.data && !t.data.error && t.stats);
-    valid.sort((a,b) => (b.stats.overall || 0) - (a.stats.overall || 0));
+    valid.sort((a,b) => (b.stats[sortBy] || 0) - (a.stats[sortBy] || 0));
+
+    // Update subtitle
+    const subtitleEl = document.getElementById('rankings-subtitle');
+    if(subtitleEl) subtitleEl.textContent = SUBTITLES[sortBy] || SUBTITLES.overall;
+
+    // Highlight selected stat column header
+    document.querySelectorAll('.rankings-table th.statcol').forEach(th => {
+      th.classList.toggle('highlight', th.dataset.statcol === sortBy);
+    });
+
+    // Toggle mobile focus mode (hide MCAP/Vol/Change columns when a stat pill is selected)
+    const tableEl = document.getElementById('rankings-table');
+    if(tableEl){
+      tableEl.classList.toggle('focus-mode', sortBy !== 'overall');
+    }
 
     const body = document.getElementById('rankings-body');
     body.innerHTML = valid.map((t, idx) => {
       const pos = idx + 1;
       const change24h = t.data.change24h;
       const changeClass = change24h > 0 ? 'pos' : change24h < 0 ? 'neg' : '';
+      const hl = (stat) => sortBy === stat ? 'highlight' : '';
       return `
         <tr>
           <td>
@@ -1378,9 +1536,14 @@ body::before{
               </div>
             </div>
           </td>
-          <td class="num rank-stat"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.mcap).replace('$','')}</td>
-          <td class="num rank-stat hide-mobile"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.vol).replace('$','')}</td>
-          <td class="num rank-stat ${changeClass} hide-mobile">${fmtPct(change24h)}</td>
+          <td class="num rank-stat col-mcap"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.mcap).replace('$','')}</td>
+          <td class="num rank-stat hide-mobile col-vol"><span class="rank-stat-currency">$</span>${fmtUsd(t.data.vol).replace('$','')}</td>
+          <td class="num rank-stat ${changeClass} hide-mobile col-change">${fmtPct(change24h)}</td>
+          <td class="rank-statcell ${hl('engine')}">${t.stats.engine ?? '—'}</td>
+          <td class="rank-statcell ${hl('aero')}">${t.stats.aero ?? '—'}</td>
+          <td class="rank-statcell ${hl('chassis')}">${t.stats.chassis ?? '—'}</td>
+          <td class="rank-statcell ${hl('drag')}">${t.stats.drag ?? '—'}</td>
+          <td class="rank-statcell ${hl('pit')}">${t.stats.pit ?? '—'}</td>
           <td class="num"><span class="rank-overall">${t.stats.overall}</span></td>
         </tr>
       `;
@@ -1401,7 +1564,7 @@ body::before{
               </div>
             </div>
           </td>
-          <td colspan="4" class="num" style="color:var(--dim);font-size:11px">no DexScreener pair</td>
+          <td colspan="9" class="num" style="color:var(--dim);font-size:11px">no DexScreener pair</td>
         </tr>
       `).join('');
     }
@@ -1506,6 +1669,9 @@ body::before{
       }
     }
     
+    // Update body class for banner/eyebrow swap
+    document.body.classList.toggle('tab-pitwall', name === 'pitwall');
+
     // Update URL hash (no page reload, no scroll jump)
     if(name === 'pitwall'){
       if(location.hash !== '#pit-wall'){
@@ -1517,6 +1683,19 @@ body::before{
       }
     }
   }
+
+  // View By pill click handlers
+  document.querySelectorAll('.viewby-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      sortBy = pill.dataset.stat;
+      document.querySelectorAll('.viewby-pill').forEach(p => {
+        p.classList.toggle('active', p === pill);
+      });
+      if(cachedTeamData.length){
+        renderRankings(cachedTeamData);
+      }
+    });
+  });
 
   document.querySelectorAll('.gpc-tab').forEach(t => {
     t.addEventListener('click', () => setActiveTab(t.dataset.tab));
