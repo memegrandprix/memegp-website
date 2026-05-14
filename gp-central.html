@@ -1169,6 +1169,69 @@ body.tab-pitwall .banner-bg.is-pitwall{
 body.tab-pitwall .banner-eyebrow-paddock{display:none}
 body.tab-pitwall .banner-eyebrow-pitwall{display:block}
 
+
+/* === Anchor card (top-right of rankings header, shows selected stat) === */
+.rankings-anchor{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--bg-card);
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:8px;
+  padding:14px 22px;
+  min-width:96px;
+  flex-shrink:0;
+}
+.rankings-anchor-icon{
+  width:48px;height:48px;
+  background:var(--bg-card-2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,204,0,.3);
+  position:relative;
+}
+.rankings-anchor-icon img{
+  width:28px;height:28px;
+  filter:brightness(1.2) saturate(1.1);
+  object-fit:contain;
+}
+.rankings-anchor-icon .star{
+  font-size:32px;color:var(--gold);line-height:1;
+}
+.rankings-anchor-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;font-weight:900;letter-spacing:1.5px;
+  color:var(--gold);
+}
+
+/* Rankings header layout — wrap title and anchor side-by-side */
+.pitwall-rankings-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.pitwall-rankings-head > div:first-child{flex:1;min-width:200px}
+
+/* Subtitle color treatment */
+.pitwall-rankings-sub .sub-prefix{
+  color:var(--text);
+}
+.pitwall-rankings-sub .sub-stat{
+  color:var(--gold);
+}
+.pitwall-rankings-sub-line2{
+  display:block;
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.3px;color:var(--muted);
+  margin-top:4px;
+  text-transform:none;
+}
+.pitwall-rankings-sub-line2 strong{
+  color:var(--chrome-1, var(--text));
+  font-weight:700;
+}
+
+/* Hide anchor on mobile */
+@media(max-width:780px){
+  .rankings-anchor{display:none}
+}
+
 /* ===== END PIT WALL CSS ===== */
 
 </style>
@@ -1302,9 +1365,18 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:block}
 
       <div class="pitwall-rankings">
         <div class="pitwall-rankings-head">
-          <div style="width:100%">
+          <div>
             <div class="pitwall-rankings-title">GRID <span class="gold">RANKINGS</span></div>
-            <div class="pitwall-rankings-sub" id="rankings-subtitle">SORTED BY OVERALL · LIVE</div>
+            <div class="pitwall-rankings-sub" id="rankings-subtitle">
+              <span class="sub-prefix">SORTED BY</span> <span class="sub-stat">OVERALL</span>
+              <span class="pitwall-rankings-sub-line2"><strong>LIVE</strong> · all stats combined</span>
+            </div>
+          </div>
+          <div class="rankings-anchor" id="rankings-anchor">
+            <div class="rankings-anchor-icon" id="rankings-anchor-icon">
+              <span class="star">★</span>
+            </div>
+            <div class="rankings-anchor-name" id="rankings-anchor-name">OVERALL</div>
           </div>
         </div>
 
@@ -1485,13 +1557,13 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:block}
   let sortBy = 'overall';
   let cachedTeamData = [];
 
-  const SUBTITLES = {
-    overall: 'SORTED BY OVERALL · LIVE',
-    engine:  'SORTED BY ENGINE · BIGGEST CARS ON THE GRID',
-    aero:    'SORTED BY AERO · MOST ACTIVE TRADERS',
-    chassis: 'SORTED BY CHASSIS · DEEPEST LIQUIDITY POOLS',
-    drag:    'SORTED BY DRAG · SMOOTHEST AT SPEED',
-    pit:     'SORTED BY PIT · COMMUNITY COORDINATION',
+  const STATS_META = {
+    overall: { name: 'OVERALL', line2: '<strong>LIVE</strong> · all stats combined',                                                       icon: null },
+    engine:  { name: 'ENGINE',  line2: '<strong>MARKET CAP</strong> · biggest cars on the grid',                                           icon: 'icon-engine.png' },
+    aero:    { name: 'AERO',    line2: '<strong>24H VOLUME ÷ MARKET CAP</strong> · most active traders',                                   icon: 'icon-aero.png' },
+    chassis: { name: 'CHASSIS', line2: '<strong>LIQUIDITY DEPTH</strong> · deepest pools',                                                 icon: 'icon-chassis.png' },
+    drag:    { name: 'DRAG',    line2: '<strong>PRICE STABILITY × VOLUME HEALTH</strong> · smoothest at speed',                            icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     line2: '<strong>ON-CHAIN COMMUNITY</strong> · editorial today, formula activates with full holder data',   icon: 'icon-pit.png' },
   };
 
   function renderRankings(teamData){
@@ -1499,9 +1571,25 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:block}
     const valid = teamData.filter(t => t.data && !t.data.error && t.stats);
     valid.sort((a,b) => (b.stats[sortBy] || 0) - (a.stats[sortBy] || 0));
 
-    // Update subtitle
+    // Update subtitle (two-line, with color highlighting)
     const subtitleEl = document.getElementById('rankings-subtitle');
-    if(subtitleEl) subtitleEl.textContent = SUBTITLES[sortBy] || SUBTITLES.overall;
+    const meta = STATS_META[sortBy] || STATS_META.overall;
+    if(subtitleEl){
+      subtitleEl.innerHTML = '<span class="sub-prefix">SORTED BY</span> <span class="sub-stat">' + meta.name + '</span>' +
+                             '<span class="pitwall-rankings-sub-line2">' + meta.line2 + '</span>';
+    }
+
+    // Update anchor card
+    const anchorIconEl = document.getElementById('rankings-anchor-icon');
+    const anchorNameEl = document.getElementById('rankings-anchor-name');
+    if(anchorIconEl && anchorNameEl){
+      if(meta.icon){
+        anchorIconEl.innerHTML = '<img src="' + meta.icon + '" alt="">';
+      } else {
+        anchorIconEl.innerHTML = '<span class="star">★</span>';
+      }
+      anchorNameEl.textContent = meta.name;
+    }
 
     // Highlight selected stat column header
     document.querySelectorAll('.rankings-table th.statcol').forEach(th => {
