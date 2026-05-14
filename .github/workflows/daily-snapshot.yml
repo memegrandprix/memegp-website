@@ -1,0 +1,37 @@
+name: Daily DexScreener Snapshot
+
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run snapshot script
+        run: python scripts/snapshot.py
+
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "memegp-bot"
+          git config user.email "bot@memegrandprix.com"
+          git add data/history.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Daily snapshot $(date -u +%Y-%m-%d)"
+            git push
+          fi
