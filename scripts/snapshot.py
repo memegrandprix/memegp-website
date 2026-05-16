@@ -34,6 +34,7 @@ TEAMS = [
     {"ticker": "VIBECOIN",   "chain": "SOL", "contract": "AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB"},
     {"ticker": "MARS",       "chain": "SOL", "contract": "EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge"},
     {"ticker": "420BLAZEIT", "chain": "SOL", "contract": "Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge"},
+    {"ticker": "PUP",        "chain": "BNB", "contract": "0x73b84f7e3901f39fc29f3704a03126d317ab4444"},
 ]
 
 DX_CHAIN = {
