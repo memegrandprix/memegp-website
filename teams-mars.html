@@ -1142,6 +1142,7 @@ const TEAMS = [
   { ticker: 'SHIH',  overall: 5.9, locked: true, current: false, link: 'teams-shih.html',       avatar: 'shih-driver.png' },
   { ticker: 'VIBECOIN',  overall: 5.5, locked: true, current: false, link: 'teams-vibe.html',       avatar: 'vibe-driver.png' },
   { ticker: '420BLAZEIT', overall: 4.1, locked: true, current: false, link: 'teams-420blazeit.html', avatar: '420blazeit-driver.png' },
+  { ticker: 'PUP',        overall: 5.8, locked: true, current: false, link: 'teams-pup.html',         avatar: 'pup-driver.png' },
   { ticker: 'MARS',  overall: 4.2, locked: true, current: true,  link: 'teams-mars.html',        avatar: 'mars-driver.png' },
 ];
 
@@ -1160,7 +1161,7 @@ TEAMS.forEach(t => {
   `;
 });
 
-for (let i = 10; i <= 15; i++) {
+for (let i = 11; i <= 15; i++) {
   const num = String(i).padStart(2, '0');
   miniHtml += `
     <div class="mini-card empty">

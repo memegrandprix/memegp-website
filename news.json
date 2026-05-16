@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-15-pup-official-team-10",
+      "type": "paddock",
+      "timestamp": "2026-05-15T18:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$PUP",
+        "name": "PUP POWER",
+        "color": "#F0B90B",
+        "logo": "pup.png",
+        "contract": "0x73b84f7e3901f39fc29f3704a03126d317ab4444",
+        "chain": "BNB"
+      },
+      "headline": "OFFICIAL TEAM 10 — $PUP JOINS THE GRID",
+      "body": "PUP POWER locked in as the tenth official team for Season 2. The mirrored BNB — community since 2021, Binance Alpha-listed, fully circulating supply. Driver: PUP. Car: BNB-01. Livery: ALPHA YELLOW. Starting profile: 5.8 overall — three-way tie for P1 entering the pre-season jockey. Verified credentials, real on-chain stats, real community.",
+      "tweet": "🏁 OFFICIAL TEAM 10 — @pupbnbchain\n\n$PUP — the mirrored #BNB — joins the grid.\n\nDRIVER: PUP\nCAR: BNB-01\nLIVERY: ALPHA YELLOW\n\nBinance Alpha-listed. Community since 2021. Keep BUILDin'.\n\nmemegrandprix.com/teams-pup.html\n\nlights out · june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-13-mars-official-team-8",
       "type": "paddock",
       "timestamp": "2026-05-13T13:00:00Z",
