@@ -1,0 +1,18 @@
+{
+  "_comment": "PIT scores for each team. Updated weekly after Thursday scoring cycle. Launch state = all 5.0 until first cycle completes.",
+  "last_updated": "2026-05-17",
+  "cycle_id": "launch-week",
+  "next_cycle_close": null,
+  "scores": {
+    "TURBO": 5.0,
+    "MASK": 5.0,
+    "NEURO": 5.0,
+    "SUS": 5.0,
+    "LOL": 5.0,
+    "SHIH": 5.0,
+    "VIBECOIN": 5.0,
+    "MARS": 5.0,
+    "420BLAZEIT": 5.0,
+    "PUP": 5.0
+  }
+}
