@@ -926,8 +926,10 @@ body::before{
 /* === STATS SYNC DISCLAIMER (transitional, inside the stats card top) === */
 .stats-disclaimer{
   background: rgba(170,136,34,.06);
+  border-top: 1px solid rgba(170,136,34,.20);
   border-bottom: 1px solid rgba(170,136,34,.20);
   padding: 9px 14px;
+  margin: 0;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -1052,10 +1054,6 @@ body::before{
 
   <!-- BLOCK 3 — STATS -->
   <div class="block block-stats">
-    <div class="stats-disclaimer">
-      <span class="icon">ⓘ</span>
-      <span><strong>Stats Sync</strong> · The Friday-freeze system goes live this week. Until then, snapshot dates may be stale. The live Pit Wall on the home page is the source of truth.</span>
-    </div>
     <div class="block-header stats">
       <div class="block-header-logo portrait" aria-hidden="true"></div>
       <div class="block-header-text">
@@ -1108,6 +1106,10 @@ body::before{
           <span class="stat-row-value">6.0</span>
         </div>
       </div>
+    </div>
+    <div class="stats-disclaimer">
+      <span class="icon">ⓘ</span>
+      <span><strong>Stats Sync</strong> · The Friday-freeze system goes live this week. Until then, snapshot dates may be stale. The live Pit Wall on the home page is the source of truth.</span>
     </div>
     <div class="mcap-strip">
       <div class="mcap-strip-left">
