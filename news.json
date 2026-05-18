@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-17-peponk-official-team-11",
+      "type": "paddock",
+      "timestamp": "2026-05-17T18:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$PEPONK",
+        "name": "PEPONK RACING",
+        "color": "#FB8802",
+        "logo": "peponk.png",
+        "contract": "Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 11 — $PEPONK JOINS THE GRID",
+      "body": "PEPONK RACING locked in as the eleventh official team for Season 2 — PEPE meets BONK, cigar lit, Solana on-chain. Driver: Peponk. Car: PEPONK-01. Livery: PEPONK ORANGE. Starting profile: 5.1 overall — mid-pack rookie with the strongest aero of the new entrants. Bonk taught Solana how to meme. Pepe taught the internet how to hold. PEPONK runs both.",
+      "tweet": "🏁 OFFICIAL TEAM 11 — @peponkwtf\n\n$PEPONK — PEPE meets BONK — joins the grid.\n\nDRIVER: Peponk\nCAR: PEPONK-01\nLIVERY: PEPONK ORANGE\n\nBonk taught Solana how to meme. Pepe taught the internet how to hold.\n\nmemegrandprix.com/teams-peponk.html\n\nlights out · june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-15-pup-official-team-10",
       "type": "paddock",
       "timestamp": "2026-05-15T18:00:00Z",

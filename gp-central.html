@@ -1504,156 +1504,36 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
     { ticker: 'MARS',      name: 'MARS RACING',      chain: 'SOL', contract: 'EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge',       dxChain: 'solana',   color: '#1A2B5C', logo: 'mars.png',      editorialPit: 4.0 },
     { ticker: '420BLAZEIT',name: '420BLAZEIT',       chain: 'SOL', contract: 'Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge',       dxChain: 'solana',   color: '#7B2D8E', logo: '420blazeit.png',editorialPit: 3.5 },
     { ticker: 'PUP',       name: 'PUP POWER',         chain: 'BNB', contract: '0x73b84f7e3901f39fc29f3704a03126d317ab4444',         dxChain: 'bsc',      color: '#F0B90B', logo: 'pup.png',       editorialPit: 6.0 },
+    { ticker: 'PEPONK',    name: 'PEPONK RACING',    chain: 'SOL', contract: 'Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump',       dxChain: 'solana',   color: '#FB8802', logo: 'peponk.png',    editorialPit: 5.0 },
   ];
 
   const TRACK_START = new Date('2026-05-14T00:00:00Z');
   const SEASON_START = new Date('2026-06-01T00:00:00Z');
 
   // ============================================================
-  // STAT FORMULAS — locked May 17 2026
-  // ENG: piecewise log10(mcap)
-  // AER: max of turnover-path and absolute-vol-path
-  // CHA: piecewise log10(liq)
-  // DRG: multi-day composite — 60% vol_score + 40% stab_score
-  // PIT: weekly X engagement, sourced from data/pit-scores.json
+  // STAT FORMULAS — mirror site logic
   // ============================================================
   function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
   function round(v){ return Math.round(v * 10) / 10; }
 
-  // Multi-day data loader for DRAG inputs
-  let historyCache = null;
-  let pitOverrideCache = null;
-  
-  async function loadHistory(){
-    if(historyCache !== null) return historyCache;
-    try {
-      const res = await fetch('data/history.json', { cache: 'no-cache' });
-      if(!res.ok) throw new Error('history.json HTTP ' + res.status);
-      const data = await res.json();
-      historyCache = data.snapshots || [];
-    } catch(e){
-      console.warn('history.json load failed:', e.message);
-      historyCache = [];
-    }
-    return historyCache;
-  }
-  
-  async function loadPitOverrides(){
-    if(pitOverrideCache !== null) return pitOverrideCache;
-    try {
-      const res = await fetch('data/pit-scores.json', { cache: 'no-cache' });
-      if(!res.ok) throw new Error('pit-scores.json HTTP ' + res.status);
-      const data = await res.json();
-      pitOverrideCache = data.scores || {};
-    } catch(e){
-      console.warn('pit-scores.json load failed:', e.message);
-      pitOverrideCache = {};
-    }
-    return pitOverrideCache;
-  }
-  
-  // Compute multi-day signals for one team from history snapshots
-  function teamMultiDay(ticker, snapshots){
-    const chgs = [];
-    const vols = [];
-    for(const s of snapshots){
-      if(s.teams && s.teams[ticker]){
-        chgs.push(s.teams[ticker].change_24h);
-        vols.push(s.teams[ticker].vol_24h);
-      }
-    }
-    let avg_vol = 0, std_chg = 0;
-    if(vols.length){
-      avg_vol = vols.reduce((a,b) => a+b, 0) / vols.length;
-    }
-    if(chgs.length >= 2){
-      const mean = chgs.reduce((a,b) => a+b, 0) / chgs.length;
-      if(chgs.length === 2){
-        std_chg = Math.abs(chgs[0] - chgs[1]) / Math.sqrt(2);
-      } else {
-        const variance = chgs.reduce((acc, v) => acc + (v - mean)**2, 0) / (chgs.length - 1);
-        std_chg = Math.sqrt(variance);
-      }
-    } else if(chgs.length === 1){
-      std_chg = Math.abs(chgs[0]);
-    }
-    return { avg_vol, std_chg, days: chgs.length };
-  }
-
-  function calcStats(d, ticker, history, pitOverrides){
+  function calcStats(d, editorialPit){
     if(!d || !d.mcap) return null;
+    const engine = clamp(Math.log10(d.mcap), 1.0, 9.5);
+    const turnover = d.vol / d.mcap;
+    const aero = clamp(turnover * 15 + 1.5, 1.0, 9.5);
+    const chassis = d.liq ? clamp(Math.log10(d.liq), 1.0, 9.5) : null;
     
-    // ============== ENGINE ==============
-    // Piecewise log10(mcap): $10K→1.5, $250K→4.5, $5M→7.0, $100M→9.5
-    const lm = Math.log10(d.mcap);
-    let engRaw;
-    if(lm <= 4.0)      engRaw = 1.5;
-    else if(lm <= 5.4) engRaw = 1.5 + (4.5 - 1.5) * (lm - 4.0) / (5.4 - 4.0);
-    else if(lm <= 6.7) engRaw = 4.5 + (7.0 - 4.5) * (lm - 5.4) / (6.7 - 5.4);
-    else if(lm <= 8.0) engRaw = 7.0 + (9.5 - 7.0) * (lm - 6.7) / (8.0 - 6.7);
-    else               engRaw = 9.5;
-    const engine = clamp(engRaw, 1.0, 9.5);
-    
-    // ============== AERO ==============
-    // Dual-path max-rule: max(turnover-path, absolute-vol-path)
-    // turnover: 0.1%→1.0, 5%→5.0, 30%→9.5  (log scale)
-    // abs vol:  $50→1.0, $5K→5.0, $100K→9.5  (log scale)
-    const turn = d.mcap ? (d.vol / d.mcap) * 100 : 0;
-    let aerTurn;
-    if(turn <= 0.1)     aerTurn = 1.0;
-    else if(turn <= 5)  aerTurn = 1.0 + 4.0 * (Math.log10(turn) - (-1)) / (Math.log10(5) - (-1));
-    else if(turn <= 30) aerTurn = 5.0 + 4.5 * (Math.log10(turn) - Math.log10(5)) / (Math.log10(30) - Math.log10(5));
-    else                aerTurn = 9.5;
-    
-    const v = d.vol || 0;
-    let aerAbs;
-    if(v <= 50)          aerAbs = 1.0;
-    else if(v <= 5000)   aerAbs = 1.0 + 4.0 * (Math.log10(v) - 1.7) / (3.7 - 1.7);
-    else if(v <= 100000) aerAbs = 5.0 + 4.5 * (Math.log10(v) - 3.7) / (5.0 - 3.7);
-    else                 aerAbs = 9.5;
-    
-    const aero = clamp(Math.max(aerTurn, aerAbs), 1.0, 9.5);
-    
-    // ============== CHASSIS ==============
-    // Piecewise log10(liq): $5K→1.0, $50K→5.0, $500K→9.5
-    let chassis = null;
-    if(d.liq){
-      const ll = Math.log10(d.liq);
-      let chaRaw;
-      if(ll <= 3.7)      chaRaw = 1.0;
-      else if(ll <= 4.7) chaRaw = 1.0 + 4.0 * (ll - 3.7);
-      else if(ll <= 5.7) chaRaw = 5.0 + 4.5 * (ll - 4.7);
-      else               chaRaw = 9.5;
-      chassis = clamp(chaRaw, 1.0, 9.5);
-    }
-    
-    // ============== DRAG ==============
-    // Multi-day composite: 60% vol_score + 40% stab_score
-    // Uses history.json snapshots for avg_vol and std_chg
+    // DRAG v2: rewards genuine trading, penalizes inactive tokens
     let drag;
-    const md = teamMultiDay(ticker, history || []);
-    if(md.days === 0){
-      drag = 5.0;  // no history yet → neutral (graceful fallback for new teams)
-    } else if(md.avg_vol < 500){
-      drag = 1.0;  // dead-coin floor
+    if((d.vol || 0) < 500){
+      drag = 1.0;
     } else {
-      // vol_score: log10($500)=2.7 → 0, log10($100K)=5.0 → 10
-      const volScore = clamp((Math.log10(md.avg_vol) - 2.7) / 2.3 * 10, 0, 10);
-      // stab_score: std=0 → 10, std=20 → 0
-      const stabScore = clamp(10 - md.std_chg / 2, 0, 10);
-      const dragRaw = 0.6 * volScore + 0.4 * stabScore;
-      drag = clamp(1.0 + 8.5 * (dragRaw / 10), 1.0, 9.5);
+      const base = 10 - Math.abs(d.change24h || 0) / 3;
+      const volHealth = clamp(Math.log10((d.vol / d.mcap) * 100) + 2, 0, 1.5);
+      drag = clamp(base * volHealth, 1.0, 9.5);
     }
     
-    // ============== PIT ==============
-    // Sourced from data/pit-scores.json (weekly update mechanism)
-    // Launch state: all teams 5.0 until first Thursday cycle completes
-    let pit = 5.0;  // default
-    if(pitOverrides && ticker && pitOverrides[ticker] != null){
-      pit = pitOverrides[ticker];
-    }
-    
-    // ============== OVERALL ==============
+    const pit = editorialPit != null ? editorialPit : 4.0;
     const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a,b)=>a+b,0) / stats.length : null;
     
@@ -1719,10 +1599,10 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   const STATS_META = {
     overall: { name: 'OVERALL', mechanics: 'LIVE',                              flavor: 'all stats combined',                                            icon: null },
     engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                        flavor: 'biggest cars on the grid',                                      icon: 'icon-engine.png' },
-    aero:    { name: 'AERO',    mechanics: '24H TRADING ACTIVITY',              flavor: 'most active traders',                                           icon: 'icon-aero.png' },
+    aero:    { name: 'AERO',    mechanics: '24H VOLUME ÷ MARKET CAP',           flavor: 'most active traders',                                           icon: 'icon-aero.png' },
     chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                   flavor: 'deepest pools',                                                 icon: 'icon-chassis.png' },
-    drag:    { name: 'DRAG',    mechanics: 'MULTI-DAY STABILITY × ACTIVITY',    flavor: 'smoothest at speed',                                            icon: 'icon-drag.png' },
-    pit:     { name: 'PIT',     mechanics: 'WEEKLY X ENGAGEMENT RATE',          flavor: 'how your community shows up',                                   icon: 'icon-pit.png' },
+    drag:    { name: 'DRAG',    mechanics: 'PRICE STABILITY × VOLUME HEALTH',   flavor: 'smoothest at speed',                                            icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     mechanics: 'ON-CHAIN COMMUNITY',                flavor: 'editorial today, formula activates with full holder data',     icon: 'icon-pit.png' },
   };
 
   function renderRankings(teamData){
@@ -1880,19 +1760,11 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
     if(dataLoaded) return;
     dataLoaded = true;
 
-    // Load all three data sources in parallel
-    const [tokenResults, history, pitOverrides] = await Promise.all([
-      Promise.all(TEAMS.map(t => fetchToken(t))),
-      loadHistory(),
-      loadPitOverrides(),
-    ]);
-    
+    const results = await Promise.all(TEAMS.map(t => fetchToken(t)));
     const teamData = TEAMS.map((team, i) => ({
       team,
-      data: tokenResults[i],
-      stats: tokenResults[i] && !tokenResults[i].error 
-        ? calcStats(tokenResults[i], team.ticker, history, pitOverrides) 
-        : null,
+      data: results[i],
+      stats: results[i] && !results[i].error ? calcStats(results[i], team.editorialPit) : null,
     }));
 
     renderRankings(teamData);
