@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-18-momo-official-team-12",
+      "type": "paddock",
+      "timestamp": "2026-05-18T18:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$MOMO",
+        "name": "MOMO MOTORS",
+        "color": "#F989B9",
+        "logo": "momo.png",
+        "contract": "G4zwEA9NSd3nMBbEj31MMPq2853Brx2oGsKzex3ebonk",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 12 — $MOMO JOINS THE GRID",
+      "body": "MOMO MOTORS locked in as the twelfth official team for Season 2 — the Queen of Shibas takes the pink slot. Driver: Queen Momo. Car: QUEEN-01. Livery: BUBBLEGUM PINK. Starting profile: 6.4 overall — debuting at P4 on the grid with AERO 9.5 (formula ceiling, $526K daily volume) and CHASSIS 7.0. The first female Shiba Inu on Solana joins the race.",
+      "tweet": "🏁 OFFICIAL TEAM 12 — @Momo_bonk\n\n$MOMO — Queen of Shibas — joins the grid.\n\nDRIVER: Queen Momo\nCAR: QUEEN-01\nLIVERY: BUBBLEGUM PINK\n\nFirst female Shiba Inu on Solana. Debuting at P4.\n\nmemegrandprix.com/teams-momo.html\n\nrace week · june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-17-peponk-official-team-11",
       "type": "paddock",
       "timestamp": "2026-05-17T18:00:00Z",

@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="robots" content="index,follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUS SPEED Racing — $SUS | MEME GP Season 2</title>
-<meta name="description" content="$SUS confirmed for Season 2. Driver, car, stats — the SUS SPEED Racing reveal.">
+<title>MOMO MOTORS — $MOMO | MEME GP Season 2</title>
+<meta name="description" content="$MOMO confirmed for Season 2. Driver, car, stats — the MOMO MOTORS reveal. Queen of Shibas. Solana on-chain.">
 
 <!-- Open Graph (Facebook, LinkedIn, Discord, etc.) -->
-<meta property="og:title" content="SUS SPEED Racing — $SUS joins MEME GP Season 2">
-<meta property="og:description" content="$SUS joins the grid. 6.0 overall — solid mid-pack contender with rock-solid DRAG. Real stats from on-chain data.">
-<meta property="og:image" content="https://memegrandprix.com/susdog-card.png">
+<meta property="og:title" content="MOMO MOTORS — $MOMO joins MEME GP Season 2">
+<meta property="og:description" content="$MOMO joins the grid. 6.4 overall — Queen of Shibas. Solana-native, female-coded, racing royalty.">
+<meta property="og:image" content="https://memegrandprix.com/momo-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://memegrandprix.com/teams-sus.html">
+<meta property="og:url" content="https://memegrandprix.com/teams-momo.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MEME GP">
 
@@ -21,10 +21,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@MemeGrandPrix">
 <meta name="twitter:creator" content="@MemeGrandPrix">
-<meta name="twitter:title" content="SUS SPEED Racing — $SUS joins MEME GP Season 2">
-<meta name="twitter:description" content="$SUS joins the grid. 6.0 overall — solid mid-pack contender.">
-<meta name="twitter:image" content="https://memegrandprix.com/susdog-card.png">
-<meta name="twitter:image:alt" content="$SUS reveal card — SUS SPEED Racing on the MEME GP Season 2 grid">
+<meta name="twitter:title" content="MOMO MOTORS — $MOMO joins MEME GP Season 2">
+<meta name="twitter:description" content="$MOMO joins the grid. 6.4 overall — Queen of Shibas.">
+<meta name="twitter:image" content="https://memegrandprix.com/momo-card.png">
+<meta name="twitter:image:alt" content="$MOMO reveal card — MOMO MOTORS on the MEME GP Season 2 grid">
 
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,8 +47,9 @@
   --gold:#ffcc00;
   --gold-dim:#aa8822;
   --green:#00ff88;
-  --turbo-blue:#C8102E;
-  --turbo-blue-glow:#E8344C;
+  --turbo-blue:#F989B9;
+  --turbo-blue-glow:#FFC2DA;
+  --secondary:#1B5E20;
 
   /* === UNIFIED HEADER TOKENS === */
   --header-h:64px;          /* fixed height for all 3 block headers */
@@ -289,7 +290,7 @@ body::before{
 }
 .block-header-logo.portrait{
   border-radius:50%;
-  background-image:url('susdog-driver.png');
+  background-image:url('momo-driver.png');
   background-size:cover;
   background-position:center 25%;
   border:2px solid var(--gold);
@@ -353,7 +354,7 @@ body::before{
 /* BLOCK 1 — DRIVER body */
 .driver-image-area{
   flex:1;
-  background-image:url('susdog-driver.png');
+  background-image:url('momo-driver.png');
   background-size:cover;background-position:center 30%;
   position:relative;min-height:340px;
 }
@@ -416,7 +417,7 @@ body::before{
 /* BLOCK 2 — CAR body (flush like Block 1) */
 .car-image-area{
   flex:1;
-  background-image:url('susdog-car.png');
+  background-image:url('momo-car.png');
   background-size:cover;background-position:center;
   position:relative;min-height:380px;
 }
@@ -900,6 +901,28 @@ body::before{
   .banner-stat{font-size:8.5px;padding:5px 8px;letter-spacing:1px}
 }
 
+/* === MOMO pink accent overrides (Bubblegum Pink livery) === */
+.block-footer{
+  border-top:1px solid var(--secondary);
+}
+.car-share-btn{
+  border-color:var(--secondary);
+  color:var(--secondary);
+}
+.car-share-btn:hover{
+  border-color:var(--secondary);
+  background:rgba(27,94,32,.1);
+  color:var(--text);
+}
+.driver-meta-value{
+  color:var(--text);
+}
+.driver-meta-row:nth-child(2) .driver-meta-value{
+  color:var(--secondary);
+  font-weight:700;
+}
+
+
 /* === STATS SYNC DISCLAIMER (transitional, inside the stats card top) === */
 .stats-disclaimer{
   background: rgba(170,136,34,.06);
@@ -985,23 +1008,23 @@ body::before{
   <!-- BLOCK 1 — DRIVER -->
   <div class="block">
     <div class="block-header driver">
-      <div class="block-header-logo">SS</div>
+      <div class="block-header-logo">MM</div>
       <div class="block-header-text">
-        <div class="block-header-title"><span class="accent">SUS</span> SPEED</div>
+        <div class="block-header-title"><span class="accent">Queen Momo</span></div>
         <div class="block-header-sub">DRIVER PROFILE</div>
       </div>
     </div>
-    <div class="driver-image-area" aria-label="SUS — SUS SPEED Racing driver"></div>
+    <div class="driver-image-area" aria-label="Queen Momo — MOMO MOTORS driver"></div>
     <div class="driver-info-pad">
       <div class="driver-ticker">
-        <span class="dollar">$</span><span class="ticker">SUS</span>
+        <span class="dollar">$</span><span class="ticker">MOMO</span>
       </div>
     </div>
     <div class="block-footer">
       <div class="driver-meta-grid">
         <div class="driver-meta-row">
           <span class="driver-meta-label">CAR #</span>
-          <span class="driver-meta-value">4</span>
+          <span class="driver-meta-value">12</span>
         </div>
         <div class="driver-meta-row">
           <span class="driver-meta-label">CHAIN</span>
@@ -1014,16 +1037,16 @@ body::before{
   <!-- BLOCK 2 — CAR -->
   <div class="block">
     <div class="block-header car">
-      <div class="block-header-logo">SS</div>
+      <div class="block-header-logo">MM</div>
       <div class="block-header-text">
-        <div class="block-header-title">THE MACHINE · SUS RED</div>
-        <div class="block-header-sub">LIVERY · SUS SPEED</div>
+        <div class="block-header-title">THE MACHINE · BUBBLEGUM PINK</div>
+        <div class="block-header-sub">LIVERY · $MOMO</div>
       </div>
     </div>
-    <div class="car-image-area" aria-label="SUS SPEED Racing F1-style car"></div>
+    <div class="car-image-area" aria-label="MOMO MOTORS F1-style car"></div>
     <div class="car-info-pad">
       <div class="car-livery-info">
-        Livery: <strong>SUS RED</strong> · Built by <strong>SUS SPEED</strong>
+        Livery: <strong>BUBBLEGUM PINK</strong> · Built by <strong>$MOMO</strong>
       </div>
       <a href="#" id="carShareBtn" class="car-share-btn">𝕏 SHARE CARD</a>
     </div>
@@ -1034,53 +1057,53 @@ body::before{
     <div class="block-header stats">
       <div class="block-header-logo portrait" aria-hidden="true"></div>
       <div class="block-header-text">
-        <div class="block-header-title">$SUS</div>
-        <div class="block-header-sub">SUS SPEED RACING</div>
+        <div class="block-header-title">$MOMO</div>
+        <div class="block-header-sub">MOMO MOTORS</div>
       </div>
       <div class="block-header-right">
-        <div class="block-header-overall-num">6.0</div>
+        <div class="block-header-overall-num">6.4</div>
         <div class="block-header-overall-label">OVERALL</div>
       </div>
     </div>
     <div class="stat-list">
-      <div class="stat-row" style="--score-pct:55%">
+      <div class="stat-row" style="--score-pct:56%">
         <div class="stat-row-icon"><img src="icon-engine.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">ENGINE</span>
-          <span class="stat-row-value">5.5</span>
+          <span class="stat-row-value">5.6</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:43%">
+      <div class="stat-row" style="--score-pct:95%">
         <div class="stat-row-icon"><img src="icon-aero.png" alt="" class="wide"></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">AERO</span>
-          <span class="stat-row-value">4.3</span>
+          <span class="stat-row-value">9.5</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:45%">
+      <div class="stat-row" style="--score-pct:70%">
         <div class="stat-row-icon"><img src="icon-chassis.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">CHASSIS</span>
-          <span class="stat-row-value">4.5</span>
+          <span class="stat-row-value">7.0</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:95%">
+      <div class="stat-row" style="--score-pct:50%">
         <div class="stat-row-icon"><img src="icon-drag.png" alt="" class="wide"></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">DRAG</span>
-          <span class="stat-row-value">9.5</span>
+          <span class="stat-row-value">5.0</span>
         </div>
       </div>
-      <div class="stat-row" style="--score-pct:60%">
+      <div class="stat-row" style="--score-pct:50%">
         <div class="stat-row-icon"><img src="icon-pit.png" alt=""></div>
         <div class="stat-row-fill"></div>
         <div class="stat-row-main">
           <span class="stat-row-name">PIT</span>
-          <span class="stat-row-value">6.0</span>
+          <span class="stat-row-value">5.0</span>
         </div>
       </div>
     </div>
@@ -1091,11 +1114,11 @@ body::before{
     <div class="mcap-strip">
       <div class="mcap-strip-left">
         <div class="mcap-strip-label">MARKET CAP</div>
-        <div class="mcap-strip-value"><span class="currency">$</span>346K</div>
+        <div class="mcap-strip-value"><span class="currency">$</span>966.56K</div>
       </div>
       <div class="mcap-strip-right">
-        24H VOL · <span class="vol">$2.9K</span>
-        <span class="snapshot">Snapshot · May 9</span>
+        24H VOL · <span class="vol">$526K</span>
+        <span class="snapshot">Snapshot · May 18</span>
       </div>
     </div>
   </div>
@@ -1107,7 +1130,7 @@ body::before{
   <div class="share-card-inner">
     <div class="share-card-text">
       <div class="share-card-title">📸 SHARE THIS REVEAL CARD</div>
-      <div class="share-card-sub">Snap an image of the full $SUS reveal and post it to <strong>𝕏</strong>. Tag <strong>@MemeGrandPrix</strong>.</div>
+      <div class="share-card-sub">Snap an image of the full $MOMO reveal and post it to <strong>𝕏</strong>. Tag <strong>@MemeGrandPrix</strong>.</div>
       <div class="share-status" id="shareStatus"></div>
     </div>
     <button class="share-btn-big" id="shareCardBtn">
@@ -1145,11 +1168,11 @@ body::before{
   <div class="share-modal">
     <button class="share-modal-close" id="shareModalClose" aria-label="Close">×</button>
     <div class="share-modal-title" id="shareModalTitle">📸 CARD READY!</div>
-    <div class="share-modal-sub">Your $SUS reveal card has been saved. Now post it on 𝕏 in 3 steps:</div>
+    <div class="share-modal-sub">Your $MOMO reveal card has been saved. Now post it on 𝕏 in 3 steps:</div>
     <div class="share-steps">
       <div class="share-step">
         <div class="share-step-num">1</div>
-        <div class="share-step-text">Card image was downloaded as <code>memegp-sus-reveal.png</code> — check your Downloads folder.</div>
+        <div class="share-step-text">Card image was downloaded as <code>memegp-momo-reveal.png</code> — check your Downloads folder.</div>
       </div>
       <div class="share-step">
         <div class="share-step-num">2</div>
@@ -1157,7 +1180,7 @@ body::before{
       </div>
       <div class="share-step">
         <div class="share-step-num">3</div>
-        <div class="share-step-text">Paste the text, then drag <code>memegp-sus-reveal.png</code> into the tweet box. Post it 🏁</div>
+        <div class="share-step-text">Paste the text, then drag <code>memegp-momo-reveal.png</code> into the tweet box. Post it 🏁</div>
       </div>
     </div>
     <div class="share-modal-actions">
@@ -1171,18 +1194,18 @@ body::before{
 <script>
 // Mini grid
 const TEAMS = [
-  { ticker: 'TURBO', overall: 7.7, locked: true, current: false, link: 'teams-turbo.html', avatar: 'turbo-driver.png' },
-  { ticker: 'MASK',  overall: 5.5, locked: true, current: false, link: 'teams-mask.html',  avatar: 'mask-driver.jpg' },
+  { ticker: 'TURBO', overall: 7.7, locked: true, current: false, link: 'teams-turbo.html',      avatar: 'turbo-driver.png' },
+  { ticker: 'MASK',  overall: 5.5, locked: true, current: false, link: 'teams-mask.html',       avatar: 'mask-driver.jpg' },
   { ticker: 'NEURO', overall: 3.7, locked: true, current: false, link: 'teams-neuroticat.html', avatar: 'neuroticat-driver.png' },
-  { ticker: 'SUS',   overall: 6.0, locked: true, current: true,  link: 'teams-sus.html', avatar: 'susdog-driver.png' },
-  { ticker: 'LOL',   overall: 3.9, locked: true, current: false, link: 'teams-lol.html', avatar: 'lol-driver.png' },
-  { ticker: 'SHIH',  overall: 5.9, locked: true, current: false, link: 'teams-shih.html', avatar: 'shih-driver.png' },
-  { ticker: 'VIBECOIN',  overall: 5.5, locked: true, current: false, link: 'teams-vibe.html', avatar: 'vibe-driver.png' },
+  { ticker: 'SUS',   overall: 6.0, locked: true, current: false, link: 'teams-sus.html',        avatar: 'susdog-driver.png' },
+  { ticker: 'LOL',   overall: 3.9, locked: true, current: false, link: 'teams-lol.html',        avatar: 'lol-driver.png' },
+  { ticker: 'SHIH',  overall: 5.9, locked: true, current: false, link: 'teams-shih.html',       avatar: 'shih-driver.png' },
+  { ticker: 'VIBECOIN',  overall: 5.5, locked: true, current: false,  link: 'teams-vibe.html',       avatar: 'vibe-driver.png' },
   { ticker: 'MARS', overall: 4.2, locked: true, current: false, link: 'teams-mars.html', avatar: 'mars-driver.png' },
   { ticker: '420BLAZEIT', overall: 4.1, locked: true, current: false, link: 'teams-420blazeit.html', avatar: '420blazeit-driver.png' },
-  { ticker: 'PUP',        overall: 5.8, locked: true, current: false, link: 'teams-pup.html',         avatar: 'pup-driver.png' },
+  { ticker: 'PUP', overall: 5.8, locked: true, current: false, link: 'teams-pup.html', avatar: 'pup-driver.png' },
   { ticker: 'PEPONK', overall: 5.1, locked: true, current: false, link: 'teams-peponk.html', avatar: 'peponk-driver.png' },
-  { ticker: 'MOMO', overall: 6.4, locked: true, current: false, link: 'teams-momo.html', avatar: 'momo-driver.png' },
+  { ticker: 'MOMO', overall: 6.4, locked: true, current: true,  link: 'teams-momo.html', avatar: 'momo-driver.png' },
 ];
 
 let miniHtml = '';
@@ -1217,14 +1240,14 @@ for (let i = 13; i <= 15; i++) {
 document.getElementById('miniGrid').innerHTML = miniHtml;
 
 // === SHARE CARD AS IMAGE ===
-const SHARE_TWEET_TEXT = `🏁 $SUS is on the Season 2 grid.
+const SHARE_TWEET_TEXT = `🏁 $MOMO is on the Season 2 grid.
 
-SUS SPEED Racing. 6.0 overall.
-DRAG 9.5 · PIT 6.0 · ENGINE 5.5
+MOMO MOTORS. 6.4 overall.
+AERO 9.5 · CHASSIS 7.0 · ENGINE 5.6
 
 @MemeGrandPrix · #MemeGP`;
 
-const PAGE_URL = 'https://memegrandprix.com/teams-sus.html';
+const PAGE_URL = 'https://memegrandprix.com/teams-momo.html';
 const TWEET_INTENT_URL = 'https://x.com/intent/post?text=' + encodeURIComponent(SHARE_TWEET_TEXT) + '&url=' + encodeURIComponent(PAGE_URL);
 
 const shareBtn = document.getElementById('shareCardBtn');
@@ -1306,7 +1329,7 @@ async function shareCard(){
   try {
     const canvas = await captureCard();
     const blob = await canvasToBlob(canvas);
-    const file = new File([blob], 'memegp-sus-reveal.png', { type: 'image/png' });
+    const file = new File([blob], 'memegp-momo-reveal.png', { type: 'image/png' });
 
     // MOBILE PATH — Web Share API: image attaches directly, no modal needed
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -1337,7 +1360,7 @@ async function shareCard(){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'memegp-sus-reveal.png';
+    a.download = 'memegp-momo-reveal.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
