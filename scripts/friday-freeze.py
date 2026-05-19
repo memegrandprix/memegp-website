@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 """
-MEME GP - Daily DexScreener Snapshot
+MEME GP - Friday-Freeze Weekly Snapshot
 
-Pulls live on-chain data from DexScreener for all grid teams and appends
-one row to data/history.json. Designed to run daily at 09:00 SAST via
-GitHub Actions cron.
+Runs every Friday at 09:00 SAST (07:00 UTC) via GitHub Actions cron.
+Captures a frozen weekly snapshot of all grid teams that gp-central.html
+reads during the parc fermé window (Fri 09:00 → Mon 00:00 SAST).
 
-Failure mode:
-  - If a team fetch fails, its entry contains an "error" field
-  - The snapshot row is still written with whatever data is available
-  - Better to have partial data than missing days
+Writes raw on-chain data only — gp-central.html runs B-prime on the
+snapshot data the same way it does on live data. No formula duplication.
+
+Outputs:
+  data/snapshot.json                  - the canonical "current frozen state"
+  data/snapshots/YYYY-MM-DD.json      - archive copy for race engine + analytics
 
 Run manually:
-  python scripts/snapshot.py
+  python scripts/friday-freeze.py
+
+Or with a fixed timestamp (for testing):
+  FREEZE_AT=2026-06-05T07:00:00Z python scripts/friday-freeze.py
 """
 
 import json
+import os
 import sys
 import urllib.request
 import urllib.error
@@ -23,7 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-# Teams config
+# Teams config - mirrors gp-central.html TEAMS array (12 teams as of May 19)
 TEAMS = [
     {"ticker": "TURBO",      "chain": "ETH", "contract": "0xa35923162c49cf95e6bf26623385eb431ad920d3"},
     {"ticker": "MASK",       "chain": "SOL", "contract": "6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump"},
@@ -47,11 +53,12 @@ DX_CHAIN = {
 }
 
 DEXSCREENER_API = "https://api.dexscreener.com/latest/dex/tokens/{contract}"
-USER_AGENT = "memegrandprix-snapshot/1.0"
+USER_AGENT = "memegrandprix-friday-freeze/1.0"
 TIMEOUT_SECONDS = 15
 
 
 def fetch_team(team):
+    """Identical logic to snapshot.py - returns raw on-chain data."""
     contract = team["contract"]
     expected_chain = DX_CHAIN.get(team["chain"])
     url = DEXSCREENER_API.format(contract=contract)
@@ -89,43 +96,36 @@ def fetch_team(team):
     }
 
 
-def load_history(path):
-    if not path.exists():
-        return {"snapshots": []}
-    try:
-        with path.open() as f:
-            data = json.load(f)
-        if not isinstance(data, dict) or not isinstance(data.get("snapshots"), list):
-            print(f"WARN {path} exists but is malformed - starting fresh", file=sys.stderr)
-            return {"snapshots": []}
-        return data
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"WARN failed to read {path}: {e} - starting fresh", file=sys.stderr)
-        return {"snapshots": []}
+def iso_week_string(date):
+    """ISO 8601 week format: 2026-W23"""
+    year, week, _ = date.isocalendar()
+    return f"{year}-W{week:02d}"
 
 
-def save_history(path, history):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(".json.tmp")
-    with tmp.open("w") as f:
-        json.dump(history, f, indent=2, ensure_ascii=False)
-        f.write("\n")
-    tmp.replace(path)
+def get_freeze_timestamp():
+    """Allow env override for testing, default to now."""
+    override = os.environ.get("FREEZE_AT")
+    if override:
+        return datetime.fromisoformat(override.replace("Z", "+00:00"))
+    return datetime.now(timezone.utc)
 
 
 def main():
-    now = datetime.now(timezone.utc)
+    now = get_freeze_timestamp()
     today = now.strftime("%Y-%m-%d")
     timestamp = now.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     repo_root = Path(__file__).resolve().parent.parent
-    history_path = repo_root / "data" / "history.json"
+    data_dir = repo_root / "data"
+    snapshot_path = data_dir / "snapshot.json"
+    archive_dir = data_dir / "snapshots"
+    archive_path = archive_dir / f"{today}.json"
 
-    print(f"MEME GP snapshot - {timestamp}")
-    print(f"  history file: {history_path}")
+    print(f"MEME GP friday-freeze - {timestamp}")
+    print(f"  ISO week:       {iso_week_string(now)}")
+    print(f"  snapshot file:  {snapshot_path}")
+    print(f"  archive file:   {archive_path}")
     print()
-
-    history = load_history(history_path)
 
     teams_data = {}
     success_count = 0
@@ -144,24 +144,32 @@ def main():
     print()
     print(f"  fetched: {success_count}/{len(TEAMS)} ok, {error_count} errors")
 
-    new_row = {
-        "date":         today,
-        "captured_at":  timestamp,
-        "teams":        teams_data,
+    # Build the snapshot
+    snapshot = {
+        "frozen_at":   timestamp,
+        "freeze_week": iso_week_string(now),
+        "teams":       teams_data,
     }
 
-    snapshots = history["snapshots"]
-    existing_idx = next((i for i, s in enumerate(snapshots) if s.get("date") == today), None)
-    if existing_idx is not None:
-        print(f"  overwriting existing snapshot for {today}")
-        snapshots[existing_idx] = new_row
-    else:
-        print(f"  appending new snapshot for {today}")
-        snapshots.append(new_row)
+    # Ensure directories exist
+    data_dir.mkdir(parents=True, exist_ok=True)
+    archive_dir.mkdir(parents=True, exist_ok=True)
 
-    save_history(history_path, history)
-    print(f"  wrote {history_path}")
-    print(f"  total snapshots in history: {len(snapshots)}")
+    # Atomic write to current snapshot
+    tmp = snapshot_path.with_suffix(".json.tmp")
+    with tmp.open("w") as f:
+        json.dump(snapshot, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    tmp.replace(snapshot_path)
+    print(f"  wrote {snapshot_path}")
+
+    # Atomic write to archive
+    tmp = archive_path.with_suffix(".json.tmp")
+    with tmp.open("w") as f:
+        json.dump(snapshot, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    tmp.replace(archive_path)
+    print(f"  wrote {archive_path}")
 
     if success_count == 0:
         print("\nALL fetches failed - exiting with error", file=sys.stderr)
