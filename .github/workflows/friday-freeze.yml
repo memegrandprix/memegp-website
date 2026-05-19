@@ -1,0 +1,33 @@
+name: Friday-Freeze Weekly Snapshot
+on:
+  schedule:
+    # Friday 07:00 UTC = Friday 09:00 SAST (UTC+2, no DST)
+    # GitHub Actions cron has ~5min jitter, which is fine -
+    # we just need the snapshot in place by Friday morning SAST.
+    - cron: '0 7 * * 5'
+  workflow_dispatch:
+jobs:
+  friday-freeze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run friday-freeze script
+        run: python scripts/friday-freeze.py
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "memegp-bot"
+          git config user.email "bot@memegrandprix.com"
+          git add data/snapshot.json data/snapshots/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Friday-freeze snapshot $(date -u +%Y-%m-%d)"
+            git push
+          fi
