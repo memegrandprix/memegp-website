@@ -1780,7 +1780,10 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   }
 
   // Render the Pit Wall using a frozen snapshot — no DexScreener fetch.
-  function renderFrozenMode(snapshot){
+  // Snapshot contains raw on-chain data (Python script writes snake_case
+  // fields). We compute B-prime stats here, same as live mode, using
+  // shared stats-calculator.js. No formula duplication.
+  async function renderFrozenMode(snapshot){
     setStatusIndicator('frozen', '\ud83d\udd12 PARC FERM\u00c9 \u00b7 STATS LOCKED \u00b7 RACE WEEKEND');
     // Override the "last updated" line with the freeze moment
     const upd = document.getElementById('pit-last-updated');
@@ -1791,18 +1794,25 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
         hour: '2-digit', minute: '2-digit',
       })}`;
     }
-    // Build teamData from the snapshot
+    // Load history.json for DRAG's multi-day calc (parallel-safe with snapshot)
+    const history = await fetchHistory();
+    // Build teamData from the snapshot — normalising snake_case to camelCase
     const teamData = TEAMS.map(team => {
       const t = snapshot.teams[team.ticker];
       if (!t || t.error) {
         return { team, data: null, stats: null };
       }
+      const data = {
+        mcap:      t.mcap,
+        price:     t.price,
+        vol:       t.vol_24h,
+        liq:       t.liq,
+        change24h: t.change_24h,
+      };
       return {
         team,
-        data: {
-          mcap: t.mcap, price: t.price, vol: t.vol, liq: t.liq, change24h: t.change24h
-        },
-        stats: t.stats,
+        data,
+        stats: calcStats(data, team.editorialPit, history, team.ticker),
       };
     });
     renderRankings(teamData);
