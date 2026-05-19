@@ -257,8 +257,140 @@
     pit:     { name: 'PIT',     mechanics: 'COMMUNITY RAID SCORE',                       flavor: 'how loud is your community',                               icon: 'icon-pit.png' },
   };
 
+  // ============================================================
+  // MODE DETECTION — live vs frozen (Friday-Freeze mechanic)
+  // ------------------------------------------------------------
+  // Race weeks run Monday 00:00 SAST → Sunday 23:59 SAST.
+  // Stats move LIVE Monday through Friday 09:00 SAST.
+  // Stats are FROZEN Friday 09:00 SAST through Sunday 23:59 SAST.
+  // On Monday 00:00 SAST, the new week starts fresh and stats move
+  // again until the next Friday 09:00 freeze moment.
+  //
+  // SAST = UTC+2 year-round (no daylight saving in South Africa).
+  // Friday 09:00 SAST = Friday 07:00 UTC.
+  // Monday 00:00 SAST = Sunday 22:00 UTC.
+  //
+  // All functions accept an optional `date` parameter for testing.
+  // ============================================================
+
+  // SAST offset in milliseconds (UTC+2)
+  const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
+
+  // Convert a JS Date to a "SAST view" — a Date whose UTC methods
+  // return SAST values. This is the standard trick for timezone math
+  // without pulling in a library.
+  function toSAST(date) {
+    return new Date(date.getTime() + SAST_OFFSET_MS);
+  }
+
+  // Build a UTC Date from SAST components (year, month, day, hour).
+  function fromSAST(year, month, day, hour, min) {
+    return new Date(Date.UTC(year, month, day, hour, min || 0) - SAST_OFFSET_MS);
+  }
+
+  // getNextFreezeMoment(date) — when is the next Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns the NEXT one
+  // (i.e. one week later). This keeps semantics clean: at freeze
+  // moment, we're already frozen.
+  function getNextFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+    // Days until Friday (5). If today IS Friday, that's 0 days unless
+    // we're already past 09:00 SAST, in which case we want next Friday.
+    let daysUntilFri = (5 - dow + 7) % 7;
+    if (dow === 5) {
+      // It's Friday in SAST — check the hour
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h > 9 || (h === 9 && m > 0)) {
+        daysUntilFri = 7;
+      } else if (h === 9 && m === 0) {
+        // Exactly at the freeze moment → next one is in a week
+        daysUntilFri = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilFri, 9, 0);
+  }
+
+  // getLastFreezeMoment(date) — when was the most recent Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns THAT moment
+  // (i.e. we just entered frozen mode this very instant).
+  function getLastFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days since Friday (5)
+    let daysSinceFri = (dow - 5 + 7) % 7;
+    if (dow === 5) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h < 9 || (h === 9 && m === 0)) {
+        // Friday before or exactly at 09:00 — the last freeze was last Friday
+        // (exception: exactly at 09:00 is the freeze moment itself)
+        if (h === 9 && m === 0) {
+          daysSinceFri = 0; // freeze moment is right now
+        } else {
+          daysSinceFri = 7; // last freeze was last Friday
+        }
+      }
+      // Friday after 09:00 SAST — daysSinceFri = 0 is already correct
+    }
+    return fromSAST(year, month, day - daysSinceFri, 9, 0);
+  }
+
+  // getNextLiveMoment(date) — when does the next live week start?
+  // Live mode begins Monday 00:00 SAST.
+  function getNextLiveMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days until next Monday (1)
+    let daysUntilMon = (1 - dow + 7) % 7;
+    if (dow === 1) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      // If it's Monday and we're past 00:00 (which is basically always
+      // unless we hit the exact instant), the next Monday is a week away
+      if (h > 0 || m > 0) {
+        daysUntilMon = 7;
+      } else {
+        // Exactly Monday 00:00 → next live moment is a week away
+        daysUntilMon = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilMon, 0, 0);
+  }
+
+  // getCurrentMode(date) — 'live' or 'frozen'?
+  // Live:   Monday 00:00 SAST  →  Friday 09:00 SAST (exclusive)
+  // Frozen: Friday 09:00 SAST  →  Monday 00:00 SAST (exclusive)
+  function getCurrentMode(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const dow = sastView.getUTCDay();
+    const h   = sastView.getUTCHours();
+    const m   = sastView.getUTCMinutes();
+    // Frozen window: Fri 09:00+ through Sun 23:59
+    if (dow === 5 && (h > 9 || (h === 9 && m >= 0))) return 'frozen';
+    if (dow === 6) return 'frozen'; // Saturday
+    if (dow === 0) return 'frozen'; // Sunday
+    // Everything else is live
+    return 'live';
+  }
+
   // ----- public API -----
   const MEMEGP_Stats = {
+    // Stat computation
     calcStats:   calcStats,
     calcEngine:  calcEngine,
     calcAero:    calcAero,
@@ -268,6 +400,11 @@
     clamp:       clamp,
     round:       round,
     STATS_META:  STATS_META,
+    // Mode detection (Friday-Freeze)
+    getCurrentMode:      getCurrentMode,
+    getLastFreezeMoment: getLastFreezeMoment,
+    getNextFreezeMoment: getNextFreezeMoment,
+    getNextLiveMoment:   getNextLiveMoment,
   };
 
   // Browser global
