@@ -1,16 +1,26 @@
 /**
- * MEME GP — Shared Stat Calculator
+ * MEME GP — Shared Stat Calculator (B-prime, deployed 2026-05-19)
  * ============================================================
  * Single source of truth for the 5-stat formulas.
  *
- * Extracted from gp-central.html (lines 1517-1549) on 2026-05-19
- * during Friday-freeze build sprint sub-component 1.
+ * Design: B-prime — approved May 17, 2026 (see transcript
+ * 2026-05-17-14-33-38-memegp-formula-rebuild-magnet-strategy.txt)
  *
  * Used by:
  *   - gp-central.html        (live Pit Wall rendering)
  *   - team pages             (stat displays)
  *   - Friday-freeze snapshot (every Friday 09:00 SAST)
  *   - race engine            (consumes frozen stats)
+ *
+ * Why piecewise: the May 17 session diagnosed three problems with the
+ * old simple-log formulas:
+ *   1. DRAG ceiling pile-up (11 of 12 teams at 9.5)
+ *   2. AERO scores compressed to 1-3 (no differentiation)
+ *   3. ENGINE bottom too harsh ($10K coins → 1.0)
+ *
+ * B-prime fixes each by anchoring SCOREPOSTS at meaningful mcap/vol/liq
+ * levels and interpolating between them, so growth is measurable and
+ * the field spreads across the full 1.0-9.5 range.
  *
  * IMPORTANT: This file IS the formula. Any change here ripples
  * across the entire platform. Modify with care.
@@ -23,85 +33,248 @@
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   function round(v) { return Math.round(v * 10) / 10; }
 
-  /**
-   * Compute the five stats from a token's on-chain snapshot.
-   *
-   * @param {object} d              — on-chain data
-   * @param {number} d.mcap         — market cap (USD)
-   * @param {number} d.vol          — 24h volume (USD)
-   * @param {number} d.liq          — liquidity pool depth (USD)
-   * @param {number} d.change24h    — 24h price change (percent, e.g. -5.03)
-   * @param {number} [editorialPit] — PIT score (editorial, defaults to 4.0)
-   *
-   * @returns {object|null} { engine, aero, chassis, drag, pit, overall }
-   *                       or null if mcap is missing/zero.
-   */
-  function calcStats(d, editorialPit) {
-    if (!d || !d.mcap) return null;
-
-    // ENGINE — raw power from market cap (log10, clamped 1.0–9.5)
-    const engine = clamp(Math.log10(d.mcap), 1.0, 9.5);
-
-    // AERO — downforce from trading velocity (turnover linear, clamped 1.0–9.5)
-    const turnover = d.vol / d.mcap;
-    const aero = clamp(turnover * 15 + 1.5, 1.0, 9.5);
-
-    // CHASSIS — stiffness from liquidity depth (log10, clamped 1.0–9.5)
-    // Null if liquidity is missing (excluded from overall average).
-    const chassis = d.liq ? clamp(Math.log10(d.liq), 1.0, 9.5) : null;
-
-    // DRAG — straight-line stability from price calm × volume health
-    // Inactive tokens (24h vol < $500) get a 1.0 floor — penalty for dead trade.
-    let drag;
-    if ((d.vol || 0) < 500) {
-      drag = 1.0;
+  // ============================================================
+  // ENGINE — raw power from market cap
+  // ------------------------------------------------------------
+  // Piecewise log10(mcap) with scoreposts:
+  //   $10K   → 1.5  (entry-tier)
+  //   $250K  → 4.5  (mid-tier)
+  //   $5M    → 7.0  (strong)
+  //   $100M+ → 9.5  (whale)
+  // ============================================================
+  function calcEngine(mcap) {
+    if (!mcap || mcap <= 0) return 1.0;
+    const lm = Math.log10(mcap);
+    let raw;
+    if (lm <= 4.0) {
+      raw = 1.5;
+    } else if (lm <= 5.4) {        // $10K → $250K
+      raw = 1.5 + (4.5 - 1.5) * (lm - 4.0) / (5.4 - 4.0);
+    } else if (lm <= 6.7) {        // $250K → $5M
+      raw = 4.5 + (7.0 - 4.5) * (lm - 5.4) / (6.7 - 5.4);
+    } else if (lm <= 8.0) {        // $5M → $100M
+      raw = 7.0 + (9.5 - 7.0) * (lm - 6.7) / (8.0 - 6.7);
     } else {
-      const base = 10 - Math.abs(d.change24h || 0) / 3;
-      const volHealth = clamp(Math.log10((d.vol / d.mcap) * 100) + 2, 0, 1.5);
-      drag = clamp(base * volHealth, 1.0, 9.5);
+      raw = 9.5;
     }
+    return clamp(raw, 1.0, 9.5);
+  }
 
-    // PIT — editorial today, formula activates with full holder/engagement data
-    const pit = editorialPit != null ? editorialPit : 4.0;
+  // ============================================================
+  // AERO — downforce from trading activity
+  // ------------------------------------------------------------
+  // DUAL PATH: take the MAX of two scores. A team strong in EITHER
+  // dimension gets credit. This fixes the old problem where huge-cap
+  // teams with real volume scored low on turnover %.
+  //
+  // Path 1 (turnover): vol / mcap as %
+  //   0.1%  → 1.0
+  //   5%    → 5.0
+  //   30%+  → 9.5
+  //
+  // Path 2 (absolute volume in USD):
+  //   $50      → 1.0
+  //   $5K      → 5.0
+  //   $100K+   → 9.5
+  // ============================================================
+  function calcAero(mcap, vol) {
+    if (!mcap || !vol) return 1.0;
+    // Path 1 — turnover
+    const turn = (vol / mcap) * 100;
+    let aerTurn;
+    if (turn <= 0.1) {
+      aerTurn = 1.0;
+    } else if (turn <= 5) {
+      // log scale: log10(0.1) = -1, log10(5) ≈ 0.7
+      aerTurn = 1.0 + 4.0 * (Math.log10(turn) - (-1)) / (Math.log10(5) - (-1));
+    } else if (turn <= 30) {
+      aerTurn = 5.0 + 4.5 * (Math.log10(turn) - Math.log10(5)) / (Math.log10(30) - Math.log10(5));
+    } else {
+      aerTurn = 9.5;
+    }
+    // Path 2 — absolute volume
+    let aerAbs;
+    if (vol <= 50) {
+      aerAbs = 1.0;
+    } else if (vol <= 5000) {
+      aerAbs = 1.0 + 4.0 * (Math.log10(vol) - 1.7) / (3.7 - 1.7);
+    } else if (vol <= 100000) {
+      aerAbs = 5.0 + 4.5 * (Math.log10(vol) - 3.7) / (5.0 - 3.7);
+    } else {
+      aerAbs = 9.5;
+    }
+    return clamp(Math.max(aerTurn, aerAbs), 1.0, 9.5);
+  }
 
-    // OVERALL — mean of all non-null stats
+  // ============================================================
+  // CHASSIS — stiffness from liquidity depth
+  // ------------------------------------------------------------
+  // Piecewise log10(liq) with scoreposts:
+  //   $5K    → 1.0  (thin pool)
+  //   $50K   → 5.0  (mid pool)
+  //   $500K+ → 9.5  (deep pool)
+  // Returns null if liq is missing — excluded from overall.
+  // ============================================================
+  function calcChassis(liq) {
+    if (!liq || liq <= 0) return null;
+    const ll = Math.log10(liq);
+    let raw;
+    if (ll <= 3.7) {              // ≤ $5K
+      raw = 1.0;
+    } else if (ll <= 4.7) {       // $5K → $50K
+      raw = 1.0 + 4.0 * (ll - 3.7);
+    } else if (ll <= 5.7) {       // $50K → $500K
+      raw = 5.0 + 4.5 * (ll - 4.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // DRAG — straight-line stability from multi-day data
+  // ------------------------------------------------------------
+  // Multi-day composite:
+  //   drag_raw = 0.6 × vol_score + 0.4 × stab_score, then map to 1.0-9.5
+  //
+  //   vol_score:  log10(avg_vol) scaled (avg_vol $500 → 0, $100K → 10)
+  //   stab_score: 10 - std_chg/2 (std 0 → 10, std 20+ → 0)
+  //
+  // FLOOR: if avg_vol < $500, drag = 1.0 (dead-trade penalty)
+  //
+  // history is an array of past snapshots, each with .teams[ticker]
+  // containing { vol, change24h }. If history is missing/empty, falls
+  // back to single-day (vol, change24h) from `d` itself.
+  // ============================================================
+  function calcDrag(d, history, ticker) {
+    // Build the history we'll use — if no snapshots, use today only
+    let chgs = [];
+    let vols = [];
+    if (history && history.length > 0 && ticker) {
+      for (const snap of history) {
+        const t = snap && snap.teams && snap.teams[ticker];
+        if (t) {
+          if (typeof t.change24h === 'number') chgs.push(t.change24h);
+          else if (typeof t.change_24h === 'number') chgs.push(t.change_24h);
+          if (typeof t.vol === 'number') vols.push(t.vol);
+          else if (typeof t.vol_24h === 'number') vols.push(t.vol_24h);
+        }
+      }
+    }
+    // If no history found, use today's snapshot
+    if (chgs.length === 0 && d) {
+      chgs = [d.change24h || 0];
+      vols = [d.vol || 0];
+    }
+    // Compute avg_vol
+    const avgVol = vols.length ? vols.reduce((a, b) => a + b, 0) / vols.length : 0;
+    // Floor: dead trade → 1.0
+    if (avgVol < 500) return 1.0;
+    // Compute std of change24h
+    let std;
+    if (chgs.length < 2) {
+      std = Math.abs(chgs[0] || 0);
+    } else if (chgs.length === 2) {
+      // 2-point std — matches the Python: abs(diff) / sqrt(2)
+      std = Math.abs(chgs[0] - chgs[1]) / Math.sqrt(2);
+    } else {
+      const mean = chgs.reduce((a, b) => a + b, 0) / chgs.length;
+      const variance = chgs.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / (chgs.length - 1);
+      std = Math.sqrt(variance);
+    }
+    // Score components
+    // vol_score: (log10(avg_vol) - 2.7) / (5.0 - 2.7) * 10, clamped 0-10
+    // So log10($500) = 2.7 → 0; log10($100K) = 5.0 → 10
+    const volScore = clamp((Math.log10(avgVol) - 2.7) / (5.0 - 2.7) * 10, 0, 10);
+    const stabScore = clamp(10 - std / 2, 0, 10);
+    // Weighted composite (volume-led at 60/40)
+    const dragRaw = 0.6 * volScore + 0.4 * stabScore;
+    // Map 0-10 → 1.0-9.5 (so dead-perfect gets 9.5, dead-zero gets 1.0)
+    const drag = 1.0 + (9.5 - 1.0) * dragRaw / 10;
+    return clamp(drag, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // PIT — community raid score (weekly)
+  // ------------------------------------------------------------
+  // All teams start each race week at PIT = 5.0 (neutral baseline).
+  // PIT moves up/down based on community raid performance on
+  // designated MEME GP tweets during the week.
+  //
+  // The editorialPit value passed in comes from the TEAMS array
+  // in gp-central.html — currently locked at 5.0 for all teams.
+  // Future: post-race-1, this gets driven by raid scoring data.
+  // Defaults to 5.0 if absent.
+  // ============================================================
+  function calcPit(editorialPit) {
+    return editorialPit != null ? editorialPit : 5.0;
+  }
+
+  // ============================================================
+  // MAIN — compute all 5 stats + OVERALL
+  // ------------------------------------------------------------
+  // @param {object} d              — today's on-chain data
+  // @param {number} d.mcap         — market cap (USD)
+  // @param {number} d.vol          — 24h volume (USD)
+  // @param {number} d.liq          — liquidity pool depth (USD)
+  // @param {number} d.change24h    — 24h price change (percent)
+  // @param {number} [editorialPit] — PIT score (community raid; default 5.0)
+  // @param {array}  [history]      — array of past snapshots for DRAG
+  // @param {string} [ticker]       — team ticker (needed for history lookup)
+  //
+  // @returns {object|null} {engine, aero, chassis, drag, pit, overall}
+  //                        or null if mcap is missing/zero.
+  // ============================================================
+  function calcStats(d, editorialPit, history, ticker) {
+    if (!d || !d.mcap) return null;
+    const engine  = calcEngine(d.mcap);
+    const aero    = calcAero(d.mcap, d.vol || 0);
+    const chassis = calcChassis(d.liq);
+    const drag    = calcDrag(d, history, ticker);
+    const pit     = calcPit(editorialPit);
+    // OVERALL — mean of non-null stats
     const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
-
     return {
-      engine: round(engine),
-      aero: round(aero),
+      engine:  round(engine),
+      aero:    round(aero),
       chassis: chassis !== null ? round(chassis) : null,
-      drag: round(drag),
-      pit: round(pit),
+      drag:    round(drag),
+      pit:     round(pit),
       overall: overall !== null ? round(overall) : null,
     };
   }
 
-  // ----- formula metadata (mirrors STATS_META in gp-central.html) -----
+  // ----- formula metadata -----
+  // Subtitles updated to reflect B-prime mechanics. Communities reading
+  // this should understand what each stat measures and how to improve.
   const STATS_META = {
-    overall: { name: 'OVERALL', mechanics: 'LIVE',                              flavor: 'all stats combined',                                          icon: null },
-    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                        flavor: 'biggest cars on the grid',                                    icon: 'icon-engine.png' },
-    aero:    { name: 'AERO',    mechanics: '24H VOLUME \u00f7 MARKET CAP',      flavor: 'most active traders',                                         icon: 'icon-aero.png' },
-    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                   flavor: 'deepest pools',                                               icon: 'icon-chassis.png' },
-    drag:    { name: 'DRAG',    mechanics: 'PRICE STABILITY \u00d7 VOLUME HEALTH', flavor: 'smoothest at speed',                                      icon: 'icon-drag.png' },
-    pit:     { name: 'PIT',     mechanics: 'ON-CHAIN COMMUNITY',                flavor: 'editorial today, formula activates with full holder data',    icon: 'icon-pit.png' },
+    overall: { name: 'OVERALL', mechanics: 'LIVE',                                       flavor: 'all stats combined',                                       icon: null },
+    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                                 flavor: 'biggest cars on the grid',                                 icon: 'icon-engine.png' },
+    aero:    { name: 'AERO',    mechanics: 'TRADING ACTIVITY (TURNOVER OR ABS VOLUME)',  flavor: 'most active traders',                                      icon: 'icon-aero.png' },
+    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                            flavor: 'deepest pools',                                            icon: 'icon-chassis.png' },
+    drag:    { name: 'DRAG',    mechanics: 'MULTI-DAY VOLUME \u00d7 PRICE STABILITY',    flavor: 'smoothest at speed',                                       icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     mechanics: 'COMMUNITY RAID SCORE',                       flavor: 'how loud is your community',                               icon: 'icon-pit.png' },
   };
 
   // ----- public API -----
   const MEMEGP_Stats = {
-    calcStats: calcStats,
-    clamp: clamp,
-    round: round,
-    STATS_META: STATS_META,
+    calcStats:   calcStats,
+    calcEngine:  calcEngine,
+    calcAero:    calcAero,
+    calcChassis: calcChassis,
+    calcDrag:    calcDrag,
+    calcPit:     calcPit,
+    clamp:       clamp,
+    round:       round,
+    STATS_META:  STATS_META,
   };
 
   // Browser global
   if (typeof window !== 'undefined') {
     global.MEMEGP_Stats = MEMEGP_Stats;
   }
-
-  // CommonJS (Node.js — for the Friday-freeze snapshot script)
+  // CommonJS (Node.js — for Friday-freeze snapshot script + tests)
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = MEMEGP_Stats;
   }
