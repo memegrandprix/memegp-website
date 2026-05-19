@@ -1485,6 +1485,7 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
 
 </main>
 
+<script src="stats-calculator.js"></script>
 <script>
 /* ===== PIT WALL JS ===== */
 (function(){
@@ -1512,41 +1513,12 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   const SEASON_START = new Date('2026-06-01T00:00:00Z');
 
   // ============================================================
-  // STAT FORMULAS — mirror site logic
+  // STAT FORMULAS — sourced from shared stats-calculator.js
+  // (See stats-calculator.js for the actual formula definitions.)
   // ============================================================
-  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-  function round(v){ return Math.round(v * 10) / 10; }
-
-  function calcStats(d, editorialPit){
-    if(!d || !d.mcap) return null;
-    const engine = clamp(Math.log10(d.mcap), 1.0, 9.5);
-    const turnover = d.vol / d.mcap;
-    const aero = clamp(turnover * 15 + 1.5, 1.0, 9.5);
-    const chassis = d.liq ? clamp(Math.log10(d.liq), 1.0, 9.5) : null;
-    
-    // DRAG v2: rewards genuine trading, penalizes inactive tokens
-    let drag;
-    if((d.vol || 0) < 500){
-      drag = 1.0;
-    } else {
-      const base = 10 - Math.abs(d.change24h || 0) / 3;
-      const volHealth = clamp(Math.log10((d.vol / d.mcap) * 100) + 2, 0, 1.5);
-      drag = clamp(base * volHealth, 1.0, 9.5);
-    }
-    
-    const pit = editorialPit != null ? editorialPit : 4.0;
-    const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
-    const overall = stats.length ? stats.reduce((a,b)=>a+b,0) / stats.length : null;
-    
-    return {
-      engine: round(engine),
-      aero: round(aero),
-      chassis: chassis !== null ? round(chassis) : null,
-      drag: round(drag),
-      pit: round(pit),
-      overall: overall !== null ? round(overall) : null,
-    };
-  }
+  const clamp = window.MEMEGP_Stats.clamp;
+  const round = window.MEMEGP_Stats.round;
+  const calcStats = window.MEMEGP_Stats.calcStats;
 
   // ============================================================
   // FORMATTERS
@@ -1597,14 +1569,7 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   let sortBy = 'overall';
   let cachedTeamData = [];
 
-  const STATS_META = {
-    overall: { name: 'OVERALL', mechanics: 'LIVE',                              flavor: 'all stats combined',                                            icon: null },
-    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                        flavor: 'biggest cars on the grid',                                      icon: 'icon-engine.png' },
-    aero:    { name: 'AERO',    mechanics: '24H VOLUME ÷ MARKET CAP',           flavor: 'most active traders',                                           icon: 'icon-aero.png' },
-    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                   flavor: 'deepest pools',                                                 icon: 'icon-chassis.png' },
-    drag:    { name: 'DRAG',    mechanics: 'PRICE STABILITY × VOLUME HEALTH',   flavor: 'smoothest at speed',                                            icon: 'icon-drag.png' },
-    pit:     { name: 'PIT',     mechanics: 'ON-CHAIN COMMUNITY',                flavor: 'editorial today, formula activates with full holder data',     icon: 'icon-pit.png' },
-  };
+  const STATS_META = window.MEMEGP_Stats.STATS_META;
 
   function renderRankings(teamData){
     cachedTeamData = teamData;
