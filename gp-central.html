@@ -1256,6 +1256,25 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   color:var(--muted);
 }
 
+/* POWER RANKINGS — large yellow text in the right side of the banner */
+.stat-focus-rankings{
+  position:absolute;
+  right:32px;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:'Orbitron',sans-serif;
+  font-size:38px;
+  font-weight:900;
+  letter-spacing:1px;
+  line-height:.95;
+  text-align:right;
+  color:var(--gold);
+  text-shadow:0 0 24px rgba(255,204,0,.4), 0 0 8px rgba(255,204,0,.6);
+  z-index:1;
+  pointer-events:none;
+  white-space:nowrap;
+}
+
 /* Mobile: icon centers behind, text centers */
 @media(max-width:780px){
   .stat-focus-banner{
@@ -1273,6 +1292,12 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   .stat-focus-icon .star{font-size:120px}
   .stat-focus-name{font-size:26px}
   .stat-focus-mechanics{font-size:12px}
+  .stat-focus-rankings{display:none}
+}
+
+/* Tablet: smaller POWER RANKINGS so it doesn't crowd */
+@media(min-width:781px) and (max-width:1100px){
+  .stat-focus-rankings{font-size:26px}
 }
 
 /* ===== END PIT WALL CSS ===== */
@@ -1429,13 +1454,14 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
 
         <div class="stat-focus-banner" id="stat-focus-banner">
           <div class="stat-focus-icon" id="stat-focus-icon">
-            <span class="star">★</span>
+            <img src="how-it-works.png" alt="">
           </div>
           <div class="stat-focus-content">
             <div class="stat-focus-name" id="stat-focus-name">OVERALL</div>
             <div class="stat-focus-mechanics" id="stat-focus-mechanics">LIVE</div>
             <div class="stat-focus-flavor" id="stat-focus-flavor">all stats combined</div>
           </div>
+          <div class="stat-focus-rankings">POWER<br>RANKINGS</div>
         </div>
 
         <table class="rankings-table" id="rankings-table">
