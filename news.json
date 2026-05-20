@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-20-billy-official-team-13",
+      "type": "paddock",
+      "timestamp": "2026-05-20T10:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$BILLY",
+        "name": "BILLY RACING",
+        "color": "#F7931A",
+        "logo": "billy.png",
+        "contract": "BDCs2xEqzXyRpp9P6uPDnAvERpLKBfzHPEzbe3BfCxDY",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 13 — $BILLY JOINS THE GRID",
+      "body": "BILLY RACING locked in as the thirteenth official team for Season 2 — the Bitcoin cat enters the paddock. Born on Bitcoin Runes, races on Solana. Driver: BILLION BILLY. Car: BILLY-13. Livery: BILLION ORANGE. Starting profile: 7.1 overall — debuting in P1/P2 territory with CHASSIS 9.5 ($1.6M deep liquidity) and AERO 9.3. 29.6K verified followers. The cat that lives on Bitcoin runs the Solana race.",
+      "tweet": "🏁 OFFICIAL TEAM 13 — @billydollarcat\n\n$BILLY — the Bitcoin cat — joins the grid.\n\n\"billy to a billy 😼\"\n\nborn on Bitcoin Runes. races on Solana.\n29K cats deep. one mission.\n\nmemegrandprix.com/teams-billy.html\n\nrace week · june 1.\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-18-momo-official-team-12",
       "type": "paddock",
       "timestamp": "2026-05-18T18:00:00Z",
