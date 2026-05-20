@@ -1,91 +1,90 @@
-# 🏁 TEAM 11 (PEPONK) DEPLOY PACKAGE — May 17, 2026
+# 🏁 TEAM 12 (MOMO) DEPLOY PACKAGE — May 18, 2026
 
 ## What's in this folder
 
-17 files ready to push to the repo. Two new files (teams-peponk.html, pit-scores.json) and 15 modified files.
+18 files. One new (`teams-momo.html`), 17 modified.
+
+## MOMO — locked spec
+
+- **Ticker:** MOMO
+- **Display name:** MOMO MOTORS
+- **Chain:** SOL
+- **Contract:** G4zwEA9NSd3nMBbEj31MMPq2853Brx2oGsKzex3ebonk
+- **Color:** `#F989B9` (Bubblegum Pink)
+- **Driver:** Queen Momo
+- **Car:** QUEEN-01
+- **Livery:** BUBBLEGUM PINK
+- **X handle:** @Momo_bonk
+- **Identity:** Queen of Shibas
+
+## Launch stats (formula-locked)
+
+| Stat | Score | Derivation |
+|---|---|---|
+| ENGINE | 5.6 | Market cap $966.56K |
+| AERO | 9.5 | 24h vol $526K = formula ceiling |
+| CHASSIS | 7.0 | Liquidity ~$138K |
+| DRAG | 5.0 | No 7-day history yet |
+| PIT | 5.0 | Launch state |
+| **OVERALL** | **6.4** | **Debuts at P4** |
 
 ## Deploy checklist
 
 ### Files to ADD (new)
-- `teams-peponk.html` → repo root (new team page)
+- `teams-momo.html` → repo root
 
-### Files to REPLACE (modified)
-- `gp-central.html` → repo root
-- `news.json` → repo root  
-- `season-2.html` → repo root
-- `about.html` → repo root
-- `join.html` → repo root
-- `pit-scores.json` → repo `data/` folder (REPLACES `data/pit-scores.json`)
-- All 10 team pages → repo root:
-  - `teams-turbo.html`
-  - `teams-mask.html`
-  - `teams-neuroticat.html`
-  - `teams-sus.html`
-  - `teams-lol.html`
-  - `teams-shih.html`
-  - `teams-vibe.html`
-  - `teams-mars.html`
-  - `teams-420blazeit.html`
-  - `teams-pup.html` (NB: also contains the `$PUP → PUP` driver-block bug fix from earlier)
+### Files to REPLACE
+- `gp-central.html` → repo root (added MOMO to TEAMS array)
+- `news.json` → repo root (new TEAM 12 card at top)
+- `season-2.html` → repo root (counters 12/15, progress 80%, GRID PROGRESS 12, MOMO card position 12)
+- `about.html` → repo root (counter 12/15 + MOMO appended to ticker list)
+- `join.html` → repo root (3 remaining seats, LOCKED 12, OPEN 3 — including all 3 stale meta descriptions)
+- `pit-scores.json` → repo `data/` folder (now 12 teams)
+- All 11 existing team pages → repo root (mini-grid TEAMS array adds MOMO after PEPONK, loop start i=13, counter "12 / 15 LOCKED")
 
-### Image assets (Pieter to handle)
-Three new PNGs need to be in the repo root before Push, or the team page will show broken images:
-- `peponk.png` — the cigar frog logo (already uploaded earlier — drop into repo)
-- `peponk-driver.png` — placeholder for now, Grok-generated later
-- `peponk-car.png` — placeholder for now, Grok-generated later
+### Image assets — from `/mnt/user-data/outputs/momo-images/`
+Drop into repo root:
+- `momo.png`
+- `momo-driver.png` (placeholder = the logo)
+- `momo-car.png` (placeholder = the logo)
+- `momo-card.png` (OG/Twitter card image)
 
-Suggest: use `peponk.png` as a temporary stand-in for both `peponk-driver.png` and `peponk-car.png` until proper images are generated. Just rename copies.
+Replace with Grok-generated images later when available.
 
-## What changed
-
-| File | Change |
-|---|---|
-| `teams-peponk.html` | NEW — full team page, PEPONK orange (#FB8802), driver "Peponk", car PEPONK-01, livery PEPONK ORANGE, stats 5.1 overall (ENG 4.7 / AER 5.8 / CHA 4.8 / DRG 5.0 / PIT 5.0) |
-| `gp-central.html` | TEAMS array gets PEPONK at slot 11 (Solana, FB8802 color) |
-| `news.json` | New OFFICIAL TEAM 11 card prepended at top of items |
-| `season-2.html` | Banner counters LOCKED 11 / OPEN 4, progress bar 73.33%, PEPONK card at position 11 |
-| `about.html` | TEAMS LOCKED counter "11 / 15" + PEPONK appended to ticker list |
-| `join.html` | Page subtitle "4 remaining", status pills LOCKED 11 / OPEN 4, **3 stale meta descriptions fixed** (were "7 remaining" — now "4 remaining") |
-| 10 team pages | Mini-grid TEAMS array adds PEPONK after PUP, loop start changes i=11 → i=12, grid-strip counter "11 / 15 LOCKED" |
-| `teams-pup.html` | ALSO fixes the `$PUP → PUP` driver-block bug from earlier (independent of the Team 11 deploy) |
-| `pit-scores.json` | Adds PEPONK: 5.0 (launch state) |
-
-## X ANNOUNCE TWEET — ready to fire
+## X ANNOUNCE TWEET
 
 ```
-🏁 OFFICIAL TEAM 11 — @peponkwtf
+🏁 OFFICIAL TEAM 12 — @Momo_bonk
 
-$PEPONK — PEPE meets BONK — joins the grid.
+$MOMO — Queen of Shibas — joins the grid.
 
-DRIVER: Peponk
-CAR: PEPONK-01
-LIVERY: PEPONK ORANGE
+DRIVER: Queen Momo
+CAR: QUEEN-01
+LIVERY: BUBBLEGUM PINK
 
-Bonk taught Solana how to meme. Pepe taught the internet how to hold.
+First female Shiba Inu on Solana. Debuting at P4.
 
-memegrandprix.com/teams-peponk.html
+memegrandprix.com/teams-momo.html
 
-lights out · june 1.
+race week · june 1.
 
 $MEMEGP
 ```
 
-Char count: ~275 (under 280 limit ✓)
+Char count: ~263 (under 280 ✓)
 
-## Push order (recommended)
+Note: uses the new "race week · june 1" signoff (not "lights out · june 1") per the tagline framework locked earlier today.
 
-1. Drop `peponk.png` into repo root (and rename copies for placeholder driver/car if needed)
-2. Replace all 17 files in repo
-3. Test locally if you can (load season-2.html, see counter shows 11/15)
-4. Commit: `feat: add PEPONK as Team 11 + fix PUP driver-block bug`
-5. Push to git
-6. Wait for Vercel to deploy
-7. Verify live site shows 11 teams
-8. **Fire the announce tweet on X**
+## Suggested commit message
 
-## Known cosmetic items NOT addressed in this deploy
+```
+feat: add MOMO MOTORS as Team 12
 
-- Mini-grid OVR values across team pages still show pre-formula-rebuild numbers (TURBO 7.7, NEURO 3.7, etc). These are "race-day commit" values per your decision. Will need a sweep before Race 1 to sync with live Pit Wall.
-- The full font/logo/styling pass on the PEPONK car block — uses generic PUP-styled CSS for now.
+- Add teams-momo.html (Queen Momo, Bubblegum Pink, Solana)
+- Launch stats: 6.4 overall (debuts at P4)
+- Update all counters: season-2 (12/15 + 80% bar + GRID PROGRESS 12), about, join
+- Add MOMO to TEAMS arrays across gp-central + 11 existing team page mini-grids
+- Update pit-scores.json launch state to include MOMO
+```
 
-🏁 lights out · june 1.
+🏁 race week · june 1.

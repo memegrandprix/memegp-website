@@ -901,17 +901,6 @@ body::before{
 }
 .pitwall-status-info{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 
-/* Mode indicators: live (default green), frozen (gold lock), warning (red) */
-#pit-mode-indicator.pit-mode-frozen{
-  color:var(--gold);
-  font-weight:700;
-  text-shadow:0 0 8px rgba(255,204,0,.3);
-}
-#pit-mode-indicator.pit-mode-warning{
-  color:var(--accent);
-  font-weight:700;
-}
-
 /* Power rankings table */
 .pitwall-rankings{
   max-width:1200px;margin:0 auto 32px;padding:0 24px;
@@ -1256,25 +1245,6 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   color:var(--muted);
 }
 
-/* POWER RANKINGS — large yellow text in the right side of the banner */
-.stat-focus-rankings{
-  position:absolute;
-  right:32px;
-  top:50%;
-  transform:translateY(-50%);
-  font-family:'Orbitron',sans-serif;
-  font-size:38px;
-  font-weight:900;
-  letter-spacing:1px;
-  line-height:.95;
-  text-align:right;
-  color:var(--gold);
-  text-shadow:0 0 24px rgba(255,204,0,.4), 0 0 8px rgba(255,204,0,.6);
-  z-index:1;
-  pointer-events:none;
-  white-space:nowrap;
-}
-
 /* Mobile: icon centers behind, text centers */
 @media(max-width:780px){
   .stat-focus-banner{
@@ -1292,12 +1262,6 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   .stat-focus-icon .star{font-size:120px}
   .stat-focus-name{font-size:26px}
   .stat-focus-mechanics{font-size:12px}
-  .stat-focus-rankings{display:none}
-}
-
-/* Tablet: smaller POWER RANKINGS so it doesn't crowd */
-@media(min-width:781px) and (max-width:1100px){
-  .stat-focus-rankings{font-size:26px}
 }
 
 /* ===== END PIT WALL CSS ===== */
@@ -1423,7 +1387,7 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
 
       <div class="pitwall-status">
         <div class="pitwall-status-info">
-          <span id="pit-mode-indicator"><span class="live-dot"></span>LIVE · DEXSCREENER</span>
+          <span><span class="live-dot"></span>LIVE · DEXSCREENER</span>
           <span id="pit-last-updated">LAST UPDATED · —</span>
         </div>
         <div>
@@ -1454,14 +1418,13 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
 
         <div class="stat-focus-banner" id="stat-focus-banner">
           <div class="stat-focus-icon" id="stat-focus-icon">
-            <img src="how-it-works.png" alt="">
+            <span class="star">★</span>
           </div>
           <div class="stat-focus-content">
             <div class="stat-focus-name" id="stat-focus-name">OVERALL</div>
             <div class="stat-focus-mechanics" id="stat-focus-mechanics">LIVE</div>
             <div class="stat-focus-flavor" id="stat-focus-flavor">all stats combined</div>
           </div>
-          <div class="stat-focus-rankings">POWER<br>RANKINGS</div>
         </div>
 
         <table class="rankings-table" id="rankings-table">
@@ -1522,7 +1485,6 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
 
 </main>
 
-<script src="stats-calculator.js"></script>
 <script>
 /* ===== PIT WALL JS ===== */
 (function(){
@@ -1532,16 +1494,16 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   // TEAMS CONFIG — single source of truth for the 9 grid teams
   // ============================================================
   const TEAMS = [
-    { ticker: 'TURBO',     name: 'AI TURBO RACING',  chain: 'ETH', contract: '0xa35923162c49cf95e6bf26623385eb431ad920d3',         dxChain: 'ethereum', color: '#1e7fd9', logo: 'turbo.png',     editorialPit: 5.0 },
-    { ticker: 'MASK',      name: 'MASK STAYS ON',    chain: 'SOL', contract: '6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump',       dxChain: 'solana',   color: '#e62538', logo: 'mask.png',      editorialPit: 5.0 },
-    { ticker: 'NEURO',     name: 'NEURO RACING',     chain: 'CRO', contract: '0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b',         dxChain: 'cronos',   color: '#F58A1F', logo: 'neuroticat.png',editorialPit: 5.0 },
-    { ticker: 'SUS',       name: 'SUS SPEED RACING', chain: 'SOL', contract: 'GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge',       dxChain: 'solana',   color: '#C8102E', logo: 'susdog.png',    editorialPit: 5.0 },
-    { ticker: 'LOL',       name: 'LOL RACING',       chain: 'SOL', contract: '53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD',       dxChain: 'solana',   color: '#22DD66', logo: 'lol.png',       editorialPit: 5.0 },
+    { ticker: 'TURBO',     name: 'AI TURBO RACING',  chain: 'ETH', contract: '0xa35923162c49cf95e6bf26623385eb431ad920d3',         dxChain: 'ethereum', color: '#1e7fd9', logo: 'turbo.png',     editorialPit: 6.0 },
+    { ticker: 'MASK',      name: 'MASK STAYS ON',    chain: 'SOL', contract: '6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump',       dxChain: 'solana',   color: '#e62538', logo: 'mask.png',      editorialPit: 6.0 },
+    { ticker: 'NEURO',     name: 'NEURO RACING',     chain: 'CRO', contract: '0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b',         dxChain: 'cronos',   color: '#F58A1F', logo: 'neuroticat.png',editorialPit: 5.5 },
+    { ticker: 'SUS',       name: 'SUS SPEED RACING', chain: 'SOL', contract: 'GpXv1GNGMzrKXCNnYFbZk5TaZXUdKJNu5cmtiUyBdoge',       dxChain: 'solana',   color: '#C8102E', logo: 'susdog.png',    editorialPit: 6.0 },
+    { ticker: 'LOL',       name: 'LOL RACING',       chain: 'SOL', contract: '53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD',       dxChain: 'solana',   color: '#22DD66', logo: 'lol.png',       editorialPit: 4.0 },
     { ticker: 'SHIH',      name: 'SHIH SPEED',       chain: 'BNB', contract: '0xfCa5208e4074e06596CC28B47214A109E4c14444',         dxChain: 'bsc',      color: '#FFD200', logo: 'shih.png',      editorialPit: 5.0 },
-    { ticker: 'VIBECOIN',  name: 'VIBING CAT',       chain: 'SOL', contract: 'AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB',       dxChain: 'solana',   color: '#E91E63', logo: 'vibe.png',      editorialPit: 5.0 },
-    { ticker: 'MARS',      name: 'MARS RACING',      chain: 'SOL', contract: 'EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge',       dxChain: 'solana',   color: '#1A2B5C', logo: 'mars.png',      editorialPit: 5.0 },
-    { ticker: '420BLAZEIT',name: '420BLAZEIT',       chain: 'SOL', contract: 'Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge',       dxChain: 'solana',   color: '#7B2D8E', logo: '420blazeit.png',editorialPit: 5.0 },
-    { ticker: 'PUP',       name: 'PUP POWER',         chain: 'BNB', contract: '0x73b84f7e3901f39fc29f3704a03126d317ab4444',         dxChain: 'bsc',      color: '#F0B90B', logo: 'pup.png',       editorialPit: 5.0 },
+    { ticker: 'VIBECOIN',  name: 'VIBING CAT',       chain: 'SOL', contract: 'AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB',       dxChain: 'solana',   color: '#E91E63', logo: 'vibe.png',      editorialPit: 6.5 },
+    { ticker: 'MARS',      name: 'MARS RACING',      chain: 'SOL', contract: 'EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge',       dxChain: 'solana',   color: '#1A2B5C', logo: 'mars.png',      editorialPit: 4.0 },
+    { ticker: '420BLAZEIT',name: '420BLAZEIT',       chain: 'SOL', contract: 'Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge',       dxChain: 'solana',   color: '#7B2D8E', logo: '420blazeit.png',editorialPit: 3.5 },
+    { ticker: 'PUP',       name: 'PUP POWER',         chain: 'BNB', contract: '0x73b84f7e3901f39fc29f3704a03126d317ab4444',         dxChain: 'bsc',      color: '#F0B90B', logo: 'pup.png',       editorialPit: 6.0 },
     { ticker: 'PEPONK',    name: 'PEPONK RACING',    chain: 'SOL', contract: 'Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump',       dxChain: 'solana',   color: '#FB8802', logo: 'peponk.png',    editorialPit: 5.0 },
     { ticker: 'MOMO',      name: 'MOMO MOTORS',      chain: 'SOL', contract: 'G4zwEA9NSd3nMBbEj31MMPq2853Brx2oGsKzex3ebonk',       dxChain: 'solana',   color: '#F989B9', logo: 'momo.png',      editorialPit: 5.0 },
   ];
@@ -1550,12 +1512,41 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   const SEASON_START = new Date('2026-06-01T00:00:00Z');
 
   // ============================================================
-  // STAT FORMULAS — sourced from shared stats-calculator.js
-  // (See stats-calculator.js for actual formula definitions — B-prime)
+  // STAT FORMULAS — mirror site logic
   // ============================================================
-  const clamp = window.MEMEGP_Stats.clamp;
-  const round = window.MEMEGP_Stats.round;
-  const calcStats = window.MEMEGP_Stats.calcStats;
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+  function round(v){ return Math.round(v * 10) / 10; }
+
+  function calcStats(d, editorialPit){
+    if(!d || !d.mcap) return null;
+    const engine = clamp(Math.log10(d.mcap), 1.0, 9.5);
+    const turnover = d.vol / d.mcap;
+    const aero = clamp(turnover * 15 + 1.5, 1.0, 9.5);
+    const chassis = d.liq ? clamp(Math.log10(d.liq), 1.0, 9.5) : null;
+    
+    // DRAG v2: rewards genuine trading, penalizes inactive tokens
+    let drag;
+    if((d.vol || 0) < 500){
+      drag = 1.0;
+    } else {
+      const base = 10 - Math.abs(d.change24h || 0) / 3;
+      const volHealth = clamp(Math.log10((d.vol / d.mcap) * 100) + 2, 0, 1.5);
+      drag = clamp(base * volHealth, 1.0, 9.5);
+    }
+    
+    const pit = editorialPit != null ? editorialPit : 4.0;
+    const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
+    const overall = stats.length ? stats.reduce((a,b)=>a+b,0) / stats.length : null;
+    
+    return {
+      engine: round(engine),
+      aero: round(aero),
+      chassis: chassis !== null ? round(chassis) : null,
+      drag: round(drag),
+      pit: round(pit),
+      overall: overall !== null ? round(overall) : null,
+    };
+  }
 
   // ============================================================
   // FORMATTERS
@@ -1606,7 +1597,14 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   let sortBy = 'overall';
   let cachedTeamData = [];
 
-  const STATS_META = window.MEMEGP_Stats.STATS_META;
+  const STATS_META = {
+    overall: { name: 'OVERALL', mechanics: 'LIVE',                              flavor: 'all stats combined',                                            icon: null },
+    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                        flavor: 'biggest cars on the grid',                                      icon: 'icon-engine.png' },
+    aero:    { name: 'AERO',    mechanics: '24H VOLUME ÷ MARKET CAP',           flavor: 'most active traders',                                           icon: 'icon-aero.png' },
+    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                   flavor: 'deepest pools',                                                 icon: 'icon-chassis.png' },
+    drag:    { name: 'DRAG',    mechanics: 'PRICE STABILITY × VOLUME HEALTH',   flavor: 'smoothest at speed',                                            icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     mechanics: 'ON-CHAIN COMMUNITY',                flavor: 'editorial today, formula activates with full holder data',     icon: 'icon-pit.png' },
+  };
 
   function renderRankings(teamData){
     cachedTeamData = teamData;
@@ -1756,130 +1754,22 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   }
 
   // ============================================================
-  // LOAD ALL DATA — mode-aware (live vs frozen / parc fermé)
-  // ------------------------------------------------------------
-  // LIVE mode    (Mon 00:00 → Fri 09:00 SAST):
-  //   Fetch DexScreener for each team, compute stats with B-prime.
-  //
-  // FROZEN mode  (Fri 09:00 → Sun 23:59 SAST):
-  //   Read data/snapshot.json — stats locked from Friday's freeze.
-  //   If snapshot missing, fall back to live mode with warning.
+  // LOAD ALL DATA
   // ============================================================
   let dataLoaded = false;
   async function loadPitWallData(){
     if(dataLoaded) return;
     dataLoaded = true;
 
-    const mode = window.MEMEGP_Stats.getCurrentMode();
-
-    if (mode === 'frozen') {
-      // Try to load the frozen snapshot
-      const snapshot = await fetchSnapshot();
-      if (snapshot && snapshot.teams) {
-        renderFrozenMode(snapshot);
-        return;
-      }
-      // Snapshot missing → fail open with warning, fall through to live mode
-      console.warn('[friday-freeze] Snapshot missing during frozen window — falling back to live data');
-      setStatusIndicator('warning', '\u26a0 SNAPSHOT MISSING \u00b7 SHOWING LIVE DATA');
-    } else {
-      // Live mode — normal indicator
-      setStatusIndicator('live', '\u2022 LIVE \u00b7 DEXSCREENER');
-    }
-
-    // LIVE mode (or frozen-fallback): fetch DexScreener + history in parallel
-    const [results, history] = await Promise.all([
-      Promise.all(TEAMS.map(t => fetchToken(t))),
-      fetchHistory(),
-    ]);
-
+    const results = await Promise.all(TEAMS.map(t => fetchToken(t)));
     const teamData = TEAMS.map((team, i) => ({
       team,
       data: results[i],
-      stats: results[i] && !results[i].error
-        ? calcStats(results[i], team.editorialPit, history, team.ticker)
-        : null,
+      stats: results[i] && !results[i].error ? calcStats(results[i], team.editorialPit) : null,
     }));
 
     renderRankings(teamData);
     renderHero(teamData);
-  }
-
-  // Render the Pit Wall using a frozen snapshot — no DexScreener fetch.
-  // Snapshot contains raw on-chain data (Python script writes snake_case
-  // fields). We compute B-prime stats here, same as live mode, using
-  // shared stats-calculator.js. No formula duplication.
-  async function renderFrozenMode(snapshot){
-    setStatusIndicator('frozen', '\ud83d\udd12 PARC FERM\u00c9 \u00b7 STATS LOCKED \u00b7 RACE WEEKEND');
-    // Override the "last updated" line with the freeze moment
-    const upd = document.getElementById('pit-last-updated');
-    if (upd) {
-      const t = new Date(snapshot.frozen_at);
-      upd.textContent = `FROZEN AT \u00b7 ${t.toLocaleString('en-GB', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit',
-      })}`;
-    }
-    // Load history.json for DRAG's multi-day calc (parallel-safe with snapshot)
-    const history = await fetchHistory();
-    // Build teamData from the snapshot — normalising snake_case to camelCase
-    const teamData = TEAMS.map(team => {
-      const t = snapshot.teams[team.ticker];
-      if (!t || t.error) {
-        return { team, data: null, stats: null };
-      }
-      const data = {
-        mcap:      t.mcap,
-        price:     t.price,
-        vol:       t.vol_24h,
-        liq:       t.liq,
-        change24h: t.change_24h,
-      };
-      return {
-        team,
-        data,
-        stats: calcStats(data, team.editorialPit, history, team.ticker),
-      };
-    });
-    renderRankings(teamData);
-    renderHero(teamData);
-  }
-
-  // Swap the mode indicator pill — live / frozen / warning
-  function setStatusIndicator(state, text){
-    const el = document.getElementById('pit-mode-indicator');
-    if (!el) return;
-    el.className = 'pit-mode-' + state;
-    // Replace the dot+text with the appropriate badge
-    if (state === 'live') {
-      el.innerHTML = '<span class="live-dot"></span>' + text.replace(/^\u2022\s*/, '');
-    } else {
-      el.textContent = text;
-    }
-  }
-
-  // Fetch the multi-day snapshot history. Returns array of {teams: {...}}
-  // or null on failure (calcStats will fall back to single-day).
-  async function fetchHistory(){
-    try {
-      const res = await fetch('data/history.json', { cache: 'no-cache' });
-      if(!res.ok) return null;
-      const data = await res.json();
-      return data && Array.isArray(data.snapshots) ? data.snapshots : null;
-    } catch (e){
-      return null;
-    }
-  }
-
-  // Fetch the frozen snapshot. Returns the parsed JSON or null on failure.
-  async function fetchSnapshot(){
-    try {
-      const res = await fetch('data/snapshot.json', { cache: 'no-cache' });
-      if(!res.ok) return null;
-      return await res.json();
-    } catch (e){
-      return null;
-    }
   }
 
   // ============================================================
