@@ -1275,23 +1275,26 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   white-space:nowrap;
 }
 
-/* Mobile: icon centers behind, text centers */
+/* Mobile: tight layout, smaller icon left, text left, POWER RANKINGS hidden */
 @media(max-width:780px){
   .stat-focus-banner{
-    padding:24px 16px;
-    text-align:center;
-    align-items:center;
+    padding:16px 16px 16px 90px;
+    text-align:left;
+    align-items:flex-start;
     min-height:auto;
+    gap:4px;
   }
   .stat-focus-icon{
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:140px;height:140px;
-    opacity:.12;
+    left:-10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:90px;height:90px;
+    opacity:.18;
   }
-  .stat-focus-icon .star{font-size:120px}
-  .stat-focus-name{font-size:26px}
-  .stat-focus-mechanics{font-size:12px}
+  .stat-focus-icon .star{font-size:80px}
+  .stat-focus-name{font-size:22px}
+  .stat-focus-mechanics{font-size:11px}
+  .stat-focus-flavor{font-size:12px}
   .stat-focus-rankings{display:none}
 }
 
