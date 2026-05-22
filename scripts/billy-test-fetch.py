@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-MEME GP — BILLY Data Fetch Test (CoinGecko + Ordiscan)
-=======================================================
-Verifies that we can pull BILLY's real Bitcoin Runes data from two
-free APIs:
-  - CoinGecko    → mcap, vol_24h, change_24h        (no API key needed)
-  - Ordiscan     → holders, market info             (needs API key)
+MEME GP — BILLY Data Fetch Test v2 (CoinGecko + Ordiscan)
+==========================================================
+Test v1 confirmed:
+  - CoinGecko works (status 200, full data available)
+  - Ordiscan auth works (no 401), but the rune name format is wrong
 
-Reads ORDISCAN_API_KEY from environment.
+Test v2 tries multiple rune name formats against Ordiscan to find
+the one their API accepts.
 """
 
 import json
@@ -20,12 +20,18 @@ ORDISCAN_API_KEY = os.environ.get("ORDISCAN_API_KEY", "")
 
 USER_AGENT = "memegrandprix-test/1.0"
 TIMEOUT = 20
-
-# CoinGecko: BILLY's API ID
 COINGECKO_ID = "billion-dollar-cat-runes"
 
-# Ordiscan: the canonical Rune name as Ordiscan expects it
-RUNE_NAME = "BILLION%E2%80%A2DOLLAR%E2%80%A2CAT"   # URL-encoded "BILLION•DOLLAR•CAT"
+# Try several formats Ordiscan might accept.
+# The Ordiscan URL slug is "billiondollarcat" (from CoinGecko's link list).
+RUNE_NAME_CANDIDATES = [
+    ("lowercase-noseparator", "billiondollarcat"),
+    ("uppercase-noseparator", "BILLIONDOLLARCAT"),
+    ("uppercase-bullet-encoded", "BILLION%E2%80%A2DOLLAR%E2%80%A2CAT"),
+    ("uppercase-bullet-raw", "BILLION\u2022DOLLAR\u2022CAT"),
+    ("rune-id-format", "845764:84"),
+    ("rune-id-encoded", "845764%3A84"),
+]
 
 
 def hit_get(url, label, headers=None):
@@ -46,8 +52,8 @@ def hit_get(url, label, headers=None):
             try:
                 data = json.loads(body)
                 pretty = json.dumps(data, indent=2)
-                if len(pretty) > 3500:
-                    print(pretty[:3500])
+                if len(pretty) > 2500:
+                    print(pretty[:2500])
                     print(f"\n  ... (truncated, full response was {len(pretty):,} chars)")
                 else:
                     print(pretty)
@@ -58,7 +64,7 @@ def hit_get(url, label, headers=None):
         print(f"  HTTP error: {e.code} {e.reason}")
         try:
             err_body = e.read().decode("utf-8", errors="replace")
-            print(f"  body: {err_body[:600]}")
+            print(f"  body: {err_body[:300]}")
         except Exception:
             pass
     except urllib.error.URLError as e:
@@ -69,50 +75,63 @@ def hit_get(url, label, headers=None):
 
 def main():
     print("\n" + "#" * 70)
-    print("# MEME GP — BILLY DATA FETCH TEST")
-    print("# CoinGecko + Ordiscan combined probe")
+    print("# MEME GP — BILLY DATA FETCH TEST v2")
     print("#" * 70)
 
     if not ORDISCAN_API_KEY:
         print("\n[!] ORDISCAN_API_KEY env var is missing.")
-        print("    In GitHub Actions: Settings → Secrets → Actions")
-        print("    Add a new secret named ORDISCAN_API_KEY")
         sys.exit(1)
-    else:
-        print(f"\n[ok] ORDISCAN_API_KEY loaded (length {len(ORDISCAN_API_KEY)} chars)")
+    print(f"\n[ok] ORDISCAN_API_KEY loaded (length {len(ORDISCAN_API_KEY)} chars)")
 
-    # CoinGecko: full coin data
-    hit_get(
-        f"https://api.coingecko.com/api/v3/coins/{COINGECKO_ID}"
-        "?localization=false&tickers=false&community_data=false&developer_data=false",
-        label="CoinGecko / coin info",
-    )
+    # ============================================================
+    # CoinGecko: grab just market_data (the part we care about)
+    # ============================================================
+    print("\n\n" + "#" * 70)
+    print("# COINGECKO — market_data subset (the bit B-prime needs)")
+    print("#" * 70)
+    try:
+        url = (
+            f"https://api.coingecko.com/api/v3/coins/{COINGECKO_ID}"
+            "?localization=false&tickers=false&community_data=false&developer_data=false"
+        )
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        md = data.get("market_data") or {}
+        print(json.dumps({
+            "current_price_usd":           md.get("current_price", {}).get("usd"),
+            "market_cap_usd":              md.get("market_cap", {}).get("usd"),
+            "fully_diluted_valuation_usd": md.get("fully_diluted_valuation", {}).get("usd"),
+            "total_volume_usd":            md.get("total_volume", {}).get("usd"),
+            "price_change_percentage_24h": md.get("price_change_percentage_24h"),
+            "price_change_percentage_7d":  md.get("price_change_percentage_7d"),
+            "circulating_supply":          md.get("circulating_supply"),
+            "total_supply":                md.get("total_supply"),
+            "max_supply":                  md.get("max_supply"),
+            "ath_usd":                     md.get("ath", {}).get("usd"),
+            "atl_usd":                     md.get("atl", {}).get("usd"),
+        }, indent=2))
+    except Exception as e:
+        print(f"  [error pulling CoinGecko market_data] {e}")
 
-    # Ordiscan endpoints
-    ordiscan_headers = {"Authorization": f"Bearer {ORDISCAN_API_KEY}"}
+    # ============================================================
+    # Ordiscan: try multiple rune name formats
+    # ============================================================
+    print("\n\n" + "#" * 70)
+    print("# ORDISCAN — testing rune name format variants")
+    print("#" * 70)
+    headers = {"Authorization": f"Bearer {ORDISCAN_API_KEY}"}
 
-    hit_get(
-        f"https://api.ordiscan.com/v1/rune/{RUNE_NAME}/market",
-        label="Ordiscan / rune market info",
-        headers=ordiscan_headers,
-    )
+    for fmt_label, name in RUNE_NAME_CANDIDATES:
+        hit_get(
+            f"https://api.ordiscan.com/v1/rune/{name}",
+            label=f"rune detail · {fmt_label} · name='{name}'",
+            headers=headers,
+        )
 
-    hit_get(
-        f"https://api.ordiscan.com/v1/rune/{RUNE_NAME}",
-        label="Ordiscan / rune detail",
-        headers=ordiscan_headers,
-    )
-
-    hit_get(
-        f"https://api.ordiscan.com/v1/rune/{RUNE_NAME}/holders?limit=5",
-        label="Ordiscan / rune holders (top 5 + total)",
-        headers=ordiscan_headers,
-    )
-
-    print()
-    print("=" * 70)
-    print("DONE — copy ALL of the output above and paste it back to Claude.")
-    print("=" * 70)
+    print("\n\n" + "#" * 70)
+    print("# DONE — paste full output back to Claude")
+    print("#" * 70)
 
 
 if __name__ == "__main__":
