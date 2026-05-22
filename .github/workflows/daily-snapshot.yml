@@ -1,29 +1,24 @@
 name: Daily DexScreener Snapshot
-
 on:
   schedule:
     - cron: '0 7 * * *'
   workflow_dispatch:
-
 jobs:
   snapshot:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Run snapshot script
+        env:
+          ORDISCAN_API_KEY: ${{ secrets.ORDISCAN_API_KEY }}
         run: python scripts/snapshot.py
-
       - name: Commit and push if data changed
         run: |
           git config user.name "memegp-bot"
