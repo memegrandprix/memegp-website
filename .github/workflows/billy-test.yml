@@ -1,0 +1,33 @@
+name: BILLY Data Fetch Test
+# ============================================================
+# One-time / on-demand test to verify CoinGecko + Ordiscan APIs
+# return the data we need for BILLY's stats.
+#
+# How to run:
+#   1. Make sure ORDISCAN_API_KEY is set as a repository secret
+#      (Settings → Secrets and variables → Actions → New secret)
+#   2. Go to the Actions tab
+#   3. Click "BILLY Data Fetch Test" in the left sidebar
+#   4. Click "Run workflow" → "Run workflow"
+#   5. Wait ~30 seconds, click the run, view logs
+#   6. Copy the output and paste back to Claude
+#
+# This workflow does NOT commit anything. It's a read-only probe.
+# ============================================================
+on:
+  workflow_dispatch:
+
+jobs:
+  billy-fetch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run BILLY fetch test
+        env:
+          ORDISCAN_API_KEY: ${{ secrets.ORDISCAN_API_KEY }}
+        run: python scripts/billy-test-fetch.py
