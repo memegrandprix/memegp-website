@@ -1547,7 +1547,7 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
     { ticker: 'PUP',       name: 'PUP POWER',         chain: 'BNB', contract: '0x73b84f7e3901f39fc29f3704a03126d317ab4444',         dxChain: 'bsc',      color: '#F0B90B', logo: 'pup.png',       editorialPit: 5.0 },
     { ticker: 'PEPONK',    name: 'PEPONK RACING',    chain: 'SOL', contract: 'Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump',       dxChain: 'solana',   color: '#FB8802', logo: 'peponk.png',    editorialPit: 5.0 },
     { ticker: 'MOMO',      name: 'MOMO MOTORS',      chain: 'SOL', contract: 'G4zwEA9NSd3nMBbEj31MMPq2853Brx2oGsKzex3ebonk',       dxChain: 'solana',   color: '#F989B9', logo: 'momo.png',      editorialPit: 5.0 },
-    { ticker: 'BILLY',     name: 'BILLY RACING',     chain: 'SOL', contract: 'BDCs2xEqzXyRpp9P6uPDnAvERpLKBfzHPEzbe3BfCxDY',       dxChain: 'solana',   color: '#F7931A', logo: 'billy.png',     editorialPit: 5.0 },
+    { ticker: 'BILLY',     name: 'BILLY RACING',     chain: 'BTC', dataSource: 'runes', coingeckoId: 'billion-dollar-cat-runes', color: '#F7931A', logo: 'billy.png',     editorialPit: 5.0 },
   ];
 
   const TRACK_START = new Date('2026-05-14T00:00:00Z');
@@ -1579,24 +1579,62 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
   // FETCH ONE TOKEN
   // ============================================================
   async function fetchToken(team){
+    // Route by dataSource: runes teams use CoinGecko, others use DexScreener
+    if (team.dataSource === 'runes') {
+      return fetchTokenRunes(team);
+    }
+    return fetchTokenDexScreener(team);
+  }
+
+  async function fetchTokenDexScreener(team){
     try {
       const url = `https://api.dexscreener.com/latest/dex/tokens/${team.contract}`;
       const res = await fetch(url);
       if(!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if(!data.pairs || data.pairs.length === 0) return { error: 'no-pairs' };
-      
+
       const onChain = data.pairs.filter(p => p.chainId === team.dxChain);
       const pairs = onChain.length ? onChain : data.pairs;
       pairs.sort((a,b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
       const top = pairs[0];
-      
+
       return {
         mcap: top.marketCap || top.fdv || null,
         price: parseFloat(top.priceUsd) || null,
         vol: top.volume?.h24 || 0,
         liq: top.liquidity?.usd || 0,
         change24h: top.priceChange?.h24 || 0,
+        dataSource: 'dexscreener',
+      };
+    } catch (e){
+      return { error: e.message };
+    }
+  }
+
+  // Bitcoin Runes fetcher — uses CoinGecko (no API key needed)
+  // CHASSIS uses Runes proxy (volume-based) inside stats-calculator.
+  async function fetchTokenRunes(team){
+    try {
+      const url = `https://api.coingecko.com/api/v3/coins/${team.coingeckoId}`
+                + `?localization=false&tickers=false`
+                + `&community_data=false&developer_data=false`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('CoinGecko HTTP ' + res.status);
+      const data = await res.json();
+      const md = data.market_data || {};
+      const mcap = md.market_cap?.usd ?? null;
+      const vol = md.total_volume?.usd ?? 0;
+      const change24h = md.price_change_percentage_24h ?? 0;
+      const price = md.current_price?.usd ?? null;
+      if (!mcap) return { error: 'no-mcap' };
+      return {
+        mcap: mcap,
+        price: price,
+        vol: vol,
+        liq: null,             // Signal: use Runes proxy in stats-calculator
+        change24h: change24h,
+        dataSource: 'runes',
       };
     } catch (e){
       return { error: e.message };
@@ -1833,11 +1871,12 @@ body.tab-pitwall .banner-eyebrow-pitwall{display:flex}
         return { team, data: null, stats: null };
       }
       const data = {
-        mcap:      t.mcap,
-        price:     t.price,
-        vol:       t.vol_24h,
-        liq:       t.liq,
-        change24h: t.change_24h,
+        mcap:       t.mcap,
+        price:      t.price,
+        vol:        t.vol_24h,
+        liq:        t.liq,
+        change24h:  t.change_24h,
+        dataSource: team.dataSource || 'dexscreener',
       };
       return {
         team,

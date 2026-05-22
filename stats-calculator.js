@@ -107,7 +107,7 @@
   }
 
   // ============================================================
-  // CHASSIS — stiffness from liquidity depth
+  // CHASSIS — stiffness from liquidity depth (AMM teams)
   // ------------------------------------------------------------
   // Piecewise log10(liq) with scoreposts:
   //   $5K    → 1.0  (thin pool)
@@ -125,6 +125,43 @@
       raw = 1.0 + 4.0 * (ll - 3.7);
     } else if (ll <= 5.7) {       // $50K → $500K
       raw = 5.0 + 4.5 * (ll - 4.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // CHASSIS (Runes proxy) — for Bitcoin Runes teams
+  // ------------------------------------------------------------
+  // Bitcoin Runes don't have AMM liquidity pools. Magic Eden uses
+  // an order book model that isn't directly comparable to AMM depth.
+  // Holders data isn't available on free APIs (Ordiscan free tier
+  // doesn't expose holder counts for runes).
+  //
+  // Proxy formula: wide log scale of absolute 24h volume, calibrated
+  // so a healthy Bitcoin Runes market lands mid-pack:
+  //   $500    → 1.0
+  //   $5K     → 5.0
+  //   $100K+  → 9.5
+  //
+  // This curve is DIFFERENT from AERO's abs-volume path (which has
+  // the same scoreposts but combines with turnover via max()).
+  // Here it's standalone, scaling absolute trade activity to chassis.
+  //
+  // Disclaimer: this is a proxy. Real holder integration is on
+  // the platform roadmap. See teams-billy.html for the public note.
+  // ============================================================
+  function calcChassisRunes(vol) {
+    if (!vol || vol <= 0) return 1.0;
+    const lv = Math.log10(vol);
+    let raw;
+    if (lv <= 2.7) {              // ≤ $500
+      raw = 1.0;
+    } else if (lv <= 3.7) {       // $500 → $5K
+      raw = 1.0 + 4.0 * (lv - 2.7);
+    } else if (lv <= 5.0) {       // $5K → $100K
+      raw = 5.0 + 4.5 * (lv - 3.7) / 1.3;
     } else {
       raw = 9.5;
     }
@@ -228,11 +265,22 @@
   function calcStats(d, editorialPit, history, ticker) {
     if (!d || !d.mcap) return null;
     const engine  = calcEngine(d.mcap);
-    const aero    = calcAero(d.mcap, d.vol || 0);
-    const chassis = calcChassis(d.liq);
+    const aero    = calcAero(d.mcap, d.vol || d.vol_24h || 0);
+    // CHASSIS routing:
+    //   - If d.liq present (AMM team) → use calcChassis(liq)
+    //   - If d.liq is null/missing AND vol present (Runes team) → proxy
+    //   - Otherwise null (excluded from overall)
+    let chassis;
+    const vol = d.vol || d.vol_24h || 0;
+    if (d.liq != null && d.liq > 0) {
+      chassis = calcChassis(d.liq);
+    } else if (vol > 0 && (d.dataSource === 'runes' || d.liq === null)) {
+      chassis = calcChassisRunes(vol);
+    } else {
+      chassis = null;
+    }
     const drag    = calcDrag(d, history, ticker);
     const pit     = calcPit(editorialPit);
-    // OVERALL — mean of non-null stats
     const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
     return {
@@ -395,6 +443,7 @@
     calcEngine:  calcEngine,
     calcAero:    calcAero,
     calcChassis: calcChassis,
+    calcChassisRunes: calcChassisRunes,
     calcDrag:    calcDrag,
     calcPit:     calcPit,
     clamp:       clamp,
