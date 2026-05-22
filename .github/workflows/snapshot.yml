@@ -1,10 +1,10 @@
-name: Friday-Freeze Weekly Snapshot
+name: Daily DexScreener Snapshot
 on:
   schedule:
-    - cron: '0 7 * * 5'
+    - cron: '0 7 * * *'
   workflow_dispatch:
 jobs:
-  friday-freeze:
+  snapshot:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -15,18 +15,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Run friday-freeze script
+      - name: Run snapshot script
         env:
           ORDISCAN_API_KEY: ${{ secrets.ORDISCAN_API_KEY }}
-        run: python scripts/friday-freeze.py
+        run: python scripts/snapshot.py
       - name: Commit and push if data changed
         run: |
           git config user.name "memegp-bot"
           git config user.email "bot@memegrandprix.com"
-          git add data/snapshot.json data/snapshots/
+          git add data/history.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Friday-freeze snapshot $(date -u +%Y-%m-%d)"
+            git commit -m "Daily snapshot $(date -u +%Y-%m-%d)"
             git push
           fi
