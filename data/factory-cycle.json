@@ -1,0 +1,11 @@
+{
+  "_README": "Factory cycle state. Update this file to refresh the FROM THE FACTORY tab. Status values: provisional | measurement | upgrades | raceweek | locked. Push to GitHub → Vercel auto-deploys in ~30 seconds. See FACTORY_README.md for full schema.",
+  "cycle": {
+    "name": "GRID LOCK WEEK",
+    "status": "provisional",
+    "start": "2026-05-25T00:00:00Z",
+    "end": "2026-05-31T23:59:00Z",
+    "lockdown": null
+  },
+  "teams": []
+}
