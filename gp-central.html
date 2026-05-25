@@ -1164,14 +1164,23 @@ body::before{
 .banner-bg{
   transition:opacity .25s ease;
 }
-.banner-bg.is-pitwall{
+.banner-bg.is-pitwall,
+.banner-bg.is-factory{
   opacity:0;
   pointer-events:none;
 }
-body.tab-pitwall .banner-bg.is-paddock{
+body.tab-pitwall .banner-bg.is-paddock,
+body.tab-pitwall .banner-bg.is-factory{
   opacity:0;
 }
 body.tab-pitwall .banner-bg.is-pitwall{
+  opacity:1;
+}
+body.tab-factory .banner-bg.is-paddock,
+body.tab-factory .banner-bg.is-pitwall{
+  opacity:0;
+}
+body.tab-factory .banner-bg.is-factory{
   opacity:1;
 }
 
@@ -1358,176 +1367,247 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 }
 .factory-status-info{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 
-/* Status pill — shows current cycle state */
-.factory-state-pill{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:4px 10px;
-  background:rgba(255,204,0,.08);
-  border:1px solid rgba(255,204,0,.3);
-  color:var(--gold);
-  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;font-weight:700;
-}
-.factory-state-pill.provisional{
-  background:rgba(120,120,140,.08);
-  border-color:rgba(160,160,180,.25);
-  color:var(--muted);
-}
-.factory-state-pill.locked{
-  background:rgba(0,255,136,.08);
-  border-color:rgba(0,255,136,.3);
-  color:var(--green);
-}
+/* =====================================================
+   VIEW BY pill bar — same component as Pit Wall
+   Reuses .viewby-bar / .viewby-pill from Pit Wall CSS,
+   no duplication needed.
+   ===================================================== */
 
-/* Wrapper around team cards */
+/* =====================================================
+   FACTORY TEAM CARDS — horizontal stat-bar pattern
+   Mirrors upgrades.html "How a Cycle Plays Out" component.
+   ===================================================== */
 .factory-cards{
-  display:flex;flex-direction:column;gap:10px;
+  display:flex;flex-direction:column;gap:18px;
 }
 
-/* Each team card — grid-row style matching season-2.html / pitwall pattern */
+/* Card frame — the team container */
 .factory-card{
-  display:grid;
-  grid-template-columns:60px 1fr 2fr;
-  align-items:stretch;
-  background:var(--bg-card);
-  border:1px solid var(--line);
-  border-radius:4px;
-  overflow:hidden;
-  transition:border-color .15s ease;
-}
-.factory-card:hover{border-color:var(--line-bright)}
-
-/* Color stripe on the left */
-.factory-card-stripe{
-  background:var(--team-color, var(--gold));
-  display:flex;align-items:center;justify-content:center;
   position:relative;
+  background:linear-gradient(180deg, #14141c 0%, #0e0e14 100%);
+  border:1px solid var(--line-bright);
+  border-radius:10px;
+  overflow:hidden;
+  padding:18px 18px 14px;
 }
-.factory-card-stripe::before{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.25) 100%);
+.factory-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg, var(--green) 0%, var(--team-color, var(--gold)) 50%, var(--accent) 100%);
+  box-shadow:0 0 14px rgba(255,204,0,.4);
 }
 
-/* Team identity column */
-.factory-card-team{
+/* Card header — ticker + status pill */
+.factory-card-head{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:16px;flex-wrap:wrap;
+  padding-bottom:14px;margin-bottom:16px;
+  border-bottom:1px solid var(--line);
+}
+.factory-card-headleft{
   display:flex;align-items:center;gap:12px;
-  padding:16px 18px;
-  border-right:1px solid var(--line);
 }
 .factory-card-logo{
-  width:42px;height:42px;border-radius:50%;
+  width:36px;height:36px;border-radius:50%;
   background:var(--bg-card-2) center/cover no-repeat;
-  border:1px solid var(--line);
-  flex-shrink:0;
+  border:1px solid var(--line-bright);flex-shrink:0;
 }
-.factory-card-id{display:flex;flex-direction:column;gap:2px;min-width:0}
-.factory-card-ticker{
-  font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:var(--text);
-}
-.factory-card-ticker .dollar{color:var(--gold)}
 .factory-card-name{
-  font-size:10px;color:var(--muted);letter-spacing:.5px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-
-/* Upgrade targets column */
-.factory-card-targets{
-  display:flex;flex-direction:column;
-  padding:12px 18px;
-  gap:8px;
-}
-.factory-target{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;gap:12px;
-  padding:6px 0;
-}
-.factory-target-stat{
-  font-family:'Orbitron',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;font-weight:900;letter-spacing:1.5px;
   color:var(--text);
-  display:flex;align-items:center;gap:6px;min-width:96px;
 }
-.factory-target-stat img{width:14px;height:14px;opacity:.85}
-.factory-target-stat .stat-value{
-  color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;
+.factory-card-name .ticker{color:var(--gold);margin-right:8px}
+.factory-card-name .sub{
+  display:block;
+  font-size:10px;letter-spacing:1px;color:var(--muted);font-weight:600;
+  margin-top:2px;
 }
-.factory-target-progress{
-  display:flex;flex-direction:column;gap:4px;min-width:0;
-}
-.factory-progress-bar{
-  height:6px;background:var(--bg-card-2);border:1px solid var(--line);
-  position:relative;overflow:hidden;
-}
-.factory-progress-fill{
-  position:absolute;left:0;top:0;bottom:0;
-  background:linear-gradient(90deg,var(--gold-dim),var(--gold));
-  transition:width .4s ease;
-}
-.factory-progress-fill.unlocked{
-  background:linear-gradient(90deg,#00aa55,var(--green));
-}
-.factory-progress-fill.expired{
-  background:linear-gradient(90deg,#552020,var(--accent));
-}
-.factory-progress-text{
-  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
-  letter-spacing:.5px;
-}
-.factory-progress-text strong{color:var(--text);font-weight:600}
-.factory-progress-text .target-type{color:var(--muted);margin-right:4px}
-
-.factory-target-status{
-  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;
-  padding:4px 8px;
-  border:1px solid var(--line);
+.factory-card-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9.5px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  background:rgba(255,204,0,.10);
+  border:1px solid rgba(255,204,0,.45);
+  border-radius:3px;
+  padding:5px 10px;
   white-space:nowrap;
 }
-.factory-target-status.pending{color:var(--muted);background:var(--bg-card-2)}
-.factory-target-status.progress{color:var(--gold);border-color:rgba(255,204,0,.3);background:rgba(255,204,0,.05)}
-.factory-target-status.unlocked{color:var(--green);border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.06)}
-.factory-target-status.expired{color:var(--accent);border-color:rgba(255,0,64,.3);background:rgba(255,0,64,.05)}
-
-/* Pre-launch state — when no targets yet, show PIT + measurement note */
-.factory-card-pretarget{
-  display:flex;flex-direction:column;justify-content:center;
-  padding:14px 18px;gap:8px;
+.factory-card-tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 6px rgba(255,204,0,.7);
 }
-.factory-pit-display{
-  display:flex;align-items:center;gap:10px;
-  font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:1.3px;
+
+/* The 5 stat rows — copied from upgrades.html pattern */
+.factory-stat-bars{
+  display:flex;flex-direction:column;gap:6px;
+}
+.factory-stat-bar{
+  position:relative;
+  display:grid;
+  grid-template-columns:54px 4px 1fr 70px;
+  align-items:center;
+  background:var(--bg-card);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.factory-stat-bar.targeted{
+  border-color:var(--gold);
+  box-shadow:0 0 18px rgba(255,204,0,.18), inset 0 0 0 1px rgba(255,204,0,.08);
+}
+.factory-stat-bar:hover{transform:translateX(2px)}
+
+.factory-stat-icon-cell{
+  width:54px;height:54px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg, #1a1a26 0%, #0e0e14 100%);
+  border-right:1px solid var(--line-bright);
+}
+.factory-stat-icon-cell img{
+  width:32px;height:32px;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.25));
+}
+
+.factory-stat-rail{
+  width:4px;height:100%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.5);
+}
+.factory-stat-bar.targeted .factory-stat-rail{
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(255,204,0,.8);
+  animation:pulseGold 2s ease-in-out infinite;
+}
+@keyframes pulseGold{
+  0%,100%{box-shadow:0 0 8px rgba(255,204,0,.5)}
+  50%{box-shadow:0 0 16px rgba(255,204,0,1),0 0 28px rgba(255,204,0,.4)}
+}
+
+.factory-stat-name-cell{
+  position:relative;
+  display:flex;align-items:center;gap:14px;
+  padding:0 18px;
+  font-family:'Orbitron',sans-serif;
+  font-size:17px;font-weight:900;letter-spacing:2px;
+  color:var(--text);
+  background:#0e0e14;
+  height:54px;
+  overflow:hidden;
+}
+
+/* GOLD fill = BASE on-chain value (weekly, fluctuates) */
+.factory-stat-name-cell::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;bottom:0;
+  width:var(--base-pct, 0%);
+  background:linear-gradient(90deg,
+    rgba(170,136,34,0.55) 0%,
+    rgba(255,204,0,0.45) 60%,
+    rgba(255,204,0,0.65) 100%);
+  z-index:0;
+  transition:width .8s cubic-bezier(.2,.8,.2,1);
+  border-right:1.5px solid rgba(255,204,0,0.9);
+  box-shadow:inset 0 0 24px rgba(255,204,0,0.15);
+}
+
+/* GREEN fill = UPGRADE points (permanent, earned through engagement) */
+.factory-stat-name-cell::after{
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  left:var(--base-pct, 0%);
+  width:var(--upgrade-pct, 0%);
+  background:linear-gradient(90deg,
+    rgba(0,170,85,0.55) 0%,
+    rgba(0,255,136,0.55) 60%,
+    rgba(0,255,136,0.75) 100%);
+  z-index:0;
+  transition:width .8s cubic-bezier(.2,.8,.2,1), left .8s cubic-bezier(.2,.8,.2,1);
+  border-right:1.5px solid rgba(0,255,136,0.9);
+  box-shadow:inset 0 0 24px rgba(0,255,136,0.15);
+}
+
+.factory-stat-name-cell > *{position:relative;z-index:1}
+
+.factory-stat-bar.targeted .factory-stat-name-cell::before{
+  background:linear-gradient(90deg,
+    rgba(170,136,34,0.65) 0%,
+    rgba(255,204,0,0.7) 60%,
+    rgba(255,224,80,0.85) 100%);
+  box-shadow:inset 0 0 28px rgba(255,204,0,0.25);
+  border-right:2px solid rgba(255,224,80,1);
+}
+
+.factory-stat-target-badge{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:#0d0d14;
+  background:var(--gold);
+  padding:3px 8px;border-radius:3px;
+  box-shadow:0 0 8px rgba(255,204,0,.6);
+  white-space:nowrap;
+}
+.factory-stat-upgrade-badge{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:1.5px;
+  color:#0d0d14;
+  background:var(--green);
+  padding:3px 8px;border-radius:3px;
+  box-shadow:0 0 8px rgba(0,255,136,.6);
+  white-space:nowrap;
+}
+
+.factory-stat-value-cell{
+  font-family:'Orbitron',sans-serif;
+  font-size:26px;font-weight:900;letter-spacing:-0.5px;
+  color:var(--gold);
+  text-align:center;
+  text-shadow:0 0 8px rgba(255,204,0,.35);
+  padding-right:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  line-height:1;
+}
+.factory-stat-value-cell .upgrade-bonus{
+  font-size:11px;color:var(--green);
+  text-shadow:0 0 6px rgba(0,255,136,.4);
+  margin-top:2px;letter-spacing:0;
+}
+.factory-stat-bar.targeted .factory-stat-value-cell{
+  color:var(--gold);
+  text-shadow:0 0 12px rgba(255,204,0,.6);
+}
+
+/* PIT row visually muted — locked to 5, not upgradeable */
+.factory-stat-bar.is-pit{
+  opacity:.92;
+}
+.factory-stat-bar.is-pit .factory-stat-rail{
+  background:var(--muted);
+  box-shadow:none;
+  animation:none;
+}
+.factory-stat-bar.is-pit .factory-stat-name-cell::before{
+  background:linear-gradient(90deg,
+    rgba(120,120,140,.35) 0%,
+    rgba(160,160,180,.30) 100%);
+  border-right:1.5px solid rgba(180,180,200,.55);
+  box-shadow:inset 0 0 18px rgba(160,160,180,.10);
+}
+.factory-stat-bar.is-pit .factory-stat-value-cell{
   color:var(--muted);
+  text-shadow:none;
 }
-.factory-pit-display img{width:14px;height:14px;opacity:.7}
-.factory-pit-display .pit-val{
-  color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
-}
-.factory-pit-display .pit-tag{
-  font-size:9px;letter-spacing:1px;color:var(--dim);
-  padding-left:10px;border-left:1px solid var(--line);
-}
-.factory-stats-row{
-  display:flex;gap:14px;flex-wrap:wrap;
-  font-family:'JetBrains Mono',monospace;font-size:11px;
-}
-.factory-stat-mini{
-  display:flex;flex-direction:column;gap:2px;
-}
-.factory-stat-mini .label{
-  font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.4px;color:var(--muted);
-}
-.factory-stat-mini .val{
-  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);font-weight:600;
-}
-.factory-stat-mini.lowest .val{color:var(--accent)}
-.factory-stat-mini.second .val{color:var(--gold)}
 
-/* Bulletin link inside targets */
-.factory-bulletin-link{
-  font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;
-  color:var(--gold);text-decoration:none;
-  display:inline-flex;align-items:center;gap:4px;
+/* Empty / pending state */
+.factory-card-pending{
+  padding:14px 0;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--muted);letter-spacing:.5px;
+  text-align:center;
 }
-.factory-bulletin-link:hover{text-decoration:underline}
 
 /* Methodology footer mirrors pitwall pattern */
 .factory-method{
@@ -1540,15 +1620,40 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   color:var(--gold);margin-bottom:6px;font-weight:700;
 }
 
-/* Responsive — stack on small screens */
+/* Legend explaining gold vs green */
+.factory-legend{
+  display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+  margin-bottom:14px;
+  padding:10px 14px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.3px;
+  color:var(--muted);
+}
+.factory-legend-item{display:inline-flex;align-items:center;gap:8px}
+.factory-legend-swatch{
+  display:inline-block;width:14px;height:10px;border-radius:2px;
+}
+.factory-legend-swatch.base{background:linear-gradient(90deg,rgba(170,136,34,.6),rgba(255,204,0,.7))}
+.factory-legend-swatch.upgrade{background:linear-gradient(90deg,rgba(0,170,85,.6),rgba(0,255,136,.7))}
+.factory-legend-item strong{color:var(--text);font-weight:700}
+
+/* Responsive */
 @media(max-width:780px){
   .factory{padding:0 12px 28px}
-  .factory-card{grid-template-columns:8px 1fr;grid-template-rows:auto auto}
-  .factory-card-stripe{grid-row:1 / span 2}
-  .factory-card-team{border-right:none;border-bottom:1px solid var(--line)}
-  .factory-target{grid-template-columns:1fr;gap:6px}
-  .factory-target-status{justify-self:start}
+  .factory-card{padding:14px 12px 12px}
+  .factory-card-head{padding-bottom:10px;margin-bottom:12px}
+  .factory-card-name{font-size:14px;letter-spacing:1px}
+  .factory-stat-bar{grid-template-columns:46px 4px 1fr 56px}
+  .factory-stat-icon-cell{width:46px;height:46px}
+  .factory-stat-icon-cell img{width:26px;height:26px}
+  .factory-stat-name-cell{font-size:13px;letter-spacing:1.5px;height:46px;padding:0 12px;gap:8px}
+  .factory-stat-target-badge,.factory-stat-upgrade-badge{font-size:8px;padding:2px 6px}
+  .factory-stat-value-cell{font-size:20px;padding-right:10px}
+  .factory-stat-value-cell .upgrade-bonus{font-size:10px}
   .factory-status{padding:14px 12px}
+  .factory-legend{font-size:9px;letter-spacing:1px}
 }
 
 /* ===== END FACTORY CSS ===== */
@@ -1610,6 +1715,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     <div class="banner-fallback" aria-hidden="true"></div>
     <div class="banner-bg is-paddock" aria-hidden="true" style="--banner-image:url('gp-central-banner.png'); --banner-pos:center 70%"></div>
     <div class="banner-bg is-pitwall" aria-hidden="true" style="--banner-image:url('pitwall-banner.png'); --banner-pos:center 70%"></div>
+    <div class="banner-bg is-factory" aria-hidden="true" style="--banner-image:url('upgrades.png'); --banner-pos:center 70%"></div>
     <div class="banner-content">
       <div class="banner-top">
         <div class="banner-eyebrow banner-eyebrow-paddock">RACE CONTROL · LIVE FROM THE PADDOCK</div>
@@ -1619,7 +1725,6 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
           GP <span class="yellow">CENTRAL</span>
         </h1>
         <div class="banner-sub">THE STORY <strong>BETWEEN THE RACES</strong></div>
-        <p class="banner-blurb">Every upgrade, signing, and result from across the MEME GP grid. Told by the data and the paddock.</p>
       </div>
       <!-- Dynamic stat counters mount — populated by news-loader.js -->
       <div class="banner-stats" id="gp-hero-counters" aria-live="polite">
@@ -1787,11 +1892,29 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       <div class="factory-status">
         <div class="factory-status-info">
           <span><span class="live-dot"></span>FACTORY · <span id="factory-state-label">PROVISIONAL</span></span>
-          <span id="factory-cycle-label">CYCLE · BASE MEASUREMENT WEEK</span>
+          <span id="factory-cycle-label">CYCLE · GRID LOCK WEEK</span>
         </div>
         <div>
-          <span id="factory-lockdown">NEXT SNAPSHOT · SUN 7 JUN 23:59 UTC</span>
+          <span id="factory-lockdown">GRID LOCKS · SUN 31 MAY 23:59 UTC</span>
         </div>
+      </div>
+
+      <!-- VIEW BY pill bar — same component family as Pit Wall -->
+      <div class="viewby-bar" id="factory-viewby-bar" style="margin-bottom:14px">
+        <span class="viewby-label">VIEW BY:</span>
+        <button class="viewby-pill overall active" data-factory-stat="overall">OVR</button>
+        <button class="viewby-pill" data-factory-stat="engine"><img src="icon-engine.png" alt="">ENG</button>
+        <button class="viewby-pill" data-factory-stat="aero"><img src="icon-aero.png" alt="">AER</button>
+        <button class="viewby-pill" data-factory-stat="chassis"><img src="icon-chassis.png" alt="">CHA</button>
+        <button class="viewby-pill" data-factory-stat="drag"><img src="icon-drag.png" alt="">DRG</button>
+        <button class="viewby-pill" data-factory-stat="pit"><img src="icon-pit.png" alt="">PIT</button>
+      </div>
+
+      <!-- Legend explaining gold vs green -->
+      <div class="factory-legend">
+        <span class="factory-legend-item"><span class="factory-legend-swatch base"></span><strong>BASE</strong> · ON-CHAIN · WEEKLY</span>
+        <span class="factory-legend-item"><span class="factory-legend-swatch upgrade"></span><strong>UPGRADE</strong> · EARNED · PERMANENT</span>
+        <span class="factory-legend-item" style="opacity:.7">Stats cap at <strong style="color:var(--gold)">9.5</strong></span>
       </div>
 
       <div class="factory-cards" id="factory-cards">
@@ -1801,7 +1924,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       <div class="factory-method">
         <div class="factory-method-title">▸ METHODOLOGY</div>
         <div>
-          <strong>Upgrade Bulletins</strong> drop every Monday during race weeks. Each team's <strong>two lowest stats</strong> (from ENGINE, AERO, CHASSIS, DRAG) become that week's targets. <strong>50 likes</strong> on the bulletin tweet → lowest stat <strong>+1</strong>. <strong>30 retweets</strong> → second-lowest <strong>+1</strong>. Cycle locks Friday 23:59 UTC. Upgrades are permanent. <strong>PIT</strong> resets to 5 weekly and is not upgradeable. Pre-season measurement runs 1–7 June; pre-season upgrade cycle runs 8–14 June; Race 1 weekend 15–21 June.
+          <strong>Upgrade Bulletins</strong> drop every Monday during race weeks. Each team's <strong>two lowest stats</strong> (from ENGINE, AERO, CHASSIS, DRAG) become that week's targets. <strong>50 likes</strong> on the bulletin tweet → lowest stat <strong>+1</strong>. <strong>30 retweets</strong> → second-lowest <strong>+1</strong>. Cycle locks Friday 23:59 UTC. Upgrades are permanent for the season — they stack on top of the weekly on-chain BASE. <strong>PIT</strong> resets to 5 weekly and is not upgradeable. Pre-season measurement runs 1–7 June; pre-season upgrade cycle runs 8–14 June; Race 1 weekend 15–21 June.
         </div>
       </div>
 
@@ -2223,11 +2346,15 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   // ============================================================
   // FACTORY DATA LOADER
   //   Reads data/factory-cycle.json for cycle state, targets, progress.
-  //   Falls back to provisional render from TEAMS config + live Pit Wall
-  //   stats if no JSON found.
+  //   Falls back to TEAMS config + live Pit Wall stats if no JSON found.
+  //   Pre-loads Pit Wall data on first Factory visit so cards never
+  //   render empty.
   // ============================================================
   let factoryLoaded = false;
   let factoryData = null;
+  let factorySortBy = 'overall';
+  let factoryCardsCache = []; // teams with computed stats, for re-sorting
+
   async function loadFactoryData(){
     if(factoryLoaded) return;
     factoryLoaded = true;
@@ -2242,8 +2369,26 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       // JSON missing — fall through to provisional render
     }
 
+    // Make sure we have live stat data — load Pit Wall data if it hasn't been yet
+    if(!cachedTeamData || !cachedTeamData.length){
+      try {
+        await loadPitWallData();
+      } catch(e){
+        // Pit Wall load failed — render with whatever we have
+      }
+    }
+
     renderFactory(factoryData);
   }
+
+  // State copy table — one source of truth for status strings
+  const FACTORY_STATE_COPY = {
+    provisional: { label: 'PROVISIONAL · GRID LOCK IN PROGRESS', cycle: 'CYCLE · GRID LOCK WEEK', lockdown: 'GRID LOCKS · SUN 31 MAY 23:59 UTC', hero: 'GRID LOCK', mile: 'SUN 31 MAY', tag: 'PROVISIONAL · CURRENT STATS' },
+    measurement: { label: 'MEASUREMENT IN PROGRESS', cycle: 'CYCLE · BASE MEASUREMENT WEEK', lockdown: 'BASE SNAPSHOT · SUN 7 JUN 23:59 UTC', hero: 'BASE MEASUREMENT', mile: 'SUN 7 JUN', tag: 'MEASURING · LIVE ON-CHAIN' },
+    upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · PRE-SEASON UPGRADES', lockdown: 'LOCKDOWN · FRI 12 JUN 23:59 UTC', hero: 'PRE-SEASON UPGRADES', mile: 'FRI 12 JUN', tag: 'CURRENT STATS · UPGRADE WEEK' },
+    raceweek: { label: 'RACE WEEK', cycle: 'CYCLE · RACE WEEK 1', lockdown: 'LIGHTS OUT · SUN 21 JUN', hero: 'RACE WEEK', mile: 'SUN 21 JUN', tag: 'RACE-DAY STATS · COMMIT' },
+    locked: { label: 'CYCLE LOCKED', cycle: 'LAST CYCLE COMPLETE', lockdown: 'NEXT CYCLE · TBD', hero: 'LOCKED', mile: 'TBD', tag: 'LOCKED STATS' }
+  };
 
   function renderFactory(data){
     const mount = document.getElementById('factory-cards');
@@ -2256,42 +2401,50 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
     if(!mount) return;
 
-    // Determine state — three modes: provisional (pre 1 June), measurement (1-7 June),
-    // upgrades (8-14 June), race-week, locked.
     const state = (data && data.cycle && data.cycle.status) || 'provisional';
-
-    // Update status copy
-    const stateCopy = {
-      provisional: { label: 'PROVISIONAL · GRID LOCK IN PROGRESS', cycle: 'CYCLE · GRID LOCK WEEK', lockdown: 'GRID LOCKS · SUN 31 MAY 23:59 UTC', hero: 'PRE-LAUNCH', mile: 'SUN 31 MAY' },
-      measurement: { label: 'MEASUREMENT IN PROGRESS', cycle: 'CYCLE · BASE MEASUREMENT WEEK', lockdown: 'BASE SNAPSHOT · SUN 7 JUN 23:59 UTC', hero: 'BASE MEASUREMENT', mile: 'SUN 7 JUN' },
-      upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · PRE-SEASON UPGRADES', lockdown: 'LOCKDOWN · FRI 12 JUN 23:59 UTC', hero: 'PRE-SEASON UPGRADES', mile: 'FRI 12 JUN' },
-      raceweek: { label: 'RACE WEEK', cycle: 'CYCLE · RACE WEEK 1', lockdown: 'LIGHTS OUT · SUN 21 JUN', hero: 'RACE WEEK', mile: 'SUN 21 JUN' },
-      locked: { label: 'CYCLE LOCKED', cycle: 'LAST CYCLE COMPLETE', lockdown: 'NEXT CYCLE · TBD', hero: 'LOCKED', mile: 'TBD' }
-    };
-    const sc = stateCopy[state] || stateCopy.provisional;
+    const sc = FACTORY_STATE_COPY[state] || FACTORY_STATE_COPY.provisional;
     if(stateLabel) stateLabel.textContent = sc.label;
     if(cycleLabel) cycleLabel.textContent = sc.cycle;
     if(lockdown) lockdown.textContent = sc.lockdown;
     if(heroCycle) heroCycle.textContent = sc.hero;
     if(heroMile) heroMile.textContent = sc.mile;
 
-    // Build the team list. If data has teams, use those. Otherwise fall back
-    // to TEAMS config + cachedTeamData (Pit Wall live stats) for provisional render.
+    // Build the merged team list
     let teams = [];
     if(data && data.teams && data.teams.length){
-      teams = data.teams;
+      // JSON-provided teams take precedence
+      teams = data.teams.map(t => {
+        const cfg = TEAMS.find(x => x.ticker === t.ticker) || {};
+        return {
+          ticker: t.ticker || cfg.ticker,
+          name: t.name || cfg.name,
+          color: t.color || cfg.color || '#ffcc00',
+          logo: t.logo || cfg.logo,
+          stats: t.stats || null,
+          upgrade_targets: t.upgrade_targets || null,
+          status: t.status || 'pending'
+        };
+      });
     } else {
-      // Fall back: build from TEAMS config, marrying with live Pit Wall data if loaded
+      // Fall back: build from TEAMS config + cachedTeamData (live Pit Wall stats)
       teams = TEAMS.map(t => {
         const live = (cachedTeamData || []).find(x => x.ticker === t.ticker);
+        let stats = null;
+        if(live){
+          stats = {
+            engine: { base: live.engine, upgrade: 0 },
+            aero: { base: live.aero, upgrade: 0 },
+            chassis: { base: live.chassis, upgrade: 0 },
+            drag: { base: live.drag, upgrade: 0 },
+            pit: { base: 5.0, upgrade: 0 }
+          };
+        }
         return {
           ticker: t.ticker,
           name: t.name,
           color: t.color,
           logo: t.logo,
-          stats: live ? {
-            engine: live.engine, aero: live.aero, chassis: live.chassis, drag: live.drag, pit: 5.0
-          } : null,
+          stats: stats,
           upgrade_targets: null,
           status: 'pending'
         };
@@ -2300,141 +2453,161 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
     if(heroCount) heroCount.textContent = teams.length;
 
-    if(!teams.length){
+    // Compute overall + cache for sorting
+    factoryCardsCache = teams.map(t => {
+      let overall = null;
+      if(t.stats){
+        const vals = ['engine','aero','chassis','drag','pit']
+          .map(k => totalForStat(t.stats[k]))
+          .filter(v => typeof v === 'number');
+        overall = vals.length ? (vals.reduce((a,b) => a+b, 0) / vals.length) : null;
+      }
+      return { team: t, overall, state };
+    });
+
+    renderFactoryCards();
+  }
+
+  // Total = base + upgrade, capped at 9.5
+  function totalForStat(s){
+    if(!s) return null;
+    const base = typeof s.base === 'number' ? s.base : (typeof s === 'number' ? s : null);
+    const upgrade = typeof s.upgrade === 'number' ? s.upgrade : 0;
+    if(base === null) return null;
+    return Math.min(9.5, base + upgrade);
+  }
+
+  // Render the cards (sort respects factorySortBy)
+  function renderFactoryCards(){
+    const mount = document.getElementById('factory-cards');
+    if(!mount) return;
+
+    if(!factoryCardsCache.length){
       mount.innerHTML = '<div class="gpf-empty" style="padding:24px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;font-size:12px;">No teams in the factory yet. Check back after grid lock.</div>';
       return;
     }
 
-    // Render each card
-    mount.innerHTML = teams.map(t => renderFactoryCard(t, state)).join('');
+    // Sort
+    let sorted = factoryCardsCache.slice();
+    if(factorySortBy === 'overall'){
+      sorted.sort((a,b) => (b.overall || -1) - (a.overall || -1));
+    } else {
+      sorted.sort((a,b) => {
+        const av = a.team.stats ? totalForStat(a.team.stats[factorySortBy]) : null;
+        const bv = b.team.stats ? totalForStat(b.team.stats[factorySortBy]) : null;
+        return (bv || -1) - (av || -1);
+      });
+    }
+
+    mount.innerHTML = sorted.map(entry => renderFactoryCard(entry.team, entry.state)).join('');
   }
 
+  // ============================================================
+  // RENDER A SINGLE TEAM CARD — horizontal stat-bar pattern
+  // ============================================================
   function renderFactoryCard(team, state){
     const color = team.color || '#ffcc00';
     const logo = team.logo || 'logo.png';
     const ticker = team.ticker || '???';
     const name = team.name || '';
+    const sc = FACTORY_STATE_COPY[state] || FACTORY_STATE_COPY.provisional;
 
-    // Determine the two lowest stats (from ENGINE/AERO/CHASSIS/DRAG only)
-    let lowest = null, second = null;
-    if(team.stats){
-      const eligible = [
-        { stat: 'engine', val: team.stats.engine },
-        { stat: 'aero', val: team.stats.aero },
-        { stat: 'chassis', val: team.stats.chassis },
-        { stat: 'drag', val: team.stats.drag }
-      ].filter(s => typeof s.val === 'number').sort((a,b) => a.val - b.val);
-      lowest = eligible[0] || null;
-      second = eligible[1] || null;
+    if(!team.stats){
+      // No stats — pending state
+      return `
+        <div class="factory-card" style="--team-color:${color}">
+          <div class="factory-card-head">
+            <div class="factory-card-headleft">
+              <div class="factory-card-logo" style="background-image:url('${logo}')"></div>
+              <div class="factory-card-name"><span class="ticker">$${ticker}</span>${name}</div>
+            </div>
+            <div class="factory-card-tag">${sc.tag}</div>
+          </div>
+          <div class="factory-card-pending">PENDING MEASUREMENT · STATS DROP ${sc.mile}</div>
+        </div>
+      `;
     }
 
-    // Decide which body to render based on cycle state
-    let targetsHtml = '';
-    if(state === 'upgrades' && team.upgrade_targets){
-      targetsHtml = renderUpgradeTargets(team.upgrade_targets);
-    } else {
-      // Provisional / measurement / pre-targets state — show PIT + the two lowest as "next week's targets"
-      targetsHtml = renderProvisionalTargets(team.stats, lowest, second, state);
-    }
+    // Determine the two lowest stats from ENGINE/AERO/CHASSIS/DRAG (excluding PIT)
+    const eligibleKeys = ['engine','aero','chassis','drag'];
+    const eligible = eligibleKeys
+      .map(k => ({ key: k, total: totalForStat(team.stats[k]) }))
+      .filter(s => typeof s.total === 'number')
+      .sort((a,b) => a.total - b.total);
+    const lowestKey = eligible[0] ? eligible[0].key : null;
+    const secondKey = eligible[1] ? eligible[1].key : null;
+
+    // Only show target badges when we're in an active upgrade cycle (state = upgrades/measurement)
+    const showTargets = (state === 'upgrades' || state === 'measurement');
+
+    // Build each stat row
+    const order = ['engine','aero','chassis','drag','pit'];
+    const iconMap = {
+      engine: 'icon-engine.png',
+      aero: 'icon-aero.png',
+      chassis: 'icon-chassis.png',
+      drag: 'icon-drag.png',
+      pit: 'icon-pit.png'
+    };
+    const rows = order.map(key => {
+      const s = team.stats[key];
+      if(!s) return '';
+      const base = typeof s.base === 'number' ? s.base : (typeof s === 'number' ? s : 0);
+      const upgrade = typeof s.upgrade === 'number' ? s.upgrade : 0;
+      const total = Math.min(9.5, base + upgrade);
+      const basePct = Math.min(100, (base / 9.5) * 100);
+      const upgradePct = Math.min(100 - basePct, (upgrade / 9.5) * 100);
+
+      const isPit = key === 'pit';
+      const isTarget = showTargets && !isPit && (key === lowestKey || key === secondKey);
+      const targetLabel = key === lowestKey ? 'TARGET A · LOWEST' : key === secondKey ? 'TARGET B · 2ND-LOWEST' : null;
+
+      const valueDisplay = upgrade > 0
+        ? `${total.toFixed(1)}<span class="upgrade-bonus">+${upgrade.toFixed(1)}</span>`
+        : total.toFixed(1);
+
+      const badge = isTarget ? `<span class="factory-stat-target-badge">${targetLabel}</span>`
+                  : (upgrade > 0 ? `<span class="factory-stat-upgrade-badge">+${upgrade.toFixed(1)} UPGRADE</span>` : '');
+
+      return `
+        <div class="factory-stat-bar ${isTarget ? 'targeted' : ''} ${isPit ? 'is-pit' : ''}">
+          <div class="factory-stat-icon-cell"><img src="${iconMap[key]}" alt="${key}"></div>
+          <div class="factory-stat-rail"></div>
+          <div class="factory-stat-name-cell" style="--base-pct:${basePct}%; --upgrade-pct:${upgradePct}%;">
+            ${key.toUpperCase()}
+            ${badge}
+          </div>
+          <div class="factory-stat-value-cell">${valueDisplay}</div>
+        </div>
+      `;
+    }).join('');
 
     return `
       <div class="factory-card" style="--team-color:${color}">
-        <div class="factory-card-stripe" aria-hidden="true"></div>
-        <div class="factory-card-team">
-          <div class="factory-card-logo" style="background-image:url('${logo}')"></div>
-          <div class="factory-card-id">
-            <div class="factory-card-ticker"><span class="dollar">$</span>${ticker}</div>
-            <div class="factory-card-name">${name}</div>
+        <div class="factory-card-head">
+          <div class="factory-card-headleft">
+            <div class="factory-card-logo" style="background-image:url('${logo}')"></div>
+            <div class="factory-card-name"><span class="ticker">$${ticker}</span>${name}</div>
           </div>
+          <div class="factory-card-tag">${sc.tag}</div>
         </div>
-        <div class="factory-card-pretarget">
-          ${targetsHtml}
+        <div class="factory-stat-bars">
+          ${rows}
         </div>
       </div>
     `;
   }
 
-  function renderProvisionalTargets(stats, lowest, second, state){
-    if(!stats || !lowest){
-      // No stats yet — pure pending
-      return `
-        <div class="factory-pit-display">
-          <img src="icon-pit.png" alt="">PIT · <span class="pit-val">5.0</span>
-          <span class="pit-tag">WEEKLY RESET</span>
-        </div>
-        <div class="factory-stats-row">
-          <span class="factory-target-status pending">PENDING MEASUREMENT</span>
-        </div>
-      `;
-    }
-
-    const stateNote = state === 'measurement' ? 'TRACKING · TARGETS DROP 8 JUN'
-                    : state === 'provisional' ? 'PROVISIONAL · SNAPSHOT 7 JUN'
-                    : 'UPCOMING TARGETS';
-
-    return `
-      <div class="factory-pit-display">
-        <img src="icon-pit.png" alt="">PIT · <span class="pit-val">${(stats.pit || 5).toFixed(1)}</span>
-        <span class="pit-tag">WEEKLY RESET · NOT UPGRADEABLE</span>
-      </div>
-      <div class="factory-stats-row">
-        <div class="factory-stat-mini lowest">
-          <span class="label">LOWEST · ${lowest.stat.toUpperCase()}</span>
-          <span class="val">${lowest.val.toFixed(1)}</span>
-        </div>
-        <div class="factory-stat-mini second">
-          <span class="label">2ND LOWEST · ${second ? second.stat.toUpperCase() : '—'}</span>
-          <span class="val">${second ? second.val.toFixed(1) : '—'}</span>
-        </div>
-        <div class="factory-stat-mini" style="margin-left:auto">
-          <span class="label">STATUS</span>
-          <span class="val" style="font-size:10px;color:var(--muted);letter-spacing:1px;">${stateNote}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderUpgradeTargets(targets){
-    const lowest = targets.lowest || {};
-    const second = targets.second || {};
-
-    const renderTarget = (t, type) => {
-      const isLikes = type === 'likes';
-      const current = isLikes ? (t.likes_current || 0) : (t.rts_current || 0);
-      const target = isLikes ? (t.likes_target || 50) : (t.rts_target || 30);
-      const pct = Math.min(100, (current / target) * 100);
-      const unlocked = current >= target;
-      const expired = t.expired;
-      const status = expired ? 'expired' : unlocked ? 'unlocked' : current > 0 ? 'progress' : 'pending';
-      const fillClass = unlocked ? 'unlocked' : expired ? 'expired' : '';
-      const statName = (t.stat || '').toUpperCase();
-      const targetType = isLikes ? 'LIKES' : 'RTs';
-      const bulletin = t.tweet_id ? `https://twitter.com/MemeGrandPrix/status/${t.tweet_id}` : null;
-
-      return `
-        <div class="factory-target">
-          <div class="factory-target-stat">
-            ${statName} <span class="stat-value">+1</span>
-          </div>
-          <div class="factory-target-progress">
-            <div class="factory-progress-bar">
-              <div class="factory-progress-fill ${fillClass}" style="width:${pct}%"></div>
-            </div>
-            <div class="factory-progress-text">
-              <span class="target-type">${targetType}</span><strong>${current}</strong> / ${target}
-              ${bulletin ? ` · <a class="factory-bulletin-link" href="${bulletin}" target="_blank" rel="noopener">↗ BULLETIN</a>` : ''}
-            </div>
-          </div>
-          <div class="factory-target-status ${status}">${status.toUpperCase()}</div>
-        </div>
-      `;
-    };
-
-    return `
-      ${lowest.stat ? renderTarget(lowest, 'likes') : ''}
-      ${second.stat ? renderTarget(second, 'rts') : ''}
-    `;
-  }
+  // VIEW BY pill handlers — bind on first Factory render
+  document.querySelectorAll('[data-factory-stat]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      factorySortBy = pill.dataset.factoryStat;
+      document.querySelectorAll('[data-factory-stat]').forEach(p => {
+        p.classList.toggle('active', p === pill);
+      });
+      renderFactoryCards();
+    });
+  });
 
   function setActiveTab(name){
     document.querySelectorAll('.gpc-tab').forEach(t => {
