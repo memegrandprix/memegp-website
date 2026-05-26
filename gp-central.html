@@ -2427,15 +2427,16 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       });
     } else {
       // Fall back: build from TEAMS config + cachedTeamData (live Pit Wall stats)
+      // cachedTeamData shape: [{ team: {ticker, name, color, logo, ...}, data: {...}, stats: {engine, aero, chassis, drag, ...} }]
       teams = TEAMS.map(t => {
-        const live = (cachedTeamData || []).find(x => x.ticker === t.ticker);
+        const live = (cachedTeamData || []).find(x => x.team && x.team.ticker === t.ticker);
         let stats = null;
-        if(live){
+        if(live && live.stats){
           stats = {
-            engine: { base: live.engine, upgrade: 0 },
-            aero: { base: live.aero, upgrade: 0 },
-            chassis: { base: live.chassis, upgrade: 0 },
-            drag: { base: live.drag, upgrade: 0 },
+            engine: { base: live.stats.engine, upgrade: 0 },
+            aero: { base: live.stats.aero, upgrade: 0 },
+            chassis: { base: live.stats.chassis, upgrade: 0 },
+            drag: { base: live.stats.drag, upgrade: 0 },
             pit: { base: 5.0, upgrade: 0 }
           };
         }
