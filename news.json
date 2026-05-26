@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-26-dobermann-official-team-14",
+      "type": "paddock",
+      "timestamp": "2026-05-26T18:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$DOBERMANN",
+        "name": "STEALTH DOBIE",
+        "color": "#1a1a1a",
+        "logo": "dobermann.png",
+        "contract": "J3mfHoQb27xHL1xUYsoPfU1vZHbzCeK7fZYvsWeYdoge",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 14 — $DOBERMANN · STEALTH DOBIE ARRIVES",
+      "body": "STEALTH DOBIE locked in as the fourteenth official team for Season 2 — and the first team on the grid launched from the Anoncoin pad. Driver: STEALTH. Car: DOBIE-14. Livery: STEALTH GREY. Starting profile: 4.3 overall — mid-grid debut with a strong ENGINE 5.7 ($513K MCAP) and a stealth-low AERO 1.8 that screams pre-season upgrade target. $DOBERMANN was minted on Anoncoin, the AI-powered launchpad built by the MyDoge team (Polychain-backed, Alliance accelerator), and races under the colours of the Dogecoin ecosystem. They don't bark. They don't blink. They just race.",
+      "tweet": "🏁 OFFICIAL TEAM 14 — @MyDogeCTO\n\na new shadow on the grid.\n\nthey don't bark. they don't blink. they just race.\n\n$DOBERMANN — STEALTH DOBIE — joins MEME GP. team 14.\n\nfirst team from the @anoncoin pad.\n\nmemegrandprix.com/teams-dobermann.html\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-20-billy-official-team-13",
       "type": "paddock",
       "timestamp": "2026-05-20T10:00:00Z",
