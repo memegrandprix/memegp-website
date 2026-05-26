@@ -1656,6 +1656,81 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   .factory-legend{font-size:9px;letter-spacing:1px}
 }
 
+/* =====================================================
+   FACTORY TEAM STRIP — horizontal icon ranking
+   Sits between BASE/UPGRADE legend and team cards.
+   Icons sorted by selected VIEW BY stat. Click to filter cards.
+   ===================================================== */
+.factory-team-strip-wrap{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:18px;
+  padding:12px 14px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.factory-team-strip{
+  display:flex;align-items:stretch;gap:8px;
+  flex:1;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  padding-bottom:4px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--line-bright) transparent;
+}
+.factory-team-strip::-webkit-scrollbar{height:6px}
+.factory-team-strip::-webkit-scrollbar-track{background:transparent}
+.factory-team-strip::-webkit-scrollbar-thumb{background:var(--line-bright);border-radius:3px}
+
+.factory-team-chip{
+  display:flex;align-items:center;justify-content:center;
+  padding:3px;
+  background:linear-gradient(180deg,#14141c 0%,#0e0e14 100%);
+  border:1px solid var(--line-bright);
+  border-radius:50%;
+  cursor:pointer;
+  transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  flex-shrink:0;
+  width:48px;height:48px;
+  user-select:none;
+}
+.factory-team-chip:hover{
+  border-color:var(--gold);
+  transform:translateY(-2px);
+  box-shadow:0 4px 14px rgba(255,204,0,.18);
+}
+.factory-team-chip.active{
+  border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(255,204,0,.18) 0%,rgba(255,204,0,.04) 100%);
+  box-shadow:0 0 14px rgba(255,204,0,.4), inset 0 0 0 1px rgba(255,204,0,.4);
+}
+.factory-team-chip-logo{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--bg-card-2) center/cover no-repeat;
+}
+
+.factory-team-strip-clear{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;letter-spacing:1.5px;font-weight:800;
+  color:var(--accent);
+  background:rgba(255,0,64,.08);
+  border:1px solid rgba(255,0,64,.4);
+  border-radius:3px;
+  padding:6px 10px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .15s ease;
+  flex-shrink:0;
+}
+.factory-team-strip-clear:hover{
+  background:rgba(255,0,64,.18);
+}
+
+@media(max-width:780px){
+  .factory-team-strip-wrap{padding:10px 8px;gap:8px}
+  .factory-team-chip{width:40px;height:40px;padding:2px}
+}
+
 /* ===== END FACTORY CSS ===== */
 
 </style>
@@ -1910,11 +1985,34 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
         <button class="viewby-pill" data-factory-stat="pit"><img src="icon-pit.png" alt="">PIT</button>
       </div>
 
+      <!-- Stat focus banner — mirrors Pit Wall pattern -->
+      <div class="stat-focus-banner" id="factory-stat-focus-banner">
+        <div class="stat-focus-icon" id="factory-stat-focus-icon">
+          <span class="star">★</span>
+        </div>
+        <div class="stat-focus-content">
+          <div class="stat-focus-name" id="factory-stat-focus-name">OVERALL</div>
+          <div class="stat-focus-mechanics" id="factory-stat-focus-mechanics">LIVE</div>
+          <div class="stat-focus-flavor" id="factory-stat-focus-flavor">all stats combined</div>
+        </div>
+        <div class="stat-focus-rankings">FACTORY<br>FLOOR</div>
+      </div>
+
       <!-- Legend explaining gold vs green -->
       <div class="factory-legend">
         <span class="factory-legend-item"><span class="factory-legend-swatch base"></span><strong>BASE</strong> · ON-CHAIN · WEEKLY</span>
         <span class="factory-legend-item"><span class="factory-legend-swatch upgrade"></span><strong>UPGRADE</strong> · EARNED · PERMANENT</span>
         <span class="factory-legend-item" style="opacity:.7">Stats cap at <strong style="color:var(--gold)">9.5</strong></span>
+      </div>
+
+      <!-- Horizontal team strip — icons ranked 1..N by selected stat, click to filter -->
+      <div class="factory-team-strip-wrap">
+        <div class="factory-team-strip" id="factory-team-strip" role="navigation" aria-label="Teams ranked by selected stat">
+          <!-- Populated by renderFactoryTeamStrip() -->
+        </div>
+        <button class="factory-team-strip-clear" id="factory-team-strip-clear" style="display:none" aria-label="Show all teams">
+          ✕ SHOW ALL
+        </button>
       </div>
 
       <div class="factory-cards" id="factory-cards">
@@ -2353,6 +2451,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   let factoryLoaded = false;
   let factoryData = null;
   let factorySortBy = 'overall';
+  let factoryFilterTicker = null; // when set, only that team's card renders
   let factoryCardsCache = []; // teams with computed stats, for re-sorting
 
   async function loadFactoryData(){
@@ -2466,6 +2565,8 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       return { team: t, overall, state };
     });
 
+    updateFactoryStatFocus();
+    renderFactoryTeamStrip();
     renderFactoryCards();
   }
 
@@ -2478,7 +2579,104 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     return Math.min(9.5, base + upgrade);
   }
 
-  // Render the cards (sort respects factorySortBy)
+  // ============================================================
+  // FACTORY STAT FOCUS BANNER UPDATER
+  //   Mirrors Pit Wall's pattern — reads STATS_META and updates
+  //   the big yellow strip below VIEW BY pills.
+  // ============================================================
+  function updateFactoryStatFocus(){
+    const focusIconEl = document.getElementById('factory-stat-focus-icon');
+    const focusNameEl = document.getElementById('factory-stat-focus-name');
+    const focusMechEl = document.getElementById('factory-stat-focus-mechanics');
+    const focusFlavorEl = document.getElementById('factory-stat-focus-flavor');
+    if(!focusNameEl || !window.MEMEGP_Stats || !window.MEMEGP_Stats.STATS_META) return;
+
+    const META = window.MEMEGP_Stats.STATS_META;
+    const meta = META[factorySortBy] || META.overall;
+
+    if(focusIconEl){
+      if(meta.icon){
+        focusIconEl.innerHTML = '<img src="' + meta.icon + '" alt="">';
+      } else {
+        focusIconEl.innerHTML = '<span class="star">★</span>';
+      }
+    }
+    focusNameEl.textContent = meta.name;
+    if(focusMechEl) focusMechEl.textContent = meta.mechanics;
+    if(focusFlavorEl) focusFlavorEl.textContent = meta.flavor;
+  }
+
+  // ============================================================
+  // FACTORY TEAM STRIP — horizontal icon ranking
+  //   Renders all teams as chips sorted by selected stat.
+  //   Click any chip → filter cards below to only that team.
+  // ============================================================
+  function renderFactoryTeamStrip(){
+    const mount = document.getElementById('factory-team-strip');
+    const clearBtn = document.getElementById('factory-team-strip-clear');
+    if(!mount) return;
+
+    if(!factoryCardsCache.length){
+      mount.innerHTML = '';
+      if(clearBtn) clearBtn.style.display = 'none';
+      return;
+    }
+
+    // Sort the same way cards are sorted
+    let sorted = factoryCardsCache.slice();
+    if(factorySortBy === 'overall'){
+      sorted.sort((a,b) => (b.overall || -1) - (a.overall || -1));
+    } else {
+      sorted.sort((a,b) => {
+        const av = a.team.stats ? totalForStat(a.team.stats[factorySortBy]) : null;
+        const bv = b.team.stats ? totalForStat(b.team.stats[factorySortBy]) : null;
+        return (bv || -1) - (av || -1);
+      });
+    }
+
+    mount.innerHTML = sorted.map((entry, idx) => {
+      const t = entry.team;
+      const ticker = t.ticker || '???';
+      const logo = t.logo || 'logo.png';
+      const pos = idx + 1;
+      // Stat value for the title tooltip (so it still shows on hover, just not in the chip)
+      let valDisplay = '—';
+      if(t.stats){
+        if(factorySortBy === 'overall'){
+          valDisplay = (entry.overall != null) ? entry.overall.toFixed(1) : '—';
+        } else {
+          const v = totalForStat(t.stats[factorySortBy]);
+          valDisplay = (v != null) ? v.toFixed(1) : '—';
+        }
+      }
+      const activeClass = (factoryFilterTicker === ticker) ? 'active' : '';
+      const tooltip = `$${ticker} · P${pos} · ${valDisplay}`;
+      return `
+        <button class="factory-team-chip ${activeClass}" data-factory-chip-ticker="${ticker}" title="${tooltip}" aria-label="Filter to $${ticker} (rank P${pos}, value ${valDisplay})">
+          <div class="factory-team-chip-logo" style="background-image:url('${logo}')"></div>
+        </button>
+      `;
+    }).join('');
+
+    if(clearBtn) clearBtn.style.display = factoryFilterTicker ? '' : 'none';
+
+    // Bind click handlers on chips
+    mount.querySelectorAll('[data-factory-chip-ticker]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const ticker = chip.dataset.factoryChipTicker;
+        // Toggle: clicking the active chip clears the filter
+        if(factoryFilterTicker === ticker){
+          factoryFilterTicker = null;
+        } else {
+          factoryFilterTicker = ticker;
+        }
+        renderFactoryTeamStrip();
+        renderFactoryCards();
+      });
+    });
+  }
+
+  // Render the cards (sort respects factorySortBy, filter respects factoryFilterTicker)
   function renderFactoryCards(){
     const mount = document.getElementById('factory-cards');
     if(!mount) return;
@@ -2498,6 +2696,16 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
         const bv = b.team.stats ? totalForStat(b.team.stats[factorySortBy]) : null;
         return (bv || -1) - (av || -1);
       });
+    }
+
+    // Filter — if a ticker is selected, show only that one card
+    if(factoryFilterTicker){
+      sorted = sorted.filter(entry => entry.team.ticker === factoryFilterTicker);
+    }
+
+    if(!sorted.length){
+      mount.innerHTML = '<div class="gpf-empty" style="padding:24px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;font-size:12px;">No matching teams.</div>';
+      return;
     }
 
     mount.innerHTML = sorted.map(entry => renderFactoryCard(entry.team, entry.state)).join('');
@@ -2606,9 +2814,21 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       document.querySelectorAll('[data-factory-stat]').forEach(p => {
         p.classList.toggle('active', p === pill);
       });
+      updateFactoryStatFocus();
+      renderFactoryTeamStrip();
       renderFactoryCards();
     });
   });
+
+  // SHOW ALL button on the team strip — clears the ticker filter
+  const factoryClearBtn = document.getElementById('factory-team-strip-clear');
+  if(factoryClearBtn){
+    factoryClearBtn.addEventListener('click', () => {
+      factoryFilterTicker = null;
+      renderFactoryTeamStrip();
+      renderFactoryCards();
+    });
+  }
 
   function setActiveTab(name){
     document.querySelectorAll('.gpc-tab').forEach(t => {
