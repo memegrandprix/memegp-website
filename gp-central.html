@@ -1664,7 +1664,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 .factory-team-strip-wrap{
   display:flex;align-items:center;gap:10px;
   margin-bottom:18px;
-  padding:12px 14px;
+  padding:12px 14px 30px;
   background:var(--bg-card);
   border:1px solid var(--line);
   border-radius:6px;
@@ -1683,7 +1683,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 .factory-team-strip::-webkit-scrollbar-thumb{background:var(--line-bright);border-radius:3px}
 
 .factory-team-chip{
-  display:flex;align-items:center;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   padding:3px;
   background:linear-gradient(180deg,#14141c 0%,#0e0e14 100%);
   border:1px solid var(--line-bright);
@@ -1693,6 +1693,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   flex-shrink:0;
   width:48px;height:48px;
   user-select:none;
+  position:relative;
 }
 .factory-team-chip:hover{
   border-color:var(--gold);
@@ -1707,6 +1708,37 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 .factory-team-chip-logo{
   width:100%;height:100%;border-radius:50%;
   background:var(--bg-card-2) center/cover no-repeat;
+}
+
+/* Mini F1 podium — stepped heights, gold/silver/bronze. P1 tallest. */
+.factory-team-chip::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:-12px;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border-radius:2px 2px 0 0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+}
+.factory-team-chip.podium-1::after{
+  width:46px;height:18px;
+  background:linear-gradient(180deg,#ffe066 0%,#d4a017 100%);
+  box-shadow:0 0 14px rgba(255,204,0,.75), 0 0 28px rgba(255,204,0,.35);
+  border:1px solid rgba(255,224,80,.6);
+}
+.factory-team-chip.podium-2::after{
+  width:42px;height:13px;
+  background:linear-gradient(180deg,#e6ecf2 0%,#9ba6b3 100%);
+  box-shadow:0 0 10px rgba(200,210,220,.6), 0 0 22px rgba(200,210,220,.25);
+  border:1px solid rgba(200,210,220,.5);
+}
+.factory-team-chip.podium-3::after{
+  width:38px;height:9px;
+  background:linear-gradient(180deg,#d99955 0%,#a0541c 100%);
+  box-shadow:0 0 8px rgba(205,127,50,.6), 0 0 18px rgba(205,127,50,.25);
+  border:1px solid rgba(217,153,85,.5);
 }
 
 .factory-team-strip-clear{
@@ -2650,9 +2682,10 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
         }
       }
       const activeClass = (factoryFilterTicker === ticker) ? 'active' : '';
+      const podiumClass = pos === 1 ? 'podium-1' : pos === 2 ? 'podium-2' : pos === 3 ? 'podium-3' : '';
       const tooltip = `$${ticker} · P${pos} · ${valDisplay}`;
       return `
-        <button class="factory-team-chip ${activeClass}" data-factory-chip-ticker="${ticker}" title="${tooltip}" aria-label="Filter to $${ticker} (rank P${pos}, value ${valDisplay})">
+        <button class="factory-team-chip ${activeClass} ${podiumClass}" data-factory-chip-ticker="${ticker}" title="${tooltip}" aria-label="Filter to $${ticker} (rank P${pos}, value ${valDisplay})">
           <div class="factory-team-chip-logo" style="background-image:url('${logo}')"></div>
         </button>
       `;
