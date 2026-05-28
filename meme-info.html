@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meme Info — MEME GP</title>
+<meta name="description" content="Everything to know about MEME GP. The format. The upgrade system. Who we are.">
+
+<meta property="og:title" content="Meme Info — MEME GP">
+<meta property="og:description" content="Everything to know about MEME GP. The format. The upgrade system. Who we are.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://memegrandprix.com/meme-info.html">
+<meta property="og:site_name" content="MEME GP">
+<meta property="og:image" content="https://memegrandprix.com/grid-hero.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:title" content="Meme Info — MEME GP">
+<meta name="twitter:description" content="Everything to know about MEME GP. The format. The upgrade system. Who we are.">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#00ff88;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:1;
+}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{
+  position:relative;z-index:10;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+  padding:14px 28px;
+  background:var(--bg-2);
+  border-bottom:1px solid var(--line);
+}
+.tnav-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;
+  background:rgba(255,204,0,.05);
+  border:1px solid rgba(255,204,0,.25);
+  border-radius:4px;
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);text-decoration:none;
+}
+.tnav-badge .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.7);
+}
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;
+  gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 18px;
+  border-radius:3px;
+  transition:color .15s ease, background .15s ease;
+}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.08);
+}
+.tnav-sep{width:1px;height:14px;background:var(--line-bright);margin:0 2px}
+.tnav-exit{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  background:rgba(255,0,64,.08);
+  border:1px solid rgba(255,0,64,.35);
+  border-radius:4px;
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);text-decoration:none;
+  transition:background .15s ease;
+}
+.tnav-exit:hover{background:rgba(255,0,64,.18)}
+.tnav-exit svg{width:14px;height:14px}
+@media(max-width:780px){
+  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
+  .tnav-center{
+    grid-column:1 / -1;
+    order:3;
+    justify-self:stretch;
+    flex-wrap:wrap;
+    gap:2px;
+  }
+  .tnav-link{flex:0 0 calc(33.333% - 4px);text-align:center}
+  .tnav-sep{display:none}
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;z-index:2;
+  padding:60px 28px 30px;
+  max-width:1080px;margin:0 auto;
+  text-align:center;
+}
+.hero-eyebrow{
+  display:inline-block;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:4px;color:var(--gold);
+  margin-bottom:18px;
+  padding:6px 14px;
+  border:1px solid rgba(255,204,0,.3);
+  border-radius:3px;
+  background:rgba(255,204,0,.05);
+}
+.hero h1{
+  font-family:'Orbitron',sans-serif;
+  font-size:48px;font-weight:800;letter-spacing:2px;
+  color:var(--text);
+  margin-bottom:14px;
+  line-height:1.05;
+}
+.hero h1 .gold{color:var(--gold)}
+.hero p{
+  font-size:15px;color:var(--muted);max-width:580px;margin:0 auto;line-height:1.6;
+}
+@media(max-width:780px){
+  .hero{padding:40px 16px 20px}
+  .hero h1{font-size:30px;letter-spacing:1px}
+  .hero p{font-size:13px}
+}
+
+/* ===== CARD GRID ===== */
+.cards-wrap{
+  position:relative;z-index:2;
+  padding:30px 28px 60px;
+  max-width:1080px;margin:0 auto;
+}
+.card-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+}
+@media(max-width:880px){
+  .card-grid{grid-template-columns:1fr;gap:14px}
+}
+.info-card{
+  position:relative;
+  display:flex;flex-direction:column;
+  padding:30px 26px 26px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,#0e0e16 100%);
+  border:1px solid var(--line-bright);
+  border-radius:8px;
+  text-decoration:none;
+  color:var(--text);
+  overflow:hidden;
+  min-height:320px;
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.info-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,204,0,.4);
+  box-shadow:0 10px 28px rgba(255,204,0,.10);
+}
+.info-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-color, var(--gold));
+}
+.info-card-icon{
+  font-size:36px;line-height:1;margin-bottom:18px;
+}
+.info-card-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:2.5px;font-weight:600;
+  color:var(--card-color, var(--gold));
+  margin-bottom:8px;
+}
+.info-card-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:800;letter-spacing:1.5px;
+  color:var(--text);
+  margin-bottom:14px;
+  line-height:1.1;
+}
+.info-card-blurb{
+  font-size:13.5px;color:var(--muted);line-height:1.6;flex:1;
+}
+.info-card-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:2px;font-weight:700;
+  color:var(--card-color, var(--gold));
+  margin-top:18px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+}
+.info-card-cta-arrow{
+  transition:transform .2s ease;
+}
+.info-card:hover .info-card-cta-arrow{transform:translateX(4px)}
+
+/* ===== FOOTER ===== */
+.footer-pro{
+  position:relative;z-index:2;
+  border-top:1px solid var(--line);
+  padding:30px 28px;
+  max-width:1080px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--muted);
+}
+.footer-pro a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line-bright)}
+.footer-pro a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+@media(max-width:780px){
+  .footer-pro{padding:20px 16px;font-size:10px;flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav-pro">
+  <a href="index.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>MEME GP</span>
+  </a>
+  <div class="tnav-center">
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="grid-index.html" class="tnav-link">GRID INDEX</a>
+    <span class="tnav-sep"></span>
+    <a href="gp-central.html" class="tnav-link">GP CENTRAL</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="meme-info.html" class="tnav-link active">MEME INFO</a>
+    <span class="tnav-sep"></span>
+    <a href="memegp-token.html" class="tnav-link">$MEMEGP</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">▸ MEME INFO</div>
+  <h1>EVERYTHING ABOUT <span class="gold">MEME GP</span></h1>
+  <p>The format, the upgrade system, the story behind the league. Pick a thread and pull it.</p>
+</section>
+
+<div class="cards-wrap">
+  <div class="card-grid">
+
+    <a href="how-it-works.html" class="info-card" style="--card-color:#1f7fd9">
+      <div class="info-card-icon">📖</div>
+      <div class="info-card-eyebrow">▸ THE FORMAT</div>
+      <h2 class="info-card-title">HOW IT WORKS</h2>
+      <p class="info-card-blurb">F1-style weekend, every week. Memecoin data drives every car. Stats, sectors, sessions, scoring — all explained.</p>
+      <span class="info-card-cta">LEARN THE FORMAT <span class="info-card-cta-arrow">→</span></span>
+    </a>
+
+    <a href="upgrades.html" class="info-card" style="--card-color:#ffcc00">
+      <div class="info-card-icon">🔧</div>
+      <div class="info-card-eyebrow">▸ THE UPGRADE SYSTEM</div>
+      <h2 class="info-card-title">UPGRADES</h2>
+      <p class="info-card-blurb">Every week between races, two of your team's stats become upgrade targets. Communities decide who upgrades. Permanent for the season.</p>
+      <span class="info-card-cta">SEE THE MECHANIC <span class="info-card-cta-arrow">→</span></span>
+    </a>
+
+    <a href="about.html" class="info-card" style="--card-color:#ff0040">
+      <div class="info-card-icon">🏁</div>
+      <div class="info-card-eyebrow">▸ BEHIND THE HELMETS</div>
+      <h2 class="info-card-title">ABOUT</h2>
+      <p class="info-card-blurb">Who's behind MEME GP, what we're building, and why your community can trust the grid. The values, the road, the team.</p>
+      <span class="info-card-cta">MEET THE GRID <span class="info-card-cta-arrow">→</span></span>
+    </a>
+
+  </div>
+</div>
+
+<footer class="footer-pro">
+  <div>MEME GP · 2026 SEASON · <a href="meme-info.html">MEME INFO</a> · <a href="roadmap.html">ROADMAP</a> · <a href="memegp-token.html">$MEMEGP</a></div>
+  <div>© 2026 MEME GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+</body>
+</html>

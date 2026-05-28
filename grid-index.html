@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Grid Index — MEME GP Season 2 Benchmark</title>
+<meta name="description" content="GRID INDEX vs MEME MARKET. The official Season 2 benchmark for memecoin performance. Equal-weight basket of all 15 MEME GP teams. Live daily.">
+
+<meta property="og:title" content="The Grid Index — MEME GP Season 2 Benchmark">
+<meta property="og:description" content="GRID INDEX vs MEME MARKET. The official Season 2 benchmark for memecoin performance.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://memegrandprix.com/grid-index.html">
+<meta property="og:site_name" content="MEME GP">
+<meta property="og:image" content="https://memegrandprix.com/grid-hero.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MemeGrandPrix">
+<meta name="twitter:title" content="The Grid Index — MEME GP Season 2 Benchmark">
+<meta name="twitter:description" content="GRID INDEX vs MEME MARKET. The official Season 2 benchmark for memecoin performance.">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040408;
+  --bg-2:#0a0a12;
+  --bg-card:#13131c;
+  --bg-card-2:#1a1a26;
+  --line:#1d1d28;
+  --line-bright:#2a2a36;
+  --text:#f0f0f5;
+  --muted:#7a7a88;
+  --dim:#3a3a44;
+  --accent:#ff0040;
+  --gold:#ffcc00;
+  --gold-dim:#aa8822;
+  --green:#4ade80;
+  --red:#ef4444;
+  --silver:#9ba6b3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Chakra Petch',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:1;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ===== TOPNAV PRO ===== */
+.topnav-pro{position:relative;z-index:10;display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:14px 28px;background:var(--bg-2);border-bottom:1px solid var(--line)}
+.tnav-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,204,0,.05);border:1px solid rgba(255,204,0,.25);border-radius:4px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:var(--gold);text-decoration:none}
+.tnav-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(255,204,0,.7)}
+.tnav-center{justify-self:center;display:flex;align-items:center;gap:0;background:rgba(20,20,30,.5);border:1px solid var(--line-bright);border-radius:6px;padding:4px}
+.tnav-link{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-decoration:none;padding:8px 18px;border-radius:3px;transition:color .15s ease, background .15s ease}
+.tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
+.tnav-link.active{color:var(--gold);background:rgba(255,204,0,.08)}
+.tnav-sep{width:1px;height:14px;background:var(--line-bright);margin:0 2px}
+.tnav-exit{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,0,64,.08);border:1px solid rgba(255,0,64,.35);border-radius:4px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--accent);text-decoration:none;transition:background .15s ease}
+.tnav-exit:hover{background:rgba(255,0,64,.18)}
+.tnav-exit svg{width:14px;height:14px}
+@media(max-width:780px){
+  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
+  .tnav-center{grid-column:1 / -1;order:3;justify-self:stretch;flex-wrap:wrap;gap:2px}
+  .tnav-link{flex:0 0 calc(33.333% - 4px);text-align:center}
+  .tnav-sep{display:none}
+}
+
+/* ===== PAGE WRAPPER ===== */
+.page-wrap{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:24px 24px 60px;
+}
+
+/* ===== HEADER ===== */
+.page-header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding-bottom:18px;border-bottom:1px solid var(--line);
+  margin-bottom:18px;flex-wrap:wrap;gap:14px;
+}
+.page-header-left .eyebrow{
+  font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);font-weight:600;
+  margin-bottom:6px;
+}
+.page-header-left h1{
+  font-family:'Orbitron',sans-serif;font-size:30px;font-weight:800;letter-spacing:2px;
+  color:var(--text);line-height:1;
+}
+.page-header-right{
+  text-align:right;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,.4);
+}
+.page-header-right .live-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);
+  margin-right:5px;animation:blink 1.5s infinite;
+}
+@media(max-width:680px){
+  .page-header-left h1{font-size:22px;letter-spacing:1.5px}
+  .page-header-right{text-align:left;font-size:9px}
+}
+
+/* ===== PRE-SEASON BANNER ===== */
+.preseason-banner{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 18px;
+  margin-bottom:20px;
+  background:linear-gradient(90deg,rgba(255,204,0,.08),rgba(255,204,0,.02));
+  border:1px solid rgba(255,204,0,.3);
+  border-left:3px solid var(--gold);
+  border-radius:4px;
+}
+.preseason-banner-icon{
+  font-size:18px;line-height:1;color:var(--gold);flex-shrink:0;margin-top:2px;
+}
+.preseason-banner-content{flex:1}
+.preseason-banner-title{
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2.5px;color:var(--gold);font-weight:700;margin-bottom:4px;
+}
+.preseason-banner-text{
+  font-size:12.5px;color:var(--text);line-height:1.55;
+}
+.preseason-banner-text strong{color:var(--gold);font-weight:600}
+
+/* ===== TIER 1 — CONTEXT BLOCKS ===== */
+.context-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:28px;
+}
+@media(max-width:680px){
+  .context-grid{grid-template-columns:1fr;gap:10px}
+}
+.context-block{
+  position:relative;overflow:hidden;
+  background:var(--bg-card);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:20px 18px;
+}
+.context-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--accent-color, var(--silver));
+}
+.context-block.is-grid{border-color:rgba(255,204,0,.35)}
+.context-block.is-grid::before{background:var(--gold)}
+.context-block-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2.5px;font-weight:600;
+  color:var(--silver);margin-bottom:14px;
+}
+.context-block.is-grid .context-block-eyebrow{color:var(--gold)}
+.context-block-value{
+  font-family:'Orbitron',sans-serif;font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1;
+  color:rgba(255,255,255,.85);margin-bottom:14px;
+}
+.context-block.is-grid .context-block-value{color:var(--gold)}
+.context-block-since{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.4);margin-bottom:12px;
+}
+.context-block.is-grid .context-block-since{color:rgba(255,204,0,.7)}
+.context-block-divider{
+  border-top:1px solid var(--line);padding-top:10px;
+}
+.context-block-divider .label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.45);margin-bottom:4px;
+}
+.context-block-divider .body{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;line-height:1.6;color:rgba(255,255,255,.6);
+}
+.context-block.is-grid .context-block-divider .body{color:rgba(255,255,255,.7)}
+
+/* ===== TIER 2 — HEADLINE ===== */
+.headline-wrap{
+  text-align:center;padding:24px 0 28px;
+}
+.headline-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;letter-spacing:4px;color:rgba(255,255,255,.55);font-weight:500;
+  margin-bottom:8px;
+}
+.headline-eyebrow-2{
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;letter-spacing:4px;color:rgba(255,255,255,.55);font-weight:500;
+  margin-bottom:24px;
+}
+.headline-number{
+  font-family:'Orbitron',sans-serif;
+  font-size:80px;font-weight:800;color:var(--gold);letter-spacing:-2px;line-height:.95;
+}
+.headline-number.is-negative{color:var(--red)}
+.headline-meta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.4);margin-top:12px;
+}
+@media(max-width:680px){
+  .headline-number{font-size:54px;letter-spacing:-1px}
+  .headline-eyebrow,.headline-eyebrow-2{font-size:10px;letter-spacing:2.5px}
+}
+
+/* ===== TIER 3 — CHART ===== */
+.chart-block{
+  background:var(--bg-card);border:1px solid var(--line-bright);border-radius:6px;
+  padding:16px 12px 12px;margin-bottom:24px;
+}
+.chart-legend{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;padding:0 6px;flex-wrap:wrap;gap:8px;
+}
+.chart-legend-left{
+  display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;
+}
+.legend-item{display:inline-flex;align-items:center;gap:6px}
+.legend-bar{display:inline-block;width:12px;height:2px}
+.legend-bar.gold{background:var(--gold)}
+.legend-bar.silver{background:var(--silver)}
+.legend-text-gold{color:var(--gold)}
+.legend-text-silver{color:rgba(255,255,255,.55)}
+.chart-legend-right{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1.5px}
+.chart-svg-wrap{position:relative}
+.chart-svg-wrap svg{width:100%;height:220px;display:block}
+.chart-x-labels{
+  display:flex;justify-content:space-between;padding:6px 6px 0;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.35);
+}
+.chart-empty{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
+  height:220px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  text-align:center;
+}
+.chart-empty-title{
+  font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;color:var(--gold);margin-bottom:4px;
+}
+
+/* ===== TIER 4 — TIME-WINDOW SELECTOR ===== */
+.tw-selector-label{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:12px;flex-wrap:wrap;gap:8px;
+}
+.tw-selector-label .left .eyebrow{
+  font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);font-weight:600;margin-bottom:4px;
+}
+.tw-selector-label .left .sub{
+  font-size:13px;color:rgba(255,255,255,.7);font-weight:500;
+}
+.tw-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;
+}
+@media(max-width:680px){
+  .tw-grid{grid-template-columns:1fr}
+}
+.tw-card{
+  background:var(--bg-card);border:1px solid var(--line-bright);
+  border-radius:6px;padding:14px;
+  text-align:left;cursor:pointer;font-family:inherit;
+  position:relative;transition:all .15s ease;
+}
+.tw-card:hover{border-color:rgba(255,204,0,.3)}
+.tw-card.active{border-color:rgba(255,204,0,.45);box-shadow:inset 0 0 0 1px rgba(255,204,0,.08)}
+.tw-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold)}
+.tw-card-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.45);margin-bottom:12px;
+}
+.tw-card.active .tw-card-eyebrow{color:var(--gold)}
+.tw-row{
+  display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;font-family:'JetBrains Mono',monospace;
+}
+.tw-row .label{color:rgba(255,255,255,.55)}
+.tw-row .value-grid{color:rgba(255,255,255,.85);font-weight:600}
+.tw-row .value-meme{color:rgba(255,255,255,.7)}
+.tw-card.active .tw-row .value-grid{color:var(--gold)}
+.tw-divider{
+  border-top:1px solid var(--line);padding-top:8px;margin-top:4px;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.tw-card.active .tw-divider{border-top-color:rgba(255,204,0,.15)}
+.tw-divider .alpha-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.4)}
+.tw-divider .alpha-value{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:rgba(255,255,255,.85)}
+.tw-card.active .tw-divider .alpha-value{color:var(--gold)}
+
+/* ===== TIER 5 — LEADERBOARD ===== */
+.lb-header{
+  background:var(--bg-card);border:1px solid rgba(255,204,0,.15);border-radius:6px;
+  padding:14px;margin-bottom:14px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+}
+.lb-header-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;color:var(--gold);font-weight:600;margin-bottom:4px;
+}
+.lb-header-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.55)}
+.lb-header-sub .active-window{color:var(--gold);font-weight:600}
+.lb-header-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.4);text-align:right;
+}
+.lb-rows{display:flex;flex-direction:column;gap:6px}
+.lb-row{
+  display:grid;grid-template-columns:42px 44px 1fr 110px;gap:12px;align-items:center;
+  background:var(--bg-card);border:1px solid var(--line-bright);border-radius:6px;
+  padding:10px 14px;
+  text-decoration:none;color:inherit;
+  transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  cursor:pointer;
+}
+.lb-row:hover{transform:translateX(2px);border-color:rgba(255,204,0,.3)}
+.lb-row.is-p1{
+  background:linear-gradient(90deg,rgba(255,204,0,.06),transparent);
+  border-color:rgba(255,204,0,.3);
+}
+.lb-position{
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.75);
+}
+.lb-row.is-p1 .lb-position{color:var(--gold)}
+.lb-logo{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--bg-card-2) center/cover no-repeat;
+  border:1.5px solid var(--line-bright);
+  flex-shrink:0;
+}
+.lb-row.is-p1 .lb-logo{border-color:rgba(255,204,0,.6)}
+.lb-info .ticker{
+  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;
+  color:var(--gold);line-height:1;
+}
+.lb-info .name{
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,.6);
+  margin-top:4px;
+}
+.lb-change{
+  display:flex;align-items:center;justify-content:flex-end;gap:6px;text-align:right;
+}
+.lb-change-arrow{font-size:14px}
+.lb-change-arrow.up{color:var(--green)}
+.lb-change-arrow.down{color:var(--red)}
+.lb-change-arrow.flat{color:var(--muted)}
+.lb-change-value{
+  font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.5px;
+}
+.lb-change-value.up{color:var(--green)}
+.lb-change-value.down{color:var(--red)}
+.lb-change-value.flat{color:var(--muted)}
+@media(max-width:680px){
+  .lb-row{grid-template-columns:34px 36px 1fr 80px;gap:8px;padding:8px 10px}
+  .lb-logo{width:30px;height:30px}
+  .lb-info .ticker{font-size:12px}
+  .lb-info .name{font-size:9px;letter-spacing:1px}
+  .lb-change-value{font-size:13px}
+}
+
+/* ===== METHODOLOGY ===== */
+.methodology{
+  margin-top:32px;padding-top:18px;border-top:1px solid var(--line);
+}
+.methodology-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;color:var(--gold);font-weight:600;margin-bottom:10px;
+}
+.methodology-body{
+  font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.75;color:rgba(255,255,255,.55);
+  max-width:760px;
+}
+
+/* ===== FOOTER ===== */
+.footer-pro{
+  position:relative;z-index:2;
+  border-top:1px solid var(--line);padding:30px 28px;max-width:1080px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+}
+.footer-pro a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line-bright)}
+.footer-pro a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+@media(max-width:780px){
+  .footer-pro{padding:20px 16px;font-size:10px;flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav-pro">
+  <a href="index.html" class="tnav-badge">
+    <span class="dot"></span>
+    <span>MEME GP</span>
+  </a>
+  <div class="tnav-center">
+    <a href="season-2.html" class="tnav-link">SEASON 2</a>
+    <span class="tnav-sep"></span>
+    <a href="grid-index.html" class="tnav-link active">GRID INDEX</a>
+    <span class="tnav-sep"></span>
+    <a href="gp-central.html" class="tnav-link">GP CENTRAL</a>
+    <span class="tnav-sep"></span>
+    <a href="roadmap.html" class="tnav-link">ROADMAP</a>
+    <span class="tnav-sep"></span>
+    <a href="meme-info.html" class="tnav-link">MEME INFO</a>
+    <span class="tnav-sep"></span>
+    <a href="memegp-token.html" class="tnav-link">$MEMEGP</a>
+  </div>
+  <a href="join.html" class="tnav-exit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3v18"/><path d="M5 4c4 -2 8 2 12 0c0 4 0 8 0 12c-4 2 -8 -2 -12 0z" fill="currentColor" fill-opacity="0.15"/>
+    </svg>
+    <span>JOIN THE GRID</span>
+  </a>
+</nav>
+
+<main class="page-wrap">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="eyebrow">▸ THE</div>
+      <h1>GRID INDEX</h1>
+    </div>
+    <div class="page-header-right">
+      <span class="live-dot"></span><span id="hdr-status">PRE-SEASON</span><br>
+      <span id="hdr-meta">UPDATED · <span id="hdr-date">—</span></span>
+    </div>
+  </div>
+
+  <!-- PRE-SEASON BANNER -->
+  <div class="preseason-banner" id="preseason-banner">
+    <div class="preseason-banner-icon">⚑</div>
+    <div class="preseason-banner-content">
+      <div class="preseason-banner-title">▸ PRE-SEASON · INDICATIVE SNAPSHOT</div>
+      <div class="preseason-banner-text">
+        Index goes live <strong>Mon 1 June 00:00 UTC</strong>. The values below are an indicative snapshot from today and do not yet track season performance. From 1 June, daily snapshots will run automatically and accumulate into the chart.
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 1 — CONTEXT BLOCKS -->
+  <div class="context-grid">
+    <div class="context-block is-grid">
+      <div class="context-block-eyebrow">▸ GRID INDEX</div>
+      <div class="context-block-value" id="ctx-grid-value">—</div>
+      <div class="context-block-since" id="ctx-grid-since">SINCE 1 JUN 2026</div>
+      <div class="context-block-divider">
+        <div class="label">WHAT IS THIS?</div>
+        <div class="body">Equal-weight basket of all 15 MEME GP Season 2 teams. The official benchmark for grid-coin performance.</div>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-block-eyebrow">▸ MEME MARKET</div>
+      <div class="context-block-value" id="ctx-meme-value">—</div>
+      <div class="context-block-since" id="ctx-meme-since">SINCE 1 JUN 2026</div>
+      <div class="context-block-divider">
+        <div class="label">WHAT IS THIS?</div>
+        <div class="body">CoinGecko's aggregate meme-coin category. Tracks ~4,000 tokens market-wide for the broader benchmark.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 2 — HEADLINE -->
+  <div class="headline-wrap">
+    <div class="headline-eyebrow" id="hl-line-1">THE GRID</div>
+    <div class="headline-eyebrow-2" id="hl-line-2">VS THE MEME MARKET</div>
+    <div class="headline-number" id="hl-number">—</div>
+    <div class="headline-meta" id="hl-meta">PRE-SEASON · DATA STARTS 1 JUN</div>
+  </div>
+
+  <!-- TIER 3 — CHART -->
+  <div class="chart-block">
+    <div class="chart-legend">
+      <div class="chart-legend-left">
+        <span class="legend-item"><span class="legend-bar gold"></span><span class="legend-text-gold">GRID INDEX</span></span>
+        <span class="legend-item"><span class="legend-bar silver"></span><span class="legend-text-silver">MEME MARKET</span></span>
+      </div>
+      <div class="chart-legend-right">SEASON 2 · INDEXED FROM 100</div>
+    </div>
+    <div class="chart-svg-wrap" id="chart-wrap">
+      <div class="chart-empty">
+        <div class="chart-empty-title">▸ CHART ACTIVATES 1 JUN 2026</div>
+        <div>The first season-2 data point lands at 00:00 UTC on Monday 1 June.<br>Until then this canvas is intentionally empty.</div>
+      </div>
+    </div>
+    <div class="chart-x-labels" id="chart-x-labels" style="display:none">
+      <span>1 JUN</span><span>—</span><span>—</span><span>—</span><span>—</span>
+    </div>
+  </div>
+
+  <!-- TIER 4 — TIME-WINDOW SELECTOR -->
+  <div class="tw-selector-label">
+    <div class="left">
+      <div class="eyebrow">▸ TIME WINDOW</div>
+      <div class="sub">Sort the grid by performance</div>
+    </div>
+  </div>
+
+  <div class="tw-grid">
+
+    <button class="tw-card" data-window="24h">
+      <div class="tw-card-eyebrow">▸ 24 HOUR</div>
+      <div class="tw-row"><span class="label">GRID</span><span class="value-grid" id="tw-24h-grid">—</span></div>
+      <div class="tw-row"><span class="label">MEME</span><span class="value-meme" id="tw-24h-meme">—</span></div>
+      <div class="tw-divider"><span class="alpha-label">ALPHA</span><span class="alpha-value" id="tw-24h-alpha">—</span></div>
+    </button>
+
+    <button class="tw-card" data-window="7d">
+      <div class="tw-card-eyebrow">▸ 7 DAY</div>
+      <div class="tw-row"><span class="label">GRID</span><span class="value-grid" id="tw-7d-grid">—</span></div>
+      <div class="tw-row"><span class="label">MEME</span><span class="value-meme" id="tw-7d-meme">—</span></div>
+      <div class="tw-divider"><span class="alpha-label">ALPHA</span><span class="alpha-value" id="tw-7d-alpha">—</span></div>
+    </button>
+
+    <button class="tw-card active" data-window="season">
+      <div class="tw-card-eyebrow">▸ SEASON · ACTIVE</div>
+      <div class="tw-row"><span class="label">GRID</span><span class="value-grid" id="tw-season-grid">—</span></div>
+      <div class="tw-row"><span class="label">MEME</span><span class="value-meme" id="tw-season-meme">—</span></div>
+      <div class="tw-divider"><span class="alpha-label">ALPHA</span><span class="alpha-value" id="tw-season-alpha">—</span></div>
+    </button>
+
+  </div>
+
+  <!-- TIER 5 — LEADERBOARD -->
+  <div class="lb-header">
+    <div>
+      <div class="lb-header-eyebrow">▸ TEAM PERFORMANCE LEADERBOARD</div>
+      <div class="lb-header-sub">Sorted by <span class="active-window" id="lb-active-window">SEASON</span> · <span id="lb-date-range">—</span></div>
+    </div>
+    <div class="lb-header-meta" id="lb-meta">15 TEAMS · <span id="lb-snapshot-count">1</span> DATA POINTS</div>
+  </div>
+
+  <div class="lb-rows" id="lb-rows">
+    <div style="padding:24px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center;">Loading leaderboard…</div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <div class="methodology-eyebrow">▸ METHODOLOGY</div>
+    <div class="methodology-body">
+      Equal-weight basket of all 15 Season 2 grid teams. Each team contributes 1/15 of the index. Indexed from 100 on 1 June 2026. The meme market benchmark uses CoinGecko's Meme category aggregate. Snapshots run daily at 00:00 UTC and live in this repo's <code>data/index-snapshots.json</code> file — every data point is committed to public git history, making the entire record tamper-proof and auditable.
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer-pro">
+  <div>MEME GP · 2026 SEASON · <a href="meme-info.html">MEME INFO</a> · <a href="roadmap.html">ROADMAP</a> · <a href="memegp-token.html">$MEMEGP</a></div>
+  <div>© 2026 MEME GP · Entertainment only · Not financial advice · DYOR</div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  // ============================================================
+  // CONFIGURATION
+  // ============================================================
+  // Team display registry — ticker → display name + logo
+  const TEAM_META = {
+    'TURBO':      { name: 'AI TURBO RACING',  logo: 'turbo.png',     link: 'teams-turbo.html' },
+    'MASK':       { name: 'MASK STAYS ON',    logo: 'mask.png',      link: 'teams-mask.html' },
+    'NEURO':      { name: 'NEURO RACING',     logo: 'neuroticat.png',link: 'teams-neuroticat.html' },
+    'SUS':        { name: 'SUS RACING',       logo: 'sus.png',       link: 'teams-sus.html' },
+    'LOL':        { name: 'LOL RACING',       logo: 'lol.png',       link: 'teams-lol.html' },
+    'SHIH':       { name: 'SHIH SPEED',       logo: 'shiba.png',     link: 'teams-shih.html' },
+    'VIBECOIN':   { name: 'VIBING CAT',       logo: 'vibe.png',      link: 'teams-vibe.html' },
+    'MARS':       { name: 'MARS RACING',      logo: 'mars.png',      link: 'teams-mars.html' },
+    '420BLAZEIT': { name: '420 RACING',       logo: '420blazeit.png',link: 'teams-420blazeit.html' },
+    'PUP':        { name: 'PUP POWER',        logo: 'pup.png',       link: 'teams-pup.html' },
+    'PEPONK':     { name: 'PEPONK RACING',    logo: 'peponk.png',    link: 'teams-peponk.html' },
+    'MOMO':       { name: 'MOMO MOTORS',      logo: 'momo.png',      link: 'teams-momo.html' },
+    'BILLY':      { name: 'BILLY RACING',     logo: 'billy.png',     link: 'teams-billy.html' },
+    'DOBERMANN':  { name: 'STEALTH DOBIE',    logo: 'dobermann.png', link: 'teams-dobermann.html' },
+    'TBD':        { name: 'WINNER OF VOTE',   logo: 'helmet.png',    link: null }
+  };
+
+  // Active state
+  let snapshotsData = null;
+  let activeWindow = 'season'; // '24h' | '7d' | 'season'
+
+  // ============================================================
+  // DATA LOADER
+  // ============================================================
+  async function loadSnapshots(){
+    try {
+      const res = await fetch('data/index-snapshots.json', { cache: 'no-store' });
+      if(!res.ok) throw new Error('snapshot fetch failed');
+      snapshotsData = await res.json();
+    } catch(e){
+      console.warn('Failed to load index-snapshots.json', e);
+      snapshotsData = null;
+    }
+    renderEverything();
+  }
+
+  // ============================================================
+  // FORMATTERS
+  // ============================================================
+  function fmtPct(v){
+    if(v === null || v === undefined || Number.isNaN(v)) return '—';
+    const sign = v > 0 ? '+' : '';
+    return `${sign}${v.toFixed(1)}%`;
+  }
+  function fmtAlpha(v){
+    if(v === null || v === undefined || Number.isNaN(v)) return '—';
+    const sign = v > 0 ? '+' : '';
+    return `${sign}${v.toFixed(1)}`;
+  }
+  function fmtDate(isoDate){
+    if(!isoDate) return '—';
+    try {
+      const d = new Date(isoDate + 'T00:00:00Z');
+      const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+      return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+    } catch(e){ return isoDate; }
+  }
+
+  // ============================================================
+  // RENDER
+  // ============================================================
+  function renderEverything(){
+    if(!snapshotsData){
+      console.warn('No snapshot data — rendering empty state');
+      renderHeader(null, 0);
+      renderLeaderboard([]);
+      return;
+    }
+
+    const snapshots = snapshotsData.snapshots || [];
+    const latest = snapshots.length ? snapshots[snapshots.length - 1] : null;
+    const isPreseason = !latest || latest.is_preseason === true;
+
+    // Show/hide pre-season banner
+    const banner = document.getElementById('preseason-banner');
+    if(banner) banner.style.display = isPreseason ? '' : 'none';
+
+    renderHeader(latest, snapshots.length);
+    renderContextBlocks(snapshots, isPreseason);
+    renderHeadline(snapshots, isPreseason);
+    renderChart(snapshots, isPreseason);
+    renderTimeWindowCards(snapshots, isPreseason);
+    renderLeaderboard(latest ? buildTeamList(snapshots, isPreseason) : []);
+  }
+
+  function renderHeader(latest, snapshotCount){
+    const status = document.getElementById('hdr-status');
+    const date = document.getElementById('hdr-date');
+    const meta = document.getElementById('hdr-meta');
+    if(!latest){
+      if(status) status.textContent = 'AWAITING DATA';
+      if(date) date.textContent = '—';
+      return;
+    }
+    if(status) status.textContent = latest.is_preseason ? 'PRE-SEASON' : 'LIVE';
+    if(date) date.textContent = fmtDate(latest.date) + ' 00:00 UTC';
+    if(meta){
+      meta.innerHTML = `UPDATED · <span>${fmtDate(latest.date)} 00:00 UTC</span><br>${snapshotCount} SNAPSHOT${snapshotCount !== 1 ? 'S' : ''}`;
+    }
+  }
+
+  function renderContextBlocks(snapshots, isPreseason){
+    const gridEl = document.getElementById('ctx-grid-value');
+    const memeEl = document.getElementById('ctx-meme-value');
+    const gridSinceEl = document.getElementById('ctx-grid-since');
+    const memeSinceEl = document.getElementById('ctx-meme-since');
+
+    if(isPreseason || snapshots.length < 2){
+      if(gridEl) gridEl.textContent = isPreseason ? '0.0%' : '—';
+      if(memeEl) memeEl.textContent = isPreseason ? '0.0%' : '—';
+      if(gridSinceEl) gridSinceEl.textContent = 'SEASON STARTS 1 JUN 2026';
+      if(memeSinceEl) memeSinceEl.textContent = 'SEASON STARTS 1 JUN 2026';
+      return;
+    }
+
+    // Season-to-date is delta from first non-preseason snapshot
+    const firstLive = snapshots.find(s => !s.is_preseason);
+    const latest = snapshots[snapshots.length - 1];
+    if(firstLive && latest){
+      const gridPct = ((latest.grid_index - firstLive.grid_index) / firstLive.grid_index) * 100;
+      const memePct = ((latest.meme_market - firstLive.meme_market) / firstLive.meme_market) * 100;
+      if(gridEl) gridEl.textContent = fmtPct(gridPct);
+      if(memeEl) memeEl.textContent = fmtPct(memePct);
+      if(gridSinceEl) gridSinceEl.textContent = `SINCE ${fmtDate(firstLive.date)}`;
+      if(memeSinceEl) memeSinceEl.textContent = `SINCE ${fmtDate(firstLive.date)}`;
+    }
+  }
+
+  function renderHeadline(snapshots, isPreseason){
+    const line1 = document.getElementById('hl-line-1');
+    const line2 = document.getElementById('hl-line-2');
+    const num = document.getElementById('hl-number');
+    const meta = document.getElementById('hl-meta');
+
+    if(isPreseason || snapshots.length < 2){
+      if(line1) line1.textContent = 'GRID INDEX';
+      if(line2) line2.textContent = 'VS THE MEME MARKET';
+      if(num){ num.textContent = '—'; num.classList.remove('is-negative'); }
+      if(meta) meta.textContent = 'PRE-SEASON · DATA STARTS 1 JUN';
+      return;
+    }
+
+    // Compute 7-day alpha
+    const alpha = computeWindowAlpha(snapshots, '7d');
+    if(alpha === null){
+      if(line1) line1.textContent = 'GRID INDEX';
+      if(line2) line2.textContent = 'VS THE MEME MARKET';
+      if(num){ num.textContent = '—'; num.classList.remove('is-negative'); }
+      if(meta) meta.textContent = '7-DAY DATA PENDING';
+      return;
+    }
+
+    if(alpha >= 0){
+      if(line1) line1.textContent = 'THE GRID OUTPERFORMED';
+      if(line2) line2.textContent = 'THE MEME MARKET BY';
+      if(num){ num.textContent = '+' + alpha.toFixed(1) + '%'; num.classList.remove('is-negative'); }
+    } else {
+      if(line1) line1.textContent = 'THE GRID UNDERPERFORMED';
+      if(line2) line2.textContent = 'THE MEME MARKET BY';
+      if(num){ num.textContent = alpha.toFixed(1) + '%'; num.classList.add('is-negative'); }
+    }
+    if(meta){
+      const latest = snapshots[snapshots.length - 1];
+      const sevenAgo = findSnapshotNDaysAgo(snapshots, 7);
+      if(sevenAgo) meta.textContent = `THIS WEEK · ${fmtDate(sevenAgo.date)} → ${fmtDate(latest.date)}`;
+      else meta.textContent = 'THIS WEEK';
+    }
+  }
+
+  function renderChart(snapshots, isPreseason){
+    const wrap = document.getElementById('chart-wrap');
+    const xLabels = document.getElementById('chart-x-labels');
+    if(!wrap) return;
+
+    // Filter to live snapshots only
+    const liveSnaps = snapshots.filter(s => !s.is_preseason);
+    if(isPreseason || liveSnaps.length < 2){
+      // Keep empty state, hide x labels
+      if(xLabels) xLabels.style.display = 'none';
+      return;
+    }
+
+    // Build chart
+    const w = 640, h = 200;
+    const padL = 30, padR = 10, padT = 12, padB = 12;
+    const innerW = w - padL - padR;
+    const innerH = h - padT - padB;
+
+    const gridVals = liveSnaps.map(s => s.grid_index);
+    const memeVals = liveSnaps.map(s => s.meme_market);
+    const allVals = gridVals.concat(memeVals);
+    const minY = Math.min.apply(null, allVals);
+    const maxY = Math.max.apply(null, allVals);
+    const yRange = (maxY - minY) || 10;
+    const yMin = minY - yRange * 0.08;
+    const yMax = maxY + yRange * 0.08;
+
+    function xFor(i){ return padL + (i / (liveSnaps.length - 1 || 1)) * innerW; }
+    function yFor(v){ return padT + (1 - (v - yMin) / (yMax - yMin)) * innerH; }
+
+    function buildLine(arr){
+      return arr.map((v, i) => `${xFor(i)},${yFor(v)}`).join(' ');
+    }
+
+    // Build SVG
+    const yGridLines = [yMax, yMin + (yMax - yMin) * 0.66, yMin + (yMax - yMin) * 0.33, yMin].map(v =>
+      `<line x1="${padL}" y1="${yFor(v)}" x2="${w - padR}" y2="${yFor(v)}" stroke="rgba(255,255,255,.04)" stroke-width="0.5"/>` +
+      `<text x="6" y="${yFor(v) + 3}" font-family="'JetBrains Mono', monospace" font-size="9" fill="rgba(255,255,255,.3)">${Math.round(v)}</text>`
+    ).join('');
+
+    const memePoly = `<polyline fill="none" stroke="#9ba6b3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" points="${buildLine(memeVals)}"/>`;
+    const gridPoly = `<polyline fill="none" stroke="#ffcc00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" points="${buildLine(gridVals)}"/>`;
+    const lastIdx = liveSnaps.length - 1;
+    const dots =
+      `<circle cx="${xFor(lastIdx)}" cy="${yFor(gridVals[lastIdx])}" r="4" fill="#ffcc00"/>` +
+      `<circle cx="${xFor(lastIdx)}" cy="${yFor(memeVals[lastIdx])}" r="3" fill="#9ba6b3"/>`;
+
+    wrap.innerHTML = `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:220px;display:block" preserveAspectRatio="none" role="img" aria-label="Chart of GRID INDEX vs MEME MARKET over ${liveSnaps.length} days">
+      ${yGridLines}
+      ${memePoly}
+      ${gridPoly}
+      ${dots}
+    </svg>`;
+
+    // X-labels: first, middle, last
+    if(xLabels){
+      xLabels.style.display = '';
+      const labelDates = [];
+      const idxs = liveSnaps.length <= 5 ? liveSnaps.map((_,i) => i) :
+        [0, Math.floor(liveSnaps.length / 4), Math.floor(liveSnaps.length / 2), Math.floor(3 * liveSnaps.length / 4), liveSnaps.length - 1];
+      xLabels.innerHTML = idxs.map(i => `<span>${fmtDate(liveSnaps[i].date).split(' ').slice(0,2).join(' ')}</span>`).join('');
+    }
+  }
+
+  function renderTimeWindowCards(snapshots, isPreseason){
+    ['24h','7d','season'].forEach(w => {
+      const gridEl  = document.getElementById(`tw-${w}-grid`);
+      const memeEl  = document.getElementById(`tw-${w}-meme`);
+      const alphaEl = document.getElementById(`tw-${w}-alpha`);
+      if(isPreseason || snapshots.length < 2){
+        if(gridEl) gridEl.textContent = '—';
+        if(memeEl) memeEl.textContent = '—';
+        if(alphaEl) alphaEl.textContent = '—';
+        return;
+      }
+      const grid  = computeWindowChange(snapshots, w, 'grid_index');
+      const meme  = computeWindowChange(snapshots, w, 'meme_market');
+      const alpha = (grid != null && meme != null) ? grid - meme : null;
+      if(gridEl) gridEl.textContent = fmtPct(grid);
+      if(memeEl) memeEl.textContent = fmtPct(meme);
+      if(alphaEl) alphaEl.textContent = fmtAlpha(alpha);
+    });
+  }
+
+  function computeWindowChange(snapshots, window, key){
+    const live = snapshots.filter(s => !s.is_preseason);
+    if(live.length < 2) return null;
+    const latest = live[live.length - 1];
+    let prior;
+    if(window === '24h') prior = live[live.length - 2];
+    else if(window === '7d') prior = findSnapshotNDaysAgo(live, 7);
+    else if(window === 'season') prior = live[0];
+    if(!prior || !latest[key] || !prior[key]) return null;
+    return ((latest[key] - prior[key]) / prior[key]) * 100;
+  }
+
+  function computeWindowAlpha(snapshots, window){
+    const grid = computeWindowChange(snapshots, window, 'grid_index');
+    const meme = computeWindowChange(snapshots, window, 'meme_market');
+    if(grid == null || meme == null) return null;
+    return grid - meme;
+  }
+
+  function findSnapshotNDaysAgo(snapshots, n){
+    if(snapshots.length === 0) return null;
+    const latest = snapshots[snapshots.length - 1];
+    const latestDate = new Date(latest.date + 'T00:00:00Z');
+    const targetTs = latestDate.getTime() - n * 24 * 60 * 60 * 1000;
+    // Find snapshot closest to (but not after) the target
+    let best = null;
+    for(const s of snapshots){
+      const t = new Date(s.date + 'T00:00:00Z').getTime();
+      if(t <= targetTs){
+        if(!best || t > new Date(best.date + 'T00:00:00Z').getTime()) best = s;
+      }
+    }
+    return best || snapshots[0];
+  }
+
+  function buildTeamList(snapshots, isPreseason){
+    const latest = snapshots[snapshots.length - 1];
+    if(!latest) return [];
+    const teams = (snapshotsData.teams || []);
+    return teams.map(ticker => {
+      const meta = TEAM_META[ticker] || { name: ticker, logo: 'helmet.png', link: null };
+      let change = null;
+      if(!isPreseason){
+        // Pick correct change field from latest snapshot if present
+        const map = { '24h': 'team_changes_24h', '7d': 'team_changes_7d', 'season': 'team_changes_season' };
+        const field = map[activeWindow];
+        if(latest[field] && latest[field][ticker] != null){
+          change = latest[field][ticker];
+        }
+      }
+      return { ticker, name: meta.name, logo: meta.logo, link: meta.link, change };
+    });
+  }
+
+  function renderLeaderboard(teams){
+    const mount = document.getElementById('lb-rows');
+    const labelEl = document.getElementById('lb-active-window');
+    const rangeEl = document.getElementById('lb-date-range');
+    const countEl = document.getElementById('lb-snapshot-count');
+
+    if(labelEl){
+      labelEl.textContent = activeWindow === '24h' ? '24 HOUR' : activeWindow === '7d' ? '7 DAY' : 'SEASON';
+    }
+    if(countEl && snapshotsData){
+      countEl.textContent = (snapshotsData.snapshots || []).length;
+    }
+    if(rangeEl && snapshotsData){
+      const live = (snapshotsData.snapshots || []).filter(s => !s.is_preseason);
+      if(live.length < 2){
+        rangeEl.textContent = 'PRE-SEASON · NO RANGE YET';
+      } else {
+        const latest = live[live.length - 1];
+        let from;
+        if(activeWindow === '24h') from = live[live.length - 2];
+        else if(activeWindow === '7d') from = findSnapshotNDaysAgo(live, 7);
+        else from = live[0];
+        rangeEl.textContent = `${fmtDate(from.date)} → ${fmtDate(latest.date)}`;
+      }
+    }
+
+    if(!mount) return;
+    if(!teams.length){
+      mount.innerHTML = `<div style="padding:24px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center;">No team data yet — the leaderboard activates on Mon 1 June.</div>`;
+      return;
+    }
+
+    // Sort by change desc (null treated as -Infinity so untracked teams sink)
+    const sorted = teams.slice().sort((a, b) => {
+      const av = a.change == null ? -1e9 : a.change;
+      const bv = b.change == null ? -1e9 : b.change;
+      return bv - av;
+    });
+
+    mount.innerHTML = sorted.map((t, i) => {
+      const pos = i + 1;
+      const isP1 = pos === 1;
+      const arrow = t.change == null ? 'flat' : t.change > 0 ? 'up' : t.change < 0 ? 'down' : 'flat';
+      const arrowChar = t.change == null ? '—' : t.change > 0 ? '▲' : t.change < 0 ? '▼' : '—';
+      const value = t.change == null ? '—' : (t.change > 0 ? '+' : '') + t.change.toFixed(1) + '%';
+      const href = t.link || '#';
+      const tag = t.link ? 'a' : 'div';
+      return `<${tag} href="${href}" class="lb-row ${isP1 ? 'is-p1' : ''}">
+        <span class="lb-position">P${pos}</span>
+        <div class="lb-logo" style="background-image:url('${t.logo}')"></div>
+        <div class="lb-info">
+          <div class="ticker">$${t.ticker}</div>
+          <div class="name">${t.name}</div>
+        </div>
+        <div class="lb-change">
+          <span class="lb-change-arrow ${arrow}">${arrowChar}</span>
+          <span class="lb-change-value ${arrow}">${value}</span>
+        </div>
+      </${tag}>`;
+    }).join('');
+  }
+
+  // ============================================================
+  // INTERACTIVITY — time window cards
+  // ============================================================
+  document.querySelectorAll('.tw-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const w = card.dataset.window;
+      if(w === activeWindow) return;
+      activeWindow = w;
+      document.querySelectorAll('.tw-card').forEach(c => {
+        c.classList.toggle('active', c === card);
+        // Update eyebrow text
+        const eb = c.querySelector('.tw-card-eyebrow');
+        if(eb){
+          const win = c.dataset.window;
+          const label = win === '24h' ? '24 HOUR' : win === '7d' ? '7 DAY' : 'SEASON';
+          eb.textContent = c.classList.contains('active') ? `▸ ${label} · ACTIVE` : `▸ ${label}`;
+        }
+      });
+      // Re-render leaderboard with new window
+      if(snapshotsData){
+        const isPreseason = !snapshotsData.snapshots || snapshotsData.snapshots.length === 0 ||
+          snapshotsData.snapshots[snapshotsData.snapshots.length - 1].is_preseason === true;
+        renderLeaderboard(buildTeamList(snapshotsData.snapshots, isPreseason));
+      }
+    });
+  });
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  loadSnapshots();
+})();
+</script>
+
+</body>
+</html>
