@@ -986,9 +986,9 @@ text-align:center;}
 <div class="countdown-wrapper">
   <div class="countdown-block">
     <div class="countdown-content">
-      <div class="countdown-eyebrow">▸ LIGHTS OUT IN</div>
-      <h2 class="countdown-title">ROUND 1 · <span class="accent">SATOSHI SPEEDWAY</span></h2>
-      <div class="countdown-circuit">June 1, 2026 · <strong>Season 2 Launch</strong></div>
+      <div class="countdown-eyebrow">▸ VOTING CLOSES IN</div>
+      <h2 class="countdown-title">FINAL GRID SEAT · <span class="accent">VOTE OPEN</span></h2>
+      <div class="countdown-circuit">Sat 30 May 23:59 UTC · <strong>15th Team Decided</strong></div>
       <div class="countdown-grid" id="countdown-grid">
         <div class="countdown-cell">
           <span class="countdown-cell-num" id="cd-days">--</span>
@@ -1110,8 +1110,8 @@ text-align:center;}
   'use strict';
 
   // === Config: change this single date to update the countdown target ===
-  // Format: YYYY-MM-DDTHH:mm:ssZ (UTC). Default: June 1, 2026 00:00 UTC
-  var SEASON_LAUNCH = new Date('2026-06-01T00:00:00Z').getTime();
+  // Format: YYYY-MM-DDTHH:mm:ssZ (UTC). Current: Sat 30 May 2026 23:59 UTC — voting closes for 15th grid seat
+  var SEASON_LAUNCH = new Date('2026-05-30T23:59:00Z').getTime();
 
   var els = {
     days:    document.getElementById('cd-days'),
@@ -1128,10 +1128,10 @@ text-align:center;}
     var diff = SEASON_LAUNCH - now;
 
     if (diff <= 0) {
-      // Race started — replace grid with celebratory message
+      // Voting closed — replace grid with locked message
       els.grid.innerHTML =
         '<div class="countdown-passed" style="grid-column:1/-1">' +
-          '🏁 LIGHTS OUT · SEASON 2 IS LIVE 🏁' +
+          '🏁 VOTING CLOSED · GRID LOCKED 🏁' +
         '</div>';
       return false; // stop ticking
     }

@@ -62,31 +62,144 @@ body::before{
   50%{box-shadow:0 0 22px rgba(255,204,0,.7),0 0 44px rgba(255,204,0,.35)}
 }
 
-/* ===== TOPNAV PRO ===== */
+
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+
+/* ===== TOPNAV PRO — F1 broadcast styled ===== */
 .topnav-pro{
-  position:relative;z-index:10;
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;
-  padding:14px 28px;
-  background:var(--bg-2);
-  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  /* The angled accent line is rendered separately below */
+  padding:10px 18px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  min-height:56px;
 }
-.tnav-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,204,0,.05);border:1px solid rgba(255,204,0,.25);border-radius:4px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:var(--gold);text-decoration:none}
-.tnav-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(255,204,0,.7)}
-.tnav-center{justify-self:center;display:flex;align-items:center;gap:0;background:rgba(20,20,30,.5);border:1px solid var(--line-bright);border-radius:6px;padding:4px}
-.tnav-link{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-decoration:none;padding:8px 18px;border-radius:3px;transition:color .15s ease, background .15s ease}
+
+/* Angled gold accent line — sits directly below nav, follows the badge bevels */
+.tnav-accent{
+  position:sticky;
+  top:56px;
+  z-index:49;
+  height:18px;
+  pointer-events:none;
+  margin-bottom:-18px;
+  /* Fully opaque dark fill — blocks all scrolling content underneath */
+  background:#040408;
+}
+.tnav-accent svg{
+  display:block;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
+}
+.tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+
+/* Left badge — MEME GP wordmark with clipped corner */
+.tnav-badge{
+  justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);
+  background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.06));
+  border:1px solid var(--gold);
+  padding:9px 18px 9px 16px;
+  clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+  text-decoration:none;
+}
+.tnav-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
+}
+
+/* Center nav */
+.tnav-center{
+  justify-self:center;
+  display:flex;align-items:center;
+  gap:0;
+  background:rgba(20,20,30,.5);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:4px;
+}
+.tnav-link{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 18px;
+  border-radius:4px;
+  transition:all .15s ease;text-align:center;
+}
 .tnav-link:hover{color:var(--text);background:rgba(255,204,0,.06)}
-.tnav-link.active{color:var(--gold);background:rgba(255,204,0,.08)}
-.tnav-sep{width:1px;height:14px;background:var(--line-bright);margin:0 2px}
-.tnav-exit{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,0,64,.08);border:1px solid rgba(255,0,64,.35);border-radius:4px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--accent);text-decoration:none;transition:background .15s ease}
-.tnav-exit:hover{background:rgba(255,0,64,.18)}
-.tnav-exit svg{width:14px;height:14px}
+.tnav-link.active{
+  color:var(--gold);
+  background:rgba(255,204,0,.12);
+  text-shadow:0 0 8px rgba(255,204,0,.4);
+}
+.tnav-sep{
+  width:1px;height:14px;
+  background:var(--line-bright);
+  flex-shrink:0;
+}
+
+/* Right EXIT button with reverse-angled corners */
+.tnav-exit{
+  justify-self:end;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;font-weight:800;letter-spacing:2px;
+  color:var(--accent);
+  background:linear-gradient(90deg,rgba(255,0,64,.06),rgba(255,0,64,.16));
+  border:1px solid var(--accent);
+  padding:9px 16px 9px 18px;
+  clip-path:polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  text-decoration:none;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.tnav-exit:hover{
+  background:linear-gradient(90deg,rgba(255,0,64,.15),rgba(255,0,64,.3));
+  filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
+}
+.tnav-exit svg{width:14px;height:14px;flex-shrink:0}
+
+/* Mobile collapse */
 @media(max-width:780px){
-  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .topnav-pro{
+    grid-template-columns:1fr auto;
+    padding:8px 12px;
+    gap:8px;
+  }
+  .tnav-center{
+    grid-column:1 / -1;
+    order:3;
+    justify-self:stretch;
+    justify-content:center;
+  }
   .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
-  .tnav-center{grid-column:1 / -1;order:3;justify-self:stretch;flex-wrap:wrap;gap:2px}
-  .tnav-link{flex:0 0 calc(33.333% - 4px);text-align:center}
+  .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
+  .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
+  .tnav-sep{height:10px}
+}
+@media(max-width:420px){
+  .tnav-center{border-radius:4px;padding:3px}
+  .tnav-link{padding:5px 8px}
   .tnav-sep{display:none}
 }
+
+/* Hide the old topnav styles — keep them as fallback */
+.topnav{display:none}
+
 
 /* ===== HERO ===== */
 .hero{
@@ -295,6 +408,13 @@ body::before{
   </a>
 </nav>
 
+<!-- Angled gold accent line that mirrors the badge bevels -->
+<div class="tnav-accent" aria-hidden="true">
+  <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
+    <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
+  </svg>
+</div>
+
 <section class="hero">
   <div class="hero-status">▸ FULL PAGE COMING SOON</div>
   <h1><span class="ticker">$MEMEGP</span></h1>
@@ -307,7 +427,7 @@ body::before{
     <div class="cs-block-eyebrow">▸ THE FULL TOKENOMICS PAGE IS BEING BUILT</div>
     <h2 class="cs-block-title">FUNDING THE FUTURE OF MEME GP</h2>
     <p class="cs-block-body">
-      $MEMEGP is the token that funds the platform — the racing engine, the broadcast layer, the prize pool architecture, and every feature that turns MEME GP from a concept into a championship-grade product. This page will lay out the full story when ready. For now, here's the contract and the links.
+      $MEMEGP is the token that funds the platform — the racing engine, the broadcast layer, the data infrastructure, and every feature that turns MEME GP from a concept into a championship-grade product. This page will lay out the full story when ready. For now, here's the contract and the links.
     </p>
 
     <div class="cs-list">
