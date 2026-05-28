@@ -1,0 +1,46 @@
+{
+  "_README": "Daily snapshots for the GRID INDEX page. Run live from 2026-06-01 00:00 UTC (Season 2 launch). Each snapshot captures grid_index (equal-weight basket of all 15 teams), meme_market (CoinGecko meme category benchmark), and per-team values. Index baseline = 100 on 2026-06-01. Pre-season snapshots flagged as is_preseason: true and excluded from chart calculations.",
+  "config": {
+    "season_start_utc": "2026-06-01T00:00:00Z",
+    "snapshot_time_utc": "00:00",
+    "baseline_value": 100,
+    "team_count": 15,
+    "methodology": "equal-weight",
+    "benchmark": "coingecko-meme-category"
+  },
+  "teams": [
+    "TURBO", "MASK", "NEURO", "SUS", "LOL", "SHIH", "VIBECOIN",
+    "MARS", "420BLAZEIT", "PUP", "PEPONK", "MOMO", "BILLY", "DOBERMANN",
+    "TBD"
+  ],
+  "snapshots": [
+    {
+      "date": "2026-05-28",
+      "is_preseason": true,
+      "label": "Indicative pre-season snapshot",
+      "grid_index": 100.0,
+      "meme_market": 100.0,
+      "alpha": 0.0,
+      "team_values": {
+        "TURBO": 100.0,
+        "MASK": 100.0,
+        "NEURO": 100.0,
+        "SUS": 100.0,
+        "LOL": 100.0,
+        "SHIH": 100.0,
+        "VIBECOIN": 100.0,
+        "MARS": 100.0,
+        "420BLAZEIT": 100.0,
+        "PUP": 100.0,
+        "PEPONK": 100.0,
+        "MOMO": 100.0,
+        "BILLY": 100.0,
+        "DOBERMANN": 100.0,
+        "TBD": null
+      },
+      "team_changes_24h": {},
+      "team_changes_7d": {},
+      "team_changes_season": {}
+    }
+  ]
+}
