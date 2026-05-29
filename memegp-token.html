@@ -66,8 +66,8 @@ body::before{
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes hotspotPulse{
-  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85}
-  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
+  0%,100%{transform:scale(1);opacity:.85}
+  50%{transform:scale(1.15);opacity:1}
 }
 
 /* ===== TOPNAV PRO ===== */
@@ -270,11 +270,17 @@ body::before{
   cursor:pointer;
   z-index:3;
   border:none;background:transparent;padding:0;
+  /* Give the button an actual clickable area — without this, the
+     marker span is absolutely positioned and the button collapses
+     to 0x0 making hover/click impossible. */
+  width:44px;height:44px;
+  transform:translate(-50%,-50%);
 }
 .hotspot-marker{
   position:absolute;
   top:50%;left:50%;
   width:34px;height:34px;
+  margin-top:-17px;margin-left:-17px;
   border-radius:50%;
   background:rgba(255,204,0,.15);
   border:2px solid var(--gold);
@@ -296,6 +302,7 @@ body::before{
 .hotspot.is-active .hotspot-marker{
   background:rgba(255,204,0,.3);
   width:42px;height:42px;
+  margin-top:-21px;margin-left:-21px;
   box-shadow:0 0 24px rgba(255,204,0,.9), 0 0 48px rgba(255,204,0,.4);
   animation:none;
 }
