@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="robots" content="index,follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>$MEMEGP — The Token — MEME GP</title>
-<meta name="description" content="$MEMEGP is the anchor token of MEME GP. Full tokenomics page coming soon. Contract & links live below.">
+<title>$MEMEGP — The Garage — MEME GP</title>
+<meta name="description" content="Step into the MEME GP garage. Every part of the platform — broadcast, telemetry, championships, marketing, locked liquidity — visualised in one frame. Hover, explore, see where it's going.">
 
-<meta property="og:title" content="$MEMEGP — The Token — MEME GP">
-<meta property="og:description" content="$MEMEGP is the anchor token of MEME GP. Full tokenomics page coming soon.">
+<meta property="og:title" content="$MEMEGP — The Garage — MEME GP">
+<meta property="og:description" content="Step into the MEME GP garage. Every part of the platform visualised in one frame.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://memegrandprix.com/memegp-token.html">
 <meta property="og:site_name" content="MEME GP">
-<meta property="og:image" content="https://memegrandprix.com/grid-hero.png">
+<meta property="og:image" content="https://memegrandprix.com/img/garage-hero.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@MemeGrandPrix">
-<meta name="twitter:title" content="$MEMEGP — The Token — MEME GP">
-<meta name="twitter:description" content="$MEMEGP is the anchor token of MEME GP. Full tokenomics page coming soon.">
+<meta name="twitter:title" content="$MEMEGP — The Garage — MEME GP">
+<meta name="twitter:description" content="Step into the MEME GP garage. Every part of the platform in one frame.">
 
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +39,8 @@
   --gold:#ffcc00;
   --gold-dim:#aa8822;
   --green:#00ff88;
+  --season-yellow:#ffcc00;
+  --season-green:#00ff88;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
@@ -61,19 +63,19 @@ body::before{
   0%,100%{box-shadow:0 0 14px rgba(255,204,0,.4),0 0 28px rgba(255,204,0,.2)}
   50%{box-shadow:0 0 22px rgba(255,204,0,.7),0 0 44px rgba(255,204,0,.35)}
 }
-
-
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes hotspotPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85}
+  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
+}
 
-/* ===== TOPNAV PRO — F1 broadcast styled ===== */
+/* ===== TOPNAV PRO ===== */
 .topnav-pro{
   position:sticky;top:0;z-index:50;
   background:linear-gradient(180deg,rgba(4,4,8,.95),rgba(4,4,8,.85));
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  /* The angled accent line is rendered separately below */
   padding:10px 18px;
   display:grid;
   grid-template-columns:1fr auto 1fr;
@@ -81,8 +83,6 @@ body::before{
   gap:18px;
   min-height:56px;
 }
-
-/* Angled gold accent line — sits directly below nav, follows the badge bevels */
 .tnav-accent{
   position:sticky;
   top:56px;
@@ -90,7 +90,6 @@ body::before{
   height:18px;
   pointer-events:none;
   margin-bottom:-18px;
-  /* Fully opaque dark fill — blocks all scrolling content underneath */
   background:#040408;
 }
 .tnav-accent svg{
@@ -100,8 +99,6 @@ body::before{
   filter:drop-shadow(0 0 6px rgba(255,204,0,.6)) drop-shadow(0 0 16px rgba(255,204,0,.3));
 }
 .tnav-accent path{stroke:var(--gold);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
-
-/* Left badge — MEME GP wordmark with clipped corner */
 .tnav-badge{
   justify-self:start;
   display:inline-flex;align-items:center;gap:8px;
@@ -120,8 +117,6 @@ body::before{
   box-shadow:0 0 8px rgba(255,204,0,.8);
   animation:blink 1.4s infinite;
 }
-
-/* Center nav */
 .tnav-center{
   justify-self:center;
   display:flex;align-items:center;
@@ -151,8 +146,6 @@ body::before{
   background:var(--line-bright);
   flex-shrink:0;
 }
-
-/* Right EXIT button with reverse-angled corners */
 .tnav-exit{
   justify-self:end;
   display:inline-flex;align-items:center;gap:8px;
@@ -172,20 +165,9 @@ body::before{
   filter:drop-shadow(0 0 12px rgba(255,0,64,.5));
 }
 .tnav-exit svg{width:14px;height:14px;flex-shrink:0}
-
-/* Mobile collapse */
 @media(max-width:780px){
-  .topnav-pro{
-    grid-template-columns:1fr auto;
-    padding:8px 12px;
-    gap:8px;
-  }
-  .tnav-center{
-    grid-column:1 / -1;
-    order:3;
-    justify-self:stretch;
-    justify-content:center;
-  }
+  .topnav-pro{grid-template-columns:1fr auto;padding:8px 12px;gap:8px}
+  .tnav-center{grid-column:1 / -1;order:3;justify-self:stretch;justify-content:center;flex-wrap:wrap}
   .tnav-link{padding:6px 10px;font-size:10px;letter-spacing:1.2px}
   .tnav-badge{font-size:9px;padding:7px 14px 7px 12px;letter-spacing:1.5px}
   .tnav-exit{font-size:9px;padding:7px 12px 7px 14px;letter-spacing:1.5px}
@@ -197,122 +179,450 @@ body::before{
   .tnav-sep{display:none}
 }
 
-/* Hide the old topnav styles — keep them as fallback */
-.topnav{display:none}
-
-
 /* ===== HERO ===== */
 .hero{
   position:relative;z-index:2;
-  padding:80px 28px 40px;
-  max-width:880px;margin:0 auto;
+  padding:50px 28px 20px;
+  max-width:1280px;margin:0 auto;
   text-align:center;
 }
-.hero-status{
+.hero-eyebrow{
   display:inline-block;
   font-family:'Orbitron',sans-serif;
-  font-size:10px;letter-spacing:3px;font-weight:700;
-  color:var(--gold);
+  font-size:11px;letter-spacing:4px;color:var(--gold);
+  margin-bottom:16px;
   padding:6px 14px;
-  background:rgba(255,204,0,.05);
   border:1px solid rgba(255,204,0,.3);
   border-radius:3px;
-  margin-bottom:24px;
-  animation:pulseGold 2.5s ease-in-out infinite;
+  background:rgba(255,204,0,.05);
 }
 .hero h1{
   font-family:'Orbitron',sans-serif;
-  font-size:64px;font-weight:800;letter-spacing:1px;
+  font-size:48px;font-weight:800;letter-spacing:2px;
   color:var(--text);
   margin-bottom:14px;
-  line-height:1;
+  line-height:1.05;
 }
 .hero h1 .ticker{color:var(--gold)}
 .hero .tagline{
-  font-size:16px;color:var(--muted);max-width:580px;margin:18px auto 0;line-height:1.55;
+  font-size:15px;color:var(--muted);max-width:640px;margin:0 auto;line-height:1.65;
+}
+.hero-hint{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:22px;
+  padding:8px 16px;
+  background:rgba(255,204,0,.04);
+  border:1px solid rgba(255,204,0,.2);
+  border-radius:3px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:2px;color:var(--gold);
+}
+.hero-hint .pulse{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.8);
+  animation:blink 1.4s infinite;
 }
 @media(max-width:780px){
-  .hero{padding:50px 16px 30px}
-  .hero h1{font-size:36px;letter-spacing:0}
+  .hero{padding:32px 16px 16px}
+  .hero h1{font-size:32px;letter-spacing:1px}
   .hero .tagline{font-size:13px}
 }
 
-/* ===== COMING SOON BLOCK ===== */
-.cs-wrap{
+/* ===== GARAGE STAGE ===== */
+.garage-stage{
   position:relative;z-index:2;
-  padding:30px 28px 40px;
-  max-width:880px;margin:0 auto;
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 16px 30px;
 }
-.cs-block{
-  background:linear-gradient(180deg,var(--bg-card) 0%,#0e0e16 100%);
+.garage-frame{
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.65), 0 0 0 1px var(--line-bright), 0 0 60px rgba(255,204,0,.06);
+  background:#000;
+}
+.garage-img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio: 1168/784;
+}
+.garage-hint-overlay{
+  position:absolute;
+  top:14px;right:14px;
+  z-index:5;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;letter-spacing:2px;font-weight:700;
+  color:var(--gold);
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,204,0,.3);
+  padding:6px 10px;
+  border-radius:3px;
+  pointer-events:none;
+  backdrop-filter:blur(6px);
+}
+
+/* Hotspot markers (visible pulses on image) */
+.hotspot{
+  position:absolute;
+  cursor:pointer;
+  z-index:3;
+  border:none;background:transparent;padding:0;
+}
+.hotspot-marker{
+  position:absolute;
+  top:50%;left:50%;
+  width:34px;height:34px;
+  border-radius:50%;
+  background:rgba(255,204,0,.15);
+  border:2px solid var(--gold);
+  box-shadow:0 0 14px rgba(255,204,0,.6), 0 0 28px rgba(255,204,0,.3);
+  animation:hotspotPulse 2.4s ease-in-out infinite;
+  pointer-events:none;
+}
+.hotspot-marker::before{
+  content:'';
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(255,204,0,.9);
+}
+.hotspot:hover .hotspot-marker,
+.hotspot:focus .hotspot-marker,
+.hotspot.is-active .hotspot-marker{
+  background:rgba(255,204,0,.3);
+  width:42px;height:42px;
+  box-shadow:0 0 24px rgba(255,204,0,.9), 0 0 48px rgba(255,204,0,.4);
+  animation:none;
+}
+
+/* Hover panel — desktop only */
+.hotspot-panel{
+  position:absolute;
+  z-index:10;
+  width:340px;
+  background:linear-gradient(180deg, #0e0e16 0%, #08080d 100%);
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:18px 18px 16px;
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+  box-shadow:0 18px 50px rgba(0,0,0,.7), 0 0 24px rgba(255,204,0,.15);
+}
+.hotspot-panel.is-open{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.hotspot-panel::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--gold), var(--accent));
+}
+.hp-headline{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:2px;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+.hp-lead{
+  font-size:13px;color:var(--text);line-height:1.55;
+  margin-bottom:14px;
+  font-style:italic;
+}
+.hp-blocks{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.hp-block{
+  padding:11px 12px;
+  border-radius:5px;
+  border:1px solid;
+}
+.hp-block-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  margin-bottom:6px;
+}
+.hp-block-body{
+  font-size:11px;line-height:1.5;color:rgba(255,255,255,.85);
+}
+.hp-block.this-season{
+  background:rgba(255,204,0,.06);
+  border-color:rgba(255,204,0,.3);
+}
+.hp-block.this-season .hp-block-label{color:var(--season-yellow)}
+.hp-block.next-season{
+  background:rgba(0,255,136,.05);
+  border-color:rgba(0,255,136,.25);
+}
+.hp-block.next-season .hp-block-label{color:var(--season-green)}
+
+/* Position-specific panel offsets (avoid overflow) */
+.hotspot-panel.pos-right{right:auto;left:calc(100% + 14px);top:0}
+.hotspot-panel.pos-left{right:calc(100% + 14px);left:auto;top:0}
+.hotspot-panel.pos-bottom{top:calc(100% + 14px);left:50%;transform:translate(-50%,8px)}
+.hotspot-panel.pos-bottom.is-open{transform:translate(-50%,0)}
+.hotspot-panel.pos-top{bottom:calc(100% + 14px);left:50%;transform:translate(-50%,8px)}
+.hotspot-panel.pos-top.is-open{transform:translate(-50%,0)}
+
+/* Hide hotspot panels on mobile (use card grid below instead) */
+@media(max-width:880px){
+  .hotspot{display:none}
+  .garage-hint-overlay{display:none}
+}
+
+/* ===== MOBILE / EXPANDED HOTSPOT GRID ===== */
+.hotspot-grid-section{
+  position:relative;z-index:2;
+  max-width:1280px;margin:0 auto;
+  padding:30px 16px 20px;
+}
+.section-eyebrow{
+  display:block;text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:4px;color:var(--gold);
+  margin-bottom:10px;
+}
+.section-title{
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:28px;font-weight:800;letter-spacing:2px;
+  color:var(--text);
+  margin-bottom:14px;
+}
+.section-sub{
+  text-align:center;
+  font-size:14px;color:var(--muted);line-height:1.6;
+  max-width:680px;margin:0 auto 30px;
+}
+.hotspot-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
+  gap:14px;
+}
+.hg-card{
+  background:linear-gradient(180deg, var(--bg-card) 0%, #0e0e16 100%);
   border:1px solid var(--line-bright);
   border-radius:8px;
-  padding:34px;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.hg-card:hover{
+  border-color:rgba(255,204,0,.5);
+  transform:translateY(-2px);
+}
+.hg-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--gold), var(--accent));
+}
+.hg-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:2px;color:var(--gold-dim);font-weight:700;
+  margin-bottom:6px;
+}
+.hg-headline{
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;font-weight:800;letter-spacing:1.5px;
+  color:var(--gold);
+  margin-bottom:8px;
+  line-height:1.2;
+}
+.hg-lead{
+  font-size:13px;color:var(--text);line-height:1.55;
+  margin-bottom:14px;
+  font-style:italic;
+}
+.hg-blocks{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+@media(max-width:480px){
+  .hg-blocks{grid-template-columns:1fr}
+}
+.hg-block{
+  padding:11px 12px;
+  border-radius:5px;
+  border:1px solid;
+}
+.hg-block-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2px;
+  margin-bottom:6px;
+}
+.hg-block-body{
+  font-size:11.5px;line-height:1.55;color:rgba(255,255,255,.85);
+}
+.hg-block.this-season{
+  background:rgba(255,204,0,.06);
+  border-color:rgba(255,204,0,.3);
+}
+.hg-block.this-season .hg-block-label{color:var(--season-yellow)}
+.hg-block.next-season{
+  background:rgba(0,255,136,.05);
+  border-color:rgba(0,255,136,.25);
+}
+.hg-block.next-season .hg-block-label{color:var(--season-green)}
+
+/* ===== FUNDING FLOW ===== */
+.funding{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:50px 16px 40px;
+}
+.funding-frame{
+  background:linear-gradient(180deg, var(--bg-card) 0%, #0a0a10 100%);
+  border:1px solid var(--line-bright);
+  border-radius:10px;
+  padding:30px 26px;
   position:relative;
   overflow:hidden;
 }
-.cs-block::before{
+.funding-frame::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--gold),var(--accent));
+  background:linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
 }
-.cs-block-eyebrow{
-  font-family:'Orbitron',sans-serif;
-  font-size:11px;letter-spacing:3px;color:var(--gold);font-weight:700;
-  margin-bottom:14px;
-}
-.cs-block-title{
-  font-family:'Orbitron',sans-serif;
-  font-size:24px;letter-spacing:1.5px;
-  color:var(--text);
-  margin-bottom:18px;
-}
-.cs-block-body{
-  font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px;
-}
-.cs-block-body strong{color:var(--text);font-weight:600}
-
-.cs-list{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-  margin-bottom:24px;
+.funding-sources{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:26px;
 }
 @media(max-width:680px){
-  .cs-list{grid-template-columns:1fr}
+  .funding-sources{grid-template-columns:1fr}
 }
-.cs-list-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:12px 14px;
-  background:var(--bg-card-2);
-  border:1px solid var(--line);
-  border-radius:4px;
-}
-.cs-list-item-bullet{
-  color:var(--gold);
-  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;
-  flex-shrink:0;line-height:1.5;
-}
-.cs-list-item-text{
-  font-size:13px;color:var(--text);line-height:1.5;
-}
-
-/* ===== CONTRACT CARD ===== */
-.ca-card{
-  margin-top:18px;
+.funding-source{
+  padding:18px 20px;
   background:var(--bg-card-2);
   border:1px solid var(--line-bright);
   border-radius:6px;
-  padding:20px 22px;
+  position:relative;
 }
-.ca-card-label{
+.funding-source-eyebrow{
   font-family:'Orbitron',sans-serif;
-  font-size:10px;letter-spacing:2.5px;color:var(--muted);font-weight:600;
-  margin-bottom:8px;
+  font-size:9px;letter-spacing:2px;font-weight:700;
+  color:var(--gold-dim);
+  margin-bottom:6px;
 }
-.ca-row{
-  display:flex;align-items:center;gap:10px;
+.funding-source-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;letter-spacing:1.5px;font-weight:800;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.funding-source-body{
+  font-size:12.5px;color:var(--muted);line-height:1.6;
+}
+.funding-source-body strong{color:var(--text);font-weight:600}
+
+.funding-arrow{
+  text-align:center;
+  margin:14px 0;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:3px;
+  color:var(--muted);
+}
+.funding-arrow svg{
+  display:block;margin:6px auto 0;
+  width:24px;height:24px;color:var(--gold);
+}
+
+.funding-flow{
+  margin-top:8px;
+}
+.funding-flow-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:2.5px;font-weight:700;
+  color:var(--gold);
+  text-align:center;
   margin-bottom:14px;
-  flex-wrap:wrap;
 }
-.ca-label-pill{
+.funding-targets{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+  gap:8px;
+}
+.funding-target{
+  padding:10px 12px;
+  background:rgba(255,204,0,.04);
+  border:1px solid rgba(255,204,0,.15);
+  border-radius:4px;
+  text-align:center;
+}
+.funding-target-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:1.5px;font-weight:700;
+  color:var(--text);
+  margin-bottom:3px;
+}
+.funding-target-gate{
+  font-size:10px;color:var(--gold-dim);letter-spacing:1px;
+}
+
+.funding-note{
+  margin-top:22px;
+  padding:14px 16px;
+  background:rgba(0,0,0,.3);
+  border-left:2px solid var(--gold);
+  font-size:12px;color:var(--muted);line-height:1.65;
+}
+.funding-note strong{color:var(--text)}
+
+/* ===== TOKEN CORE DATA ===== */
+.token-core{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:30px 16px 50px;
+}
+.tc-frame{
+  background:linear-gradient(180deg, var(--bg-card) 0%, #0a0a10 100%);
+  border:1px solid var(--line-bright);
+  border-radius:10px;
+  padding:30px 26px;
+  position:relative;
+  overflow:hidden;
+}
+.tc-frame::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg, var(--accent), var(--gold));
+}
+.tc-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:11px;letter-spacing:3px;color:var(--gold);font-weight:700;
+  margin-bottom:10px;
+}
+.tc-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;letter-spacing:1.5px;font-weight:800;
+  color:var(--text);
+  margin-bottom:16px;
+}
+.tc-body{
+  font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:22px;
+}
+.tc-body strong{color:var(--text);font-weight:600}
+
+.tc-contract{
+  background:var(--bg-card-2);
+  border:1px solid var(--line-bright);
+  border-radius:6px;
+  padding:18px 20px;
+  margin-bottom:18px;
+}
+.tc-contract-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.tc-pill{
   font-family:'Orbitron',sans-serif;
   font-size:10px;letter-spacing:2px;font-weight:700;
   color:var(--gold);
@@ -320,29 +630,29 @@ body::before{
   border:1px solid rgba(255,204,0,.3);
   padding:5px 10px;border-radius:3px;
 }
-.ca-value{
+.tc-ca{
   font-family:'JetBrains Mono',monospace;
-  font-size:13px;color:var(--text);
+  font-size:12.5px;color:var(--text);
   word-break:break-all;
   flex:1;min-width:240px;
 }
-.ca-copy{
+.tc-copy{
   font-family:'Orbitron',sans-serif;
   font-size:10px;letter-spacing:1.5px;font-weight:700;
   color:var(--gold);
   background:rgba(255,204,0,.06);
   border:1px solid rgba(255,204,0,.3);
-  padding:6px 12px;border-radius:3px;
+  padding:7px 12px;border-radius:3px;
   cursor:pointer;transition:background .15s ease;
 }
-.ca-copy:hover{background:rgba(255,204,0,.14)}
-.ca-copy.copied{background:rgba(0,255,136,.14);border-color:rgba(0,255,136,.4);color:var(--green)}
+.tc-copy:hover{background:rgba(255,204,0,.14)}
+.tc-copy.copied{background:rgba(0,255,136,.14);border-color:rgba(0,255,136,.4);color:var(--green)}
 
-.cta-row{
+.tc-cta-row{
   display:flex;gap:10px;flex-wrap:wrap;
   margin-top:6px;
 }
-.cta-btn{
+.tc-btn{
   flex:1;min-width:200px;
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 18px;
@@ -351,17 +661,17 @@ body::before{
   text-decoration:none;
   transition:transform .15s ease, box-shadow .15s ease;
 }
-.cta-btn:hover{transform:translateY(-2px)}
-.cta-btn-primary{
+.tc-btn:hover{transform:translateY(-2px)}
+.tc-btn-primary{
   background:var(--gold);color:#0d0d14;
   box-shadow:0 4px 14px rgba(255,204,0,.3);
 }
-.cta-btn-primary:hover{box-shadow:0 6px 22px rgba(255,204,0,.5)}
-.cta-btn-secondary{
+.tc-btn-primary:hover{box-shadow:0 6px 22px rgba(255,204,0,.5)}
+.tc-btn-secondary{
   background:transparent;color:var(--text);
   border:1px solid var(--line-bright);
 }
-.cta-btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.tc-btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
 
 /* ===== FOOTER ===== */
 .footer-pro{
@@ -375,13 +685,22 @@ body::before{
 }
 .footer-pro a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line-bright)}
 .footer-pro a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.footer-disclaimer{
+  max-width:1080px;margin:0 auto;
+  padding:16px 28px 30px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--dim);line-height:1.6;
+  text-align:center;
+}
 @media(max-width:780px){
   .footer-pro{padding:20px 16px;font-size:10px;flex-direction:column;text-align:center}
+  .footer-disclaimer{padding:14px 16px 24px;font-size:9px}
 }
 </style>
 </head>
 <body>
 
+<!-- ===== TOPNAV ===== -->
 <nav class="topnav-pro">
   <a href="index.html" class="tnav-badge">
     <span class="dot"></span>
@@ -408,88 +727,506 @@ body::before{
   </a>
 </nav>
 
-<!-- Angled gold accent line that mirrors the badge bevels -->
 <div class="tnav-accent" aria-hidden="true">
   <svg viewBox="0 0 1000 18" preserveAspectRatio="none">
     <path d="M 0 2 L 160 2 L 180 16 L 820 16 L 840 2 L 1000 2" />
   </svg>
 </div>
 
+<!-- ===== HERO ===== -->
 <section class="hero">
-  <div class="hero-status">▸ FULL PAGE COMING SOON</div>
-  <h1><span class="ticker">$MEMEGP</span></h1>
-  <p class="tagline">The anchor token of the MEME GP platform. Independent of team auctions. Live on Solana via pump.fun.</p>
+  <div class="hero-eyebrow">▸ STEP INTO THE GARAGE</div>
+  <h1>WHERE <span class="ticker">$MEMEGP</span> LIVES</h1>
+  <p class="tagline">
+    Every part of the platform — the broadcast, the telemetry, the championships, the engineering,
+    the locked liquidity — visualised in one frame. Hover the markers. See what's racing this season,
+    and where it's going next.
+  </p>
+  <div class="hero-hint">
+    <span class="pulse"></span>
+    <span>8 HOTSPOTS · HOVER OR TAP TO EXPLORE</span>
+  </div>
 </section>
 
-<div class="cs-wrap">
+<!-- ===== GARAGE STAGE ===== -->
+<section class="garage-stage">
+  <div class="garage-frame" id="garageFrame">
+    <img src="img/garage-hero.jpg" alt="The MEME GP garage — F1-style racing garage with broadcast monitors, trophy cabinet, locked safe, engineer's workstation, tyre rack, and the MEME GP car at the centre" class="garage-img" loading="eager">
+    <div class="garage-hint-overlay">▸ HOVER THE GOLD MARKERS</div>
 
-  <div class="cs-block">
-    <div class="cs-block-eyebrow">▸ THE FULL TOKENOMICS PAGE IS BEING BUILT</div>
-    <h2 class="cs-block-title">FUNDING THE FUTURE OF MEME GP</h2>
-    <p class="cs-block-body">
-      $MEMEGP is the token that funds the platform — the racing engine, the broadcast layer, the data infrastructure, and every feature that turns MEME GP from a concept into a championship-grade product. This page will lay out the full story when ready. For now, here's the contract and the links.
-    </p>
+    <!-- Hotspot 1: F1 CAR (centre, hero) -->
+    <button class="hotspot" data-hotspot="1" style="left:51%; top:65%;" aria-label="Your Community hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-top" data-panel="1">
+        <div class="hp-headline">YOUR COMMUNITY</div>
+        <div class="hp-lead">This is your team. You build your car, you build your progress, you build your performance on track.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Simple livery. No sponsors. Earned grid seat.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Custom professional livery per team. Sponsor slots on your car. Auctioned grid seat.</div>
+          </div>
+        </div>
+      </div>
+    </button>
 
-    <div class="cs-list">
-      <div class="cs-list-item">
-        <span class="cs-list-item-bullet">01</span>
-        <span class="cs-list-item-text">The token narrative — why $MEMEGP exists and what it unlocks</span>
+    <!-- Hotspot 2: BROADCAST (back wall, big screens) -->
+    <button class="hotspot" data-hotspot="2" style="left:52%; top:41%;" aria-label="The Broadcast hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-bottom" data-panel="2">
+        <div class="hp-headline">THE BROADCAST</div>
+        <div class="hp-lead">This is entertainment central.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">2D AI racing format. Dots on a screen chasing each other.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Enhanced broadcast format. Building towards our full 3D racing roadmap.</div>
+          </div>
+        </div>
       </div>
-      <div class="cs-list-item">
-        <span class="cs-list-item-bullet">02</span>
-        <span class="cs-list-item-text">Distribution breakdown — supply, vesting, allocations</span>
+    </button>
+
+    <!-- Hotspot 3: TELEMETRY (left, stacked monitors inside arch) -->
+    <button class="hotspot" data-hotspot="3" style="left:6%; top:39%;" aria-label="Telemetry hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-right" data-panel="3">
+        <div class="hp-headline">TELEMETRY</div>
+        <div class="hp-lead">Every signal your community sends, measured live.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Upgrades driven by X engagement. Likes and RTs unlock stat upgrades between races.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Team telemetry dashboard. Live engagement breakdown. Coach your community with real data.</div>
+          </div>
+        </div>
       </div>
-      <div class="cs-list-item">
-        <span class="cs-list-item-bullet">03</span>
-        <span class="cs-list-item-text">Use of funds — what platform features get built, when</span>
+    </button>
+
+    <!-- Hotspot 4: TROPHY CABINET (right side, glass cabinet) -->
+    <button class="hotspot" data-hotspot="4" style="left:91%; top:41%;" aria-label="Champions hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-left" data-panel="4">
+        <div class="hp-headline">A COMMUNITY OF CHAMPIONS</div>
+        <div class="hp-lead">The constructor's title. The end-of-season trophy. Permanent place in the MEME GP Hall of Fame.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Bragging rights. Hall of Fame entry. Top 4 teams auto-qualify for next season.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Champion's spotlight in season launch coverage. Founding champion badge on team page. Exploring on-chain trophies and commemorative NFTs.</div>
+          </div>
+        </div>
       </div>
-      <div class="cs-list-item">
-        <span class="cs-list-item-bullet">04</span>
-        <span class="cs-list-item-text">The path from Season 2 to Season 1 Official championship</span>
+    </button>
+
+    <!-- Hotspot 5: WORKSTATION (left, desk with helmet) -->
+    <button class="hotspot" data-hotspot="5" style="left:20%; top:53%;" aria-label="Engineer's Workstation hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-right" data-panel="5">
+        <div class="hp-headline">EVERY RACING TEAM NEEDS AN ENGINEER</div>
+        <div class="hp-lead">The pit lane behind the pit lane. The people who make race weekends happen.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">A lean operation. One race engineer running the show — building, calling races, reading data, posting results. Fast, focused, hands-on.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Pit crew expansion. Dedicated engineers for the platform, producers for the broadcast, analysts for the data.</div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <!-- Hotspot 6: TYRE RACK (right foreground) -->
+    <button class="hotspot" data-hotspot="6" style="left:90%; top:71%;" aria-label="Marketing & Growth hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-left" data-panel="6">
+        <div class="hp-headline">MARKETING &amp; GROWTH</div>
+        <div class="hp-lead">The consumables that get burned through every race weekend. The audience doesn't grow by accident.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Founding-grade growth. The audience compounds race by race. Every team brings their community. Word of mouth, not media buys.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Race weekend sponsorships. Campaigns across X and other social. Audience growth funded by auction proceeds and $MEMEGP.</div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <!-- Hotspot 7: LOCKED SAFE (centre floor) -->
+    <button class="hotspot" data-hotspot="7" style="left:30%; top:71%;" aria-label="Locked Liquidity hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-top" data-panel="7">
+        <div class="hp-headline">LOCKED LIQUIDITY</div>
+        <div class="hp-lead">The foundation. The one wallet that can't move. The proof this is built to last.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Foundational trust. 40% of the $MEMEGP supply locked in liquidity for 12 months. No backdoor, no early unlock, no rug.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">Trust deepens. Additional transparency tools, governance structures, and verification layers ship through Season 3 as the platform matures.</div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <!-- Hotspot 8: CALENDAR (left side, above workstation) -->
+    <button class="hotspot" data-hotspot="8" style="left:23%; top:36%;" aria-label="The Calendar hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-right" data-panel="8">
+        <div class="hp-headline">THE CALENDAR</div>
+        <div class="hp-lead">When the platform lives, breathes, and races.</div>
+        <div class="hp-blocks">
+          <div class="hp-block this-season">
+            <div class="hp-block-label">THIS SEASON</div>
+            <div class="hp-block-body">Four races. The inaugural championship. Upgrade cycles and hype build between every race. The proof season — short, sharp, focused.</div>
+          </div>
+          <div class="hp-block next-season">
+            <div class="hp-block-label">NEXT SEASON</div>
+            <div class="hp-block-body">20 races across the main grid. Plus the launch of MGP2 — the feeder series for small-cap meme coins with strong communities.</div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+  </div>
+</section>
+
+<!-- ===== MOBILE / EXPANDED HOTSPOT GRID ===== -->
+<section class="hotspot-grid-section">
+  <span class="section-eyebrow">▸ THE EIGHT HOTSPOTS</span>
+  <h2 class="section-title">EVERY PART OF THE PLATFORM</h2>
+  <p class="section-sub">
+    A full breakdown of every hotspot in the garage — what's running this season, and what's coming next.
+  </p>
+  <div class="hotspot-grid">
+    <div class="hg-card">
+      <div class="hg-num">▸ 01 / THE CAR</div>
+      <div class="hg-headline">YOUR COMMUNITY</div>
+      <div class="hg-lead">This is your team. You build your car, you build your progress, you build your performance on track.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Simple livery. No sponsors. Earned grid seat.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Custom professional livery per team. Sponsor slots on your car. Auctioned grid seat.</div>
+        </div>
       </div>
     </div>
 
-    <div class="ca-card">
-      <div class="ca-card-label">▸ ON-CHAIN · SOLANA</div>
-      <div class="ca-row">
-        <span class="ca-label-pill">CA</span>
-        <span class="ca-value" id="ca-value">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
-        <button class="ca-copy" id="ca-copy" aria-label="Copy contract address">📋 COPY</button>
+    <div class="hg-card">
+      <div class="hg-num">▸ 02 / THE TV</div>
+      <div class="hg-headline">THE BROADCAST</div>
+      <div class="hg-lead">This is entertainment central.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">2D AI racing format. Dots on a screen chasing each other.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Enhanced broadcast format. Building towards our full 3D racing roadmap.</div>
+        </div>
       </div>
-      <div class="cta-row">
-        <a href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener" class="cta-btn cta-btn-primary">VIEW ON PUMP.FUN →</a>
-        <a href="https://twitter.com/MemeGrandPrix" target="_blank" rel="noopener" class="cta-btn cta-btn-secondary">FOLLOW @MemeGrandPrix</a>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 03 / THE SCREENS</div>
+      <div class="hg-headline">TELEMETRY</div>
+      <div class="hg-lead">Every signal your community sends, measured live.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Upgrades driven by X engagement. Likes and RTs unlock stat upgrades between races.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Team telemetry dashboard. Live engagement breakdown. Coach your community with real data — see what's working, plug what's leaking.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 04 / THE CABINET</div>
+      <div class="hg-headline">A COMMUNITY OF CHAMPIONS</div>
+      <div class="hg-lead">The constructor's title. The end-of-season trophy. Permanent place in the MEME GP Hall of Fame.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Bragging rights. Hall of Fame entry. Top 4 teams auto-qualify for next season.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Champion's spotlight in season launch coverage. Founding champion badge on team page. Exploring on-chain trophies and commemorative NFTs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 05 / THE WORKSTATION</div>
+      <div class="hg-headline">EVERY RACING TEAM NEEDS AN ENGINEER</div>
+      <div class="hg-lead">The pit lane behind the pit lane. The people who make race weekends happen.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">A lean operation. One race engineer running the show — building the platform, calling the races, reading the data, posting the results. Fast, focused, hands-on.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Pit crew expansion. Dedicated engineers for the platform, dedicated producers for the broadcast, dedicated analysts for the data. Every race weekend produced like a proper grand prix.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 06 / THE TYRES</div>
+      <div class="hg-headline">MARKETING &amp; GROWTH</div>
+      <div class="hg-lead">The consumables that get burned through every race weekend. The audience doesn't grow by accident.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Founding-grade growth. The audience compounds race by race, post by post. Every team brings their community. Every community brings their friends. Word of mouth, not media buys.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Race weekend sponsorships. Marketing campaigns across X and other social media channels. Audience growth funded by the auction proceeds and $MEMEGP — the more teams pay to race, the more the platform reaches.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 07 / THE SAFE</div>
+      <div class="hg-headline">LOCKED LIQUIDITY</div>
+      <div class="hg-lead">The foundation. The one wallet that can't move. The proof this is built to last.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Foundational trust. 40% of the $MEMEGP supply locked in liquidity for 12 months. No backdoor, no early unlock, no rug. The proof that this is built to last.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">Trust deepens. Additional transparency tools, governance structures, and verification layers ship through Season 3 as the platform matures.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hg-card">
+      <div class="hg-num">▸ 08 / THE CALENDAR</div>
+      <div class="hg-headline">THE CALENDAR</div>
+      <div class="hg-lead">When the platform lives, breathes, and races.</div>
+      <div class="hg-blocks">
+        <div class="hg-block this-season">
+          <div class="hg-block-label">THIS SEASON</div>
+          <div class="hg-block-body">Four races. The inaugural championship. Upgrade cycles and hype build between every race. The proof season — short, sharp, focused.</div>
+        </div>
+        <div class="hg-block next-season">
+          <div class="hg-block-label">NEXT SEASON</div>
+          <div class="hg-block-body">20 races across the main grid. Plus the launch of MGP2 — the feeder series for small-cap meme coins with strong communities. Promotion pathway to the main grid. Every race a feature, every community a contender.</div>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-</div>
+<!-- ===== FUNDING FLOW ===== -->
+<section class="funding">
+  <span class="section-eyebrow">▸ THE FUNDING FLOW</span>
+  <h2 class="section-title">HOW IT ALL GETS BUILT</h2>
+  <p class="section-sub">
+    Every hotspot above has a funding question behind it — how does the broadcast get bigger,
+    the pit crew grow, the marketing scale? Here's where the money comes from.
+  </p>
 
+  <div class="funding-frame">
+    <div class="funding-sources">
+      <div class="funding-source">
+        <div class="funding-source-eyebrow">SOURCE 01</div>
+        <div class="funding-source-title">AUCTION PROCEEDS</div>
+        <div class="funding-source-body">
+          From <strong>Season 3 onwards</strong>, competitive auctions for grid slots generate ongoing revenue.
+          The more teams pay to race, the more the platform invests in growing the audience those teams race for.
+          A reinforcing flywheel — paying teams fund the growth that makes future seats more valuable.
+        </div>
+      </div>
+      <div class="funding-source">
+        <div class="funding-source-eyebrow">SOURCE 02</div>
+        <div class="funding-source-title">$MEMEGP TREASURY</div>
+        <div class="funding-source-body">
+          <strong>Milestone-gated</strong> release of allocated $MEMEGP supply. Funds platform development,
+          broadcast infrastructure, and operational scaling — but only as the platform delivers against
+          its milestones. No quiet treasury dumps, no unilateral spending.
+        </div>
+      </div>
+    </div>
+
+    <div class="funding-arrow">
+      <div>FLOWS INTO</div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+
+    <div class="funding-flow">
+      <div class="funding-flow-title">THE SEVEN BUILDABLES</div>
+      <div class="funding-targets">
+        <div class="funding-target"><div class="funding-target-name">BROADCAST</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">TELEMETRY</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">CHAMPIONS</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">ENGINEERS</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">MARKETING</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">CALENDAR</div><div class="funding-target-gate">milestone-gated</div></div>
+        <div class="funding-target"><div class="funding-target-name">COMMUNITY</div><div class="funding-target-gate">milestone-gated</div></div>
+      </div>
+    </div>
+
+    <div class="funding-note">
+      <strong>LP isn't funded — LP is locked.</strong> The locked liquidity hotspot doesn't draw from these sources because
+      it can't move. It's the foundation that lets everything else race. The seven buildables above are funded
+      by the two sources. The eighth — locked liquidity — is what guarantees the whole structure stays standing.
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOKEN CORE DATA ===== -->
+<section class="token-core">
+  <div class="tc-frame">
+    <div class="tc-eyebrow">▸ THE TOKEN</div>
+    <h2 class="tc-title">$MEMEGP — CORE DATA</h2>
+    <p class="tc-body">
+      <strong>$MEMEGP</strong> is the anchor token of the MEME GP platform. Live on Solana via pump.fun.
+      Independent of team selection — owning $MEMEGP supports the platform, not any single team.
+      Always do your own research. Entertainment only, not financial advice.
+    </p>
+
+    <div class="tc-contract">
+      <div class="tc-contract-row">
+        <span class="tc-pill">CONTRACT</span>
+        <span class="tc-ca" id="caValue">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+        <button class="tc-copy" id="copyBtn" onclick="copyCA()">COPY</button>
+      </div>
+    </div>
+
+    <div class="tc-cta-row">
+      <a href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener" class="tc-btn tc-btn-primary">
+        BUY ON PUMP.FUN ▸
+      </a>
+      <a href="https://dexscreener.com/solana/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener" class="tc-btn tc-btn-secondary">
+        DEXSCREENER ▸
+      </a>
+      <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="tc-btn tc-btn-secondary">
+        @MEMEGRANDPRIX ▸
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
 <footer class="footer-pro">
   <div>MEME GP · 2026 SEASON · <a href="meme-info.html">MEME INFO</a> · <a href="roadmap.html">ROADMAP</a> · <a href="memegp-token.html">$MEMEGP</a></div>
   <div>© 2026 MEME GP · Entertainment only · Not financial advice · DYOR</div>
 </footer>
 
+<div class="footer-disclaimer">
+  MEME GP is an entertainment platform for crypto culture. Not a gambling product. No cash prizes are awarded.
+  Recognition, championship titles, and platform exposure are non-financial benefits.
+  Forward-looking items (Next Season blocks, funding flow) describe intent and direction, not promises.
+  Specific deliverables, timing, and milestones may evolve based on Season 2 outcomes and broader conditions.
+</div>
+
 <script>
+// Hotspot panel toggle
 (function(){
-  const btn = document.getElementById('ca-copy');
-  const val = document.getElementById('ca-value');
-  if(!btn || !val) return;
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(val.textContent.trim());
-      btn.classList.add('copied');
-      btn.textContent = '✓ COPIED';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.textContent = '📋 COPY';
-      }, 1800);
-    } catch(e){
-      const r = document.createRange(); r.selectNode(val);
-      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
-    }
+  const hotspots = document.querySelectorAll('.hotspot');
+  let active = null;
+
+  function closeActive(){
+    if(!active) return;
+    active.classList.remove('is-active');
+    const panel = active.querySelector('.hotspot-panel');
+    if(panel) panel.classList.remove('is-open');
+    active = null;
+  }
+
+  hotspots.forEach(h => {
+    const panel = h.querySelector('.hotspot-panel');
+
+    // Hover behavior (desktop only)
+    h.addEventListener('mouseenter', () => {
+      if(window.matchMedia('(hover: hover)').matches){
+        closeActive();
+        h.classList.add('is-active');
+        panel.classList.add('is-open');
+        active = h;
+      }
+    });
+    h.addEventListener('mouseleave', () => {
+      if(window.matchMedia('(hover: hover)').matches){
+        h.classList.remove('is-active');
+        panel.classList.remove('is-open');
+        if(active === h) active = null;
+      }
+    });
+
+    // Click toggle (touch / accessibility)
+    h.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if(active === h){
+        closeActive();
+      } else {
+        closeActive();
+        h.classList.add('is-active');
+        panel.classList.add('is-open');
+        active = h;
+      }
+    });
+
+    // Keyboard
+    h.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') closeActive();
+    });
+  });
+
+  // Click outside to close
+  document.addEventListener('click', (e) => {
+    if(active && !e.target.closest('.hotspot')) closeActive();
   });
 })();
+
+// Copy contract address
+function copyCA(){
+  const btn = document.getElementById('copyBtn');
+  const value = document.getElementById('caValue').innerText.trim();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(value).then(() => {
+      btn.textContent = 'COPIED ✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+}
 </script>
 
 </body>
