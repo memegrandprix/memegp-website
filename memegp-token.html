@@ -276,6 +276,14 @@ body::before{
   width:44px;height:44px;
   transform:translate(-50%,-50%);
 }
+/* When a hotspot is hovered or active, lift its entire stacking
+   context above the other hotspots so the panel never gets hidden
+   behind later-in-DOM markers. */
+.hotspot:hover,
+.hotspot:focus-within,
+.hotspot.is-active{
+  z-index:20;
+}
 .hotspot-marker{
   position:absolute;
   top:50%;left:50%;
