@@ -35,6 +35,23 @@
   },
   "items": [
     {
+      "id": "2026-05-31-monko-official-team-15",
+      "type": "paddock",
+      "timestamp": "2026-05-31T12:00:00Z",
+      "tag": "OFFICIAL TEAM",
+      "team": {
+        "ticker": "$MONKO",
+        "name": "MONKO MOTORS",
+        "color": "#ffcc00",
+        "logo": "monko.png",
+        "contract": "EMvFZGZAakJk1AByP162Bu2ENiGxV8EXqYx2XKV3doge",
+        "chain": "SOL"
+      },
+      "headline": "OFFICIAL TEAM 15 — $MONKO · MONKO MOTORS · GRID LOCKED",
+      "body": "MONKO MOTORS locks in as the fifteenth and final official team for Season 2 — and the first team in MEME GP history to earn its seat by community vote. Across the final week of May, the $MONKO community out-engaged $DOGEVAN, $BULL and $UTYA in the RT contest to claim the final founding-grid slot. Driver: MONKO. Starting profile: 4.5 overall — pre-season baseline pending the 1–7 June measurement window. The grid is locked at 15/15. Pre-season starts tomorrow. Lights out 21 June.",
+      "tweet": "🏁 OFFICIAL TEAM 15 — $MONKO\n\nthe community brought it home.\n\nout-engaged $DOGEVAN, $BULL and $UTYA. earned the final seat.\n\n$MONKO — MONKO MOTORS — joins MEME GP. team 15.\n\nthe grid is locked. 15/15.\n\nmemegrandprix.com/teams-monko.html\n\n$MEMEGP"
+    },
+    {
       "id": "2026-05-26-dobermann-official-team-14",
       "type": "paddock",
       "timestamp": "2026-05-26T18:00:00Z",
