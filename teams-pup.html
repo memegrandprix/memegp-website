@@ -1235,7 +1235,7 @@ body::before{
 
 <div class="grid-strip">
   <div class="grid-strip-header">
-    <div class="grid-strip-title">▸ THE STARTING GRID · 14 / 15 LOCKED</div>
+    <div class="grid-strip-title">▸ THE STARTING GRID · 15 / 15 LOCKED</div>
     <a href="season-2.html" class="grid-strip-link">VIEW FULL GRID →</a>
   </div>
   <div class="mini-grid" id="miniGrid"></div>
@@ -1295,6 +1295,7 @@ const TEAMS = [
   { ticker: 'MOMO', overall: 6.4, locked: true, current: false, link: 'teams-momo.html', avatar: 'momo-driver.png' },
   { ticker: 'BILLY', overall: 6.0, locked: true, current: false, link: 'teams-billy.html', avatar: 'billy-driver.png' },
   { ticker: 'DOBERMANN', overall: 4.3, locked: true, current: false, link: 'teams-dobermann.html', avatar: 'dobermann-driver.png' },
+  { ticker: 'MONKO', overall: 4.5, locked: true, current: false, link: 'teams-monko.html', avatar: 'monko-driver.png' },
 ];
 
 let miniHtml = '';
@@ -1312,20 +1313,6 @@ TEAMS.forEach(t => {
   `;
 });
 
-for (let i = 15; i <= 15; i++) {
-  const num = String(i).padStart(2, '0');
-  miniHtml += `
-    <div class="mini-card empty">
-      <div class="mini-card-row">
-        <div class="mini-avatar" style="background-image:url('helmet.png')"></div>
-        <div class="mini-info">
-          <div class="mini-ticker">SLOT ${num}</div>
-          <div class="mini-overall">OVR · <strong>—</strong></div>
-        </div>
-      </div>
-    </div>
-  `;
-}
 document.getElementById('miniGrid').innerHTML = miniHtml;
 
 // === SHARE CARD AS IMAGE ===
