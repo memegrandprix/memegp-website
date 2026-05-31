@@ -5,14 +5,14 @@
 <meta name="robots" content="index,follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MEME GP 2026 — Starting Grid | Season 2</title>
-<meta name="description" content="The starting grid for MEME GP Season 2. 15 teams. 8 confirmed. 7 seats remaining.">
+<meta name="description" content="The starting grid for MEME GP Season 2. 15 teams locked. Pre-season measurement 1–7 June. Race 1 · Sunday 21 June.">
 <meta property="og:title" content="MEME GP 2026 — STARTING GRID">
-<meta property="og:description" content="15 teams. 8 confirmed. 7 seats up for grabs.">
+<meta property="og:description" content="The starting grid is locked. 15 teams, 4 races, one championship. Lights out 21 June.">
 <meta property="og:image" content="grid-hero.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://memegrandprix.com/season-2.html">
 <meta name="twitter:title" content="MEME GP 2026 — STARTING GRID">
-<meta name="twitter:description" content="15 teams. 8 confirmed. 7 seats up for grabs.">
+<meta name="twitter:description" content="The starting grid is locked. 15 teams, 4 races, one championship. Lights out 21 June.">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" type="image/png" href="favicon.png">
@@ -369,7 +369,7 @@ body::before{
 .progress-fill{
   height:100%;
   background:linear-gradient(90deg,var(--gold),var(--accent));
-  width:93.3%; /* 14 of 15 */
+  width:100%; /* 15 of 15 — grid locked */
   border-radius:3px;
   box-shadow:
     0 0 12px rgba(255,204,0,.5),
@@ -1305,9 +1305,8 @@ body::before{
         <div class="banner-sub">STARTING GRID · <strong>15 TEAMS</strong></div>
       </div>
       <div class="banner-stats">
-        <span class="banner-stat locked">✓ LOCKED · <strong>14</strong></span>
-        <span class="banner-stat open">SEATS OPEN · <strong>1</strong></span>
-        <span class="banner-stat race">RACE 1 · <strong>JUNE 2026</strong></span>
+        <span class="banner-stat locked">✓ LOCKED · <strong>15</strong></span>
+        <span class="banner-stat race">RACE 1 · <strong>21 JUN 2026</strong></span>
       </div>
     </div>
   </div>
@@ -1324,7 +1323,7 @@ body::before{
     <div class="progress-track">
       <div class="progress-fill"></div>
     </div>
-    <span><strong style="color:var(--gold);font-size:20px;text-shadow:0 0 8px rgba(255,204,0,.4)">14</strong> / 15</span>
+    <span><strong style="color:var(--gold);font-size:20px;text-shadow:0 0 8px rgba(255,204,0,.4)">15</strong> / 15</span>
   </div>
 </div>
 
@@ -1514,8 +1513,8 @@ body::before{
 <div class="cta-section">
   <div class="cta-card">
     <h3>WANT YOUR COIN ON THE GRID?</h3>
-    <p>7 seats remaining for Season 2. We're vetting low and medium-cap meme coin communities — engagement matters more than market cap.</p>
-    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="btn primary">DM @MemeGrandPrix →</a>
+    <p>Season 2 is locked at 15 teams. Season 3 introduces competitive auctions for grid slots, plus the launch of <strong>MGP2</strong> — our feeder series for small-cap meme coins with strong communities. Promotion pathway to the main grid.</p>
+    <a href="https://x.com/MemeGrandPrix" target="_blank" rel="noopener" class="btn primary">FOLLOW @MemeGrandPrix →</a>
   </div>
 </div>
 
@@ -1656,6 +1655,15 @@ const TEAMS = [
     color: '#1a1a1a',         // Stealth Black
     logo: 'dobermann.png',
     link: 'teams-dobermann.html',
+    locked: true,
+  },
+  {
+    position: 15,
+    ticker: 'MONKO',
+    teamName: 'MONKO MOTORS',
+    color: '#ffcc00',         // MEME GP gold (placeholder — update once livery is locked)
+    logo: 'monko.png',
+    link: 'teams-monko.html',
     locked: true,
   },
   // Future teams go here — example:

@@ -7,13 +7,13 @@
 <title>MEME GP — F1-Style Memecoin Racing League</title>
 <meta name="description" content="The world's first F1-style memecoin racing league. Memecoin data drives every car. AI runs the season. Your community decides everything else.">
 <meta property="og:title" content="MEME GP — F1-Style Memecoin Racing League">
-<meta property="og:description" content="15 teams. 4 races. 1 meme champion. Round 1 lights out June 1, 2026.">
+<meta property="og:description" content="15 teams. 4 races. 1 meme champion. Race 1 lights out 21 June 2026.">
 <meta property="og:image" content="grid-hero.png">
 <meta property="og:url" content="https://memegrandprix.com/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MEME GP — F1-Style Memecoin Racing League">
-<meta name="twitter:description" content="15 teams. 4 races. 1 meme champion. Round 1 lights out June 1, 2026.">
+<meta name="twitter:description" content="15 teams. 4 races. 1 meme champion. Race 1 lights out 21 June 2026.">
 <meta name="twitter:image" content="grid-hero.png">
 
 <link rel="icon" type="image/png" href="favicon.png">
@@ -986,9 +986,9 @@ text-align:center;}
 <div class="countdown-wrapper">
   <div class="countdown-block">
     <div class="countdown-content">
-      <div class="countdown-eyebrow">▸ VOTING CLOSES IN</div>
-      <h2 class="countdown-title">FINAL GRID SEAT · <span class="accent">VOTE OPEN</span></h2>
-      <div class="countdown-circuit">Sat 30 May 23:59 UTC · <strong>15th Team Decided</strong></div>
+      <div class="countdown-eyebrow">▸ LIGHTS OUT IN</div>
+      <h2 class="countdown-title">RACE 1 · <span class="accent">THE INAUGURAL GP</span></h2>
+      <div class="countdown-circuit">Sun 21 June 2026 · <strong>Satoshi Speedway</strong></div>
       <div class="countdown-grid" id="countdown-grid">
         <div class="countdown-cell">
           <span class="countdown-cell-num" id="cd-days">--</span>
@@ -1110,8 +1110,8 @@ text-align:center;}
   'use strict';
 
   // === Config: change this single date to update the countdown target ===
-  // Format: YYYY-MM-DDTHH:mm:ssZ (UTC). Current: Sat 30 May 2026 23:59 UTC — voting closes for 15th grid seat
-  var SEASON_LAUNCH = new Date('2026-05-30T23:59:00Z').getTime();
+  // Format: YYYY-MM-DDTHH:mm:ssZ (UTC). Current: Sun 21 Jun 2026 — Race 1 · The Inaugural Grand Prix
+  var SEASON_LAUNCH = new Date('2026-06-21T15:00:00Z').getTime();
 
   var els = {
     days:    document.getElementById('cd-days'),
@@ -1128,10 +1128,10 @@ text-align:center;}
     var diff = SEASON_LAUNCH - now;
 
     if (diff <= 0) {
-      // Voting closed — replace grid with locked message
+      // Race day reached — replace grid with "race day" message
       els.grid.innerHTML =
         '<div class="countdown-passed" style="grid-column:1/-1">' +
-          '🏁 VOTING CLOSED · GRID LOCKED 🏁' +
+          '🏁 LIGHTS OUT · RACE 1 IS LIVE 🏁' +
         '</div>';
       return false; // stop ticking
     }
