@@ -7,7 +7,7 @@ Pulls live on-chain data for all grid teams and appends one row to
 data/history.json. Runs daily at 09:00 SAST via GitHub Actions cron.
 
 Two data source modes per team (via "dataSource" field in TEAMS):
-  - "dexscreener"  → standard AMM fetch (12 teams)
+  - "dexscreener"  → standard AMM fetch (14 teams)
   - "runes"        → CoinGecko + Ordiscan combo (BILLY only for now)
 
 Bitcoin Runes integration notes:
@@ -37,7 +37,7 @@ from pathlib import Path
 # TEAMS config — dataSource controls which fetcher is used
 # ============================================================
 TEAMS = [
-    # 12 DexScreener-tracked teams
+    # 14 DexScreener-tracked teams
     {"ticker": "TURBO",      "dataSource": "dexscreener", "chain": "ETH", "contract": "0xa35923162c49cf95e6bf26623385eb431ad920d3"},
     {"ticker": "MASK",       "dataSource": "dexscreener", "chain": "SOL", "contract": "6MQpbiTC2YcogidTmKqMLK82qvE9z5QEm7EP3AEDpump"},
     {"ticker": "NEURO",      "dataSource": "dexscreener", "chain": "CRO", "contract": "0xCFE223d06b86568C24ffd17E8ac748DbAC096b3b"},
@@ -50,6 +50,8 @@ TEAMS = [
     {"ticker": "PUP",        "dataSource": "dexscreener", "chain": "BNB", "contract": "0x73b84f7e3901f39fc29f3704a03126d317ab4444"},
     {"ticker": "PEPONK",     "dataSource": "dexscreener", "chain": "SOL", "contract": "Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump"},
     {"ticker": "MOMO",       "dataSource": "dexscreener", "chain": "SOL", "contract": "G4zwEA9NSd3nMBbEj31MMPq2853Brx2oGsKzex3ebonk"},
+    {"ticker": "DOBERMANN",  "dataSource": "dexscreener", "chain": "SOL", "contract": "J3mfHoQb27xHL1xUYsoPfU1vZHbzCeK7fZYvsWeYdoge"},
+    {"ticker": "MONKO",      "dataSource": "dexscreener", "chain": "SOL", "contract": "EMvFZGZAakJk1AByP162Bu2ENiGxV8EXqYx2XKV3doge"},
     # 1 Bitcoin Runes team
     {"ticker": "BILLY",      "dataSource": "runes",       "chain": "BTC",
      "coingecko_id": "billion-dollar-cat-runes",
