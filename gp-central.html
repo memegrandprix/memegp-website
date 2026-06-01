@@ -942,6 +942,11 @@ body::before{
   text-align:left;padding:14px 16px;
   border-bottom:1px solid var(--line);
   font-weight:700;
+  /* Sticky header: sits below topnav (56px) + gold accent (18px) = 74px */
+  position:sticky;
+  top:74px;
+  background:var(--bg-card);
+  z-index:5;
 }
 .rankings-table th.num{text-align:right}
 .rankings-table td{
