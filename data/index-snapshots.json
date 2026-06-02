@@ -1,46 +1,55 @@
 {
-  "_README": "Daily snapshots for the GRID INDEX page. Run live from 2026-06-01 00:00 UTC (Season 2 launch). Each snapshot captures grid_index (equal-weight basket of all 15 teams), meme_market (CoinGecko meme category benchmark), and per-team values. Index baseline = 100 on 2026-06-01. Pre-season snapshots flagged as is_preseason: true and excluded from chart calculations.",
-  "config": {
-    "season_start_utc": "2026-06-01T00:00:00Z",
-    "snapshot_time_utc": "00:00",
-    "baseline_value": 100,
-    "team_count": 15,
-    "methodology": "equal-weight",
-    "benchmark": "coingecko-meme-category"
+  "baseline": {
+    "date": "2026-06-02",
+    "established_at": "2026-06-02T13:58:57Z",
+    "team_mcaps_usd": {
+      "TURBO": 71099680.0,
+      "MASK": 1362560.0,
+      "NEURO": 8764.0,
+      "SUS": 170076.0,
+      "LOL": 453412.0,
+      "SHIH": 166796.0,
+      "VIBECOIN": 1093452.0,
+      "MARS": 12330.0,
+      "420BLAZEIT": 70516.0,
+      "PUP": 1409690.0,
+      "PEPONK": 545132.0,
+      "MOMO": 468088.0,
+      "DOBERMANN": 414907.0,
+      "MONKO": 79040.0,
+      "BILLY": 1639191.0
+    },
+    "meme_market_mcap_usd": 34070774628.972397,
+    "teams_in_basket": [
+      "420BLAZEIT",
+      "BILLY",
+      "DOBERMANN",
+      "LOL",
+      "MARS",
+      "MASK",
+      "MOMO",
+      "MONKO",
+      "NEURO",
+      "PEPONK",
+      "PUP",
+      "SHIH",
+      "SUS",
+      "TURBO",
+      "VIBECOIN"
+    ],
+    "methodology_notes": "Equal-weight basket of MEME GP Season 2 teams. Each team's MCAP on this baseline date = 100. Subsequent days computed as: avg(today_mcap_i / baseline_mcap_i) * 100. Meme market benchmark = CoinGecko 'Meme' category total MCAP, normalized to 100 on baseline date."
   },
-  "teams": [
-    "TURBO", "MASK", "NEURO", "SUS", "LOL", "SHIH", "VIBECOIN",
-    "MARS", "420BLAZEIT", "PUP", "PEPONK", "MOMO", "BILLY", "DOBERMANN",
-    "TBD"
-  ],
   "snapshots": [
     {
-      "date": "2026-05-28",
-      "is_preseason": true,
-      "label": "Indicative pre-season snapshot",
-      "grid_index": 100.0,
+      "date": "2026-06-02",
+      "captured_at": "2026-06-02T13:58:57Z",
+      "is_preseason": false,
+      "grid_value": 100.0,
       "meme_market": 100.0,
       "alpha": 0.0,
-      "team_values": {
-        "TURBO": 100.0,
-        "MASK": 100.0,
-        "NEURO": 100.0,
-        "SUS": 100.0,
-        "LOL": 100.0,
-        "SHIH": 100.0,
-        "VIBECOIN": 100.0,
-        "MARS": 100.0,
-        "420BLAZEIT": 100.0,
-        "PUP": 100.0,
-        "PEPONK": 100.0,
-        "MOMO": 100.0,
-        "BILLY": 100.0,
-        "DOBERMANN": 100.0,
-        "TBD": null
-      },
-      "team_changes_24h": {},
-      "team_changes_7d": {},
-      "team_changes_season": {}
+      "grid_total_mcap_usd": 78993634.0,
+      "meme_market_mcap_usd": 34070774628.972397,
+      "teams_count": 15
     }
   ]
 }
