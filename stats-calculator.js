@@ -29,6 +29,17 @@
 (function (global) {
   'use strict';
 
+  // ============================================================
+  // PRE_REVEAL_MODE — Sunday 7 June 2026 inaugural rankings drop
+  // ------------------------------------------------------------
+  // When true: calcStats returns null for engine/aero/chassis/drag/overall
+  // PIT stays visible (it's editorial, not measured)
+  // Rendering pages already handle null via existing chassis logic
+  //
+  // FLIP TO FALSE Sunday 7 June after the countdown reveal completes.
+  // ============================================================
+  const PRE_REVEAL_MODE = true;
+
   // ----- helpers -----
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   function round(v) { return Math.round(v * 10) / 10; }
@@ -283,6 +294,20 @@
     const pit     = calcPit(editorialPit);
     const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
+
+    // PRE_REVEAL_MODE: null out the measured stats so renderers show placeholders.
+    // PIT remains visible (editorial value, not measured this week).
+    if (PRE_REVEAL_MODE) {
+      return {
+        engine:  null,
+        aero:    null,
+        chassis: null,
+        drag:    null,
+        pit:     round(pit),
+        overall: null,
+      };
+    }
+
     return {
       engine:  round(engine),
       aero:    round(aero),
@@ -436,6 +461,14 @@
     return 'live';
   }
 
+  // ----- pre-reveal display helper -----
+  // Pages can use this to render placeholders consistently.
+  // Returns "—" for null/undefined (pre-reveal hidden), formatted number otherwise.
+  function displayStat(value, decimals) {
+    if (value === null || value === undefined || isNaN(value)) return '—';
+    return Number(value).toFixed(decimals != null ? decimals : 1);
+  }
+
   // ----- public API -----
   const MEMEGP_Stats = {
     // Stat computation
@@ -454,6 +487,9 @@
     getLastFreezeMoment: getLastFreezeMoment,
     getNextFreezeMoment: getNextFreezeMoment,
     getNextLiveMoment:   getNextLiveMoment,
+    // Pre-reveal mode (flip PRE_REVEAL_MODE to false in source to disable)
+    PRE_REVEAL_MODE:     PRE_REVEAL_MODE,
+    displayStat:         displayStat,
   };
 
   // Browser global
