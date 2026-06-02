@@ -603,9 +603,9 @@ body::before{
       <div class="chart-legend-right">SEASON 2 · INDEXED FROM 100</div>
     </div>
     <div class="chart-svg-wrap" id="chart-wrap">
-      <div class="chart-empty">
-        <div class="chart-empty-title">▸ CHART ACTIVATES 1 JUN 2026</div>
-        <div>The first season-2 data point lands at 00:00 UTC on Monday 1 June.<br>Until then this canvas is intentionally empty.</div>
+      <div class="chart-empty" id="chart-empty">
+        <div class="chart-empty-title" id="chart-empty-title">▸ CHART FORMS WITH DAILY DATA</div>
+        <div id="chart-empty-sub">Baseline locks Day 1. Chart line appears once we have 2+ data points.</div>
       </div>
     </div>
     <div class="chart-x-labels" id="chart-x-labels" style="display:none">
@@ -697,7 +697,7 @@ body::before{
     'MOMO':       { name: 'MOMO MOTORS',      logo: 'momo.png',      link: 'teams-momo.html' },
     'BILLY':      { name: 'BILLY RACING',     logo: 'billy.png',     link: 'teams-billy.html' },
     'DOBERMANN':  { name: 'STEALTH DOBIE',    logo: 'dobermann.png', link: 'teams-dobermann.html' },
-    'MONKO':      { name: 'MONKO MOTORS',     logo: 'monko.png',     link: 'teams-monko.html' }
+    'TBD':        { name: 'WINNER OF VOTE',   logo: 'helmet.png',    link: null }
   };
 
   // Active state
@@ -790,11 +790,20 @@ body::before{
     const gridSinceEl = document.getElementById('ctx-grid-since');
     const memeSinceEl = document.getElementById('ctx-meme-since');
 
-    if(isPreseason || snapshots.length < 2){
-      if(gridEl) gridEl.textContent = isPreseason ? '0.0%' : '—';
-      if(memeEl) memeEl.textContent = isPreseason ? '0.0%' : '—';
+    if(isPreseason){
+      if(gridEl) gridEl.textContent = '0.0%';
+      if(memeEl) memeEl.textContent = '0.0%';
       if(gridSinceEl) gridSinceEl.textContent = 'SEASON STARTS 1 JUN 2026';
       if(memeSinceEl) memeSinceEl.textContent = 'SEASON STARTS 1 JUN 2026';
+      return;
+    }
+    if(snapshots.length < 2){
+      // Live but Day 0 — only baseline snapshot exists, no delta yet
+      const baseline = snapshots[0];
+      if(gridEl) gridEl.textContent = '0.0%';
+      if(memeEl) memeEl.textContent = '0.0%';
+      if(gridSinceEl) gridSinceEl.textContent = `BASELINE · ${fmtDate(baseline.date)}`;
+      if(memeSinceEl) memeSinceEl.textContent = `BASELINE · ${fmtDate(baseline.date)}`;
       return;
     }
 
@@ -817,11 +826,19 @@ body::before{
     const num = document.getElementById('hl-number');
     const meta = document.getElementById('hl-meta');
 
-    if(isPreseason || snapshots.length < 2){
+    if(isPreseason){
       if(line1) line1.textContent = 'GRID INDEX';
       if(line2) line2.textContent = 'VS THE MEME MARKET';
       if(num){ num.textContent = '—'; num.classList.remove('is-negative'); }
       if(meta) meta.textContent = 'PRE-SEASON · DATA STARTS 1 JUN';
+      return;
+    }
+    if(snapshots.length < 2){
+      // Live Day 0 — baseline set, no comparison yet
+      if(line1) line1.textContent = 'GRID INDEX';
+      if(line2) line2.textContent = 'VS THE MEME MARKET';
+      if(num){ num.textContent = '—'; num.classList.remove('is-negative'); }
+      if(meta) meta.textContent = 'LIVE · BASELINE LOCKED · DAILY UPDATES';
       return;
     }
 
@@ -860,7 +877,17 @@ body::before{
     // Filter to live snapshots only
     const liveSnaps = snapshots.filter(s => !s.is_preseason);
     if(isPreseason || liveSnaps.length < 2){
-      // Keep empty state, hide x labels
+      // Update empty state text to reflect current condition
+      const emptyTitle = document.getElementById('chart-empty-title');
+      const emptySub   = document.getElementById('chart-empty-sub');
+      if(isPreseason){
+        if(emptyTitle) emptyTitle.textContent = '▸ CHART ACTIVATES 1 JUN 2026';
+        if(emptySub) emptySub.textContent = 'The first season-2 data point lands at 00:00 UTC on Monday 1 June. Until then this canvas is intentionally empty.';
+      } else {
+        // Live but Day 0 — baseline locked, need 2+ points to plot
+        if(emptyTitle) emptyTitle.textContent = '▸ CHART FORMS WITH DAILY DATA';
+        if(emptySub) emptySub.textContent = `Baseline locked · ${liveSnaps.length} snapshot${liveSnaps.length === 1 ? '' : 's'} · chart appears once we have 2+ data points.`;
+      }
       if(xLabels) xLabels.style.display = 'none';
       return;
     }
