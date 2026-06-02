@@ -14,7 +14,7 @@ Index methodology:
   - Each team contributes 1/15 of the index (equal weight)
   - Grid value  = avg(today_mcap_i / baseline_mcap_i) * 100 for i in 15 teams
   - Meme market = (today_meme_category_mcap / baseline_meme_category_mcap) * 100
-  - Alpha       = grid_value - meme_market
+  - Alpha       = grid_index - meme_market
 
 First-run behavior:
   - Reads latest entry from data/history.json (must contain all 15 teams)
@@ -221,7 +221,7 @@ def main():
             "date": snapshot_date,
             "captured_at": timestamp,
             "is_preseason": False,
-            "grid_value": 100.0,
+            "grid_index": 100.0,
             "meme_market": 100.0,
             "alpha": 0.0,
             "grid_total_mcap_usd": sum(today_mcaps.values()),
@@ -237,7 +237,7 @@ def main():
         print(f"  grid teams in basket: {len(today_mcaps)}")
         print(f"  total grid mcap: ${sum(today_mcaps.values()):,.0f}")
         print(f"  meme market mcap: ${meme_mcap_today:,.0f}")
-        print(f"  grid_value=100.0  meme_market=100.0  alpha=0.0")
+        print(f"  grid_index=100.0  meme_market=100.0  alpha=0.0")
         return
 
     # ---- Subsequent run: compute today's values vs baseline ----
@@ -245,7 +245,7 @@ def main():
     baseline_team_mcaps = baseline["team_mcaps_usd"]
     baseline_meme_mcap = baseline["meme_market_mcap_usd"]
 
-    # Compute grid_value: equal-weight average of % change from baseline
+    # Compute grid_index: equal-weight average of % change from baseline
     # For each baseline team, get today's mcap (skip if missing today)
     pct_changes = []
     missing_today = []
@@ -263,15 +263,15 @@ def main():
     if missing_today:
         print(f"  WARN: {len(missing_today)} baseline teams missing today: {missing_today}")
 
-    grid_value = (sum(pct_changes) / len(pct_changes)) * 100.0
+    grid_index = (sum(pct_changes) / len(pct_changes)) * 100.0
     meme_market = (meme_mcap_today / baseline_meme_mcap) * 100.0
-    alpha = grid_value - meme_market
+    alpha = grid_index - meme_market
 
     new_snapshot = {
         "date": snapshot_date,
         "captured_at": timestamp,
         "is_preseason": False,
-        "grid_value": round(grid_value, 2),
+        "grid_index": round(grid_index, 2),
         "meme_market": round(meme_market, 2),
         "alpha": round(alpha, 2),
         "grid_total_mcap_usd": sum(today_mcaps.get(t, 0) for t in baseline_team_mcaps),
@@ -291,7 +291,7 @@ def main():
 
     save_json(index_path, index_data)
     print()
-    print(f"  grid_value:   {grid_value:.2f}  ({'+' if grid_value >= 100 else ''}{grid_value-100:.2f} from baseline)")
+    print(f"  grid_index:   {grid_index:.2f}  ({'+' if grid_index >= 100 else ''}{grid_index-100:.2f} from baseline)")
     print(f"  meme_market:  {meme_market:.2f}  ({'+' if meme_market >= 100 else ''}{meme_market-100:.2f} from baseline)")
     print(f"  alpha:        {alpha:+.2f}")
     print(f"  total snapshots: {len(snaps)}")
