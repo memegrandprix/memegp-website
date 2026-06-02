@@ -2272,7 +2272,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
           <td class="rank-statcell ${hl('chassis')}">${t.stats.chassis ?? '—'}</td>
           <td class="rank-statcell ${hl('drag')}">${t.stats.drag ?? '—'}</td>
           <td class="rank-statcell ${hl('pit')}">${t.stats.pit ?? '—'}</td>
-          <td class="num"><span class="rank-overall">${t.stats.overall}</span></td>
+          <td class="num"><span class="rank-overall">${t.stats.overall ?? '—'}</span></td>
         </tr>
       `;
     }).join('');
