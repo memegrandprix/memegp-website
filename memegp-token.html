@@ -264,6 +264,273 @@ body::before{
   backdrop-filter:blur(6px);
 }
 
+/* ===== FUEL PUMP METER ===== */
+/* Sits on top of the pump's digital screen + button area in the garage image.
+   Replaces the static pump display with a live $MEMEGP MC meter that tracks
+   progress toward the next funding milestone. */
+.fuel-pump-meter{
+  position:absolute;
+  left:71.7%;
+  top:45.5%;
+  width:9%;
+  height:18.5%;
+  z-index:4;
+  box-sizing:border-box;
+  background:linear-gradient(180deg, #0a3340 0%, #061d24 100%);
+  border:1px solid rgba(0,220,255,.4);
+  border-radius:3px;
+  box-shadow:
+    inset 0 0 10px rgba(0,220,255,.25),
+    0 0 6px rgba(0,220,255,.15);
+  font-family:'JetBrains Mono','Courier New',monospace;
+  color:#7fe9ff;
+  padding:6px 8px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:space-between;
+  gap:4px;
+  overflow:hidden;
+  pointer-events:none;
+  /* Subtle scanline texture for LCD feel */
+  background-image:
+    linear-gradient(180deg, #0a3340 0%, #061d24 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(0,220,255,.04) 2px,
+      rgba(0,220,255,.04) 3px
+    );
+}
+.fuel-pump-meter > *{
+  align-self:stretch;
+  width:auto;
+  flex-shrink:0;
+  box-sizing:border-box;
+}
+.fuel-pump-meter-label{
+  font-size:clamp(5px, 0.6vw, 9px);
+  letter-spacing:0.5px;
+  color:rgba(127,233,255,.7);
+  font-weight:600;
+  text-transform:uppercase;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:center;
+  line-height:1.1;
+}
+.fuel-pump-meter-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(11px, 1.3vw, 18px);
+  font-weight:800;
+  color:#fff;
+  letter-spacing:0.5px;
+  line-height:1;
+  text-shadow:0 0 8px rgba(0,220,255,.55);
+  text-align:center;
+}
+.fuel-pump-meter-bar{
+  position:relative;
+  height:clamp(4px, 0.6vw, 7px);
+  background:rgba(0,220,255,.15);
+  border-radius:1px;
+  overflow:hidden;
+}
+.fuel-pump-meter-bar-fill{
+  position:absolute;
+  inset:0;
+  width:0%;
+  background:linear-gradient(90deg, var(--gold) 0%, #ffe066 100%);
+  box-shadow:0 0 6px rgba(255,204,0,.6);
+  transition:width 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.fuel-pump-meter-target{
+  font-size:clamp(5px, 0.55vw, 8px);
+  color:rgba(127,233,255,.8);
+  letter-spacing:0.8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:center;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+
+/* Hide the in-image meter on very small screens — standalone meter below covers it */
+@media (max-width: 600px){
+  .fuel-pump-meter{display:none;}
+}
+
+/* ===== STANDALONE FUNDING METER (below the image) =====
+   Larger version with full detail. Mobile-friendly. */
+.funding-meter-section{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 16px 40px;
+}
+.funding-meter-card{
+  background:var(--bg-card, #13131c);
+  border:1px solid var(--line-bright, #2a2a36);
+  border-radius:8px;
+  padding:24px;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:32px;
+  align-items:center;
+}
+.funding-meter-head{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.funding-meter-eyebrow{
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;letter-spacing:2px;font-weight:700;
+  color:var(--gold);
+}
+.funding-meter-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:24px;font-weight:800;
+  color:#fff;
+  letter-spacing:1px;
+  line-height:1.1;
+}
+.funding-meter-sub{
+  font-size:13px;
+  color:var(--muted, #9ba6b3);
+  line-height:1.5;
+}
+.funding-meter-main{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.funding-meter-current{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.funding-meter-mc-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:1.5px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.funding-meter-mc-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:34px;font-weight:800;
+  color:#fff;
+  letter-spacing:0.5px;
+}
+.funding-meter-mc-status{
+  font-size:11px;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;
+}
+.funding-meter-mc-status .live-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:#00ff88;margin-right:6px;vertical-align:middle;
+  box-shadow:0 0 8px rgba(0,255,136,.7);
+  animation:livePulse 1.6s ease-in-out infinite;
+}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.45}}
+.funding-meter-bar-wrap{
+  position:relative;
+  height:22px;
+  background:#0a0a14;
+  border:1px solid var(--line-bright);
+  border-radius:4px;
+  overflow:hidden;
+}
+.funding-meter-bar-fill{
+  position:absolute;inset:0;
+  width:0%;
+  background:linear-gradient(90deg, var(--gold) 0%, #ffe066 100%);
+  box-shadow:0 0 12px rgba(255,204,0,.4);
+  transition:width 1.2s cubic-bezier(.2,.7,.3,1);
+}
+.funding-meter-bar-text{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:1px;color:#000;
+  z-index:2;
+  mix-blend-mode:difference;
+}
+.funding-meter-targets{
+  display:flex;
+  justify-content:space-between;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.funding-meter-targets strong{color:#fff;}
+.funding-meter-targets .next-target{color:var(--gold);}
+.funding-meter-milestones{
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:6px;
+  margin-top:4px;
+}
+.funding-milestone{
+  background:#0a0a14;
+  border:1px solid var(--line-bright);
+  border-radius:3px;
+  padding:8px 6px;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:1px;
+  color:var(--muted);
+  transition:all 0.3s;
+}
+.funding-milestone.reached{
+  border-color:var(--gold);
+  background:rgba(255,204,0,.08);
+  color:var(--gold);
+}
+.funding-milestone.next{
+  border-color:#00ff88;
+  background:rgba(0,255,136,.06);
+  color:#00ff88;
+  animation:nextPulse 2s ease-in-out infinite;
+}
+@keyframes nextPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,.4)}50%{box-shadow:0 0 8px 2px rgba(0,255,136,.15)}}
+.funding-milestone-num{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;font-weight:800;
+  display:block;margin-bottom:4px;
+}
+.funding-milestone-mc{
+  font-weight:700;display:block;
+}
+.funding-milestone-unlock{
+  font-size:8px;
+  color:rgba(255,255,255,.5);
+  display:block;
+  margin-top:4px;
+  line-height:1.3;
+}
+.funding-milestone.reached .funding-milestone-unlock,
+.funding-milestone.next .funding-milestone-unlock{
+  color:inherit;opacity:.85;
+}
+
+@media (max-width: 720px){
+  .funding-meter-card{
+    grid-template-columns:1fr;
+    padding:18px;
+    gap:18px;
+  }
+  .funding-meter-title{font-size:20px;}
+  .funding-meter-mc-value{font-size:28px;}
+  .funding-meter-milestones{grid-template-columns:repeat(5, 1fr);gap:4px;}
+  .funding-milestone-unlock{display:none;}
+}
+
 /* Hotspot markers (visible pulses on image) */
 .hotspot{
   position:absolute;
@@ -921,6 +1188,59 @@ body::before{
       </div>
     </button>
 
+    <!-- ===== FUEL PUMP METER — sits on the pump's digital screen ===== -->
+    <div class="fuel-pump-meter" id="fuelPumpMeter" aria-hidden="true">
+      <div class="fuel-pump-meter-label">$MEMEGP MC</div>
+      <div class="fuel-pump-meter-value" id="fpmValue">—</div>
+      <div class="fuel-pump-meter-bar">
+        <div class="fuel-pump-meter-bar-fill" id="fpmBarFill"></div>
+      </div>
+      <div class="fuel-pump-meter-target" id="fpmTarget">M1 · $250K</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== STANDALONE FUNDING METER (below the garage) ===== -->
+<section class="funding-meter-section">
+  <div class="funding-meter-card">
+
+    <div class="funding-meter-head">
+      <span class="funding-meter-eyebrow">▸ THE FUEL PUMP · LIVE</span>
+      <h2 class="funding-meter-title">FUNDING THE NEXT MILESTONE</h2>
+      <p class="funding-meter-sub">
+        The fuel pump in the garage isn't decoration. As $MEMEGP grows, each milestone unlocks a real platform commitment — pulled from the finance model, not vibes. Live MC data via DexScreener.
+      </p>
+    </div>
+
+    <div class="funding-meter-main">
+
+      <div class="funding-meter-current">
+        <div>
+          <div class="funding-meter-mc-label">Current $MEMEGP Market Cap</div>
+          <div class="funding-meter-mc-value" id="fmMcValue">—</div>
+        </div>
+        <div class="funding-meter-mc-status">
+          <span class="live-dot"></span><span id="fmStatus">CONNECTING…</span>
+        </div>
+      </div>
+
+      <div class="funding-meter-bar-wrap">
+        <div class="funding-meter-bar-fill" id="fmBarFill"></div>
+        <div class="funding-meter-bar-text" id="fmBarText">—</div>
+      </div>
+
+      <div class="funding-meter-targets">
+        <span>FROM <strong id="fmFromLabel">$0</strong></span>
+        <span class="next-target">NEXT · <strong id="fmNextLabel">$250K</strong></span>
+      </div>
+
+      <div class="funding-meter-milestones" id="fmMilestones">
+        <!-- 5 milestone tiles injected by JS -->
+      </div>
+
+    </div>
+
   </div>
 </section>
 
@@ -1242,6 +1562,150 @@ function copyCA(){
     });
   }
 }
+
+// ============================================================
+// FUEL PUMP METER — Live $MEMEGP MC tracking via DexScreener
+// ============================================================
+(function(){
+  const MEMEGP_CA = '4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';
+  const DEX_URL   = `https://api.dexscreener.com/latest/dex/tokens/${MEMEGP_CA}`;
+  const REFRESH_MS = 60000; // 60 seconds
+
+  // Milestones tied to finance model + roadmap commitments.
+  // Each milestone's MC threshold is a real funding trigger.
+  const MILESTONES = [
+    { id: 1, mc: 250000,    label: '$250K',  unlock: 'S2 fully resourced' },
+    { id: 2, mc: 1000000,   label: '$1M',    unlock: 'Founder Tranche 2 · S2 funded' },
+    { id: 3, mc: 5000000,   label: '$5M',    unlock: 'MGP2 green-lit · S3 auctions' },
+    { id: 4, mc: 10000000,  label: '$10M',   unlock: 'Tranche 3 · 3D engine builds' },
+    { id: 5, mc: 25000000,  label: '$25M',   unlock: 'Championship-grade 2027' },
+  ];
+
+  function fmtMc(n){
+    if(n == null || isNaN(n)) return '—';
+    if(n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if(n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    if(n >= 1e3) return '$' + (n/1e3).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+  }
+
+  function findCurrentMilestone(mc){
+    // Returns { reachedCount, next, from, fillPct }
+    // - reachedCount: how many milestones the MC has crossed (0-5)
+    // - next: the next milestone to reach (or null if all done)
+    // - from: the previous milestone's MC (or 0 if none reached yet)
+    // - fillPct: progress between from → next as 0-100
+    let reachedCount = 0;
+    for(const m of MILESTONES){
+      if(mc >= m.mc) reachedCount++;
+    }
+    if(reachedCount >= MILESTONES.length){
+      return {
+        reachedCount,
+        next: null,
+        from: MILESTONES[MILESTONES.length - 1].mc,
+        fillPct: 100,
+      };
+    }
+    const next = MILESTONES[reachedCount];
+    const from = reachedCount === 0 ? 0 : MILESTONES[reachedCount - 1].mc;
+    const fillPct = Math.max(0, Math.min(100, ((mc - from) / (next.mc - from)) * 100));
+    return { reachedCount, next, from, fillPct };
+  }
+
+  function renderMilestones(reachedCount){
+    const mount = document.getElementById('fmMilestones');
+    if(!mount) return;
+    mount.innerHTML = MILESTONES.map((m, i) => {
+      let cls = 'funding-milestone';
+      if(i < reachedCount) cls += ' reached';
+      else if(i === reachedCount) cls += ' next';
+      return `
+        <div class="${cls}">
+          <span class="funding-milestone-num">M${m.id}</span>
+          <span class="funding-milestone-mc">${m.label}</span>
+          <span class="funding-milestone-unlock">${m.unlock}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateMeters(mc, isLive){
+    const meta = findCurrentMilestone(mc);
+
+    // --- Pump screen overlay (in image) ---
+    const fpmValue = document.getElementById('fpmValue');
+    const fpmTarget = document.getElementById('fpmTarget');
+    const fpmBarFill = document.getElementById('fpmBarFill');
+    if(fpmValue) fpmValue.textContent = fmtMc(mc);
+    if(fpmTarget){
+      if(meta.next){
+        fpmTarget.textContent = `M${meta.next.id} · ${meta.next.label}`;
+      } else {
+        fpmTarget.textContent = 'ALL MILESTONES';
+      }
+    }
+    if(fpmBarFill) fpmBarFill.style.width = meta.fillPct + '%';
+
+    // --- Standalone meter (below garage) ---
+    const fmMcValue = document.getElementById('fmMcValue');
+    const fmStatus = document.getElementById('fmStatus');
+    const fmBarFill = document.getElementById('fmBarFill');
+    const fmBarText = document.getElementById('fmBarText');
+    const fmFromLabel = document.getElementById('fmFromLabel');
+    const fmNextLabel = document.getElementById('fmNextLabel');
+
+    if(fmMcValue) fmMcValue.textContent = fmtMc(mc);
+    if(fmStatus) fmStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'STALE — UPDATING';
+    if(fmBarFill) fmBarFill.style.width = meta.fillPct + '%';
+    if(fmBarText){
+      fmBarText.textContent = meta.next
+        ? `${meta.fillPct.toFixed(1)}% TO M${meta.next.id}`
+        : 'CHAMPIONSHIP TIER UNLOCKED';
+    }
+    if(fmFromLabel) fmFromLabel.textContent = fmtMc(meta.from);
+    if(fmNextLabel) fmNextLabel.textContent = meta.next ? meta.next.label : 'DONE';
+
+    renderMilestones(meta.reachedCount);
+  }
+
+  function setError(msg){
+    const fmStatus = document.getElementById('fmStatus');
+    if(fmStatus) fmStatus.textContent = msg || 'DATA UNAVAILABLE';
+    const fmStatusDot = document.querySelector('.funding-meter-mc-status .live-dot');
+    if(fmStatusDot) fmStatusDot.style.background = '#ff3344';
+  }
+
+  async function fetchMC(){
+    try {
+      const r = await fetch(DEX_URL, { cache: 'no-store' });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      const json = await r.json();
+      const pairs = (json.pairs || []).filter(p => p.chainId === 'solana');
+      if(!pairs.length){
+        setError('NO PAIRS FOUND');
+        return;
+      }
+      // Pick the pair with highest liquidity
+      pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
+      const top = pairs[0];
+      const mc = top.marketCap || top.fdv;
+      if(!mc || mc <= 0){
+        setError('MC NOT AVAILABLE');
+        return;
+      }
+      updateMeters(mc, true);
+    } catch(err){
+      console.warn('Funding meter fetch failed:', err);
+      setError('FETCH FAILED');
+    }
+  }
+
+  // Initial render with placeholders + first fetch
+  renderMilestones(0);
+  fetchMC();
+  setInterval(fetchMC, REFRESH_MS);
+})();
 </script>
 
 </body>
