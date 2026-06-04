@@ -61,6 +61,17 @@
       "grid_total_mcap_usd": 78357352.0,
       "meme_market_mcap_usd": 33255165492.04023,
       "teams_count": 15
+    },
+    {
+      "date": "2026-06-04",
+      "captured_at": "2026-06-04T10:46:23Z",
+      "is_preseason": false,
+      "grid_index": 88.08,
+      "meme_market": 93.26,
+      "alpha": -5.17,
+      "grid_total_mcap_usd": 70144827.0,
+      "meme_market_mcap_usd": 31461578531.18309,
+      "teams_count": 15
     }
   ]
 }
