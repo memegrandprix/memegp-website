@@ -40,6 +40,56 @@
   // ============================================================
   const PRE_REVEAL_MODE = true;
 
+  // ============================================================
+  // STAGGERED REVEAL — inaugural Power Rankings drop
+  // ------------------------------------------------------------
+  // Reveals one team every `intervalMinutes`, worst OVR first
+  // (P15 -> P1), purely time-gated on the client — NO redeploys.
+  //
+  // While `startUTC` is null, or before it passes, every score
+  // stays hidden (the pre-reveal blackout). As each interval
+  // elapses, the next team in `order` unlocks. Any page load — or
+  // the 60s tick on open pages — shows the correct state for the
+  // current time automatically.
+  //
+  // Set startUTC to an ISO-8601 UTC string once the time is locked,
+  // e.g. '2026-06-07T14:00:00Z'. Flip PRE_REVEAL_MODE to false after
+  // the drop completes to force everything live.
+  // ============================================================
+  const REVEAL = {
+    startUTC: null,            // TODO: set when the Sunday start time is locked
+    intervalMinutes: 30,
+    // P15 -> P1 (worst OVR first, champion last).
+    // Ties kept in grid order — swap if the public rankings differ:
+    //   MASK / VIBECOIN  (both 5.5)
+    //   SUS  / BILLY     (both 6.0)
+    order: [
+      'NEURO', 'LOL', '420BLAZEIT', 'MARS', 'DOBERMANN', 'MONKO', 'PEPONK',
+      'MASK', 'VIBECOIN', 'PUP', 'SHIH', 'SUS', 'BILLY', 'MOMO', 'TURBO',
+    ],
+  };
+
+  // How many teams are revealed as of `now` (Date, optional)?
+  function revealedCount(now) {
+    if (!REVEAL.startUTC) return 0;
+    const start = Date.parse(REVEAL.startUTC);
+    if (isNaN(start)) return 0;
+    const t = now ? now.getTime() : Date.now();
+    if (t < start) return 0;
+    const step = REVEAL.intervalMinutes * 60 * 1000;
+    const count = Math.floor((t - start) / step) + 1; // team 1 reveals at start
+    return Math.min(count, REVEAL.order.length);
+  }
+
+  // Is a given team's score revealed yet?
+  // PRE_REVEAL_MODE === false is a master override -> everything live.
+  function isRevealed(ticker, now) {
+    if (PRE_REVEAL_MODE === false) return true;
+    const idx = REVEAL.order.indexOf(ticker);
+    if (idx === -1) return true;   // unknown ticker -> don't hide it
+    return idx < revealedCount(now);
+  }
+
   // ----- helpers -----
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   function round(v) { return Math.round(v * 10) / 10; }
@@ -490,6 +540,10 @@
     // Pre-reveal mode (flip PRE_REVEAL_MODE to false in source to disable)
     PRE_REVEAL_MODE:     PRE_REVEAL_MODE,
     displayStat:         displayStat,
+    // Staggered reveal (Power Rankings drop)
+    REVEAL:              REVEAL,
+    revealedCount:       revealedCount,
+    isRevealed:          isRevealed,
   };
 
   // Browser global
