@@ -601,6 +601,10 @@ body::before{
 .hotspot-panel.pos-bottom.is-open{transform:translate(-50%,0)}
 .hotspot-panel.pos-top{bottom:calc(100% + 14px);left:50%;transform:translate(-50%,8px)}
 .hotspot-panel.pos-top.is-open{transform:translate(-50%,0)}
+/* Bottom-anchored variant: panel grows upward from the marker.
+   Use for low hotspots so the panel doesn't run off the bottom edge. */
+.hotspot-panel.pos-left.from-bottom,
+.hotspot-panel.pos-right.from-bottom{top:auto;bottom:0}
 
 /* Hide hotspot panels on mobile (use card grid below instead) */
 @media(max-width:880px){
@@ -1081,7 +1085,7 @@ body::before{
     <!-- Hotspot 6: TYRE RACK (right foreground) -->
     <button class="hotspot" data-hotspot="6" style="left:90%; top:71%;" aria-label="Marketing & Growth hotspot">
       <span class="hotspot-marker"></span>
-      <div class="hotspot-panel pos-left" data-panel="6">
+      <div class="hotspot-panel pos-left from-bottom" data-panel="6">
         <div class="hp-headline">MARKETING &amp; GROWTH</div>
         <div class="hp-lead">The consumables that get burned through every race weekend. The audience doesn't grow by accident.</div>
         <div class="hp-blocks">
