@@ -1186,7 +1186,7 @@ body::before{
       <span class="funding-meter-eyebrow">▸ THE FUEL PUMP · LIVE</span>
       <h2 class="funding-meter-title">FUNDING THE NEXT MILESTONE</h2>
       <p class="funding-meter-sub">
-        The fuel pump in the garage isn't decoration. As $MEMEGP grows, each milestone unlocks a real platform commitment — pulled from the finance model, not vibes. Live MC data via DexScreener.
+        The fuel pump in the garage isn't decoration. As $MEMEGP grows, each milestone unlocks a real platform commitment — pulled from the finance model, not vibes. Live on-chain market cap via GeckoTerminal.
       </p>
     </div>
 
@@ -1541,11 +1541,11 @@ function copyCA(btnId, valueId){
 }
 
 // ============================================================
-// FUEL PUMP METER — Live $MEMEGP MC tracking via DexScreener
+// FUEL PUMP METER — Live $MEMEGP MC via GeckoTerminal (pre- & post-graduation)
 // ============================================================
 (function(){
   const MEMEGP_CA = '4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';
-  const DEX_URL   = `https://api.dexscreener.com/latest/dex/tokens/${MEMEGP_CA}`;
+  const GECKO_URL = `https://api.geckoterminal.com/api/v2/networks/solana/tokens/${MEMEGP_CA}`;
   const REFRESH_MS = 60000; // 60 seconds
 
   // Milestones tied to finance model + roadmap commitments.
@@ -1620,7 +1620,7 @@ function copyCA(btnId, valueId){
       hpTarget.textContent = meta.next ? `M${meta.next.id} · ${meta.next.label}` : 'ALL MILESTONES';
     }
     if(hpBarFill) hpBarFill.style.width = meta.fillPct + '%';
-    if(hpStatus) hpStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'UPDATING…';
+    if(hpStatus) hpStatus.textContent = isLive ? 'LIVE · ON-CHAIN' : 'UPDATING…';
     const hpDotEl = document.querySelector('.hp-pump-dot');
     if(hpDotEl) hpDotEl.style.background = '#00ff88';
 
@@ -1633,7 +1633,7 @@ function copyCA(btnId, valueId){
     const fmNextLabel = document.getElementById('fmNextLabel');
 
     if(fmMcValue) fmMcValue.textContent = fmtMc(mc);
-    if(fmStatus) fmStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'STALE — UPDATING';
+    if(fmStatus) fmStatus.textContent = isLive ? 'LIVE · ON-CHAIN' : 'STALE — UPDATING';
     const fmDotEl = document.querySelector('.funding-meter-mc-status .live-dot');
     if(fmDotEl) fmDotEl.style.background = '#00ff88';
     if(fmBarFill) fmBarFill.style.width = meta.fillPct + '%';
@@ -1672,20 +1672,19 @@ function copyCA(btnId, valueId){
 
   async function fetchMC(){
     try {
-      const r = await fetch(DEX_URL, { cache: 'no-store' });
+      const r = await fetch(GECKO_URL, { cache: 'no-store' });
       if(!r.ok) throw new Error('HTTP ' + r.status);
       const json = await r.json();
-      const pairs = (json.pairs || []).filter(p => p.chainId === 'solana');
-      if(!pairs.length){
-        setPending('AWAITING DEX LISTING');
+      const a = json && json.data && json.data.attributes;
+      if(!a){
+        setPending('AWAITING DATA');
         return;
       }
-      // Pick the pair with highest liquidity
-      pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
-      const top = pairs[0];
-      const mc = top.marketCap || top.fdv;
-      if(!mc || mc <= 0){
-        setError('MC NOT AVAILABLE');
+      // market_cap_usd is null until team-verified; fdv_usd == MC for a fixed 1B supply.
+      const raw = (a.market_cap_usd != null) ? a.market_cap_usd : a.fdv_usd;
+      const mc = parseFloat(raw);
+      if(!mc || mc <= 0 || isNaN(mc)){
+        setPending('AWAITING DATA');
         return;
       }
       updateMeters(mc, true);
