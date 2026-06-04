@@ -264,104 +264,6 @@ body::before{
   backdrop-filter:blur(6px);
 }
 
-/* ===== FUEL PUMP METER ===== */
-/* Sits on top of the pump's digital screen + button area in the garage image.
-   Replaces the static pump display with a live $MEMEGP MC meter that tracks
-   progress toward the next funding milestone. */
-.fuel-pump-meter{
-  position:absolute;
-  left:71.7%;
-  top:45.5%;
-  width:9%;
-  height:18.5%;
-  z-index:4;
-  box-sizing:border-box;
-  background:linear-gradient(180deg, #0a3340 0%, #061d24 100%);
-  border:1px solid rgba(0,220,255,.4);
-  border-radius:3px;
-  box-shadow:
-    inset 0 0 10px rgba(0,220,255,.25),
-    0 0 6px rgba(0,220,255,.15);
-  font-family:'JetBrains Mono','Courier New',monospace;
-  color:#7fe9ff;
-  padding:6px 8px;
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  justify-content:space-between;
-  gap:4px;
-  overflow:hidden;
-  pointer-events:none;
-  /* Subtle scanline texture for LCD feel */
-  background-image:
-    linear-gradient(180deg, #0a3340 0%, #061d24 100%),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 2px,
-      rgba(0,220,255,.04) 2px,
-      rgba(0,220,255,.04) 3px
-    );
-}
-.fuel-pump-meter > *{
-  align-self:stretch;
-  width:auto;
-  flex-shrink:0;
-  box-sizing:border-box;
-}
-.fuel-pump-meter-label{
-  font-size:clamp(5px, 0.6vw, 9px);
-  letter-spacing:0.5px;
-  color:rgba(127,233,255,.7);
-  font-weight:600;
-  text-transform:uppercase;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  text-align:center;
-  line-height:1.1;
-}
-.fuel-pump-meter-value{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(11px, 1.3vw, 18px);
-  font-weight:800;
-  color:#fff;
-  letter-spacing:0.5px;
-  line-height:1;
-  text-shadow:0 0 8px rgba(0,220,255,.55);
-  text-align:center;
-}
-.fuel-pump-meter-bar{
-  position:relative;
-  height:clamp(4px, 0.6vw, 7px);
-  background:rgba(0,220,255,.15);
-  border-radius:1px;
-  overflow:hidden;
-}
-.fuel-pump-meter-bar-fill{
-  position:absolute;
-  inset:0;
-  width:0%;
-  background:linear-gradient(90deg, var(--gold) 0%, #ffe066 100%);
-  box-shadow:0 0 6px rgba(255,204,0,.6);
-  transition:width 0.8s cubic-bezier(.2,.7,.3,1);
-}
-.fuel-pump-meter-target{
-  font-size:clamp(5px, 0.55vw, 8px);
-  color:rgba(127,233,255,.8);
-  letter-spacing:0.8px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  text-align:center;
-  text-transform:uppercase;
-  line-height:1.1;
-}
-
-/* Hide the in-image meter on very small screens — standalone meter below covers it */
-@media (max-width: 600px){
-  .fuel-pump-meter{display:none;}
-}
 
 /* ===== STANDALONE FUNDING METER (below the image) =====
    Larger version with full detail. Mobile-friendly. */
@@ -646,6 +548,51 @@ body::before{
   border-color:rgba(0,255,136,.25);
 }
 .hp-block.next-season .hp-block-label{color:var(--season-green)}
+
+/* Fuel-pump hotspot panel — live MC readout (matches gold hotspot styling) */
+.hp-pump{
+  display:flex;flex-direction:column;gap:9px;
+  padding:13px 14px;border-radius:6px;
+  background:rgba(255,204,0,.05);
+  border:1px solid rgba(255,204,0,.25);
+}
+.hp-pump-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.hp-pump-mc-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted,#9ba6b3);
+}
+.hp-pump-live{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  color:rgba(0,255,136,.85);
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.hp-pump-dot{
+  width:6px;height:6px;border-radius:50%;background:#00ff88;
+  box-shadow:0 0 8px rgba(0,255,136,.7);
+  animation:livePulse 1.6s ease-in-out infinite;
+}
+.hp-pump-value{
+  font-family:'Orbitron',sans-serif;
+  font-size:30px;font-weight:800;color:#fff;letter-spacing:.5px;line-height:1;
+}
+.hp-pump-bar{
+  position:relative;height:8px;border-radius:2px;overflow:hidden;
+  background:#0a0a14;border:1px solid var(--line-bright,#2a2a36);
+}
+.hp-pump-bar-fill{
+  position:absolute;inset:0;width:0%;
+  background:linear-gradient(90deg,var(--gold) 0%,#ffe066 100%);
+  box-shadow:0 0 10px rgba(255,204,0,.5);
+  transition:width 1s cubic-bezier(.2,.7,.3,1);
+}
+.hp-pump-next{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted,#9ba6b3);
+}
+.hp-pump-next strong{color:var(--gold);}
 
 /* Position-specific panel offsets (avoid overflow) */
 .hotspot-panel.pos-right{right:auto;left:calc(100% + 14px);top:0}
@@ -1188,15 +1135,23 @@ body::before{
       </div>
     </button>
 
-    <!-- ===== FUEL PUMP METER — sits on the pump's digital screen ===== -->
-    <div class="fuel-pump-meter" id="fuelPumpMeter" aria-hidden="true">
-      <div class="fuel-pump-meter-label">$MEMEGP MC</div>
-      <div class="fuel-pump-meter-value" id="fpmValue">—</div>
-      <div class="fuel-pump-meter-bar">
-        <div class="fuel-pump-meter-bar-fill" id="fpmBarFill"></div>
+    <!-- Hotspot 9: FUEL PUMP — live $MEMEGP market cap (replaces old LCD overlay) -->
+    <button class="hotspot" data-hotspot="9" style="left:76%; top:53%;" aria-label="Fuel Pump — live market cap hotspot">
+      <span class="hotspot-marker"></span>
+      <div class="hotspot-panel pos-left" data-panel="9">
+        <div class="hp-headline">THE FUEL PUMP</div>
+        <div class="hp-lead">Live $MEMEGP market cap. Each milestone unlocks a real platform commitment — pulled from the finance model, not vibes.</div>
+        <div class="hp-pump">
+          <div class="hp-pump-top">
+            <span class="hp-pump-mc-label">CURRENT MC</span>
+            <span class="hp-pump-live"><span class="hp-pump-dot"></span><span id="hpPumpStatus">CONNECTING…</span></span>
+          </div>
+          <div class="hp-pump-value" id="hpPumpValue">—</div>
+          <div class="hp-pump-bar"><div class="hp-pump-bar-fill" id="hpPumpBarFill"></div></div>
+          <div class="hp-pump-next">NEXT · <strong id="hpPumpTarget">M1 · $250K</strong></div>
+        </div>
       </div>
-      <div class="fuel-pump-meter-target" id="fpmTarget">M1 · $250K</div>
-    </div>
+    </button>
 
   </div>
 </section>
@@ -1574,11 +1529,11 @@ function copyCA(){
   // Milestones tied to finance model + roadmap commitments.
   // Each milestone's MC threshold is a real funding trigger.
   const MILESTONES = [
-    { id: 1, mc: 250000,    label: '$250K',  unlock: 'S2 fully resourced' },
-    { id: 2, mc: 1000000,   label: '$1M',    unlock: 'Founder Tranche 2 · S2 funded' },
-    { id: 3, mc: 5000000,   label: '$5M',    unlock: 'MGP2 green-lit · S3 auctions' },
-    { id: 4, mc: 10000000,  label: '$10M',   unlock: 'Tranche 3 · 3D engine builds' },
-    { id: 5, mc: 25000000,  label: '$25M',   unlock: 'Championship-grade 2027' },
+    { id: 1, mc: 250000,   label: '$250K', unlock: 'S2 fully resourced' },
+    { id: 2, mc: 500000,   label: '$500K', unlock: 'Founder Tranche 2 · S2 funded' },
+    { id: 3, mc: 1000000,  label: '$1M',   unlock: 'MGP2 green-lit · S3 auctions' },
+    { id: 4, mc: 2500000,  label: '$2.5M', unlock: 'Tranche 3 · 3D engine builds' },
+    { id: 5, mc: 5000000,  label: '$5M',   unlock: 'Championship-grade 2027' },
   ];
 
   function fmtMc(n){
@@ -1633,19 +1588,17 @@ function copyCA(){
   function updateMeters(mc, isLive){
     const meta = findCurrentMilestone(mc);
 
-    // --- Pump screen overlay (in image) ---
-    const fpmValue = document.getElementById('fpmValue');
-    const fpmTarget = document.getElementById('fpmTarget');
-    const fpmBarFill = document.getElementById('fpmBarFill');
-    if(fpmValue) fpmValue.textContent = fmtMc(mc);
-    if(fpmTarget){
-      if(meta.next){
-        fpmTarget.textContent = `M${meta.next.id} · ${meta.next.label}`;
-      } else {
-        fpmTarget.textContent = 'ALL MILESTONES';
-      }
+    // --- Pump hotspot panel (in image) ---
+    const hpVal = document.getElementById('hpPumpValue');
+    const hpTarget = document.getElementById('hpPumpTarget');
+    const hpBarFill = document.getElementById('hpPumpBarFill');
+    const hpStatus = document.getElementById('hpPumpStatus');
+    if(hpVal) hpVal.textContent = fmtMc(mc);
+    if(hpTarget){
+      hpTarget.textContent = meta.next ? `M${meta.next.id} · ${meta.next.label}` : 'ALL MILESTONES';
     }
-    if(fpmBarFill) fpmBarFill.style.width = meta.fillPct + '%';
+    if(hpBarFill) hpBarFill.style.width = meta.fillPct + '%';
+    if(hpStatus) hpStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'UPDATING…';
 
     // --- Standalone meter (below garage) ---
     const fmMcValue = document.getElementById('fmMcValue');
@@ -1674,6 +1627,8 @@ function copyCA(){
     if(fmStatus) fmStatus.textContent = msg || 'DATA UNAVAILABLE';
     const fmStatusDot = document.querySelector('.funding-meter-mc-status .live-dot');
     if(fmStatusDot) fmStatusDot.style.background = '#ff3344';
+    const hpStatus = document.getElementById('hpPumpStatus');
+    if(hpStatus) hpStatus.textContent = msg || 'DATA UNAVAILABLE';
   }
 
   async function fetchMC(){
