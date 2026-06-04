@@ -1255,6 +1255,7 @@ body::before{
   </div>
 </div>
 
+<script src="stats-calculator.js"></script>
 <script>
 // Mini grid
 const TEAMS = [
@@ -1275,6 +1276,9 @@ const TEAMS = [
   { ticker: 'MARS',  overall: 4.2, locked: true, current: true,  link: 'teams-mars.html',        avatar: 'mars-driver.png' },
 ];
 
+// PRE-REVEAL: hide OVR until stats-calculator.js flips PRE_REVEAL_MODE to false.
+// Fail-safe to hidden if the calculator didn't load — never leak scores.
+const HIDE_OVR = !window.MEMEGP_Stats || window.MEMEGP_Stats.PRE_REVEAL_MODE;
 let miniHtml = '';
 TEAMS.forEach(t => {
   miniHtml += `
@@ -1283,7 +1287,7 @@ TEAMS.forEach(t => {
         <div class="mini-avatar" style="background-image:url('${t.avatar}')"></div>
         <div class="mini-info">
           <div class="mini-ticker">$${t.ticker}</div>
-          <div class="mini-overall">OVR · <strong>${t.overall.toFixed(1)}</strong></div>
+          <div class="mini-overall">OVR · <strong>${HIDE_OVR ? '\u2014' : t.overall.toFixed(1)}</strong></div>
         </div>
       </div>
     </a>
