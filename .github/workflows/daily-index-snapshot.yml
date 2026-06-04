@@ -37,5 +37,11 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chore(index): daily grid index snapshot $(date -u +'%Y-%m-%d')"
-            git push
+            # Pull with rebase in case someone pushed to main while we were running.
+            # Retry the push up to 3 times to handle concurrent pushes gracefully.
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push attempt $i failed, retrying..."
+              sleep 2
+            done
           fi
