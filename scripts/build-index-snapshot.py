@@ -133,6 +133,54 @@ def get_team_mcap(team_entry):
     return float(mcap)
 
 
+def find_snapshot_n_days_before(history_snapshots, target_date_str, n_days):
+    """
+    Find the history snapshot dated approximately n_days before target_date_str.
+    Returns the snapshot dict, or None if not available.
+    Uses the snapshot whose date is closest to (target - n_days) but not after.
+    """
+    from datetime import datetime
+    target = datetime.strptime(target_date_str, "%Y-%m-%d")
+    # Walk snapshots in reverse, find the most recent one that's >= n_days old
+    for snap in reversed(history_snapshots):
+        snap_date_str = snap.get("date")
+        if not snap_date_str:
+            continue
+        snap_date = datetime.strptime(snap_date_str, "%Y-%m-%d")
+        days_diff = (target - snap_date).days
+        if days_diff >= n_days:
+            return snap
+    return None
+
+
+def compute_team_changes(today_mcaps, history_snapshots, snapshot_date, n_days, baseline_mcaps=None):
+    """
+    Compute per-team % change vs N days ago.
+    If baseline_mcaps is provided, uses that instead of looking back N days
+    (used for season-to-date which uses fixed baseline).
+    Returns dict {ticker: pct_change} or {} if no comparable snapshot.
+    """
+    if baseline_mcaps is not None:
+        prior_mcaps = baseline_mcaps
+    else:
+        prior = find_snapshot_n_days_before(history_snapshots, snapshot_date, n_days)
+        if not prior:
+            return {}
+        prior_teams = prior.get("teams", {})
+        prior_mcaps = {}
+        for ticker, entry in prior_teams.items():
+            m = get_team_mcap(entry)
+            if m is not None:
+                prior_mcaps[ticker] = m
+
+    changes = {}
+    for ticker, today_m in today_mcaps.items():
+        if ticker in prior_mcaps and prior_mcaps[ticker] > 0:
+            pct = ((today_m - prior_mcaps[ticker]) / prior_mcaps[ticker]) * 100.0
+            changes[ticker] = round(pct, 2)
+    return changes
+
+
 # ============================================================
 # Main
 # ============================================================
@@ -217,6 +265,10 @@ def main():
                 "Meme market benchmark = CoinGecko 'Meme' category total MCAP, normalized to 100 on baseline date."
             ),
         }
+        # Day-0: team changes are all 0 (or vs prior history if available)
+        team_changes_24h = compute_team_changes(today_mcaps, snapshots, snapshot_date, 1)
+        team_changes_7d  = compute_team_changes(today_mcaps, snapshots, snapshot_date, 7)
+        team_changes_season = {t: 0.0 for t in today_mcaps}
         baseline_snapshot = {
             "date": snapshot_date,
             "captured_at": timestamp,
@@ -227,9 +279,13 @@ def main():
             "grid_total_mcap_usd": sum(today_mcaps.values()),
             "meme_market_mcap_usd": meme_mcap_today,
             "teams_count": len(today_mcaps),
+            "team_changes_24h": team_changes_24h,
+            "team_changes_7d": team_changes_7d,
+            "team_changes_season": team_changes_season,
         }
         index_data = {
             "baseline": baseline,
+            "teams": sorted(today_mcaps.keys()),
             "snapshots": [baseline_snapshot],
         }
         save_json(index_path, index_data)
@@ -267,6 +323,11 @@ def main():
     meme_market = (meme_mcap_today / baseline_meme_mcap) * 100.0
     alpha = grid_index - meme_market
 
+    # Compute per-team changes for the leaderboard
+    team_changes_24h = compute_team_changes(today_mcaps, snapshots, snapshot_date, 1)
+    team_changes_7d  = compute_team_changes(today_mcaps, snapshots, snapshot_date, 7)
+    team_changes_season = compute_team_changes(today_mcaps, snapshots, snapshot_date, 0, baseline_mcaps=baseline_team_mcaps)
+
     new_snapshot = {
         "date": snapshot_date,
         "captured_at": timestamp,
@@ -277,6 +338,9 @@ def main():
         "grid_total_mcap_usd": sum(today_mcaps.get(t, 0) for t in baseline_team_mcaps),
         "meme_market_mcap_usd": meme_mcap_today,
         "teams_count": len(pct_changes),
+        "team_changes_24h": team_changes_24h,
+        "team_changes_7d": team_changes_7d,
+        "team_changes_season": team_changes_season,
     }
 
     # Idempotent: replace today's snapshot if it already exists
@@ -289,11 +353,18 @@ def main():
         print(f"  appending new snapshot for {snapshot_date}")
         snaps.append(new_snapshot)
 
+    # Ensure top-level teams array is present (page reads this for leaderboard)
+    # Use baseline's teams_in_basket as canonical
+    index_data["teams"] = sorted(baseline_team_mcaps.keys())
+
     save_json(index_path, index_data)
     print()
     print(f"  grid_index:   {grid_index:.2f}  ({'+' if grid_index >= 100 else ''}{grid_index-100:.2f} from baseline)")
     print(f"  meme_market:  {meme_market:.2f}  ({'+' if meme_market >= 100 else ''}{meme_market-100:.2f} from baseline)")
     print(f"  alpha:        {alpha:+.2f}")
+    print(f"  24h team changes: {len(team_changes_24h)} teams")
+    print(f"  7d  team changes: {len(team_changes_7d)} teams")
+    print(f"  season changes:   {len(team_changes_season)} teams")
     print(f"  total snapshots: {len(snaps)}")
 
 
