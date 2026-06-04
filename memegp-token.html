@@ -881,6 +881,15 @@ body::before{
 .tc-copy:hover{background:rgba(255,204,0,.14)}
 .tc-copy.copied{background:rgba(0,255,136,.14);border-color:rgba(0,255,136,.4);color:var(--green)}
 
+/* CA quick-copy strip — between the garage image and the funding meter */
+.ca-strip-section{max-width:1280px;margin:0 auto;padding:0 16px 20px;}
+.ca-strip{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--bg-card,#13131c);
+  border:1px solid var(--line-bright,#2a2a36);
+  border-radius:8px;padding:12px 16px;
+}
+
 .tc-cta-row{
   display:flex;gap:10px;flex-wrap:wrap;
   margin-top:6px;
@@ -1157,6 +1166,15 @@ body::before{
       </div>
     </button>
 
+  </div>
+</section>
+
+<!-- ===== CA QUICK-COPY STRIP (between garage image and funding meter) ===== -->
+<section class="ca-strip-section">
+  <div class="ca-strip">
+    <span class="tc-pill">CONTRACT</span>
+    <span class="tc-ca" id="caValueTop">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+    <button class="tc-copy" id="copyBtnTop" onclick="copyCA('copyBtnTop','caValueTop')">COPY</button>
   </div>
 </section>
 
@@ -1507,9 +1525,9 @@ body::before{
 })();
 
 // Copy contract address
-function copyCA(){
-  const btn = document.getElementById('copyBtn');
-  const value = document.getElementById('caValue').innerText.trim();
+function copyCA(btnId, valueId){
+  const btn = document.getElementById(btnId || 'copyBtn');
+  const value = document.getElementById(valueId || 'caValue').innerText.trim();
   if(navigator.clipboard){
     navigator.clipboard.writeText(value).then(() => {
       btn.textContent = 'COPIED ✓';
@@ -1603,6 +1621,8 @@ function copyCA(){
     }
     if(hpBarFill) hpBarFill.style.width = meta.fillPct + '%';
     if(hpStatus) hpStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'UPDATING…';
+    const hpDotEl = document.querySelector('.hp-pump-dot');
+    if(hpDotEl) hpDotEl.style.background = '#00ff88';
 
     // --- Standalone meter (below garage) ---
     const fmMcValue = document.getElementById('fmMcValue');
@@ -1614,6 +1634,8 @@ function copyCA(){
 
     if(fmMcValue) fmMcValue.textContent = fmtMc(mc);
     if(fmStatus) fmStatus.textContent = isLive ? 'LIVE · DEXSCREENER' : 'STALE — UPDATING';
+    const fmDotEl = document.querySelector('.funding-meter-mc-status .live-dot');
+    if(fmDotEl) fmDotEl.style.background = '#00ff88';
     if(fmBarFill) fmBarFill.style.width = meta.fillPct + '%';
     if(fmBarText){
       fmBarText.textContent = meta.next
@@ -1626,6 +1648,19 @@ function copyCA(){
     renderMilestones(meta.reachedCount);
   }
 
+  function setPending(msg){
+    // Expected pre-DEX state: token not yet on an indexed liquidity pool.
+    const fmStatus = document.getElementById('fmStatus');
+    if(fmStatus) fmStatus.textContent = msg || 'AWAITING DEX LISTING';
+    const fmDot = document.querySelector('.funding-meter-mc-status .live-dot');
+    if(fmDot) fmDot.style.background = '#ffcc00';
+    const fmBarText = document.getElementById('fmBarText');
+    if(fmBarText) fmBarText.textContent = 'PRE-GRADUATION';
+    const hpStatus = document.getElementById('hpPumpStatus');
+    if(hpStatus) hpStatus.textContent = 'PRE-DEX';
+    const hpDot = document.querySelector('.hp-pump-dot');
+    if(hpDot) hpDot.style.background = '#ffcc00';
+  }
   function setError(msg){
     const fmStatus = document.getElementById('fmStatus');
     if(fmStatus) fmStatus.textContent = msg || 'DATA UNAVAILABLE';
@@ -1642,7 +1677,7 @@ function copyCA(){
       const json = await r.json();
       const pairs = (json.pairs || []).filter(p => p.chainId === 'solana');
       if(!pairs.length){
-        setError('NO PAIRS FOUND');
+        setPending('AWAITING DEX LISTING');
         return;
       }
       // Pick the pair with highest liquidity
