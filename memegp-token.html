@@ -1545,7 +1545,10 @@ function copyCA(btnId, valueId){
 // ============================================================
 (function(){
   const MEMEGP_CA = '4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';
-  const GECKO_URL = `https://api.geckoterminal.com/api/v2/networks/solana/tokens/${MEMEGP_CA}`;
+  const GECKO_TOKEN = `https://api.geckoterminal.com/api/v2/networks/solana/tokens/${MEMEGP_CA}`;
+  // Fallback: read the bonding-curve pool directly when the token rollup is quiet.
+  const GECKO_POOL  = `https://api.geckoterminal.com/api/v2/networks/solana/pools/9UsTfqXEE6h5ucvCrHh85b83HDWkrKrmrJHmRdg99mJQ`;
+  const FIXED_SUPPLY = 1e9; // pump.fun mints a fixed 1B supply
   const REFRESH_MS = 60000; // 60 seconds
 
   // Milestones tied to finance model + roadmap commitments.
@@ -1670,27 +1673,43 @@ function copyCA(btnId, valueId){
     if(hpStatus) hpStatus.textContent = msg || 'DATA UNAVAILABLE';
   }
 
+  // Pull a market cap out of a GeckoTerminal attributes object (token OR pool shape).
+  // For a fixed-supply token, MC = FDV = price x supply, so any present field works.
+  function mcFromAttrs(a){
+    if(!a) return null;
+    let mc = parseFloat(a.market_cap_usd);
+    if(!mc || isNaN(mc)) mc = parseFloat(a.fdv_usd);
+    if(!mc || isNaN(mc)){
+      // token endpoint exposes price_usd; pool endpoint exposes base_token_price_usd
+      const price = parseFloat(a.price_usd != null ? a.price_usd : a.base_token_price_usd);
+      const supply = parseFloat(a.normalized_total_supply) || FIXED_SUPPLY;
+      if(price > 0) mc = price * supply;
+    }
+    return (mc > 0 && !isNaN(mc)) ? mc : null;
+  }
+
+  async function fetchJson(url){
+    const r = await fetch(url, { cache: 'no-store' });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+
   async function fetchMC(){
     try {
-      const r = await fetch(GECKO_URL, { cache: 'no-store' });
-      if(!r.ok) throw new Error('HTTP ' + r.status);
-      const json = await r.json();
-      const a = json && json.data && json.data.attributes;
-      if(!a){
-        setPending('AWAITING DATA');
-        return;
+      let mc = null;
+      // Layer 1: token endpoint
+      try {
+        const t = await fetchJson(GECKO_TOKEN);
+        mc = mcFromAttrs(t && t.data && t.data.attributes);
+      } catch(e){ /* fall through to pool */ }
+      // Layer 2: pool endpoint (holds price even when the token rollup is quiet)
+      if(mc == null){
+        try {
+          const p = await fetchJson(GECKO_POOL);
+          mc = mcFromAttrs(p && p.data && p.data.attributes);
+        } catch(e){ /* fall through */ }
       }
-      // Resolve MC with fallbacks. For a fixed 1B supply, MC = FDV = price x supply,
-      // so any one of these gives the same number — we just take whichever is present:
-      //   1) team-verified market cap   2) FDV   3) price x supply
-      let mc = parseFloat(a.market_cap_usd);
-      if(!mc || isNaN(mc)) mc = parseFloat(a.fdv_usd);
-      if(!mc || isNaN(mc)){
-        const price  = parseFloat(a.price_usd);
-        const supply = parseFloat(a.normalized_total_supply);
-        if(price > 0 && supply > 0) mc = price * supply;
-      }
-      if(!mc || mc <= 0 || isNaN(mc)){
+      if(mc == null){
         setPending('AWAITING DATA');
         return;
       }
