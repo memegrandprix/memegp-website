@@ -345,9 +345,12 @@
     const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
 
-    // PRE_REVEAL_MODE: null out the measured stats so renderers show placeholders.
+    // STAGGERED REVEAL: hide a team's measured stats until its slot in the
+    // reveal schedule has passed. isRevealed() handles the master switch
+    // (PRE_REVEAL_MODE) and the per-team timing in one place, so every
+    // calcStats consumer (rankings, pit wall, factory) staggers automatically.
     // PIT remains visible (editorial value, not measured this week).
-    if (PRE_REVEAL_MODE) {
+    if (!isRevealed(ticker)) {
       return {
         engine:  null,
         aero:    null,
