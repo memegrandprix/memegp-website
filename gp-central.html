@@ -2202,6 +2202,41 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
   const STATS_META = window.MEMEGP_Stats.STATS_META;
 
+  // Staggered reveal gate (worst-first P15 -> P1). FAIL-SAFE: hidden if the
+  // calculator is absent, so the board never leaks before the reveal.
+  function isTeamRevealed(ticker){
+    const S = window.MEMEGP_Stats;
+    if(!S || typeof S.isRevealed !== 'function') return false;
+    return S.isRevealed(String(ticker || '').replace(/^\$/, ''));
+  }
+
+  // Locked slot in the reveal board — team, logo, score all hidden.
+  function lockedRowHTML(pos){
+    return `
+        <tr class="reveal-locked" style="opacity:.4">
+          <td><span class="rank-pos"><span class="rank-pos-num">P${pos}</span></span></td>
+          <td>
+            <div class="rank-team">
+              <div class="rank-team-logo" style="background:#161616;border:1px solid rgba(255,255,255,.06)"></div>
+              <div class="rank-team-name">
+                <span class="rank-team-ticker">\uD83D\uDD12</span>
+                <span class="rank-team-sub">AWAITING REVEAL</span>
+              </div>
+            </div>
+          </td>
+          <td class="num rank-stat col-mcap">\u2014</td>
+          <td class="num rank-stat hide-mobile col-vol">\u2014</td>
+          <td class="num rank-stat hide-mobile col-change">\u2014</td>
+          <td class="rank-statcell">\u2014</td>
+          <td class="rank-statcell">\u2014</td>
+          <td class="rank-statcell">\u2014</td>
+          <td class="rank-statcell">\u2014</td>
+          <td class="rank-statcell">\u2014</td>
+          <td class="num"><span class="rank-overall">\u2014</span></td>
+        </tr>
+      `;
+  }
+
   function renderRankings(teamData){
     cachedTeamData = teamData;
     const valid = teamData.filter(t => t.data && !t.data.error && t.stats);
@@ -2243,8 +2278,33 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     }
 
     const body = document.getElementById('rankings-body');
-    body.innerHTML = valid.map((t, idx) => {
-      const pos = idx + 1;
+
+    // REVEAL LAYOUT: during the staggered drop, lay rows out by FINAL rank
+    // (champion's P1 slot at the top, worst at the bottom) and lock them until
+    // each slot unlocks -> board fills bottom-up to #1, never "worst at top".
+    const _S = window.MEMEGP_Stats;
+    const _order = (_S && _S.REVEAL && Array.isArray(_S.REVEAL.order)) ? _S.REVEAL.order : [];
+    const _total = teamData.length;
+    const _revealing = !!(_S && _S.PRE_REVEAL_MODE && _order.length &&
+                          typeof _S.revealedCount === 'function' && _S.revealedCount() < _total);
+
+    let _rowList;
+    if (_revealing) {
+      const _byTicker = {};
+      teamData.forEach(x => { if(x.team) _byTicker[String(x.team.ticker).replace(/^\$/, '')] = x; });
+      _rowList = [];
+      for (let _rank = 1; _rank <= _total; _rank++){
+        const _tk = _order[_total - _rank];          // rank 1 = last in order = champion
+        const _t = _byTicker[_tk];
+        const _ok = _t && _t.data && !_t.data.error && _t.stats && isTeamRevealed(_tk);
+        _rowList.push({ t: _t, pos: _rank, locked: !_ok });
+      }
+    } else {
+      _rowList = valid.map((t, idx) => ({ t: t, pos: idx + 1, locked: false }));
+    }
+
+    body.innerHTML = _rowList.map(({t, pos, locked}) => {
+      if (locked) return lockedRowHTML(pos);
       const change24h = t.data.change24h;
       const changeClass = change24h > 0 ? 'pos' : change24h < 0 ? 'neg' : '';
       const hl = (stat) => sortBy === stat ? 'highlight' : '';
@@ -2278,7 +2338,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     }).join('');
 
     // Errored teams at bottom
-    const errored = teamData.filter(t => !t.data || t.data.error);
+    const errored = _revealing ? [] : teamData.filter(t => !t.data || t.data.error);
     if(errored.length){
       body.innerHTML += errored.map(t => `
         <tr class="skeleton">
@@ -2297,9 +2357,10 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       `).join('');
     }
 
-    // Update movers
-    if(valid.length){
-      const byChange = [...valid].sort((a,b) => (b.data.change24h || 0) - (a.data.change24h || 0));
+    // Update movers (revealed teams only during the reveal)
+    const _moverPool = _revealing ? valid.filter(t => isTeamRevealed(t.team.ticker)) : valid;
+    if(_moverPool.length){
+      const byChange = [..._moverPool].sort((a,b) => (b.data.change24h || 0) - (a.data.change24h || 0));
       const winner = byChange[0];
       const loser = byChange[byChange.length - 1];
       if(winner && winner.data.change24h > 0){
@@ -2439,6 +2500,42 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     renderRankings(teamData);
     renderHero(teamData);
   }
+
+  // ---- Reveal auto-refresh (Sunday drop) -----------------------------
+  // gp-central freezes stats at fetch time, so to un-blank teams live as
+  // their slot hits we re-fetch + recompute on a tick. Scoped to the reveal
+  // window (PRE_REVEAL_MODE on, not yet complete); stops itself afterwards,
+  // so there is no idle fetching before Sunday or once the board is full.
+  let _revealReloading = false;
+  async function reloadForReveal(){
+    if(_revealReloading) return;
+    _revealReloading = true;
+    try {
+      const [results, history] = await Promise.all([
+        Promise.all(TEAMS.map(t => fetchToken(t))),
+        fetchHistory(),
+      ]);
+      const teamData = TEAMS.map((team, i) => ({
+        team,
+        data: results[i],
+        stats: results[i] && !results[i].error
+          ? calcStats(results[i], team.editorialPit, history, team.ticker)
+          : null,
+      }));
+      renderRankings(teamData);
+      renderHero(teamData);
+    } catch(e){ /* keep last good render */ }
+    finally { _revealReloading = false; }
+  }
+
+  const _revealTick = setInterval(() => {
+    const S = window.MEMEGP_Stats;
+    if(!S || typeof S.revealedCount !== 'function' || !S.PRE_REVEAL_MODE){ clearInterval(_revealTick); return; }
+    const total = TEAMS.length;
+    const done = S.revealedCount();
+    if(done >= total){ clearInterval(_revealTick); return; }  // reveal complete
+    if(done > 0) reloadForReveal();                            // mid-reveal: live refresh
+  }, 60000);
 
   // Swap the mode indicator pill — live / frozen / warning
   function setStatusIndicator(state, text){
