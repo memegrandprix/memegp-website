@@ -17,6 +17,9 @@
 (function () {
   'use strict';
 
+  // Last render snapshot — lets the reveal tick re-render in place.
+  var STATE = { mount: null, weeks: null, activeId: null };
+
   // -------------------------------------------------------
   // ESCAPE HTML
   // -------------------------------------------------------
@@ -77,9 +80,58 @@
   }
 
   // -------------------------------------------------------
+  // STAGGERED REVEAL — gate each row on the shared schedule
+  //   isRevealed(ticker) lives in stats-calculator.js.
+  //   FAIL-SAFE: if the calculator isn't present, stay LOCKED —
+  //   never expose the board before the reveal.
+  // -------------------------------------------------------
+  function isTeamRevealed(ticker) {
+    var S = window.MEMEGP_Stats;
+    if (!S || typeof S.isRevealed !== 'function') return false;
+    return S.isRevealed(String(ticker || '').replace(/^\$/, ''));
+  }
+
+  // Locked placeholder — hides team, score, logo. Rank shown (position
+  // isn't the secret; WHO sits there is). Board fills P15 -> P1.
+  function renderLockedRow(entry) {
+    return '' +
+      '<div class="pr-row pr-row--locked" style="opacity:.38">' +
+        '<div class="pr-row-rail"></div>' +
+        '<div class="pr-row-rank">' +
+          '<span class="pr-row-rank-num">' + escapeHTML(String(entry.rank)) + '</span>' +
+        '</div>' +
+        '<div class="pr-row-mv"></div>' +
+        '<div class="pr-row-team">' +
+          '<span class="pr-row-ticker">\uD83D\uDD12</span>' +
+          '<span class="pr-row-name">AWAITING REVEAL</span>' +
+        '</div>' +
+        '<div class="pr-row-score">' +
+          '<span class="pr-row-score-val">\u2014</span>' +
+          '<span class="pr-row-score-label">SCORE</span>' +
+        '</div>' +
+        '<div class="pr-row-comment"></div>' +
+        '<div class="pr-row-actions"></div>' +
+      '</div>';
+  }
+
+  // Reveal progress banner — only shown mid-reveal.
+  function revealBanner(week) {
+    var S = window.MEMEGP_Stats;
+    if (!S || typeof S.revealedCount !== 'function' || !week.rankings) return '';
+    var total = week.rankings.length;
+    var done = Math.min(S.revealedCount(), total);
+    if (done <= 0 || done >= total) return '';
+    return '<div class="pr-reveal-banner" style="text-align:center;font-family:\'JetBrains Mono\',monospace;' +
+           'font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#ffcc00;margin:0 0 14px;">' +
+           '\uD83C\uDFC1 REVEALING P' + total + ' \u2192 P1 \u00b7 ' + done + ' OF ' + total + ' UNLOCKED' +
+           '</div>';
+  }
+
+  // -------------------------------------------------------
   // RANKINGS ROW
   // -------------------------------------------------------
   function renderRow(entry) {
+    if (!isTeamRevealed(entry.ticker)) return renderLockedRow(entry);
     var color = entry.color || '#ffcc00';
     var rankClass = entry.rank === 1 ? ' pr-row--p1'
                   : entry.rank === 2 ? ' pr-row--p2'
@@ -147,7 +199,7 @@
     }
 
     var rows = week.rankings.map(renderRow).join('');
-    return header + '<div class="pr-rows">' + rows + '</div>';
+    return header + revealBanner(week) + '<div class="pr-rows">' + rows + '</div>';
   }
 
   // -------------------------------------------------------
@@ -155,6 +207,7 @@
   // -------------------------------------------------------
   function render(mount, weeks, activeId) {
     var active = weeks.find(function (w) { return w.id === activeId; }) || weeks[0];
+    STATE.mount = mount; STATE.weeks = weeks; STATE.activeId = active.id;
     mount.innerHTML =
       renderTabs(weeks, active.id) +
       '<div class="pr-week" id="pr-week-' + escapeHTML(active.id) + '">' +
@@ -248,6 +301,12 @@
         console.warn('[power-rankings] failed to load rankings.json:', err);
         mount.innerHTML = '<div class="pr-stub"><div class="pr-stub-text">RANKINGS UNAVAILABLE</div><div class="pr-stub-sub">Try refreshing.</div></div>';
       });
+
+    // Reveal tick: re-render in place so locked rows unlock on schedule
+    // without a page refresh (matches the team-page mini-grids).
+    setInterval(function () {
+      if (STATE.mount && STATE.weeks) render(STATE.mount, STATE.weeks, STATE.activeId);
+    }, 30000);
   }
 
   if (document.readyState === 'loading') {
