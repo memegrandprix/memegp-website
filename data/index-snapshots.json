@@ -121,6 +121,66 @@
         "MONKO": -5.75,
         "BILLY": -4.37
       }
+    },
+    {
+      "date": "2026-06-05",
+      "captured_at": "2026-06-05T10:56:44Z",
+      "is_preseason": false,
+      "grid_index": 87.18,
+      "meme_market": 89.76,
+      "alpha": -2.59,
+      "grid_total_mcap_usd": 67700741.0,
+      "meme_market_mcap_usd": 30283577605.702927,
+      "teams_count": 15,
+      "team_changes_24h": {
+        "TURBO": -3.64,
+        "MASK": 0.11,
+        "NEURO": -5.02,
+        "SUS": -1.15,
+        "LOL": -6.14,
+        "SHIH": -0.31,
+        "VIBECOIN": 1.44,
+        "MARS": -8.93,
+        "420BLAZEIT": 16.08,
+        "PUP": -12.55,
+        "PEPONK": -13.48,
+        "MOMO": 3.78,
+        "DOBERMANN": 27.55,
+        "MONKO": -8.14,
+        "BILLY": -1.18
+      },
+      "team_changes_7d": {
+        "TURBO": -18.6,
+        "MASK": -29.12,
+        "NEURO": -11.97,
+        "SUS": -18.54,
+        "LOL": -16.25,
+        "SHIH": -11.61,
+        "VIBECOIN": -16.46,
+        "MARS": -59.11,
+        "420BLAZEIT": -6.08,
+        "PUP": -21.21,
+        "PEPONK": -23.33,
+        "MOMO": -21.59,
+        "BILLY": -21.24
+      },
+      "team_changes_season": {
+        "TURBO": -14.44,
+        "MASK": -18.72,
+        "NEURO": -10.36,
+        "SUS": -10.72,
+        "LOL": -23.08,
+        "SHIH": -10.65,
+        "VIBECOIN": -17.67,
+        "MARS": -32.61,
+        "420BLAZEIT": -13.27,
+        "PUP": -21.7,
+        "PEPONK": -6.89,
+        "MOMO": -10.68,
+        "DOBERMANN": 17.35,
+        "MONKO": -13.42,
+        "BILLY": -5.5
+      }
     }
   ],
   "teams": [
