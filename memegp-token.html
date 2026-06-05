@@ -1680,9 +1680,16 @@ function copyCA(btnId, valueId){
         setPending('AWAITING DATA');
         return;
       }
-      // market_cap_usd is null until team-verified; fdv_usd == MC for a fixed 1B supply.
-      const raw = (a.market_cap_usd != null) ? a.market_cap_usd : a.fdv_usd;
-      const mc = parseFloat(raw);
+      // Resolve MC with fallbacks. For a fixed 1B supply, MC = FDV = price x supply,
+      // so any one of these gives the same number — we just take whichever is present:
+      //   1) team-verified market cap   2) FDV   3) price x supply
+      let mc = parseFloat(a.market_cap_usd);
+      if(!mc || isNaN(mc)) mc = parseFloat(a.fdv_usd);
+      if(!mc || isNaN(mc)){
+        const price  = parseFloat(a.price_usd);
+        const supply = parseFloat(a.normalized_total_supply);
+        if(price > 0 && supply > 0) mc = price * supply;
+      }
       if(!mc || mc <= 0 || isNaN(mc)){
         setPending('AWAITING DATA');
         return;
