@@ -41,6 +41,17 @@
   const PRE_REVEAL_MODE = true;
 
   // ============================================================
+  // FREEZE OVERRIDE — force the whole platform into frozen mode
+  // ------------------------------------------------------------
+  // The automatic freeze only covers Fri 09:00 -> Sun 23:59 SAST.
+  // For a reveal that runs OUTSIDE that window (e.g. a Monday drop),
+  // set this to true so the Pit Wall reads the locked snapshot.json
+  // instead of going live and drifting mid-reveal. Flip back to
+  // false once the reveal is done and you want live data again.
+  // ============================================================
+  const FREEZE_OVERRIDE = false;
+
+  // ============================================================
   // STAGGERED REVEAL — inaugural Power Rankings drop
   // ------------------------------------------------------------
   // Reveals one team every `intervalMinutes`, worst OVR first
@@ -69,8 +80,23 @@
     ],
   };
 
+  // PREVIEW KEY — open any page with ?preview=<this value> to force-reveal
+  // everything IN THAT BROWSER ONLY (for screenshotting cards before the
+  // public drop). Inert without the URL param. Use it on a LOCAL copy for
+  // zero public exposure. Note: the key lives in this public file, so it's
+  // convenience, not security — the truly private path is local-only.
+  const PREVIEW_KEY = 'gp-grid-preview-2026';
+  function _previewActive() {
+    try {
+      return typeof location !== 'undefined' &&
+             typeof location.search === 'string' &&
+             location.search.indexOf('preview=' + PREVIEW_KEY) !== -1;
+    } catch (e) { return false; }
+  }
+
   // How many teams are revealed as of `now` (Date, optional)?
   function revealedCount(now) {
+    if (_previewActive()) return REVEAL.order.length; // preview: show the full grid
     if (!REVEAL.startUTC) return 0;
     const start = Date.parse(REVEAL.startUTC);
     if (isNaN(start)) return 0;
@@ -84,6 +110,7 @@
   // Is a given team's score revealed yet?
   // PRE_REVEAL_MODE === false is a master override -> everything live.
   function isRevealed(ticker, now) {
+    if (_previewActive()) return true;          // preview: reveal in this browser only
     if (PRE_REVEAL_MODE === false) return true;
     const idx = REVEAL.order.indexOf(ticker);
     if (idx === -1) return true;   // unknown ticker -> don't hide it
@@ -501,6 +528,7 @@
   // Live:   Monday 00:00 SAST  →  Friday 09:00 SAST (exclusive)
   // Frozen: Friday 09:00 SAST  →  Monday 00:00 SAST (exclusive)
   function getCurrentMode(date) {
+    if (FREEZE_OVERRIDE) return 'frozen';   // manual hold (reveal outside Fri-Sun)
     const now = date || new Date();
     const sastView = toSAST(now);
     const dow = sastView.getUTCDay();
