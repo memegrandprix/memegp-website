@@ -2511,6 +2511,14 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     if(_revealReloading) return;
     _revealReloading = true;
     try {
+      // Respect frozen mode — during the reveal weekend the board is parc
+      // fermé, so re-render from the static snapshot (re-evaluating which
+      // slots have unlocked) rather than re-fetching live data, which would
+      // un-freeze the board mid-reveal.
+      if (window.MEMEGP_Stats.getCurrentMode() === 'frozen') {
+        const snapshot = await fetchSnapshot();
+        if (snapshot && snapshot.teams) { await renderFrozenMode(snapshot); return; }
+      }
       const [results, history] = await Promise.all([
         Promise.all(TEAMS.map(t => fetchToken(t))),
         fetchHistory(),
