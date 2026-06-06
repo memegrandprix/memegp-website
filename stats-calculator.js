@@ -71,12 +71,14 @@
     startUTC: null,            // TODO: set when the Sunday start time is locked
     intervalMinutes: 30,
     // P15 -> P1 (worst OVR first, champion last).
-    // Ties kept in grid order — swap if the public rankings differ:
-    //   MASK / VIBECOIN  (both 5.5)
-    //   SUS  / BILLY     (both 6.0)
+    // VERIFIED against the frozen 2026-W23 snapshot + full history.json
+    // (DRAG uses all days) via verify-reveal-order.js on 6 Jun 2026.
+    // Near-ties within 0.1 OVR (a late move could swap these):
+    //   MONKO / MARS         (2.9 / 3.0)
+    //   PEPONK / MOMO / BILLY / VIBECOIN  (5.5 / 5.6 / 5.7 / 5.8)
     order: [
-      'NEURO', 'LOL', '420BLAZEIT', 'MARS', 'DOBERMANN', 'MONKO', 'PEPONK',
-      'MASK', 'VIBECOIN', 'PUP', 'SHIH', 'SUS', 'BILLY', 'MOMO', 'TURBO',
+      'NEURO', 'MONKO', 'MARS', '420BLAZEIT', 'SUS', 'SHIH', 'DOBERMANN',
+      'LOL', 'PEPONK', 'MOMO', 'BILLY', 'VIBECOIN', 'MASK', 'TURBO', 'PUP',
     ],
   };
 
