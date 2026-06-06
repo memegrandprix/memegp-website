@@ -1299,18 +1299,20 @@ const TEAMS = [
   { ticker: 'MONKO', overall: 4.5, locked: true, current: false, link: 'teams-monko.html', avatar: 'monko-driver.png' },
 ];
 
-// PRE-REVEAL: hide OVR until stats-calculator.js flips PRE_REVEAL_MODE to false.
-// Fail-safe to hidden if the calculator didn't load — never leak scores.
-const HIDE_OVR = !window.MEMEGP_Stats || window.MEMEGP_Stats.PRE_REVEAL_MODE;
-let miniHtml = '';
-TEAMS.forEach(t => {
+function renderMiniGrid(){
+  // Per-team staggered reveal. Fail-safe to hidden if the calculator didn't load.
+  const isRevealed = (window.MEMEGP_Stats && window.MEMEGP_Stats.isRevealed)
+    ? window.MEMEGP_Stats.isRevealed
+    : function(){ return false; };
+  let miniHtml = '';
+  TEAMS.forEach(t => {
   miniHtml += `
     <a href="${t.link}" class="mini-card locked${t.current ? ' current' : ''}">
       <div class="mini-card-row">
         <div class="mini-avatar" style="background-image:url('${t.avatar}')"></div>
         <div class="mini-info">
           <div class="mini-ticker">$${t.ticker}</div>
-          <div class="mini-overall">OVR · <strong>${HIDE_OVR ? '\u2014' : t.overall.toFixed(1)}</strong></div>
+          <div class="mini-overall">OVR · <strong>${isRevealed(t.ticker) ? t.overall.toFixed(1) : '\u2014'}</strong></div>
         </div>
       </div>
     </a>
@@ -1318,6 +1320,9 @@ TEAMS.forEach(t => {
 });
 
 document.getElementById('miniGrid').innerHTML = miniHtml;
+}
+renderMiniGrid();
+setInterval(renderMiniGrid, 60000); // pick up staggered reveals without a refresh
 
 // === SHARE CARD AS IMAGE ===
 const SHARE_TWEET_TEXT = `🏁 a new shadow on the grid.
@@ -1476,6 +1481,7 @@ if (carShareBtn) {
 </script>
 
 
+<script src="reveal-card.js"></script>
 <script src="news-loader.js"></script>
 </body>
 </html>
