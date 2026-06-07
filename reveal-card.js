@@ -29,7 +29,7 @@
   var UPGRADEABLE = ['ENGINE', 'AERO', 'CHASSIS', 'DRAG'];
   var PIT_BASE = 5.0; // editorial PIT — matches gp-central TEAMS editorialPit
 
-  var _data = { rankings: null, snapshot: null, history: null };
+  var _data = { rankings: null, snapshot: null, history: null, upgrades: null };
   var _fetched = false;
 
   // -------------------------------------------------------
@@ -238,6 +238,128 @@
   }
 
   // -------------------------------------------------------
+  // DEVELOPMENT CYCLE (reads data/upgrades.json)
+  //   - targets = the 2 lowest upgradeable stats (live, gated)
+  //   - box 1 (15 likes) = lowest · box 2 (10 RTs) = 2nd-lowest
+  //   - locked state + pinned Week-0 base come from upgrades.json
+  // -------------------------------------------------------
+  function injectDevCSS() {
+    if (document.getElementById('dev-cycle-css')) return;
+    var el = document.createElement('style');
+    el.id = 'dev-cycle-css';
+    el.textContent = `
+.dev-head-wrap{max-width:1280px;margin:40px auto 0;padding:0 24px}
+.dev-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.dev-head h2{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:3px;color:var(--gold,#ffcc00)}
+.dev-dot{width:9px;height:9px;border-radius:50%;background:var(--accent,#ff0040);box-shadow:0 0 8px var(--accent,#ff0040);animation:devpulse 1.6s ease-in-out infinite}
+.dev-head .dev-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted,#7a7a88);letter-spacing:1.2px}
+.dev-week{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--gold,#ffcc00);border:1px solid var(--gold,#ffcc00);border-radius:4px;padding:4px 9px;margin-left:auto}
+.dev-blocks{margin-top:18px}
+.dev-blocks .block{min-height:0}
+.block-header-logo.coin{overflow:hidden;background:#0a0a12;display:flex;align-items:center;justify-content:center}
+.block-header-logo.coin img{width:100%;height:100%;object-fit:cover}
+.dev-block .tag{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted,#7a7a88);border:1px solid var(--line-bright,#2a2a36);border-radius:4px;padding:4px 7px}
+.dev-body{padding:18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.dev-hero{display:flex;align-items:center;gap:16px;background:#0a0a12;border:1px solid var(--line,#1d1d28);border-left:5px solid var(--gold,#ffcc00);border-radius:6px;padding:16px 18px}
+.locked .dev-hero{border-left-color:var(--green,#00ff88)}
+.dev-hero-icon{width:68px;height:68px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.dev-hero-icon img{width:60px;height:60px;object-fit:contain}
+.dev-hero-meta{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dev-hero-name{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;letter-spacing:2px;color:var(--gold,#ffcc00);line-height:1}
+.dev-hero-vals{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900}
+.dev-hero-vals .now{color:var(--muted,#7a7a88)}
+.dev-hero-vals .arrow{color:var(--muted,#7a7a88);margin:0 8px}
+.dev-hero-vals .next{color:var(--gold,#ffcc00)}
+.locked .dev-hero-vals .next{color:var(--green,#00ff88)}
+.dev-state{display:flex;align-items:center;justify-content:center;gap:9px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:1.5px;padding:10px;border-radius:6px;border:1px solid var(--line,#1d1d28)}
+.dev-state .gear{width:17px;height:17px;animation:devspin 2.6s linear infinite}
+.dev-state .ico{width:16px;height:16px}
+.in-prog .dev-state{color:var(--gold,#ffcc00);background:rgba(255,204,0,.06)}
+.locked .dev-state{color:var(--green,#00ff88);background:rgba(0,255,136,.07)}
+.in-prog .dev-state .done,.in-prog .dev-state .done-txt{display:none}
+.locked .dev-state .gear,.locked .dev-state .prog-txt{display:none}
+.dev-foot{min-height:var(--footer-min-h,72px);padding:14px 18px;border-top:1px solid var(--line,#1d1d28);background:#0a0a12;display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:10px}
+.dev-req{display:flex;align-items:center;gap:7px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted,#7a7a88)}
+.dev-req .ico{width:15px;height:15px}
+.dev-delta{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:.5px;color:var(--gold,#ffcc00)}
+.locked .dev-delta,.locked .dev-req{color:var(--green,#00ff88)}
+.sum-body{padding:20px 18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.sum-hero{text-align:center;padding:6px 0 4px}
+.sum-hero .lab{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted,#7a7a88);margin-bottom:4px}
+.sum-hero .val{font-family:'Orbitron',sans-serif;font-size:46px;font-weight:900;line-height:1;color:var(--gold,#ffcc00)}
+.sum-row{display:flex;align-items:center;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1px}
+.sum-row .k{color:var(--muted,#7a7a88);font-size:10px;letter-spacing:2px}
+.sum-row .v{font-weight:900}
+.sum-row .v .base{color:var(--muted,#7a7a88)}
+.sum-row .v .arrow{color:var(--muted,#7a7a88);margin:0 5px}
+.sum-row .v .cur{color:var(--gold,#ffcc00)}
+.sum-bar{height:8px;border-radius:5px;background:#0a0a12;border:1px solid var(--line,#1d1d28);overflow:hidden}
+.sum-bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffcc00,#00ff88);transition:width .5s ease}
+.sum-foot{min-height:var(--footer-min-h,72px);padding:14px 18px;border-top:1px solid var(--line,#1d1d28);background:#0a0a12;display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.sum-foot .k{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted,#7a7a88)}
+.sum-foot .v{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:var(--text,#f0f0f5)}
+.sum-foot .v .lk{color:var(--green,#00ff88)}
+@keyframes devspin{to{transform:rotate(360deg)}}
+@keyframes devpulse{0%,100%{opacity:1}50%{opacity:.3}}
+`;
+    document.head.appendChild(el);
+  }
+
+  function devTeam(ticker) {
+    var u = _data.upgrades;
+    if (!u || !u.teams) return null;
+    var tk = clean(ticker);
+    var keys = Object.keys(u.teams);
+    for (var i = 0; i < keys.length; i++) { if (clean(keys[i]) === tk) return u.teams[keys[i]]; }
+    return null;
+  }
+
+  function setQ(scope, sel, txt) { var e = scope.querySelector(sel); if (e) e.textContent = txt; }
+  function setId(id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; }
+
+  function fillUpgradeBox(n, statName, map, lockedArr) {
+    var box = document.getElementById('dev-up' + n);
+    if (!box || !statName) return;
+    var isLocked = lockedArr.indexOf(statName) !== -1;
+    box.className = 'block dev-block ' + (isLocked ? 'locked' : 'in-prog');
+    var v = (map[statName] && map[statName].value != null) ? map[statName].value : null;
+    var icon = box.querySelector('.dev-hero-icon img');
+    if (icon) icon.src = 'icon-' + statName.toLowerCase() + '.png';
+    setQ(box, '.dev-hero-name', statName);
+    setQ(box, '.dev-hero-vals .now', v != null ? r1(v) : '\u2014');
+    setQ(box, '.dev-hero-vals .next', v != null ? r1(v + 1) : '\u2014');
+    setQ(box, '.dev-delta', statName + ' +1');
+  }
+
+  function renderDevCycle(ticker, map, targets, revealed) {
+    var head = document.getElementById('dev-cycle');
+    var row = document.getElementById('dev-row');
+    if (!head || !row) return;                 // page has no dev section
+    if (!revealed || !targets) {               // gate: hidden until this team's slot unlocks
+      head.hidden = true; row.hidden = true; return;
+    }
+    injectDevCSS();
+    head.hidden = false; row.hidden = false;
+
+    var dev = devTeam(ticker) || {};
+    var lockedArr = Array.isArray(dev.locked) ? dev.locked : [];
+    var base = (dev.base_overall != null) ? dev.base_overall : null;
+
+    fillUpgradeBox('1', targets[0], map, lockedArr);   // lowest  → 15 likes
+    fillUpgradeBox('2', targets[1], map, lockedArr);   // 2nd     → 10 RTs
+
+    var count = targets.filter(function (t) { return lockedArr.indexOf(t) !== -1; }).length;
+    var gained = count * 0.2;
+    setId('dev-sum-gain', '+' + gained.toFixed(1));
+    setId('dev-sum-base', base != null ? r1(base) : '\u2014');
+    setId('dev-sum-cur', base != null ? r1(base + gained) : '\u2014');
+    setId('dev-sum-locked', count + ' / 2');
+    setId('dev-sum-status', count === 2 ? 'COMPLETE' : 'ACTIVE');
+    var bar = document.getElementById('dev-sum-bar');
+    if (bar) bar.style.width = (58 + count * 21) + '%';
+  }
+
+  // -------------------------------------------------------
   // FETCH + RUN
   // -------------------------------------------------------
   function fetchJSON(path) {
@@ -251,11 +373,13 @@
     Promise.all([
       fetchJSON('rankings.json'),
       fetchJSON('data/snapshot.json'),
-      fetchJSON('data/history.json')
+      fetchJSON('data/history.json'),
+      fetchJSON('data/upgrades.json')
     ]).then(function (res) {
       _data.rankings = res[0];
       _data.snapshot = res[1];
       _data.history = (res[2] && Array.isArray(res[2].snapshots)) ? res[2].snapshots : null;
+      _data.upgrades = res[3];
       done();
     });
   }
@@ -267,8 +391,10 @@
     var map = statRowMap();
     populate(ticker, map);              // write snapshot-derived stats (gate handled by calcStats)
     map = statRowMap();                 // re-read after populate
-    applyHighlight(map, revealed ? lowestTwo(map) : null);
+    var targets = revealed ? lowestTwo(map) : null;
+    applyHighlight(map, targets);
     renderRank(ticker, revealed);
+    renderDevCycle(ticker, map, targets, revealed);
   }
 
   function init() { run(); fetchData(run); }
