@@ -172,9 +172,18 @@
   function lowestTwo(map) {
     var items = UPGRADEABLE.map(function (name, i) { return { name: name, i: i, e: map[name] }; })
       .filter(function (x) { return x.e; });
-    if (items.length < 4 || items.some(function (x) { return x.e.value === null; })) return null;
-    items.sort(function (a, b) { return a.e.value !== b.e.value ? a.e.value - b.e.value : a.i - b.i; });
-    return [items[0].name, items[1].name];
+    if (items.length < 2) return null;
+    // Prefer stats that actually have a value; only fall back to all if fewer than 2 are valued.
+    // A team missing a stat (e.g. no liquidity -> CHASSIS null) still gets a clean 2-upgrade cycle
+    // rather than collapsing the whole section.
+    var valued = items.filter(function (x) { return x.e.value !== null; });
+    var pool = (valued.length >= 2) ? valued : items;
+    pool.sort(function (a, b) {
+      var av = (a.e.value == null) ? Infinity : a.e.value;
+      var bv = (b.e.value == null) ? Infinity : b.e.value;
+      return av !== bv ? av - bv : a.i - b.i;
+    });
+    return [pool[0].name, pool[1].name];
   }
   function applyHighlight(map, targets) {
     UPGRADEABLE.forEach(function (name) {
@@ -276,7 +285,9 @@
 .dev-state .ico{width:16px;height:16px}
 .in-prog .dev-state{color:var(--gold,#ffcc00);background:rgba(255,204,0,.06)}
 .locked .dev-state{color:var(--green,#00ff88);background:rgba(0,255,136,.07)}
-.in-prog .dev-state .done,.in-prog .dev-state .done-txt{display:none}
+.dev-state .done,.dev-state .done-txt{display:none}
+.locked .dev-state .done{display:inline-block}
+.locked .dev-state .done-txt{display:inline}
 .locked .dev-state .gear,.locked .dev-state .prog-txt{display:none}
 .dev-foot{min-height:var(--footer-min-h,72px);padding:14px 18px;border-top:1px solid var(--line,#1d1d28);background:#0a0a12;display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:10px}
 .dev-req{display:flex;align-items:center;gap:7px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted,#7a7a88)}
