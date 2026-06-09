@@ -335,7 +335,10 @@
     box.className = 'block dev-block ' + (isLocked ? 'locked' : 'in-prog');
     var v = (map[statName] && map[statName].value != null) ? map[statName].value : null;
     var icon = box.querySelector('.dev-hero-icon img');
-    if (icon) icon.src = 'icon-' + statName.toLowerCase() + '.png';
+    if (icon) {
+      icon.style.visibility = 'visible';   // undo any earlier empty-src onerror hide
+      icon.src = 'icon-' + statName.toLowerCase() + '.png';
+    }
     setQ(box, '.dev-hero-name', statName);
     setQ(box, '.dev-hero-vals .now', v != null ? r1(v) : '\u2014');
     setQ(box, '.dev-hero-vals .next', v != null ? r1(v + 1) : '\u2014');
