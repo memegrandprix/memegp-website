@@ -1299,29 +1299,52 @@ const TEAMS = [
 ];
 
 function renderMiniGrid(){
-  // Per-team staggered reveal. Fail-safe to hidden if the calculator didn't load.
-  const isRevealed = (window.MEMEGP_Stats && window.MEMEGP_Stats.isRevealed)
-    ? window.MEMEGP_Stats.isRevealed
-    : function(){ return false; };
-  let miniHtml = '';
-  TEAMS.forEach(t => {
-  miniHtml += `
-    <a href="${t.link}" class="mini-card locked${t.current ? ' current' : ''}">
+  var S = window.MEMEGP_Stats;
+  var isRevealed = (S && S.isRevealed) ? S.isRevealed : function(){ return false; };
+  function liveOverall(ticker, fallback){
+    try {
+      if (S && S.calcStats && window._miniSnap && window._miniSnap.teams && window._miniSnap.teams[ticker]) {
+        var s = S.calcStats(window._miniSnap.teams[ticker], 5.0, window._miniHist, ticker);
+        if (s && s.overall != null) return s.overall;
+      }
+    } catch(e){}
+    return fallback;
+  }
+  var miniHtml = '';
+  TEAMS.forEach(function(t){
+    var ovr = liveOverall(t.ticker, t.overall);
+    var revealed = isRevealed(t.ticker);
+    miniHtml += `
+    <a href="${t.link}" class="mini-card${revealed ? '' : ' locked'}${t.current ? ' current' : ''}">
       <div class="mini-card-row">
         <div class="mini-avatar" style="background-image:url('${t.avatar}')"></div>
         <div class="mini-info">
-          <div class="mini-ticker">$${t.ticker}</div>
-          <div class="mini-overall">OVR · <strong>${isRevealed(t.ticker) ? t.overall.toFixed(1) : '\u2014'}</strong></div>
+          <div class="mini-ticker">${t.ticker}</div>
+          <div class="mini-overall">OVR · <strong>${(revealed && ovr != null) ? ovr.toFixed(1) : '\u2014'}</strong></div>
         </div>
       </div>
-    </a>
-  `;
-});
-
-document.getElementById('miniGrid').innerHTML = miniHtml;
+    </a>`;
+  });
+  document.getElementById('miniGrid').innerHTML = miniHtml;
+  var titleEl = document.querySelector('.grid-strip-title');
+  if (titleEl) {
+    var total = TEAMS.length, live = 0;
+    TEAMS.forEach(function(t){ if (isRevealed(t.ticker)) live++; });
+    titleEl.innerHTML = '\u25B8 THE STARTING GRID \u00b7 ' + live + ' / ' + total + ' LIVE';
+  }
 }
-renderMiniGrid();
-setInterval(renderMiniGrid, 60000); // pick up staggered reveals without a refresh
+(function(){
+  if (window._miniSnap !== undefined) { renderMiniGrid(); return; }
+  Promise.all([
+    fetch('data/snapshot.json',{cache:'no-cache'}).then(function(r){return r && r.ok ? r.json() : null;}).catch(function(){return null;}),
+    fetch('data/history.json',{cache:'no-cache'}).then(function(r){return r && r.ok ? r.json() : null;}).catch(function(){return null;})
+  ]).then(function(res){
+    window._miniSnap = res[0] || null;
+    window._miniHist = (res[1] && Array.isArray(res[1].snapshots)) ? res[1].snapshots : null;
+    renderMiniGrid();
+  });
+})();
+setInterval(renderMiniGrid, 60000);
 
 // === SHARE CARD AS IMAGE ===
 const SHARE_TWEET_TEXT = `🏁 $SHIH is on the Season 2 grid.
