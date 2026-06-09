@@ -38,7 +38,7 @@
   //
   // FLIP TO FALSE Sunday 7 June after the countdown reveal completes.
   // ============================================================
-  const PRE_REVEAL_MODE = true;
+  const PRE_REVEAL_MODE = false;   // LIVE — reveals complete, full grid public
 
   // ============================================================
   // FREEZE OVERRIDE — force the whole platform into frozen mode
