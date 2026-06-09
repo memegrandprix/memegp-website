@@ -1895,7 +1895,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
       <div class="pitwall-intro">
         <h3>LIVE <span class="gold">POWER RANKINGS</span></h3>
-        <p>The grid sorted by on-chain power, updated daily. Communities have until June 1 to climb. Race-day stats commit Friday 18:00 SAST.</p>
+        <p>The grid sorted by on-chain power, updated daily. Week 1 upgrade window is LIVE — communities have until Sunday 14 June to climb. Race 1: Satoshi Speedway, 21 June.</p>
       </div>
 
       <div class="pitwall-status">
@@ -2104,6 +2104,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
   const TRACK_START = new Date('2026-05-14T00:00:00Z');
   const SEASON_START = new Date('2026-06-01T00:00:00Z');
+  const RACE_START = new Date('2026-06-21T16:00:00Z'); // Race 1 — Satoshi Speedway (18:00 SAST)
 
   // ============================================================
   // STAT FORMULAS — sourced from shared stats-calculator.js
@@ -2404,10 +2405,19 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
     document.getElementById('pit-last-updated').textContent = 'LAST UPDATED · ' + new Date().toLocaleString('en-GB', {hour12:false}).toUpperCase();
 
-    // Days tracked
-    const daysSinceStart = Math.max(1, Math.floor((now - TRACK_START) / (1000 * 60 * 60 * 24)) + 1);
-    const totalDays = Math.floor((SEASON_START - TRACK_START) / (1000 * 60 * 60 * 24));
-    document.getElementById('pit-tracking-days').textContent = `TRACKING · DAY ${daysSinceStart} of ${totalDays}`;
+    // Status line — phase-aware (pre-season tracking → race countdown → race week)
+    const DAY_MS = 1000 * 60 * 60 * 24;
+    const trackEl = document.getElementById('pit-tracking-days');
+    if (now < SEASON_START) {
+      const daysSinceStart = Math.max(1, Math.floor((now - TRACK_START) / DAY_MS) + 1);
+      const totalDays = Math.floor((SEASON_START - TRACK_START) / DAY_MS);
+      trackEl.textContent = `TRACKING · DAY ${daysSinceStart} of ${totalDays}`;
+    } else if (now < RACE_START) {
+      const daysToRace = Math.max(1, Math.ceil((RACE_START - now) / DAY_MS));
+      trackEl.textContent = `RACE 1 · ${daysToRace} DAY${daysToRace === 1 ? '' : 'S'} TO GO`;
+    } else {
+      trackEl.textContent = `RACE WEEK · SATOSHI SPEEDWAY`;
+    }
   }
 
   // ============================================================
