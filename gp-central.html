@@ -2608,6 +2608,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   let factoryFilterTicker = null; // when set, only that team's card renders
   let factoryCardsCache = []; // teams with computed stats, for re-sorting
   let factoryUpgrades = {};   // earned upgrades from data/upgrades.json (ticker -> {locked:[]})
+  let factoryBaseStats = {};  // BASE stats from the frozen weekly snapshot (same source as team pages)
 
   async function loadFactoryData(){
     if(factoryLoaded) return;
@@ -2629,6 +2630,21 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       if(ur.ok){ factoryUpgrades = await ur.json() || {}; }
     } catch(e){
       // no upgrades yet — base only
+    }
+
+    // Compute BASE stats from the FROZEN weekly snapshot (same source + math as the
+    // team-page dev cycle), so the factory matches the cards/thread exactly.
+    try {
+      const [snap, hist] = await Promise.all([fetchSnapshot(), fetchHistory()]);
+      const S = window.MEMEGP_Stats;
+      if(snap && snap.teams && S && S.calcStats){
+        Object.keys(snap.teams).forEach(function(tk){
+          const s = S.calcStats(snap.teams[tk], 5.0, hist, tk);
+          factoryBaseStats[tk] = { engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag, pit: 5.0 };
+        });
+      }
+    } catch(e){
+      // snapshot unavailable — fall back to live Pit Wall stats below
     }
 
     // Make sure we have live stat data — load Pit Wall data if it hasn't been yet
@@ -2691,17 +2707,19 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       // Fall back: build from TEAMS config + cachedTeamData (live Pit Wall stats)
       // cachedTeamData shape: [{ team: {ticker, name, color, logo, ...}, data: {...}, stats: {engine, aero, chassis, drag, ...} }]
       teams = TEAMS.map(t => {
+        const frozen = factoryBaseStats[t.ticker];
         const live = (cachedTeamData || []).find(x => x.team && x.team.ticker === t.ticker);
+        const baseStats = frozen || (live && live.stats) || null;
         let stats = null;
-        if(live && live.stats){
+        if(baseStats){
           const ut = (factoryUpgrades && factoryUpgrades.teams) ? factoryUpgrades.teams[t.ticker] : null;
           const lk = (ut && Array.isArray(ut.locked)) ? ut.locked : [];
           const up = (name) => lk.indexOf(name) !== -1 ? 1 : 0;
           stats = {
-            engine: { base: live.stats.engine, upgrade: up('ENGINE') },
-            aero: { base: live.stats.aero, upgrade: up('AERO') },
-            chassis: { base: live.stats.chassis, upgrade: up('CHASSIS') },
-            drag: { base: live.stats.drag, upgrade: up('DRAG') },
+            engine: { base: baseStats.engine, upgrade: up('ENGINE') },
+            aero: { base: baseStats.aero, upgrade: up('AERO') },
+            chassis: { base: baseStats.chassis, upgrade: up('CHASSIS') },
+            drag: { base: baseStats.drag, upgrade: up('DRAG') },
             pit: { base: 5.0, upgrade: 0 }
           };
         }
