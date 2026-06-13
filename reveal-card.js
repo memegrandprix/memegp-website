@@ -50,6 +50,17 @@
       '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
       '  color:#ff2b5e;border:1px solid rgba(255,0,64,.5);border-radius:4px;',
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
+      // EARNED upgrade (locked) — green
+      '.stat-row.is-upgrade-earned .stat-row-fill{background:linear-gradient(180deg,#16c784,#0e8f5e);}',
+      '.stat-row.is-upgrade-earned .stat-row-main{background:linear-gradient(90deg,',
+      '  rgba(22,199,132,.20) 0%, rgba(22,199,132,.20) var(--score-pct,0%),',
+      '  transparent var(--score-pct,0%), transparent 100%);}',
+      '.stat-row.is-upgrade-earned .stat-row-value{color:#16c784;}',
+      '.stat-row.is-upgrade-earned .stat-row-name{color:#3fe0a0;}',
+      '.stat-row.is-upgrade-earned .stat-row-name::after{content:"\\25B2 UPGRADED";',
+      '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
+      '  color:#16c784;border:1px solid rgba(22,199,132,.5);border-radius:4px;',
+      '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
       '.rank-strip{display:flex;align-items:center;justify-content:space-between;',
       '  background:#0a0a12;border:1px solid var(--line,#23232e);border-radius:6px;',
       '  padding:11px 18px;margin:0 0 10px;}',
@@ -185,10 +196,15 @@
     });
     return [pool[0].name, pool[1].name];
   }
-  function applyHighlight(map, targets) {
+  function applyHighlight(map, targets, earned) {
+    var earnedArr = earned || [];
     UPGRADEABLE.forEach(function (name) {
       var e = map[name];
-      if (e) e.row.classList.toggle('is-upgrade-target', !!targets && targets.indexOf(name) !== -1);
+      if (!e) return;
+      var isEarned = earnedArr.indexOf(name) !== -1;
+      var isTarget = !!targets && targets.indexOf(name) !== -1;
+      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = locked
+      e.row.classList.toggle('is-upgrade-target', isTarget && !isEarned); // red = still in progress
     });
   }
 
@@ -451,7 +467,9 @@
     map = statRowMap();                 // re-read after populate (for highlight rows)
     var baseMap = baseStatMap(ticker) || map;   // frozen base for targets + dev cycle
     var targets = revealed ? lowestTwo(baseMap) : null;
-    applyHighlight(map, targets);
+    var S = window.MEMEGP_Stats;
+    var earned = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker) : [];
+    applyHighlight(map, targets, earned);
     renderRank(ticker, revealed);
     renderDevCycle(ticker, baseMap, targets, revealed);
   }
