@@ -355,9 +355,20 @@
     injectDevCSS();
     head.hidden = false; row.hidden = false;
 
+    var S = window.MEMEGP_Stats;
     var dev = devTeam(ticker) || {};
-    var lockedArr = Array.isArray(dev.locked) ? dev.locked : [];
-    var base = (dev.base_overall != null) ? dev.base_overall : null;
+
+    // Single source of truth: earned upgrades + base come from stats-calculator.
+    // Fall back to upgrades.json only if the accessors aren't available.
+    var lockedArr = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker)
+                    : (Array.isArray(dev.locked) ? dev.locked : []);
+
+    var base = null;
+    if (S && typeof S.getBaseStats === 'function') {
+      var b = S.getBaseStats(ticker);
+      if (b) base = (b.engine + b.aero + b.chassis + b.drag + b.pit) / 5;
+    }
+    if (base == null && dev.base_overall != null) base = dev.base_overall;
 
     fillUpgradeBox('1', targets[0], map, lockedArr);   // lowest  → 15 likes
     fillUpgradeBox('2', targets[1], map, lockedArr);   // 2nd     → 10 RTs
@@ -398,17 +409,35 @@
     });
   }
 
+  // Build a {NAME:{value}} map from the FROZEN base (no upgrades) so the dev
+  // cycle picks fixed targets and shows base→target, independent of what the
+  // main stat rows now display (which include earned upgrades).
+  function baseStatMap(ticker) {
+    var S = window.MEMEGP_Stats;
+    if (!S || typeof S.getBaseStats !== 'function') return null;
+    var b = S.getBaseStats(ticker);
+    if (!b) return null;
+    return {
+      ENGINE:  { value: b.engine },
+      AERO:    { value: b.aero },
+      CHASSIS: { value: b.chassis },
+      DRAG:    { value: b.drag },
+      PIT:     { value: b.pit }
+    };
+  }
+
   function run() {
     injectCSS();
     var ticker = currentTicker();
     var revealed = isRevealed(ticker);
     var map = statRowMap();
-    populate(ticker, map);              // write snapshot-derived stats (gate handled by calcStats)
-    map = statRowMap();                 // re-read after populate
-    var targets = revealed ? lowestTwo(map) : null;
+    populate(ticker, map);              // main rows show current = base + earned upgrades
+    map = statRowMap();                 // re-read after populate (for highlight rows)
+    var baseMap = baseStatMap(ticker) || map;   // frozen base for targets + dev cycle
+    var targets = revealed ? lowestTwo(baseMap) : null;
     applyHighlight(map, targets);
     renderRank(ticker, revealed);
-    renderDevCycle(ticker, map, targets, revealed);
+    renderDevCycle(ticker, baseMap, targets, revealed);
   }
 
   function init() { run(); fetchData(run); }

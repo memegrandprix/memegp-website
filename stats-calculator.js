@@ -349,17 +349,88 @@
   // @param {array}  [history]      — array of past snapshots for DRAG
   // @param {string} [ticker]       — team ticker (needed for history lookup)
   //
+  // ============================================================
+  // FROZEN BASE  —  Week-1 measurement, LOCKED Friday.
+  // ------------------------------------------------------------
+  // The market no longer moves these scores. Only earned upgrades
+  // (+1 per locked stat) change a team's score. This is the single
+  // source of truth: every page runs through calcStats, so editing
+  // these two objects re-syncs the entire site at once.
+  //
+  // To record a new earned upgrade: add the stat to EARNED_UPGRADES.
+  // To set a new weekly base: replace the numbers in FROZEN_BASE.
+  // ============================================================
+  const FROZEN_BASE = {
+    TURBO:      { engine: 9.0, aero: 6.9, chassis: 6.5, drag: 7.1 },
+    MASK:       { engine: 5.7, aero: 6.6, chassis: 7.4, drag: 6.0 },
+    NEURO:      { engine: 1.5, aero: 3.5, chassis: 1.4, drag: 1.0 },
+    SUS:        { engine: 4.0, aero: 2.3, chassis: 4.0, drag: 3.3 },
+    LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
+    SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
+    VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
+    MARS:       { engine: 1.5, aero: 4.1, chassis: 1.3, drag: 2.9 },
+    '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
+    PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
+    PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
+    MOMO:       { engine: 4.9, aero: 5.2, chassis: 5.8, drag: 7.0 },
+    DOBERMANN:  { engine: 4.9, aero: 5.0, chassis: 4.8, drag: 4.2 },
+    MONKO:      { engine: 3.3, aero: 1.8, chassis: 3.2, drag: 1.0 },
+    BILLY:      { engine: 6.0, aero: 5.6, chassis: 5.6, drag: 6.1 }
+  };
+
+  // Earned upgrades — locked stats per team (+1 each, permanent for the season).
+  const EARNED_UPGRADES = {
+    BILLY: ['AERO'],
+    PUP:   ['ENGINE']
+  };
+
+  const FROZEN_PIT = 5.0; // PIT resets weekly to 5, not upgradeable
+
+  function cleanTk(t){ return String(t == null ? '' : t).toUpperCase().replace(/^\$/, '').trim(); }
+
+  // Pure frozen base (no upgrades) — for the dev cycle "base -> target" display.
+  function getBaseStats(ticker){
+    const b = FROZEN_BASE[cleanTk(ticker)];
+    if (!b) return null;
+    return { engine: b.engine, aero: b.aero, chassis: b.chassis, drag: b.drag, pit: FROZEN_PIT };
+  }
+  // Earned (locked) upgrade stat names for a team.
+  function getEarned(ticker){
+    return EARNED_UPGRADES[cleanTk(ticker)] || [];
+  }
+
   // @returns {object|null} {engine, aero, chassis, drag, pit, overall}
   //                        or null if mcap is missing/zero.
   // ============================================================
   function calcStats(d, editorialPit, history, ticker) {
+    const pitVal = round(calcPit(editorialPit));
+
+    // Reveal gate — hide a team's stats until its slot unlocks (PIT stays visible).
+    if (!isRevealed(ticker)) {
+      return { engine: null, aero: null, chassis: null, drag: null, pit: pitVal, overall: null };
+    }
+
+    // FROZEN PATH: return the locked Friday base + any earned upgrades.
+    // The market does not move these — only upgrades do.
+    const fb = getBaseStats(ticker);
+    if (fb) {
+      const up = getEarned(ticker);
+      const bump = (name, val) => Math.min(val + (up.indexOf(name) !== -1 ? 1 : 0), 9.5);
+      const eng = bump('ENGINE', fb.engine);
+      const aer = bump('AERO', fb.aero);
+      const cha = bump('CHASSIS', fb.chassis);
+      const dra = bump('DRAG', fb.drag);
+      const ovr = (eng + aer + cha + dra + pitVal) / 5;
+      return {
+        engine: round(eng), aero: round(aer), chassis: round(cha),
+        drag: round(dra), pit: pitVal, overall: round(ovr)
+      };
+    }
+
+    // LIVE FALLBACK: only used for tickers without a frozen base (safety net).
     if (!d || !d.mcap) return null;
     const engine  = calcEngine(d.mcap);
     const aero    = calcAero(d.mcap, d.vol || d.vol_24h || 0);
-    // CHASSIS routing:
-    //   - If d.liq present (AMM team) → use calcChassis(liq)
-    //   - If d.liq is null/missing AND vol present (Runes team) → proxy
-    //   - Otherwise null (excluded from overall)
     let chassis;
     const vol = d.vol || d.vol_24h || 0;
     if (d.liq != null && d.liq > 0) {
@@ -370,32 +441,14 @@
       chassis = null;
     }
     const drag    = calcDrag(d, history, ticker);
-    const pit     = calcPit(editorialPit);
-    const stats = [engine, aero, chassis, drag, pit].filter(s => s !== null);
+    const stats = [engine, aero, chassis, drag, pitVal].filter(s => s !== null);
     const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
-
-    // STAGGERED REVEAL: hide a team's measured stats until its slot in the
-    // reveal schedule has passed. isRevealed() handles the master switch
-    // (PRE_REVEAL_MODE) and the per-team timing in one place, so every
-    // calcStats consumer (rankings, pit wall, factory) staggers automatically.
-    // PIT remains visible (editorial value, not measured this week).
-    if (!isRevealed(ticker)) {
-      return {
-        engine:  null,
-        aero:    null,
-        chassis: null,
-        drag:    null,
-        pit:     round(pit),
-        overall: null,
-      };
-    }
-
     return {
       engine:  round(engine),
       aero:    round(aero),
       chassis: chassis !== null ? round(chassis) : null,
       drag:    round(drag),
-      pit:     round(pit),
+      pit:     pitVal,
       overall: overall !== null ? round(overall) : null,
     };
   }
@@ -556,6 +609,10 @@
   const MEMEGP_Stats = {
     // Stat computation
     calcStats:   calcStats,
+    getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
+    getEarned:    getEarned,       // earned/locked upgrade stat names for a team
+    FROZEN_BASE:  FROZEN_BASE,
+    EARNED_UPGRADES: EARNED_UPGRADES,
     calcEngine:  calcEngine,
     calcAero:    calcAero,
     calcChassis: calcChassis,
