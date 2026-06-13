@@ -2607,6 +2607,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   let factorySortBy = 'overall';
   let factoryFilterTicker = null; // when set, only that team's card renders
   let factoryCardsCache = []; // teams with computed stats, for re-sorting
+  let factoryUpgrades = {};   // earned upgrades from data/upgrades.json (ticker -> {locked:[]})
 
   async function loadFactoryData(){
     if(factoryLoaded) return;
@@ -2620,6 +2621,14 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       }
     } catch(e){
       // JSON missing — fall through to provisional render
+    }
+
+    // Load earned upgrades (locked stats) so the factory shows base + the new score
+    try {
+      const ur = await fetch('data/upgrades.json', { cache: 'no-store' });
+      if(ur.ok){ factoryUpgrades = await ur.json() || {}; }
+    } catch(e){
+      // no upgrades yet — base only
     }
 
     // Make sure we have live stat data — load Pit Wall data if it hasn't been yet
@@ -2638,7 +2647,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   const FACTORY_STATE_COPY = {
     provisional: { label: 'PROVISIONAL · GRID LOCK IN PROGRESS', cycle: 'CYCLE · GRID LOCK WEEK', lockdown: 'GRID LOCKS · SUN 31 MAY 23:59 UTC', hero: 'GRID LOCK', mile: 'SUN 31 MAY', tag: 'PROVISIONAL · CURRENT STATS' },
     measurement: { label: 'MEASUREMENT IN PROGRESS', cycle: 'CYCLE · BASE MEASUREMENT WEEK', lockdown: 'BASE SNAPSHOT · SUN 7 JUN 23:59 UTC', hero: 'BASE MEASUREMENT', mile: 'SUN 7 JUN', tag: 'MEASURING · LIVE ON-CHAIN' },
-    upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · PRE-SEASON UPGRADES', lockdown: 'LOCKDOWN · FRI 12 JUN 23:59 UTC', hero: 'PRE-SEASON UPGRADES', mile: 'FRI 12 JUN', tag: 'CURRENT STATS · UPGRADE WEEK' },
+    upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · WEEK 1 UPGRADES', lockdown: 'LOCKDOWN · SUN 14 JUN 23:59 UTC', hero: 'WEEK 1 UPGRADES', mile: 'SUN 14 JUN', tag: 'CURRENT STATS · UPGRADE WEEK' },
     raceweek: { label: 'RACE WEEK', cycle: 'CYCLE · RACE WEEK 1', lockdown: 'LIGHTS OUT · SUN 21 JUN', hero: 'RACE WEEK', mile: 'SUN 21 JUN', tag: 'RACE-DAY STATS · COMMIT' },
     locked: { label: 'CYCLE LOCKED', cycle: 'LAST CYCLE COMPLETE', lockdown: 'NEXT CYCLE · TBD', hero: 'LOCKED', mile: 'TBD', tag: 'LOCKED STATS' }
   };
@@ -2654,8 +2663,8 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
     if(!mount) return;
 
-    const state = (data && data.cycle && data.cycle.status) || 'provisional';
-    const sc = FACTORY_STATE_COPY[state] || FACTORY_STATE_COPY.provisional;
+    const state = (data && data.cycle && data.cycle.status) || 'upgrades';
+    const sc = FACTORY_STATE_COPY[state] || FACTORY_STATE_COPY.upgrades;
     if(stateLabel) stateLabel.textContent = sc.label;
     if(cycleLabel) cycleLabel.textContent = sc.cycle;
     if(lockdown) lockdown.textContent = sc.lockdown;
@@ -2685,11 +2694,14 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
         const live = (cachedTeamData || []).find(x => x.team && x.team.ticker === t.ticker);
         let stats = null;
         if(live && live.stats){
+          const ut = (factoryUpgrades && factoryUpgrades.teams) ? factoryUpgrades.teams[t.ticker] : null;
+          const lk = (ut && Array.isArray(ut.locked)) ? ut.locked : [];
+          const up = (name) => lk.indexOf(name) !== -1 ? 1 : 0;
           stats = {
-            engine: { base: live.stats.engine, upgrade: 0 },
-            aero: { base: live.stats.aero, upgrade: 0 },
-            chassis: { base: live.stats.chassis, upgrade: 0 },
-            drag: { base: live.stats.drag, upgrade: 0 },
+            engine: { base: live.stats.engine, upgrade: up('ENGINE') },
+            aero: { base: live.stats.aero, upgrade: up('AERO') },
+            chassis: { base: live.stats.chassis, upgrade: up('CHASSIS') },
+            drag: { base: live.stats.drag, upgrade: up('DRAG') },
             pit: { base: 5.0, upgrade: 0 }
           };
         }

@@ -1,22 +1,69 @@
 {
   "_note": "MEME GP upgrade ledger. 'base_overall' = each team's Week 0 (Monday reveal) score, PINNED — do not change it. 'locked' = the stats upgraded this cycle; add a stat name ('ENGINE'/'AERO'/'CHASSIS'/'DRAG') when a team clears its target. Each locked stat = +0.2 overall. To lock an upgrade mid-week: add the stat to that team's 'locked' array, save, deploy.",
   "week": 1,
-  "cycle_label": "WEEK 1 \u00b7 PRE-SEASON BUILD",
+  "cycle_label": "WEEK 1 · PRE-SEASON BUILD",
   "teams": {
-    "PUP":        { "base_overall": 7.3, "locked": [] },
-    "TURBO":      { "base_overall": 6.9, "locked": [] },
-    "MASK":       { "base_overall": 6.1, "locked": [] },
-    "VIBECOIN":   { "base_overall": 5.8, "locked": [] },
-    "BILLY":      { "base_overall": 5.7, "locked": [] },
-    "MOMO":       { "base_overall": 5.6, "locked": [] },
-    "PEPONK":     { "base_overall": 5.5, "locked": [] },
-    "LOL":        { "base_overall": 5.3, "locked": [] },
-    "DOBERMANN":  { "base_overall": 4.7, "locked": [] },
-    "SHIH":       { "base_overall": 4.4, "locked": [] },
-    "SUS":        { "base_overall": 4.0, "locked": [] },
-    "420BLAZEIT": { "base_overall": 3.6, "locked": [] },
-    "MARS":       { "base_overall": 3.0, "locked": [] },
-    "MONKO":      { "base_overall": 2.9, "locked": [] },
-    "NEURO":      { "base_overall": 2.5, "locked": [] }
+    "PUP": {
+      "base_overall": 7.3,
+      "locked": []
+    },
+    "TURBO": {
+      "base_overall": 6.9,
+      "locked": []
+    },
+    "MASK": {
+      "base_overall": 6.1,
+      "locked": []
+    },
+    "VIBECOIN": {
+      "base_overall": 5.8,
+      "locked": []
+    },
+    "BILLY": {
+      "base_overall": 5.7,
+      "locked": [
+        "AERO"
+      ]
+    },
+    "MOMO": {
+      "base_overall": 5.6,
+      "locked": []
+    },
+    "PEPONK": {
+      "base_overall": 5.5,
+      "locked": []
+    },
+    "LOL": {
+      "base_overall": 5.3,
+      "locked": []
+    },
+    "DOBERMANN": {
+      "base_overall": 4.7,
+      "locked": []
+    },
+    "SHIH": {
+      "base_overall": 4.4,
+      "locked": []
+    },
+    "SUS": {
+      "base_overall": 4,
+      "locked": []
+    },
+    "420BLAZEIT": {
+      "base_overall": 3.6,
+      "locked": []
+    },
+    "MARS": {
+      "base_overall": 3,
+      "locked": []
+    },
+    "MONKO": {
+      "base_overall": 2.9,
+      "locked": []
+    },
+    "NEURO": {
+      "base_overall": 2.5,
+      "locked": []
+    }
   }
 }
