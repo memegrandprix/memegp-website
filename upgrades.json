@@ -5,7 +5,9 @@
   "teams": {
     "PUP": {
       "base_overall": 7.3,
-      "locked": []
+      "locked": [
+        "ENGINE"
+      ]
     },
     "TURBO": {
       "base_overall": 6.9,
