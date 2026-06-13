@@ -1,5 +1,4 @@
 {
-  "_note": "Drives the FACTORY FLOOR phase + status strings. status options: provisional | measurement | upgrades | raceweek | locked. Leave teams empty to use live on-chain stats + data/upgrades.json.",
   "cycle": {
     "status": "upgrades",
     "week": 1,
