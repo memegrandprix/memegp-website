@@ -2679,7 +2679,10 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
     if(!mount) return;
 
-    const state = (data && data.cycle && data.cycle.status) || 'upgrades';
+    let state = (data && data.cycle && data.cycle.status) || 'upgrades';
+    // We've moved past the May grid-lock. If the cycle file is still on the old
+    // 'provisional' value, treat it as the live upgrade week regardless.
+    if(state === 'provisional') state = 'upgrades';
     const sc = FACTORY_STATE_COPY[state] || FACTORY_STATE_COPY.upgrades;
     if(stateLabel) stateLabel.textContent = sc.label;
     if(cycleLabel) cycleLabel.textContent = sc.cycle;
