@@ -399,6 +399,29 @@
     return EARNED_UPGRADES[cleanTk(ticker)] || [];
   }
 
+  // Given the published opening-grid entries (from rankings.json), overlay the
+  // CURRENT score (frozen base + earned upgrades), re-sort by it, and compute
+  // movement vs the opening grid. Returns a new array sorted by current rank,
+  // each entry carrying { rank, previous_rank, score, ...original fields }.
+  // This makes the power rankings + per-team grid rank reflect upgrades from
+  // the single source — edit EARNED_UPGRADES and the whole board re-sorts.
+  function rankWithUpgrades(openingEntries){
+    if (!Array.isArray(openingEntries)) return [];
+    var rows = openingEntries.map(function(e){
+      var s = calcStats({}, FROZEN_PIT, null, e.ticker);
+      var cur = (s && s.overall != null) ? s.overall : e.score;
+      var copy = {}; for (var k in e) { if (e.hasOwnProperty(k)) copy[k] = e[k]; }
+      copy._openingRank = e.rank;
+      copy.score = cur;
+      return copy;
+    });
+    rows.sort(function(a, b){
+      return (b.score - a.score) || (a._openingRank - b._openingRank);
+    });
+    rows.forEach(function(e, i){ e.rank = i + 1; e.previous_rank = e._openingRank; });
+    return rows;
+  }
+
   // @returns {object|null} {engine, aero, chassis, drag, pit, overall}
   //                        or null if mcap is missing/zero.
   // ============================================================
@@ -611,6 +634,7 @@
     calcStats:   calcStats,
     getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
     getEarned:    getEarned,       // earned/locked upgrade stat names for a team
+    rankWithUpgrades: rankWithUpgrades, // opening grid -> current standings + movement
     FROZEN_BASE:  FROZEN_BASE,
     EARNED_UPGRADES: EARNED_UPGRADES,
     calcEngine:  calcEngine,

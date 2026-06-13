@@ -236,12 +236,28 @@
       strip.innerHTML = '<span class="rank-strip-label">GRID RANK</span><span class="rank-strip-value">\u2014</span>';
       return;
     }
-    var entry = rankingEntry(ticker);
-    var rank = entry && entry.rank != null ? entry.rank : computeRank(ticker);
+    // Current standings: frozen base + earned upgrades, re-sorted, with movement
+    // measured against the opening grid. Falls back to the static entry if the
+    // calculator isn't available.
+    var rank = null, prev = null;
+    var S = window.MEMEGP_Stats;
+    var opening = (_data.rankings && _data.rankings.weeks && _data.rankings.weeks[0] &&
+                   _data.rankings.weeks[0].rankings) || null;
+    if (S && typeof S.rankWithUpgrades === 'function' && opening) {
+      var standings = S.rankWithUpgrades(opening);
+      var tk = clean(ticker);
+      var me = standings.filter(function (e) { return clean(e.ticker) === tk; })[0];
+      if (me) { rank = me.rank; prev = me.previous_rank; }
+    }
+    if (rank == null) {
+      var entry = rankingEntry(ticker);
+      rank = entry && entry.rank != null ? entry.rank : computeRank(ticker);
+      prev = entry ? entry.previous_rank : null;
+    }
     if (rank == null) { strip.style.display = 'none'; return; }
     strip.style.display = '';
     strip.className = 'rank-strip';
-    var mv = getMovement(rank, entry ? entry.previous_rank : null);
+    var mv = getMovement(rank, prev);
     strip.innerHTML = '<span class="rank-strip-label">GRID RANK</span><span class="rank-strip-right">' +
       '<span class="rank-strip-value">P' + rank + '</span>' + movementChip(mv) + '</span>';
   }

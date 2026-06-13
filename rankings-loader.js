@@ -207,11 +207,24 @@
   // -------------------------------------------------------
   function render(mount, weeks, activeId) {
     var active = weeks.find(function (w) { return w.id === activeId; }) || weeks[0];
+
+    // LIVE WEEK: overlay current scores (frozen base + earned upgrades), re-sort,
+    // and show movement vs the opening grid. Historical/archived weeks render as-is.
+    var renderTarget = active;
+    var S = window.MEMEGP_Stats;
+    if (S && typeof S.rankWithUpgrades === 'function' &&
+        active.id === weeks[0].id && active.rankings && active.rankings.length) {
+      renderTarget = {
+        id: active.id, label: active.label, subtitle: active.subtitle,
+        tag: active.tag, rankings: S.rankWithUpgrades(active.rankings)
+      };
+    }
+
     STATE.mount = mount; STATE.weeks = weeks; STATE.activeId = active.id;
     mount.innerHTML =
       renderTabs(weeks, active.id) +
       '<div class="pr-week" id="pr-week-' + escapeHTML(active.id) + '">' +
-        renderWeek(active) +
+        renderWeek(renderTarget) +
       '</div>';
 
     wireTabs(mount, weeks);
