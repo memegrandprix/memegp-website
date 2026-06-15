@@ -288,6 +288,46 @@
       "headline": "OFFICIAL TEAM 1 — $TURBO JOINS THE GRID",
       "body": "AI TURBO RACING locked in as the inaugural team for Season 2 — auto-promoted from the most engaged community of the Season 1 build-up. Driver: The Frog. Livery: TURBO BLUE, built by AI. Starting profile: 7.7 overall — a perfect DRAG 10.0 (highest on the grid) paired with a benchmark-setting ENGINE 9.5. Real on-chain stats. Community joined via Season 1 engagement.",
       "tweet": "OFFICIAL TEAM 1 - $TURBO\n\nAI TURBO RACING joins the grid.\n\nDriver: The Frog\nLivery: TURBO BLUE\nDRAG 10.0 · ENGINE 9.5\n\nfirst team locked. paddock is open.\n\n@MemeGrandPrix · #MemeGP\n\n$MEMEGP"
+    },
+    {
+      "id": "2026-06-14-pup-upgrade-engine",
+      "type": "upgrade",
+      "timestamp": "2026-06-14T23:59:30Z",
+      "tag": "UPGRADE LOCKED",
+      "team": {
+        "ticker": "$PUP",
+        "name": "PUP POWER",
+        "color": "#F0B90B",
+        "logo": "pup.png"
+      },
+      "headline": "WEEK 1 UPGRADE — $PUP LOCKS ENGINE 5.8 → 6.8",
+      "body": "The pole-sitter keeps building. The $PUP community cleared the likes threshold on its Week 1 bulletin, locking ENGINE from 5.8 to 6.8 — permanent for the season. PUP's overall ticks from 7.3 to 7.5, extending its hold on P1 at the top of the grid. The second target, DRAG, narrowly missed the retweet line and fails for the week. Even from the front, the champion finds pace.",
+      "stat_change": {
+        "stat": "ENGINE",
+        "from": 5.8,
+        "to": 6.8
+      },
+      "tweet": "🏁 UPGRADE LOCKED — $PUP 🏆\n\nEven the leader builds. ENGINE 5.8 → 6.8, locked for the season.\n\nPOLE gets meaner: 7.3 → 7.5, P1 held.\n\nmemegrandprix.com/teams-pup.html\n\n$MEMEGP"
+    },
+    {
+      "id": "2026-06-14-billy-upgrade-aero",
+      "type": "upgrade",
+      "timestamp": "2026-06-14T23:59:00Z",
+      "tag": "UPGRADE LOCKED",
+      "team": {
+        "ticker": "$BILLY",
+        "name": "BILLY RACING",
+        "color": "#F7931A",
+        "logo": "billy.png"
+      },
+      "headline": "WEEK 1 UPGRADE — $BILLY LOCKS AERO 5.6 → 6.6",
+      "body": "BILLY Racing lands an upgrade in the opening cycle. The $BILLY community cleared 15 likes on the Week 1 build bulletin, locking AERO from 5.6 to 6.6 — permanent for the season. The gain lifts BILLY's overall from 5.7 to 5.9 and fires the Bitcoin Runes outsider up from P5 to P4, overtaking $VIBECOIN on the grid. CHASSIS, the second target, fell short on retweets and stays put. One upgrade banked, the climb begins.",
+      "stat_change": {
+        "stat": "AERO",
+        "from": 5.6,
+        "to": 6.6
+      },
+      "tweet": "🏁 UPGRADE LOCKED — $BILLY 🟠\n\n15 likes on the bulletin → AERO 5.6 → 6.6, permanent for Season 2.\n\nBILLY climbs 5.7 → 5.9 and jumps P5 → P4, past $VIBECOIN.\n\nmemegrandprix.com/teams-billy.html\n\n$MEMEGP"
     }
   ]
 }
