@@ -381,8 +381,13 @@
   // Earned upgrades — locked stats per team (+1 each, permanent for the season).
   const EARNED_UPGRADES = {
     BILLY: ['AERO'],
-    PUP:   ['ENGINE']
+    PUP:   ['ENGINE', 'DRAG']
   };
+
+  // CYCLE_LOCKED: false during the upgrade window (unearned targets show
+  // "DEVELOPMENT IN PROGRESS"), true once the window closes (unearned targets
+  // show "UPGRADE FAILED"). Flip to false at the start of each new cycle.
+  const CYCLE_LOCKED = true;
 
   const FROZEN_PIT = 5.0; // PIT resets weekly to 5, not upgradeable
 
@@ -634,6 +639,7 @@
     calcStats:   calcStats,
     getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
     getEarned:    getEarned,       // earned/locked upgrade stat names for a team
+    cycleLocked:  CYCLE_LOCKED,     // true once the upgrade window has closed
     rankWithUpgrades: rankWithUpgrades, // opening grid -> current standings + movement
     FROZEN_BASE:  FROZEN_BASE,
     EARNED_UPGRADES: EARNED_UPGRADES,

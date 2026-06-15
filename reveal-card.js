@@ -326,6 +326,17 @@
 .dev-req .ico{width:15px;height:15px}
 .dev-delta{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:.5px;color:var(--gold,#ffcc00)}
 .locked .dev-delta,.locked .dev-req{color:var(--green,#00ff88)}
+/* FAILED state (window closed, target not met) */
+.dev-state .fail,.dev-state .fail-txt{display:none}
+.failed .dev-state{color:#ff2b5e;background:rgba(255,0,64,.07);border-color:rgba(255,0,64,.32)}
+.failed .dev-state .gear,.failed .dev-state .prog-txt,.failed .dev-state .done,.failed .dev-state .done-txt{display:none}
+.failed .dev-state .fail{display:inline-block;width:16px;height:16px}
+.failed .dev-state .fail-txt{display:inline}
+.failed .dev-hero{border-left-color:#ff0040;opacity:.92}
+.failed .dev-hero-name{color:#ff6688}
+.failed .dev-hero-vals .now{color:#9aa}
+.failed .dev-hero-vals .next{color:#ff2b5e;text-decoration:line-through;text-decoration-thickness:2px}
+.failed .dev-delta,.failed .dev-req{color:#ff2b5e}
 .sum-body{padding:20px 18px;display:flex;flex-direction:column;gap:14px;flex:1}
 .sum-hero{text-align:center;padding:6px 0 4px}
 .sum-hero .lab{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted,#7a7a88);margin-bottom:4px}
@@ -360,11 +371,12 @@
   function setQ(scope, sel, txt) { var e = scope.querySelector(sel); if (e) e.textContent = txt; }
   function setId(id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; }
 
-  function fillUpgradeBox(n, statName, map, lockedArr) {
+  function fillUpgradeBox(n, statName, map, lockedArr, cycleLocked) {
     var box = document.getElementById('dev-up' + n);
     if (!box || !statName) return;
     var isLocked = lockedArr.indexOf(statName) !== -1;
-    box.className = 'block dev-block ' + (isLocked ? 'locked' : 'in-prog');
+    var state = isLocked ? 'locked' : (cycleLocked ? 'failed' : 'in-prog');
+    box.className = 'block dev-block ' + state;
     var v = (map[statName] && map[statName].value != null) ? map[statName].value : null;
     var icon = box.querySelector('.dev-hero-icon img');
     if (icon) {
@@ -375,6 +387,19 @@
     setQ(box, '.dev-hero-vals .now', v != null ? r1(v) : '\u2014');
     setQ(box, '.dev-hero-vals .next', v != null ? r1(v + 1) : '\u2014');
     setQ(box, '.dev-delta', statName + ' +1');
+
+    // Inject the FAILED label once (X icon + dramatic text), CSS hides it unless .failed.
+    var ds = box.querySelector('.dev-state');
+    if (ds && !ds.querySelector('.fail-txt')) {
+      ds.insertAdjacentHTML('beforeend',
+        '<svg class="ico fail" width="16" height="16" viewBox="0 0 24 24" fill="none" ' +
+        'stroke="currentColor" stroke-width="2.6"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+        '<span class="fail-txt"></span>');
+    }
+    if (ds) {
+      var ft = ds.querySelector('.fail-txt');
+      if (ft) ft.textContent = (n === '2' ? 'DEPLOYMENT FAILED' : 'UPGRADE FAILED');
+    }
   }
 
   function renderDevCycle(ticker, map, targets, revealed) {
@@ -402,8 +427,9 @@
     }
     if (base == null && dev.base_overall != null) base = dev.base_overall;
 
-    fillUpgradeBox('1', targets[0], map, lockedArr);   // lowest  → 15 likes
-    fillUpgradeBox('2', targets[1], map, lockedArr);   // 2nd     → 10 RTs
+    var cycleLocked = !!(S && S.cycleLocked);
+    fillUpgradeBox('1', targets[0], map, lockedArr, cycleLocked);   // lowest  → 15 likes
+    fillUpgradeBox('2', targets[1], map, lockedArr, cycleLocked);   // 2nd     → 10 RTs
 
     var count = targets.filter(function (t) { return lockedArr.indexOf(t) !== -1; }).length;
     var gained = count * 0.2;
@@ -411,7 +437,7 @@
     setId('dev-sum-base', base != null ? r1(base) : '\u2014');
     setId('dev-sum-cur', base != null ? r1(base + gained) : '\u2014');
     setId('dev-sum-locked', count + ' / 2');
-    setId('dev-sum-status', count === 2 ? 'COMPLETE' : 'ACTIVE');
+    setId('dev-sum-status', count === 2 ? 'COMPLETE' : (cycleLocked ? 'CLOSED' : 'ACTIVE'));
     var bar = document.getElementById('dev-sum-bar');
     if (bar) bar.style.width = (58 + count * 21) + '%';
   }
