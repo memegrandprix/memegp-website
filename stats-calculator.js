@@ -381,7 +381,7 @@
   // Earned upgrades — locked stats per team (+1 each, permanent for the season).
   const EARNED_UPGRADES = {
     BILLY: ['AERO'],
-    PUP:   ['ENGINE', 'DRAG']
+    PUP:   ['ENGINE']
   };
 
   // CYCLE_LOCKED: false during the upgrade window (unearned targets show
