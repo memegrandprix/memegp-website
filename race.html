@@ -153,7 +153,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   <div class="stat-item"><span class="stat-label" style="color:#3b82f6">S1</span><span class="stat-value" id="statS1" style="color:#3b82f6;font-size:9px">—</span></div>
   <div class="stat-item"><span class="stat-label" style="color:#ef4444">S2</span><span class="stat-value" id="statS2" style="color:#ef4444;font-size:9px">—</span></div>
   <div class="stat-item"><span class="stat-label" style="color:#10b981">S3</span><span class="stat-value" id="statS3" style="color:#10b981;font-size:9px">—</span></div>
-  <div class="stat-item"><span class="stat-label">PIT STOPS</span><span class="stat-value" id="statPits" style="color:#ff9900">0/10</span></div>
+  <div class="stat-item"><span class="stat-label">PIT STOPS</span><span class="stat-value" id="statPits" style="color:#ff9900">0/15</span></div>
   <div class="stat-item"><span class="stat-label">LAST EVENT</span><span class="stat-value" id="statOvertake" style="color:#ffcc00">—</span></div>
 </div>
 
@@ -353,6 +353,8 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   </div>
 </div>
 
+<!-- Single source of truth: frozen base + earned upgrades. Race reads stats from here. -->
+<script src="stats-calculator.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 // MEME GP — RACE DAY v2.1 (FIX: progressive fastest tracking)
@@ -366,20 +368,58 @@ const COUNTDOWN_SECONDS = 10;
 const TOTAL_LAPS = 20;
 const LAP_REAL_SECONDS = 90;
 const PIT_TIME_LOSS_BASE = 5;
-const SEED = 20260426004;
+const SEED = 20260621001; // Round 1 — Satoshi Speedway
 
-const TEAMS = [
-  { id:"TURBO", emoji:"🤖", logo:"turbo.png", color:"#00D4AA", engine:3, aero:7, chassis:3, drag:5, pit:6, overall:4.8, gridPos:1 },
-  { id:"DOGE",  emoji:"🐕", logo:"doge.png", color:"#C2A633", engine:10, aero:5, chassis:8, drag:7, pit:5, overall:7.0, gridPos:2 },
-  { id:"FLOKI", emoji:"⚔️", logo:"floki.png", color:"#D4A847", engine:5, aero:6, chassis:6, drag:9, pit:8, overall:6.8, gridPos:3 },
-  { id:"BONK",  emoji:"🦴", logo:"bonk.png", color:"#F5A623", engine:6, aero:6, chassis:4, drag:8, pit:7, overall:6.2, gridPos:4 },
-  { id:"PEPE",  emoji:"🐸", logo:"pepe.png", color:"#3D9B3D", engine:5, aero:9, chassis:6, drag:3, pit:7, overall:8.2, gridPos:5 },
-  { id:"SHIB",  emoji:"🐕‍🦺", logo:"shiba.png", color:"#F7931A", engine:9, aero:3, chassis:7, drag:6, pit:4, overall:5.8, gridPos:6 },
-  { id:"WIF",   emoji:"🎩", logo:"wif.png", color:"#E91E8C", engine:4, aero:8, chassis:4, drag:4, pit:3, overall:4.6, gridPos:7 },
-  { id:"PENGU", emoji:"🐧", logo:"pengu.png", color:"#5B9BD5", engine:1, aero:10, chassis:2, drag:4, pit:6, overall:4.6, gridPos:8 },
-  { id:"MOG",   emoji:"😎", logo:"mog.png", color:"#8B5CF6", engine:2, aero:7, chassis:3, drag:3, pit:5, overall:4.0, gridPos:9 },
-  { id:"BRETT", emoji:"🔵", logo:"brett.png", color:"#0052FF", engine:3, aero:8, chassis:5, drag:2, pit:2, overall:4.0, gridPos:10 },
-];
+// ── TEAM META — display only (colours / logos / names / emoji).
+// Stats are NOT here: they come from stats-calculator.js (single source of truth).
+const TEAM_META = {
+  PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
+  BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
+  VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
+  MOMO:        { color:"#F989B9", logo:"momo.png",       name:"MOMO MOTORS",     emoji:"🌸" },
+  PEPONK:      { color:"#FB8802", logo:"peponk.png",     name:"PEPONK RACING",   emoji:"🐸" },
+  LOL:         { color:"#22DD66", logo:"lol.png",        name:"LOL RACING",      emoji:"😂" },
+  DOBERMANN:   { color:"#8a8a99", logo:"dobermann.png",  name:"STEALTH DOBIE",   emoji:"🐕‍🦺" },
+  SHIH:        { color:"#FFD200", logo:"shih.png",       name:"SHIH SPEED",      emoji:"🐕" },
+  SUS:         { color:"#C8102E", logo:"susdog.png",     name:"SUS SPEED",       emoji:"🛸" },
+  '420BLAZEIT':{ color:"#7B2D8E", logo:"420blazeit.png", name:"420BLAZEIT",      emoji:"🌿" },
+  MARS:        { color:"#3a5bd0", logo:"mars.png",       name:"MARS RACING",     emoji:"🪐" },
+  MONKO:       { color:"#ffcc00", logo:"monko.png",      name:"MONKO MOTORS",    emoji:"🐒" },
+  NEURO:       { color:"#F58A1F", logo:"neuroticat.png", name:"NEURO RACING",    emoji:"🧠" },
+};
+
+// ── QUALIFYING grid override.
+// Empty  → grid set by championship standings (overall desc, derived live from
+//          stats-calculator.js).  Once Saturday quali has run, drop the P1→P15
+//          tickers in here and the starting grid uses them instead.
+const QUALIFYING_ORDER = []; // e.g. ['TURBO','PUP','MASK', ...]
+
+function buildTeams() {
+  const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
+  if (!S || typeof S.calcStats !== 'function') {
+    throw new Error('stats-calculator.js not loaded — race grid unavailable.');
+  }
+  let teams = Object.keys(TEAM_META).map(tk => {
+    const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
+    const m = TEAM_META[tk];
+    return {
+      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
+      pit: s.pit, overall: s.overall,
+    };
+  });
+  if (QUALIFYING_ORDER.length === teams.length) {
+    teams.sort((a, b) => QUALIFYING_ORDER.indexOf(a.id) - QUALIFYING_ORDER.indexOf(b.id));
+  } else {
+    teams.sort((a, b) => (b.overall - a.overall) || a.id.localeCompare(b.id));
+  }
+  teams.forEach((t, i) => { t.gridPos = i + 1; });
+  return teams;
+}
+
+const TEAMS = buildTeams();
 
 function createRng(seed) { let s=seed; return()=>{s=(s*16807)%2147483647;return s/2147483647;}; }
 function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
