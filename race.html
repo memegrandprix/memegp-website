@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEME GP — RACE DAY LIVE | Degen Speedway</title>
-<meta name="description" content="Race Day — 20 Laps at Degen Speedway. 10 teams. 1 winner.">
+<title>MEME GP — RACE DAY LIVE | Satoshi Speedway</title>
+<meta name="description" content="Race Day — 20 Laps at Satoshi Speedway. 15 teams. 1 winner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -110,7 +110,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 
 <div class="team-picker-overlay" id="teamPicker">
   <div style="font-size:36px;margin-bottom:8px">🏁</div>
-  <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">RACE DAY — DEGEN SPEEDWAY</h1>
+  <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">RACE DAY — SATOSHI SPEEDWAY</h1>
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:8px;letter-spacing:1px">WHO ARE YOU SUPPORTING?</div>
   <div class="team-picker-grid" id="teamPickerGrid"></div>
   <div style="font-family:'Chakra Petch';font-size:10px;color:#444;margin-top:20px">20 laps · Mandatory pit stop · Pick your team</div>
@@ -150,28 +150,28 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 <div class="stats-bar" id="statsBar">
   <div class="stat-item"><span class="stat-label">FASTEST LAP</span><span class="stat-value" id="statFL" style="color:#ff0040">—</span></div>
   <div class="stat-item"><span class="stat-label">LEADER</span><span class="stat-value" id="statLeader" style="color:#00ff88">—</span></div>
-  <div class="stat-item"><span class="stat-label" style="color:#ff3333">S1</span><span class="stat-value" id="statS1" style="color:#ff3333;font-size:9px">—</span></div>
-  <div class="stat-item"><span class="stat-label" style="color:#00bbff">S2</span><span class="stat-value" id="statS2" style="color:#00bbff;font-size:9px">—</span></div>
-  <div class="stat-item"><span class="stat-label" style="color:#ffcc00">S3</span><span class="stat-value" id="statS3" style="color:#ffcc00;font-size:9px">—</span></div>
-  <div class="stat-item"><span class="stat-label">PIT STOPS</span><span class="stat-value" id="statPits" style="color:#ff9900">0/10</span></div>
+  <div class="stat-item"><span class="stat-label" style="color:#3b82f6">S1</span><span class="stat-value" id="statS1" style="color:#3b82f6;font-size:9px">—</span></div>
+  <div class="stat-item"><span class="stat-label" style="color:#ef4444">S2</span><span class="stat-value" id="statS2" style="color:#ef4444;font-size:9px">—</span></div>
+  <div class="stat-item"><span class="stat-label" style="color:#10b981">S3</span><span class="stat-value" id="statS3" style="color:#10b981;font-size:9px">—</span></div>
+  <div class="stat-item"><span class="stat-label">PIT STOPS</span><span class="stat-value" id="statPits" style="color:#ff9900">0/15</span></div>
   <div class="stat-item"><span class="stat-label">LAST EVENT</span><span class="stat-value" id="statOvertake" style="color:#ffcc00">—</span></div>
 </div>
 
 <div class="ticker" id="ticker">
   <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ RACE NOT STARTED</div>
-  <div style="font-size:10px;color:#333">DEGEN SPEEDWAY — SEASON 1</div>
+  <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY · ROUND 1</div>
 </div>
 
 <div class="waiting" id="waitingScreen" style="display:none">
   <img src="webcar.png" alt="Meme GP Car" style="width:200px;margin-bottom:16px">
-  <h1>RACE DAY — DEGEN SPEEDWAY</h1>
+  <h1>RACE DAY — SATOSHI SPEEDWAY</h1>
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">LIGHTS OUT IN</div>
   <div class="countdown-big" id="waitCountdown">--:--:--</div>
   <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">20 laps · Mandatory pit stop · 1 winner</div>
 </div>
 
 <div id="podiumOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,5,8,.95);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;padding:30px">
-  <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:#888;margin-bottom:8px">DEGEN SPEEDWAY GRAND PRIX</div>
+  <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:#888;margin-bottom:8px">SATOSHI SPEEDWAY GRAND PRIX</div>
   <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ffcc00,#f0d060,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:30px">RACE COMPLETE</div>
   <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:30px">
     <div style="text-align:center">
@@ -203,7 +203,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
     <div id="podiumFullResults"></div>
   </div>
   <div id="podiumFastestLap" style="margin-top:16px;font-family:'Space Mono',monospace;font-size:10px;color:#ff0040;text-align:center"></div>
-  <div style="font-family:'Chakra Petch';font-size:11px;color:#333;margin-top:20px;letter-spacing:1px">SEASON 1 — DEGEN SPEEDWAY</div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#333;margin-top:20px;letter-spacing:1px">ROUND 1 — SATOSHI SPEEDWAY</div>
 </div>
 
 <div class="main" id="mainLayout" style="display:none">
@@ -227,27 +227,106 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 
   <div class="center">
     <div class="grid-bg"></div>
-    <svg id="trackSvg" viewBox="0 0 1050 700" style="width:100%;max-width:800px;position:relative;z-index:2">
-      <path id="trackPath" d="M 870,560 L 870,340 C 870,290 865,260 840,230 L 800,190 C 785,178 780,168 785,155 C 790,142 800,138 820,140 L 860,148 C 880,152 890,148 890,135 C 890,120 878,112 860,112 L 680,120 C 640,122 610,130 580,150 C 550,170 530,178 500,170 C 470,162 455,150 440,150 L 380,155 C 350,158 330,168 320,185 L 300,230 C 290,250 275,258 260,250 L 240,238 C 220,228 205,230 200,245 L 190,280 C 182,305 175,310 175,310 C 175,310 170,320 180,340 L 210,380 C 225,400 225,415 210,430 C 195,448 190,460 200,475 L 230,510 C 245,528 265,535 290,535 L 380,540 C 410,540 425,545 435,555 C 445,565 455,568 475,565 L 560,548 C 590,542 615,545 640,558 C 665,572 690,580 720,580 L 780,575 C 810,572 835,568 855,565 C 868,562 870,560 870,560 Z" fill="none" stroke="none"/>
-      <path id="pitPath" d="M 280,535 C 350,620 480,648 620,645 C 760,640 840,610 845,568" fill="none" stroke="#ff9900" stroke-width="2" stroke-dasharray="6,4" opacity="0.3" stroke-linecap="round"/>
-      <text x="590" y="660" font-family="'Space Mono',monospace" font-size="8" fill="#ff9900" opacity="0.35" letter-spacing="2">PIT LANE</text>
-      <use href="#trackPath" stroke="rgba(255,255,255,0.02)" stroke-width="58" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-      <use href="#trackPath" stroke="rgba(255,255,255,0.04)" stroke-width="40" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-      <path d="M 870,560 L 870,340 C 870,290 865,260 840,230 L 800,190 C 785,178 780,168 785,155 C 790,142 800,138 820,140 L 860,148 C 880,152 890,148 890,135 C 890,120 878,112 860,112 L 680,120 C 640,122 610,130 580,150 C 550,170 530,178 500,170" stroke="#ff3333" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-      <path d="M 500,170 C 470,162 455,150 440,150 L 380,155 C 350,158 330,168 320,185 L 300,230 C 290,250 275,258 260,250 L 240,238 C 220,228 205,230 200,245 L 190,280 C 182,305 175,310 175,310 C 175,310 170,320 180,340 L 210,380 C 225,400 225,415 210,430 C 195,448 190,460 200,475 L 230,510" stroke="#00bbff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-      <path d="M 230,510 C 245,528 265,535 290,535 L 380,540 C 410,540 425,545 435,555 C 445,565 455,568 475,565 L 560,548 C 590,542 615,545 640,558 C 665,572 690,580 720,580 L 780,575 C 810,572 835,568 855,565 C 868,562 870,560 870,560" stroke="#ffcc00" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-      <g id="corners"></g>
-      <line x1="863" y1="555" x2="877" y2="555" stroke="#fff" stroke-width="2" opacity="0.5"/>
-      <text x="893" y="558" font-family="'Space Mono',monospace" font-size="7" fill="#fff" opacity="0.4" letter-spacing="1">S/F</text>
-      <text x="135" y="298" font-family="'Space Mono',monospace" font-size="6" fill="#00bbff" opacity="0.3" letter-spacing="1" text-anchor="end">HAIRPIN</text>
-      <g id="carDots"></g>
+    <svg id="trackSvg" viewBox="-30 95 600 340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;max-width:780px;position:relative;z-index:2">
+      <defs>
+        <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
+          <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+        </pattern>
+      </defs>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- GEOMETRY PATHS (UNTILTED, HIDDEN)                  -->
+      <!-- getPointAtLength reads these in raw coords; the    -->
+      <!-- car dots live inside the tilt group below so they  -->
+      <!-- get tilted to match the visible track.             -->
+      <!-- ════════════════════════════════════════════════ -->
+      <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="none"/>
+
+      <!-- Background grid -->
+      <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- TILTED TRACK GROUP — visuals + car dots            -->
+      <!-- ════════════════════════════════════════════════ -->
+      <g transform="matrix(1, 0, -0.04, 0.88, 10, 25)">
+
+        <!-- Mid glow -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Asphalt base -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              fill="none" stroke="#1a1a22" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Subtle white edge -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" opacity="0.12"/>
+
+        <!-- PIT LANE underlays -->
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#1a1a24" stroke-width="20" stroke-linecap="butt" stroke-linejoin="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#f5f5f5" stroke-width="15" stroke-linecap="butt" stroke-linejoin="round" opacity="0.97"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="1" stroke-dasharray="5 6" stroke-linecap="butt"/>
+
+        <!-- 3 SECTOR COLOURED OVERLAYS (pathLength=3000, dasharray 1000/2000) -->
+        <!-- SECTOR 1 · BLUE -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#2563eb" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
+        <!-- SECTOR 2 · RED -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#dc2626" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#ef4444" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
+        <!-- SECTOR 3 · GREEN -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#10b981" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              pathLength="3000" fill="none" stroke="#34d399" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
+
+        <!-- Center dashed white racing line -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
+              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="5 8" stroke-linecap="round"/>
+
+        <!-- Garage bays -->
+        <g stroke="#0a0a14" stroke-width="1.3" opacity="0.55">
+          <line x1="195" y1="138" x2="195" y2="148"/><line x1="215" y1="138" x2="215" y2="148"/>
+          <line x1="235" y1="138" x2="235" y2="148"/><line x1="255" y1="138" x2="255" y2="148"/>
+          <line x1="275" y1="138" x2="275" y2="148"/><line x1="295" y1="138" x2="295" y2="148"/>
+          <line x1="315" y1="138" x2="315" y2="148"/><line x1="335" y1="138" x2="335" y2="148"/>
+        </g>
+        <text x="158" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">ENTRY</text>
+        <g transform="translate(170, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
+        <text x="362" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">EXIT</text>
+        <g transform="translate(355, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
+        <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+
+        <!-- START / FINISH -->
+        <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
+        <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
+        <rect x="250" y="112" width="3" height="14" fill="#ffcc00"/>
+        <g transform="translate(280, 118)"><path d="M -4 -3 L 4 0 L -4 3 Z" fill="#ffcc00"/></g>
+
+        <!-- 17 TURN MARKERS -->
+        <g class="turn-markers" font-family="Orbitron,sans-serif" font-size="6.2" font-weight="800" letter-spacing="0.5" fill="rgba(255,204,0,0.55)" text-anchor="middle">
+          <text x="395" y="103">T1</text><text x="430" y="143">T2</text><text x="500" y="159">T3</text>
+          <text x="535" y="200">T4</text><text x="528" y="240">T5</text><text x="478" y="258">T6</text>
+          <text x="410" y="241">T7</text><text x="345" y="201">T8</text><text x="180" y="208">T9</text>
+          <text x="143" y="265">T10</text><text x="208" y="297">T11</text><text x="273" y="278">T12</text>
+          <text x="252" y="312">T13</text><text x="142" y="362">T14</text><text x="68" y="372">T15</text>
+          <text x="32" y="285">T16</text><text x="68" y="142">T17</text>
+        </g>
+
+        <g id="corners"></g>
+        <g id="carDots"></g>
+      </g>
     </svg>
   </div>
 
   <div class="right">
     <div class="right-header">
       <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px" id="rightTitle">RACE — TIMING</div>
-      <div id="raceInfo" style="font-size:9px;color:#444;letter-spacing:1px">DEGEN SPEEDWAY GRAND PRIX</div>
+      <div id="raceInfo" style="font-size:9px;color:#444;letter-spacing:1px">SATOSHI SPEEDWAY GRAND PRIX</div>
     </div>
     <div style="display:flex;border-bottom:1px solid #1a1a1a">
       <div style="flex:1;padding:6px 10px;border-right:1px solid #1a1a1a">
@@ -269,41 +348,78 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
     <div id="leaderboard" style="flex:1;overflow-y:auto"></div>
     <div style="padding:8px 16px;border-top:1px solid #1a1a1a;background:#06060a;display:flex;justify-content:space-between;align-items:center">
       <div style="font-size:8px;color:#333;letter-spacing:1px">20 LAPS · 1 PIT STOP</div>
-      <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 1</div>
+      <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 2</div>
     </div>
   </div>
 </div>
 
+<!-- Single source of truth: frozen base + earned upgrades. Race reads stats from here. -->
+<script src="stats-calculator.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 // MEME GP — RACE DAY v2.1 (FIX: progressive fastest tracking)
 // ═══════════════════════════════════════════════════
 
-const SESSION_START_UTC = new Date('2026-04-26T18:00:00Z').getTime();
+const RACE1_START_UTC = new Date('2026-06-21T18:00:00Z').getTime(); // Round 1 — Satoshi Speedway (Sun 21 Jun, 18:00 UTC)
+// ── PREVIEW MODE ── starts a few seconds from load so you can watch lights-out + the full race now.
+// For production: replace the line below with  const SESSION_START_UTC = RACE1_START_UTC;
+const SESSION_START_UTC = Date.now() + 4000;
 const COUNTDOWN_SECONDS = 10;
 const TOTAL_LAPS = 20;
 const LAP_REAL_SECONDS = 90;
 const PIT_TIME_LOSS_BASE = 5;
-const SEED = 20260426004;
+const SEED = 20260621001; // Round 1 — Satoshi Speedway
 
-const TEAMS = [
-  { id:"TURBO", emoji:"🤖", logo:"turbo.png", color:"#00D4AA", engine:3, aero:7, chassis:3, drag:5, pit:6, overall:4.8, gridPos:1 },
-  { id:"DOGE",  emoji:"🐕", logo:"doge.png", color:"#C2A633", engine:10, aero:5, chassis:8, drag:7, pit:5, overall:7.0, gridPos:2 },
-  { id:"FLOKI", emoji:"⚔️", logo:"floki.png", color:"#D4A847", engine:5, aero:6, chassis:6, drag:9, pit:8, overall:6.8, gridPos:3 },
-  { id:"BONK",  emoji:"🦴", logo:"bonk.png", color:"#F5A623", engine:6, aero:6, chassis:4, drag:8, pit:7, overall:6.2, gridPos:4 },
-  { id:"PEPE",  emoji:"🐸", logo:"pepe.png", color:"#3D9B3D", engine:5, aero:9, chassis:6, drag:3, pit:7, overall:8.2, gridPos:5 },
-  { id:"SHIB",  emoji:"🐕‍🦺", logo:"shiba.png", color:"#F7931A", engine:9, aero:3, chassis:7, drag:6, pit:4, overall:5.8, gridPos:6 },
-  { id:"WIF",   emoji:"🎩", logo:"wif.png", color:"#E91E8C", engine:4, aero:8, chassis:4, drag:4, pit:3, overall:4.6, gridPos:7 },
-  { id:"PENGU", emoji:"🐧", logo:"pengu.png", color:"#5B9BD5", engine:1, aero:10, chassis:2, drag:4, pit:6, overall:4.6, gridPos:8 },
-  { id:"MOG",   emoji:"😎", logo:"mog.png", color:"#8B5CF6", engine:2, aero:7, chassis:3, drag:3, pit:5, overall:4.0, gridPos:9 },
-  { id:"BRETT", emoji:"🔵", logo:"brett.png", color:"#0052FF", engine:3, aero:8, chassis:5, drag:2, pit:2, overall:4.0, gridPos:10 },
-];
+// ── TEAM META — display only (colours / logos / names / emoji).
+// Stats are NOT here: they come from stats-calculator.js (single source of truth).
+const TEAM_META = {
+  PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
+  BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
+  VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
+  MOMO:        { color:"#F989B9", logo:"momo.png",       name:"MOMO MOTORS",     emoji:"🌸" },
+  PEPONK:      { color:"#FB8802", logo:"peponk.png",     name:"PEPONK RACING",   emoji:"🐸" },
+  LOL:         { color:"#22DD66", logo:"lol.png",        name:"LOL RACING",      emoji:"😂" },
+  DOBERMANN:   { color:"#8a8a99", logo:"dobermann.png",  name:"STEALTH DOBIE",   emoji:"🐕‍🦺" },
+  SHIH:        { color:"#FFD200", logo:"shih.png",       name:"SHIH SPEED",      emoji:"🐕" },
+  SUS:         { color:"#C8102E", logo:"susdog.png",     name:"SUS SPEED",       emoji:"🛸" },
+  '420BLAZEIT':{ color:"#7B2D8E", logo:"420blazeit.png", name:"420BLAZEIT",      emoji:"🌿" },
+  MARS:        { color:"#3a5bd0", logo:"mars.png",       name:"MARS RACING",     emoji:"🪐" },
+  MONKO:       { color:"#ffcc00", logo:"monko.png",      name:"MONKO MOTORS",    emoji:"🐒" },
+  NEURO:       { color:"#F58A1F", logo:"neuroticat.png", name:"NEURO RACING",    emoji:"🧠" },
+};
 
-const CORNERS = [
-  [850,245,"1","#ff3333"],[870,260,"2","#ff3333"],[885,135,"3","#ff3333"],[680,118,"4","#ff3333"],[540,165,"5","#ff3333"],
-  [430,148,"6","#00bbff"],[330,178,"7","#00bbff"],[188,295,"8","#00bbff"],[218,420,"9","#00bbff"],
-  [250,525,"10","#ffcc00"],[400,540,"11","#ffcc00"],[448,562,"12","#ffcc00"],[558,545,"13","#ffcc00"],[730,578,"14","#ffcc00"],
-];
+// ── QUALIFYING grid override.
+// Empty  → grid set by championship standings (overall desc, derived live from
+//          stats-calculator.js).  Once Saturday quali has run, drop the P1→P15
+//          tickers in here and the starting grid uses them instead.
+const QUALIFYING_ORDER = []; // e.g. ['TURBO','PUP','MASK', ...]
+
+function buildTeams() {
+  const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
+  if (!S || typeof S.calcStats !== 'function') {
+    throw new Error('stats-calculator.js not loaded — race grid unavailable.');
+  }
+  let teams = Object.keys(TEAM_META).map(tk => {
+    const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
+    const m = TEAM_META[tk];
+    return {
+      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
+      pit: s.pit, overall: s.overall,
+    };
+  });
+  if (QUALIFYING_ORDER.length === teams.length) {
+    teams.sort((a, b) => QUALIFYING_ORDER.indexOf(a.id) - QUALIFYING_ORDER.indexOf(b.id));
+  } else {
+    teams.sort((a, b) => (b.overall - a.overall) || a.id.localeCompare(b.id));
+  }
+  teams.forEach((t, i) => { t.gridPos = i + 1; });
+  return teams;
+}
+
+const TEAMS = buildTeams();
 
 function createRng(seed) { let s=seed; return()=>{s=(s*16807)%2147483647;return s/2147483647;}; }
 function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
@@ -509,11 +625,7 @@ function renderFanZone() {
   }
 }
 
-const cornersG = document.getElementById('corners');
-CORNERS.forEach(([cx,cy,label,col]) => {
-  cornersG.innerHTML += `<circle cx="${cx}" cy="${cy}" r="8" fill="none" stroke="${col}" stroke-width="1" opacity="0.3"/>
-    <text x="${cx}" y="${Number(cy)+3}" text-anchor="middle" font-family="'Space Mono',monospace" font-size="6" font-weight="700" fill="${col}" opacity="0.5">${label}</text>`;
-});
+// Turn markers (T1–T17) are baked into the Satoshi SVG; no JS corner injection.
 
 const pathEl = document.getElementById('trackPath');
 const pitPathEl = document.getElementById('pitPath');
@@ -682,13 +794,13 @@ function update() {
     document.getElementById('statS3').textContent = `${prog.fastestS3.time.toFixed(3)} $${prog.fastestS3.driver}`;
   }
   const pitsDone = RACE.events.filter(e => e.type === 'pit' && e.lap <= currentLap).length;
-  document.getElementById('statPits').textContent = `${pitsDone}/10`;
+  document.getElementById('statPits').textContent = `${pitsDone}/${TEAMS.length}`;
 
   const tickerEl = document.getElementById('tickerMsg');
   const tickerDiv = document.getElementById('ticker');
 
   if (isComplete) {
-    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} WINS THE DEGEN SPEEDWAY GRAND PRIX`;
+    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} WINS THE SATOSHI SPEEDWAY GRAND PRIX`;
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
     const timeSinceAllFinished = elapsed - (TOTAL_LAPS * LAP_REAL_SECONDS + 75);
@@ -728,10 +840,10 @@ function update() {
         }
         if (sectorEvent) {
           const sTeam = TEAMS.find(t => t.id === sectorEvent.team);
-          const sLabel = sectorEvent.type === 'fastest_s1' ? '🔴 FASTEST S1' : sectorEvent.type === 'fastest_s2' ? '🔵 FASTEST S2' : '🟡 FASTEST S3';
+          const sLabel = sectorEvent.type === 'fastest_s1' ? '🔵 FASTEST S1' : sectorEvent.type === 'fastest_s2' ? '🔴 FASTEST S2' : '🟢 FASTEST S3';
           const freshMsg = sectorEvent.freshTyres ? ' — FRESH TYRES! 🔥' : '';
           tickerEl.textContent = `▸ ${sLabel} — ${sTeam.emoji} $${sectorEvent.team} — ${sectorEvent.time.toFixed(3)}${freshMsg}`;
-          tickerEl.style.color = sectorEvent.type === 'fastest_s1' ? '#ff3333' : sectorEvent.type === 'fastest_s2' ? '#00bbff' : '#ffcc00';
+          tickerEl.style.color = sectorEvent.type === 'fastest_s1' ? '#3b82f6' : sectorEvent.type === 'fastest_s2' ? '#ef4444' : '#10b981';
           tickerDiv.style.background = `${tickerEl.style.color}0a`;
           tickerSet = true;
         }
@@ -767,16 +879,14 @@ function renderGridFormation() {
   const dotsG = document.getElementById('carDots');
   let html = '';
   TEAMS.forEach(t => {
-    const gridOffset = (t.gridPos - 1) * 0.012;
+    const gridOffset = (t.gridPos - 1) * 0.013;
     const frac = (1 - gridOffset + 1) % 1;
     const pt = getPoint(frac);
     const logoId = 'logo-clip-' + t.id;
-    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="16"/></clipPath></defs>
-      <circle cx="${pt.x}" cy="${pt.y}" r="20" fill="${t.color}" opacity="0.15"/>
-      <circle cx="${pt.x}" cy="${pt.y}" r="17" fill="#111" stroke="${t.color}" stroke-width="2"/>
-      <image href="${t.logo}" x="${pt.x-16}" y="${pt.y-16}" width="32" height="32" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>
-      <rect x="${pt.x+20}" y="${pt.y-8}" width="42" height="14" rx="3" fill="rgba(0,0,0,0.88)" stroke="${t.color}" stroke-width="1"/>
-      <text x="${pt.x+25}" y="${pt.y+3}" font-family="'Space Mono',monospace" font-size="8" font-weight="700" fill="${t.color}">${t.id}</text>`;
+    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
+      <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${t.color}" opacity="0.15"/>
+      <circle cx="${pt.x}" cy="${pt.y}" r="10" fill="#111" stroke="${t.color}" stroke-width="2"/>
+      <image href="${t.logo}" x="${pt.x-9}" y="${pt.y-9}" width="18" height="18" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>`;
   });
   dotsG.innerHTML = html;
 
@@ -828,15 +938,17 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
 
     const logoId = 'logo-clip-' + id;
     const showPitBadge = isPitting && carLapProgress > 0.70;
-    const pitBadge = showPitBadge ? `<circle cx="${pt.x+20}" cy="${pt.y-14}" r="6" fill="#ff9900"/><text x="${pt.x+20}" y="${pt.y-11}" text-anchor="middle" font-family="'Space Mono',monospace" font-size="5" font-weight="700" fill="#fff">PIT</text>` : '';
+    const ringColor = showPitBadge ? '#ff9900' : team.color;
+    const isLeaderDot = pos === 0;
+    const leaderHalo = isLeaderDot ? `<circle cx="${pt.x}" cy="${pt.y}" r="13.5" fill="${team.color}" opacity="0.22"/>` : '';
+    const pitBadge = showPitBadge ? `<circle cx="${pt.x+8.5}" cy="${pt.y-8.5}" r="4" fill="#ff9900"/><text x="${pt.x+8.5}" y="${pt.y-7}" text-anchor="middle" font-family="'Space Mono',monospace" font-size="3.6" font-weight="700" fill="#fff">P</text>` : '';
 
-    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="16"/></clipPath></defs>
-      <circle cx="${pt.x}" cy="${pt.y}" r="20" fill="${team.color}" opacity="0.15"/>
-      <circle cx="${pt.x}" cy="${pt.y}" r="17" fill="#111" stroke="${showPitBadge ? '#ff9900' : team.color}" stroke-width="2"/>
-      <image href="${team.logo}" x="${pt.x-16}" y="${pt.y-16}" width="32" height="32" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>
-      ${pitBadge}
-      <rect x="${pt.x+20}" y="${pt.y-8}" width="42" height="14" rx="3" fill="rgba(0,0,0,0.88)" stroke="${showPitBadge ? '#ff9900' : team.color}" stroke-width="1"/>
-      <text x="${pt.x+25}" y="${pt.y+3}" font-family="'Space Mono',monospace" font-size="8" font-weight="700" fill="${showPitBadge ? '#ff9900' : team.color}">${id}</text>`;
+    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
+      ${leaderHalo}
+      <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${team.color}" opacity="0.15"/>
+      <circle cx="${pt.x}" cy="${pt.y}" r="10" fill="#111" stroke="${ringColor}" stroke-width="2"/>
+      <image href="${team.logo}" x="${pt.x-9}" y="${pt.y-9}" width="18" height="18" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>
+      ${pitBadge}`;
   });
   dotsG.innerHTML = html;
 }
