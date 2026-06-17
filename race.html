@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- ============================================================ -->
+<!--  MEMEGP race.html · BUILD: S2-GRID-LIVE-r3 (sector fix + nav: FP2 dropped)   -->
+<!--  Satoshi Speedway + 15-team live grid (reads stats-calculator) -->
+<!--  Correct file: pole sitter is PUP. Old test files have no stamp.  -->
+<!-- ============================================================ -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -138,8 +143,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
     <span id="trackInfo" style="font-size:10px;color:#555;margin-left:8px"></span>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
-    <a href="fp1.html" class="session-tab" style="opacity:.6">FP1</a>
-    <a href="fp2.html" class="session-tab" style="opacity:.6">FP2</a>
+    <a href="fp1.html" class="session-tab" style="opacity:.6">PRACTICE</a>
     <a href="quali.html" class="session-tab" style="opacity:.6">QUALI</a>
     <a href="race.html" class="session-tab active">RACE</a>
     <span class="lap-counter" id="lapCounter">LAP 0/20</span>
@@ -679,6 +683,50 @@ function updateLights(elapsed) {
 
 let lastOvertakeMsg = '';
 
+// ═══════════════════════════════════════════════════
+// LIVE SECTOR REVEAL — best S1/S2/S3 + lap among sectors a car has
+// actually crossed by `elapsed`. Uses the same per-car gap model as the
+// car dots, so the timing tower stays exactly in step with the track:
+//   • completed laps contribute all 3 sectors + the lap time
+//   • the in-progress lap reveals S1 past ⅓, S2 past ⅔; S3 lands at the
+//     line (counted once that lap is complete)
+//   • lap times include pit loss, so a pit lap can't steal fastest-lap
+// ═══════════════════════════════════════════════════
+function computeLiveBests(elapsed, gapById) {
+  const THIRD = 1 / 3;
+  let bS1 = { time: Infinity }, bS2 = { time: Infinity },
+      bS3 = { time: Infinity }, bLap = { time: Infinity };
+
+  TEAMS.forEach(t => {
+    const g = gapById[t.id] || 0;
+    const carElapsed = Math.max(0, elapsed - g);
+    const carLapFloat = carElapsed / LAP_REAL_SECONDS;
+    const completed = Math.min(Math.floor(carLapFloat), TOTAL_LAPS); // fully-done laps
+    const curProg = carLapFloat - Math.floor(carLapFloat);
+
+    // fully completed laps → all sectors + lap time are official
+    for (let L = 1; L <= completed; L++) {
+      const st = RACE.laps[L - 1].sectorTimes[t.id];
+      const lt = RACE.laps[L - 1].lapTimes[t.id];
+      if (st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: L };
+      if (st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: L };
+      if (st.s3 < bS3.time) bS3 = { time: st.s3, driver: t.id, lap: L };
+      if (lt   < bLap.time) bLap = { time: lt,   driver: t.id, lap: L };
+    }
+
+    // in-progress lap → reveal S1/S2 as the car crosses each split
+    const curLap = completed + 1;
+    if (curLap <= TOTAL_LAPS) {
+      const st = RACE.laps[curLap - 1].sectorTimes[t.id];
+      if (curProg > THIRD     && st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: curLap };
+      if (curProg > THIRD * 2 && st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: curLap };
+      // S3 completes at the line → picked up next lap as a completed lap
+    }
+  });
+
+  return { fastestS1: bS1, fastestS2: bS2, fastestS3: bS3, fastestLap: bLap };
+}
+
 function update() {
   const now = Date.now();
   const rawElapsed = (now - SESSION_START_UTC) / 1000;
@@ -739,14 +787,6 @@ function update() {
   const currentLapData = RACE.laps[lapIdx];
   const prevLapData = lapIdx > 0 ? RACE.laps[lapIdx - 1] : null;
 
-  // ★ FIX: use progressive fastest tracking — completed laps so far
-  // On lap N (in progress), the most recently completed lap is N-1, OR
-  // we can show stats from the leader's last completed lap.
-  // Simplest: show progressive[currentLap-1] which reflects all data through current lap calc.
-  // But during early progress through a lap, prefer previous lap's progressive to feel "live but lagging by 1 lap"
-  const progIdx = Math.max(0, Math.min(TOTAL_LAPS - 1, currentLap - 1));
-  const prog = RACE.progressive[progIdx];
-
   const positions = currentLapData.positions;
   let interpolatedGaps = {};
 
@@ -761,6 +801,11 @@ function update() {
   } else {
     positions.forEach((id, i) => { interpolatedGaps[id] = currentLapData.gaps[i] || 0; });
   }
+
+  // ★ SECTOR REVEAL (broadcast-accurate): a sector record only appears once a
+  // car has actually crossed that split. S1 at ⅓ lap, S2 at ⅔, S3 at the line.
+  // Gated by each car's live track position — never shows future sectors.
+  const prog = computeLiveBests(elapsed, interpolatedGaps);
 
   const liveOrder = Object.keys(interpolatedGaps).sort((a, b) => interpolatedGaps[a] - interpolatedGaps[b]);
   const liveGaps = liveOrder.map(id => interpolatedGaps[id]);
