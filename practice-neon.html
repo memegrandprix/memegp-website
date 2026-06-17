@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<!-- MEMEGP practice.html (fp1.html) · BUILD: S2-NEON (glass/neon theme) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — PRACTICE LIVE | Satoshi Speedway</title>
+<meta name="description" content="Free Practice 1 — Live at Degen Speedway. 10 teams. 3 sectors. 14 corners.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overflow:hidden;height:100vh}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#08080c}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+
+.top-bar{background:linear-gradient(90deg,#0a0a10,#111118,#0a0a10);border-bottom:2px solid #ff0040;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,0,64,.15);border:1px solid #ff0040;border-radius:4px;padding:3px 10px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ff0040;animation:pulse 1s infinite}
+.brand{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555}
+.session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040;opacity:1}
+.countdown{font-family:'JetBrains Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+
+.ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
+.ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
+
+.main{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 82px)}
+
+/* Left panel */
+.left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+.car-row{display:flex;align-items:center;gap:8px;padding:6px 14px;border-bottom:1px solid #111;transition:all .3s}
+.car-row.active{background:rgba(0,255,136,.06)}
+.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0}
+.run-box{background:rgba(255,255,255,.05);border:1px solid #333;border-radius:4px;padding:2px 8px;text-align:center}
+
+/* Center */
+.center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
+
+/* Right panel */
+.right{background:#08080c;border-left:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.right-header{padding:12px 16px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+.best-sectors{display:flex;border-bottom:1px solid #1a1a1a}
+.best-sector{flex:1;padding:8px 10px}
+.col-headers{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:6px 12px;border-bottom:1px solid #1a1a1a;font-size:7px;color:#444;letter-spacing:1.5px;font-weight:700}
+.lb-row{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:7px 12px;border-bottom:1px solid #111;align-items:center;transition:all .3s}
+
+/* Waiting screen */
+.waiting{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;background:#050508}
+.waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.waiting .countdown-big{font-family:'JetBrains Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
+
+/* Session complete */
+.complete-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.9);border:1px solid #ff0040;border-radius:12px;padding:30px 50px}
+
+@media(max-width:1024px){
+  /* MOBILE: unlock body scroll, stack to one scrollable column, track + timing only */
+  body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
+  .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
+  .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
+  .center{min-height:45vh}                       /* keep the track prominent */
+  .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
+  .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
+  .brand{font-size:13px;letter-spacing:1.5px}
+  .session-tab{padding:3px 9px;font-size:9px;letter-spacing:1px}
+  .col-headers,.lb-row{grid-template-columns:24px 1fr 46px 46px 46px 58px}
+}
+@media(max-width:600px){
+  .center{min-height:40dvh}
+  .ticker{padding:6px 12px;font-size:9px}
+  .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
+}
+
+/* ===== NEON / GLASS THEME ===== */
+:root{--gold:#ffcc00;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
+body{background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),
+ radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%),
+ linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+ background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background-image:radial-gradient(1px 1px at 18% 28%,rgba(255,255,255,.45),transparent),
+ radial-gradient(1px 1px at 72% 18%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.3),transparent),
+ radial-gradient(1px 1px at 86% 62%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 10% 82%,rgba(255,255,255,.35),transparent)}
+.top-bar,.ticker,.main{position:relative;z-index:1}
+.center{background:transparent!important}
+.grid-bg{opacity:.35}
+.left,.right{background:linear-gradient(160deg,rgba(22,22,32,.72),rgba(10,10,18,.82))!important;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(255,204,0,.16)!important;box-shadow:0 0 26px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.05) inset}
+.left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
+.left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
+.run-box{position:relative;width:40px;height:40px;border-radius:50%!important;border:none!important;
+ display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0}
+.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;
+ border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
+.run-box>div:first-child{font-size:10px!important;font-family:'JetBrains Mono',monospace!important}
+.run-box>div:last-child{display:none}
+.car-row{border-bottom:1px solid rgba(255,255,255,.04)!important}
+.car-row.active{background:rgba(255,204,0,.05)!important}
+.lb-row{border-bottom:1px solid rgba(255,255,255,.05)!important}
+.lb-row.lb-lead{background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.02))!important;border:1px solid rgba(255,204,0,.3)!important}
+.lb-lead>span:first-child{color:var(--gold)!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.col-headers{border-bottom:1px solid rgba(255,204,0,.12)!important}
+.top-bar{background:linear-gradient(180deg,rgba(12,12,20,.92),rgba(4,4,8,.82))!important;border-bottom:1px solid rgba(255,204,0,.3)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ticker{background:rgba(8,8,14,.6)!important;border-bottom:1px solid rgba(255,204,0,.1)!important}
+.brand{background:linear-gradient(90deg,#ffcc00,#ffe066)!important;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none}
+.session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.session-tab{color:#888}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="live-badge" id="liveBadge" style="display:none">
+      <div class="live-dot"></div>
+      <span style="font-size:11px;font-weight:700;color:#ff0040;letter-spacing:2px">LIVE</span>
+    </div>
+    <span class="brand">MEME GRAND PRIX</span>
+    <span id="trackCount" style="font-size:10px;color:#555;margin-left:8px"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="fp1.html" class="session-tab active" style="text-decoration:none">PRACTICE</a>
+    <a href="quali.html" class="session-tab" style="text-decoration:none">QUALI</a>
+    <a href="race.html" class="session-tab" style="text-decoration:none">RACE</a>
+  </div>
+  <div class="countdown" id="sessionClock">60:00</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ SESSION NOT STARTED</div>
+  <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+</div>
+
+<!-- WAITING SCREEN (before session starts) -->
+<div class="waiting" id="waitingScreen">
+  <img src="webcar.png" alt="Meme GP Car" style="width:200px;margin-bottom:16px">
+  <h1>PRACTICE — SATOSHI SPEEDWAY</h1>
+  <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">SESSION STARTS IN</div>
+  <div class="countdown-big" id="waitCountdown">--:--:--</div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">10 teams · 3 sectors · 14 corners · 5 runs each</div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main" id="mainLayout" style="display:none">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <div class="left-header">
+      <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#888">CAR STATUS</div>
+    </div>
+    <div id="carStatusList" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:8px 14px;border-top:1px solid #1a1a1a">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:6px;height:6px;border-radius:50%;background:#3b82f6"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#3b82f6;letter-spacing:1px">S1</span><span style="font-size:7px;color:#444">ENGINE+CHASSIS</span></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:6px;height:6px;border-radius:50%;background:#ef4444"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#ef4444;letter-spacing:1px">S2</span><span style="font-size:7px;color:#444">DRAG+AERO</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#10b981"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#10b981;letter-spacing:1px">S3</span><span style="font-size:7px;color:#444">PIT+AERO</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER: Track -->
+  <div class="center">
+    <div class="grid-bg"></div>
+    <svg id="trackSvg" viewBox="-30 95 600 340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;max-width:780px;position:relative;z-index:2">
+      <defs>
+        <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
+          <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+        </pattern>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- GEOMETRY PATHS (UNTILTED, HIDDEN)                  -->
+      <!-- getPointAtLength reads these in raw coords; the    -->
+      <!-- car dots live inside the tilt group below so they  -->
+      <!-- get tilted to match the visible track.             -->
+      <!-- ════════════════════════════════════════════════ -->
+      <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="none"/>
+
+      <!-- Background grid -->
+      <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- TILTED TRACK GROUP — visuals + car dots            -->
+      <!-- ════════════════════════════════════════════════ -->
+      <g transform="matrix(1, 0, -0.04, 0.88, 10, 25)">
+
+        <!-- ===== NEON ROAD ===== -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="#0a0a12" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
+        <!-- ===== NEON PIT LANE ===== -->
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#e8e8f0" stroke-width="16" opacity="0.16" filter="url(#glow)" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0a0a12" stroke-width="13" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#dfe2ee" stroke-width="7.5" opacity="0.92" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(10,10,18,.55)" stroke-width="1" stroke-dasharray="4 6"/>
+        <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+        <!-- START / FINISH -->
+        <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
+        <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
+        <rect x="250" y="112" width="3" height="14" fill="#ffcc00"/>
+        <g transform="translate(280, 118)"><path d="M -4 -3 L 4 0 L -4 3 Z" fill="#ffcc00"/></g>
+
+        <!-- 17 TURN MARKERS -->
+        <g class="turn-markers" font-family="Orbitron,sans-serif" font-size="6.2" font-weight="800" letter-spacing="0.5" fill="rgba(255,204,0,0.55)" text-anchor="middle">
+          <text x="395" y="103">T1</text><text x="430" y="143">T2</text><text x="500" y="159">T3</text>
+          <text x="535" y="200">T4</text><text x="528" y="240">T5</text><text x="478" y="258">T6</text>
+          <text x="410" y="241">T7</text><text x="345" y="201">T8</text><text x="180" y="208">T9</text>
+          <text x="143" y="265">T10</text><text x="208" y="297">T11</text><text x="273" y="278">T12</text>
+          <text x="252" y="312">T13</text><text x="142" y="362">T14</text><text x="68" y="372">T15</text>
+          <text x="32" y="285">T16</text><text x="68" y="142">T17</text>
+        </g>
+
+        <g id="corners"></g>
+        <g id="carDots"></g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="right-header">
+      <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px">PRACTICE — TIMING</div>
+      <div id="classifiedCount" style="font-size:9px;color:#444;letter-spacing:1px">SATOSHI SPEEDWAY • 0/15 CLASSIFIED</div>
+    </div>
+    <div class="best-sectors">
+      <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(255,51,51,.03),transparent)">
+        <div style="font-size:8px;color:#3b82f6;font-weight:700;letter-spacing:2px;margin-bottom:2px">S1 BEST</div>
+        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
+        <div id="bestS1Team" style="font-size:8px;color:#555"></div>
+      </div>
+      <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(0,187,255,.03),transparent)">
+        <div style="font-size:8px;color:#ef4444;font-weight:700;letter-spacing:2px;margin-bottom:2px">S2 BEST</div>
+        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
+        <div id="bestS2Team" style="font-size:8px;color:#555"></div>
+      </div>
+      <div class="best-sector" style="background:linear-gradient(180deg,rgba(255,204,0,.03),transparent)">
+        <div style="font-size:8px;color:#10b981;font-weight:700;letter-spacing:2px;margin-bottom:2px">S3 BEST</div>
+        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
+        <div id="bestS3Team" style="font-size:8px;color:#555"></div>
+      </div>
+    </div>
+    <div class="col-headers">
+      <span>POS</span><span>DRIVER</span><span style="text-align:right">S1</span><span style="text-align:right">S2</span><span style="text-align:right">S3</span><span style="text-align:right">BEST LAP</span>
+    </div>
+    <div id="leaderboard" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:10px 16px;border-top:1px solid #1a1a1a;background:#06060a;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:8px;color:#333;letter-spacing:1px">15 TEAMS · 17 CORNERS</div>
+      <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 2</div>
+    </div>
+  </div>
+</div>
+
+<script src="stats-calculator.js"></script>
+<script>
+// ═══════════════════════════════════════════════════
+// MEME GP — FP1 DETERMINISTIC LIVE SIMULATOR
+// Session start: 2026-04-24 18:00:00 UTC (20:00 SAST)
+// Same seed + same clock = everyone sees the same race
+// ═══════════════════════════════════════════════════
+
+const SESSION_START_UTC = new Date('2026-04-24T18:00:00Z').getTime();
+const SESSION_DURATION = 3600; // 60 min session
+const S1_END = 0.36;
+const S2_END = 0.68;
+const SEED = 20260424; // deterministic seed — same for everyone
+
+// ── TEAM META — display only (colours / logos / names / emoji).
+// Stats come from stats-calculator.js (single source of truth).
+const TEAM_META = {
+  PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
+  BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
+  VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
+  MOMO:        { color:"#F989B9", logo:"momo.png",       name:"MOMO MOTORS",     emoji:"🌸" },
+  PEPONK:      { color:"#FB8802", logo:"peponk.png",     name:"PEPONK RACING",   emoji:"🐸" },
+  LOL:         { color:"#22DD66", logo:"lol.png",        name:"LOL RACING",      emoji:"😂" },
+  DOBERMANN:   { color:"#8a8a99", logo:"dobermann.png",  name:"STEALTH DOBIE",   emoji:"🐕" },
+  SHIH:        { color:"#FFD200", logo:"shih.png",       name:"SHIH SPEED",      emoji:"🐶" },
+  SUS:         { color:"#C8102E", logo:"susdog.png",     name:"SUS SPEED",       emoji:"🛸" },
+  '420BLAZEIT':{ color:"#7B2D8E", logo:"420blazeit.png", name:"420BLAZEIT",      emoji:"🌿" },
+  MARS:        { color:"#3a5bd0", logo:"mars.png",       name:"MARS RACING",     emoji:"🪐" },
+  MONKO:       { color:"#ffcc00", logo:"monko.png",      name:"MONKO MOTORS",    emoji:"🐒" },
+  NEURO:       { color:"#F58A1F", logo:"neuroticat.png", name:"NEURO RACING",    emoji:"🧠" },
+};
+
+function buildTeams() {
+  const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
+  if (!S || typeof S.calcStats !== 'function') {
+    throw new Error('stats-calculator.js not loaded — grid unavailable.');
+  }
+  return Object.keys(TEAM_META).map(tk => {
+    const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
+    const m = TEAM_META[tk];
+    return {
+      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
+      pit: s.pit, overall: s.overall,
+    };
+  }).sort((a, b) => (b.overall - a.overall) || a.id.localeCompare(b.id));
+}
+
+const TEAMS = buildTeams();
+
+
+// Deterministic RNG
+function createRng(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+}
+
+function calcSectorTime(team, sector, rng) {
+  const v = (rng() - 0.5) * 1.8;
+  let base, bonus;
+  if (sector === 1) { base = 32; bonus = team.engine * 0.12 + team.chassis * 0.08; }
+  else if (sector === 2) { base = 28; bonus = team.drag * 0.10 + team.aero * 0.10; }
+  else { base = 25; bonus = team.pit * 0.08 + team.aero * 0.12; }
+  return Math.max(base - bonus + v, base - 2.5);
+}
+
+function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
+function fmtS(s) { return s.toFixed(3); }
+function fmtCD(s) { return `${Math.floor(s/60)}:${(Math.floor(s)%60).toString().padStart(2,'0')}`; }
+
+// ═══ PRE-COMPUTE ALL EVENTS ═══
+// Using deterministic seed, compute the exact schedule of all runs
+// Each event: { time (seconds from session start), teamIdx, run, s1, s2, s3 }
+
+function buildSchedule() {
+  const rng = createRng(SEED);
+  const events = [];
+  let prevTime = 0;
+  for (let run = 0; run < 5; run++) {
+    // Deterministic shuffle per run
+    const order = [...Array(TEAMS.length).keys()];
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    order.forEach((ti, idx) => {
+      const team = TEAMS[ti];
+      const gap = 35 + Math.floor(rng() * 40); // 35-75 sec random gap between cars
+      const runBreak = idx === 0 && run > 0 ? 60 + Math.floor(rng() * 90) : 0; // 60-150 sec break between runs
+      prevTime += gap + runBreak;
+      const goTime = prevTime;
+      const s1 = calcSectorTime(team, 1, rng);
+      const s2 = calcSectorTime(team, 2, rng);
+      const s3 = calcSectorTime(team, 3, rng);
+      const lapSec = 90 - (team.overall * 2); // visual lap duration
+      events.push({ time: goTime, teamIdx: ti, run: run + 1, s1, s2, s3, lapDur: lapSec });
+    });
+  }
+  return events;
+}
+
+const SCHEDULE = buildSchedule();
+const TOTAL_SESSION_TIME = SCHEDULE[SCHEDULE.length - 1].time + 100; // session ends after last car finishes
+
+// ═══ STATE ═══
+const carStates = {};
+TEAMS.forEach((t, i) => {
+  carStates[t.id] = { runs: 0, status: 'IN PIT', onTrack: false, progress: 0, sector: 0,
+    liveS1: null, liveS2: null, liveS3: null, goTime: -1, lapDur: 80,
+    pendingS1: 0, pendingS2: 0, pendingS3: 0 };
+});
+
+let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
+let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
+
+// ═══ RENDER CORNERS ═══
+// Turn markers (T1–T17) are baked into the Satoshi SVG.
+
+// ═══ MAIN LOOP ═══
+const pathEl = document.getElementById('trackPath');
+
+function getPoint(frac) {
+  const len = pathEl.getTotalLength();
+  const pt = pathEl.getPointAtLength(len * (frac % 1));
+  return { x: pt.x, y: pt.y };
+}
+
+function update() {
+  const now = Date.now();
+  const elapsed = (now - SESSION_START_UTC) / 1000; // seconds since session start
+
+  // Before session
+  if (elapsed < 0) {
+    document.getElementById('waitingScreen').style.display = 'flex';
+    document.getElementById('mainLayout').style.display = 'none';
+    document.getElementById('liveBadge').style.display = 'none';
+    const remaining = Math.abs(elapsed);
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = Math.floor(remaining % 60);
+    document.getElementById('waitCountdown').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    requestAnimationFrame(update);
+    return;
+  }
+
+  // Session active or complete
+  document.getElementById('waitingScreen').style.display = 'none';
+  document.getElementById('mainLayout').style.display = 'grid';
+  
+  const isComplete = elapsed > TOTAL_SESSION_TIME;
+  document.getElementById('liveBadge').style.display = isComplete ? 'none' : 'flex';
+  
+  const sessionRemaining = Math.max(0, SESSION_DURATION - elapsed);
+  document.getElementById('sessionClock').textContent = fmtCD(sessionRemaining);
+
+  // Reset all cars to pit first
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    cs.onTrack = false;
+    cs.status = isComplete ? 'SESSION END' : 'IN PIT';
+    cs.progress = 0;
+    cs.sector = 0;
+    cs.liveS1 = null;
+    cs.liveS2 = null;
+    cs.liveS3 = null;
+  });
+
+  // Reset best results
+  bestResults = {};
+  globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
+
+  let lastActiveTeam = null;
+  let lastActiveRun = 0;
+
+  // Process all events up to current time
+  SCHEDULE.forEach(ev => {
+    const team = TEAMS[ev.teamIdx];
+    const cs = carStates[team.id];
+    const timeSinceGo = elapsed - ev.time;
+
+    if (timeSinceGo < 0) return; // hasn't started yet
+
+    // This run's lap duration
+    const lapDur = ev.lapDur;
+
+    // Is this run still active? (car on track)
+    if (timeSinceGo < lapDur) {
+      // Car is ON TRACK right now
+      cs.onTrack = true;
+      cs.status = 'ON TRACK';
+      cs.runs = ev.run;
+      cs.progress = timeSinceGo / lapDur;
+      cs.goTime = ev.time;
+      cs.lapDur = lapDur;
+      cs.pendingS1 = ev.s1;
+      cs.pendingS2 = ev.s2;
+      cs.pendingS3 = ev.s3;
+
+      // Sector reveals
+      if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; }
+      else { cs.sector = 1; }
+      if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
+      if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
+
+      lastActiveTeam = team;
+      lastActiveRun = ev.run;
+    } else {
+      // Run is completed
+      cs.runs = Math.max(cs.runs, ev.run);
+      // Update best results
+      const lap = ev.s1 + ev.s2 + ev.s3;
+      if (!bestResults[team.id]) {
+        bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
+      } else {
+        const br = bestResults[team.id];
+        br.bestS1 = Math.min(br.bestS1, ev.s1);
+        br.bestS2 = Math.min(br.bestS2, ev.s2);
+        br.bestS3 = Math.min(br.bestS3, ev.s3);
+        br.bestLap = Math.min(br.bestLap, lap);
+        br.runs = ev.run;
+      }
+    }
+  });
+
+  // Compute global bests
+  Object.entries(bestResults).forEach(([id, br]) => {
+    if (!globalBestS1 || br.bestS1 < globalBestS1.time) globalBestS1 = { id, time: br.bestS1 };
+    if (!globalBestS2 || br.bestS2 < globalBestS2.time) globalBestS2 = { id, time: br.bestS2 };
+    if (!globalBestS3 || br.bestS3 < globalBestS3.time) globalBestS3 = { id, time: br.bestS3 };
+  });
+
+  // ═══ RENDER ═══
+  
+  // Ticker
+  const tickerEl = document.getElementById('tickerMsg');
+  const tickerDiv = document.getElementById('ticker');
+  if (isComplete) {
+    tickerEl.textContent = '▸ CHEQUERED FLAG — SESSION COMPLETE';
+    tickerEl.style.color = '#888';
+    tickerDiv.style.background = 'rgba(255,255,255,0.02)';
+  } else if (lastActiveTeam) {
+    tickerEl.textContent = `▸ ${lastActiveTeam.emoji} $${lastActiveTeam.id} — HOT LAP — RUN ${lastActiveRun}/5`;
+    tickerEl.style.color = '#ff6644';
+    tickerDiv.style.background = 'rgba(255,0,64,0.06)';
+  } else {
+    tickerEl.textContent = '▸ ALL CARS IN PIT';
+    tickerEl.style.color = '#444';
+  }
+
+  // Track count
+  const onTrackN = TEAMS.filter(t => carStates[t.id].onTrack).length;
+  document.getElementById('trackCount').textContent = onTrackN > 0 ? `${onTrackN} car${onTrackN>1?'s':''} on track` : '';
+
+  // Left panel
+  renderCarStatus();
+  
+  // Car dots on track
+  renderCarDots();
+
+  // Best sectors
+  document.getElementById('bestS1').textContent = globalBestS1 ? fmtS(globalBestS1.time) : '—';
+  document.getElementById('bestS1Team').textContent = globalBestS1 ? `$${globalBestS1.id}` : '';
+  document.getElementById('bestS2').textContent = globalBestS2 ? fmtS(globalBestS2.time) : '—';
+  document.getElementById('bestS2Team').textContent = globalBestS2 ? `$${globalBestS2.id}` : '';
+  document.getElementById('bestS3').textContent = globalBestS3 ? fmtS(globalBestS3.time) : '—';
+  document.getElementById('bestS3Team').textContent = globalBestS3 ? `$${globalBestS3.id}` : '';
+
+  // Leaderboard
+  renderLeaderboard();
+
+  requestAnimationFrame(update);
+}
+
+function renderCarStatus() {
+  const el = document.getElementById('carStatusList');
+  let html = '';
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    const isOn = cs.onTrack;
+    const sectorColors = { 1:'#3b82f6', 2:'#ef4444', 3:'#10b981' };
+    const statusColor = isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
+    const sectorLabel = isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
+    
+    html += `<div class="car-row${isOn ? ' active' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
+      <div class="color-bar" style="background:${t.color}"></div>
+      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0">
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : '#ccc'}">$${t.id}</div>
+        <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
+        ${isOn ? `<div style="display:flex;gap:6px;margin-top:2px">
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
+        </div>` : ''}
+      </div>
+      <div class="run-box" style="--rc:${cs.runs > 0 ? t.color : '#444'}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/5</div>
+        <div style="font-size:6px;color:#555;letter-spacing:1px">RUNS</div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderCarDots() {
+  const dotsG = document.getElementById('carDots');
+  let html = '';
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    if (!cs.onTrack) return;
+    const pt = getPoint(cs.progress);
+    const logoId = 'logo-clip-' + t.id;
+    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
+      <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${t.color}" opacity="0.15"/>
+      <circle cx="${pt.x}" cy="${pt.y}" r="10" fill="#111" stroke="${t.color}" stroke-width="2"/>
+      <image href="${t.logo}" x="${pt.x-9}" y="${pt.y-9}" width="18" height="18" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>`;
+  });
+  dotsG.innerHTML = html;
+}
+
+function renderLeaderboard() {
+  const sorted = Object.entries(bestResults)
+    .map(([id, br]) => ({ id, ...br, team: TEAMS.find(t => t.id === id) }))
+    .sort((a, b) => a.bestLap - b.bestLap);
+
+  document.getElementById('classifiedCount').textContent = `SATOSHI SPEEDWAY • ${sorted.length}/15 CLASSIFIED`;
+
+  const leader = sorted[0];
+  let html = '';
+  sorted.forEach((r, i) => {
+    const cs = carStates[r.id];
+    const isOn = cs.onTrack;
+    const gap = i === 0 ? '' : `+${(r.bestLap - leader.bestLap).toFixed(3)}`;
+    const isBestS1 = globalBestS1 && r.bestS1 === globalBestS1.time;
+    const isBestS2 = globalBestS2 && r.bestS2 === globalBestS2.time;
+    const isBestS3 = globalBestS3 && r.bestS3 === globalBestS3.time;
+
+    html += `<div class="lb-row${i===0?' lb-lead':''}" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'transparent' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
+      <span style="font-size:12px;font-weight:800;color:${i===0?'#fff':'#666'};font-family:'Orbitron',sans-serif">${i+1}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
+        <img src="${r.team.logo}" alt="${r.id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#eee">$${r.id}</div>
+          <div style="font-size:7px;color:${isOn?'#00ff88':'#444'}">${isOn?'ON TRACK':r.runs+' RUNS'}</div>
+        </div>
+      </div>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
+      <div style="text-align:right">
+        <div style="font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:${i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
+        <div style="font-size:8px;color:#555;font-family:'JetBrains Mono',monospace">${gap}</div>
+      </div>
+    </div>`;
+  });
+
+  // Empty slots
+  for (let i = sorted.length; i < TEAMS.length; i++) {
+    html += `<div class="lb-row" style="opacity:.3">
+      <span style="font-size:12px;font-weight:800;color:#333;font-family:'Orbitron',sans-serif">${i+1}</span>
+      <span style="color:#333">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span>
+    </div>`;
+  }
+  document.getElementById('leaderboard').innerHTML = html;
+}
+
+// Start the loop
+requestAnimationFrame(update);
+</script>
+</body>
+</html>
