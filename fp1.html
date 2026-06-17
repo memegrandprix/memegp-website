@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MEMEGP practice.html (fp1.html) · BUILD: S2-LIVE (Satoshi + 15-team grid) -->
+<!-- MEMEGP practice.html (fp1.html) · BUILD: S2-NEON (glass/neon theme) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,7 +22,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .brand{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555}
 .session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040;opacity:1}
-.countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+.countdown{font-family:'JetBrains Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
 
 .ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
 .ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
@@ -52,7 +52,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 /* Waiting screen */
 .waiting{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;background:#050508}
 .waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.waiting .countdown-big{font-family:'Space Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
+.waiting .countdown-big{font-family:'JetBrains Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
 
 /* Session complete */
 .complete-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.9);border:1px solid #ff0040;border-radius:12px;padding:30px 50px}
@@ -74,6 +74,46 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   .ticker{padding:6px 12px;font-size:9px}
   .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
 }
+
+/* ===== NEON / GLASS THEME ===== */
+:root{--gold:#ffcc00;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
+body{background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),
+ radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%),
+ linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+ background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background-image:radial-gradient(1px 1px at 18% 28%,rgba(255,255,255,.45),transparent),
+ radial-gradient(1px 1px at 72% 18%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.3),transparent),
+ radial-gradient(1px 1px at 86% 62%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 10% 82%,rgba(255,255,255,.35),transparent)}
+.top-bar,.ticker,.main{position:relative;z-index:1}
+.center{background:transparent!important}
+.grid-bg{opacity:.35}
+.left,.right{background:linear-gradient(160deg,rgba(22,22,32,.72),rgba(10,10,18,.82))!important;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(255,204,0,.16)!important;box-shadow:0 0 26px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.05) inset}
+.left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
+.left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
+.run-box{position:relative;width:40px;height:40px;border-radius:50%!important;border:none!important;
+ display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0}
+.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;
+ border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
+.run-box>div:first-child{font-size:10px!important;font-family:'JetBrains Mono',monospace!important}
+.run-box>div:last-child{display:none}
+.car-row{border-bottom:1px solid rgba(255,255,255,.04)!important}
+.car-row.active{background:rgba(255,204,0,.05)!important}
+.lb-row{border-bottom:1px solid rgba(255,255,255,.05)!important}
+.lb-row.lb-lead{background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.02))!important;border:1px solid rgba(255,204,0,.3)!important}
+.lb-lead>span:first-child{color:var(--gold)!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.col-headers{border-bottom:1px solid rgba(255,204,0,.12)!important}
+.top-bar{background:linear-gradient(180deg,rgba(12,12,20,.92),rgba(4,4,8,.82))!important;border-bottom:1px solid rgba(255,204,0,.3)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ticker{background:rgba(8,8,14,.6)!important;border-bottom:1px solid rgba(255,204,0,.1)!important}
+.brand{background:linear-gradient(90deg,#ffcc00,#ffe066)!important;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none}
+.session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.session-tab{color:#888}
 </style>
 </head>
 <body>
@@ -135,6 +175,9 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
         <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
           <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
         </pattern>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
 
       <!-- ════════════════════════════════════════════════ -->
@@ -154,56 +197,24 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
       <!-- ════════════════════════════════════════════════ -->
       <g transform="matrix(1, 0, -0.04, 0.88, 10, 25)">
 
-        <!-- Mid glow -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Asphalt base -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="#1a1a22" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Subtle white edge -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" opacity="0.12"/>
-
-        <!-- PIT LANE underlays -->
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#1a1a24" stroke-width="20" stroke-linecap="butt" stroke-linejoin="round"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#f5f5f5" stroke-width="15" stroke-linecap="butt" stroke-linejoin="round" opacity="0.97"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="1" stroke-dasharray="5 6" stroke-linecap="butt"/>
-
-        <!-- 3 SECTOR COLOURED OVERLAYS (pathLength=3000, dasharray 1000/2000) -->
-        <!-- SECTOR 1 · BLUE -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#2563eb" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-        <!-- SECTOR 2 · RED -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#dc2626" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#ef4444" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-        <!-- SECTOR 3 · GREEN -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#10b981" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#34d399" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-
-        <!-- Center dashed white racing line -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="5 8" stroke-linecap="round"/>
-
-        <!-- Garage bays -->
-        <g stroke="#0a0a14" stroke-width="1.3" opacity="0.55">
-          <line x1="195" y1="138" x2="195" y2="148"/><line x1="215" y1="138" x2="215" y2="148"/>
-          <line x1="235" y1="138" x2="235" y2="148"/><line x1="255" y1="138" x2="255" y2="148"/>
-          <line x1="275" y1="138" x2="275" y2="148"/><line x1="295" y1="138" x2="295" y2="148"/>
-          <line x1="315" y1="138" x2="315" y2="148"/><line x1="335" y1="138" x2="335" y2="148"/>
-        </g>
-        <text x="158" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">ENTRY</text>
-        <g transform="translate(170, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
-        <text x="362" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">EXIT</text>
-        <g transform="translate(355, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
+        <!-- ===== NEON ROAD ===== -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="#0a0a12" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
+        <!-- ===== NEON PIT LANE ===== -->
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#e8e8f0" stroke-width="16" opacity="0.16" filter="url(#glow)" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0a0a12" stroke-width="13" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#dfe2ee" stroke-width="7.5" opacity="0.92" stroke-linecap="round"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(10,10,18,.55)" stroke-width="1" stroke-dasharray="4 6"/>
         <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
-
         <!-- START / FINISH -->
         <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
         <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
@@ -235,17 +246,17 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
     <div class="best-sectors">
       <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(255,51,51,.03),transparent)">
         <div style="font-size:8px;color:#3b82f6;font-weight:700;letter-spacing:2px;margin-bottom:2px">S1 BEST</div>
-        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS1Team" style="font-size:8px;color:#555"></div>
       </div>
       <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(0,187,255,.03),transparent)">
         <div style="font-size:8px;color:#ef4444;font-weight:700;letter-spacing:2px;margin-bottom:2px">S2 BEST</div>
-        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS2Team" style="font-size:8px;color:#555"></div>
       </div>
       <div class="best-sector" style="background:linear-gradient(180deg,rgba(255,204,0,.03),transparent)">
         <div style="font-size:8px;color:#10b981;font-weight:700;letter-spacing:2px;margin-bottom:2px">S3 BEST</div>
-        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS3Team" style="font-size:8px;color:#555"></div>
       </div>
     </div>
@@ -552,13 +563,13 @@ function renderCarStatus() {
         <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : '#ccc'}">$${t.id}</div>
         <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
         ${isOn ? `<div style="display:flex;gap:6px;margin-top:2px">
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
         </div>` : ''}
       </div>
-      <div class="run-box" style="border-color:${cs.runs > 0 ? '#333' : '#1a1a1a'}">
-        <div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/5</div>
+      <div class="run-box" style="--rc:${cs.runs > 0 ? t.color : '#444'}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/5</div>
         <div style="font-size:6px;color:#555;letter-spacing:1px">RUNS</div>
       </div>
     </div>`;
@@ -599,7 +610,7 @@ function renderLeaderboard() {
     const isBestS2 = globalBestS2 && r.bestS2 === globalBestS2.time;
     const isBestS3 = globalBestS3 && r.bestS3 === globalBestS3.time;
 
-    html += `<div class="lb-row" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'rgba(255,255,255,.02)' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
+    html += `<div class="lb-row${i===0?' lb-lead':''}" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'transparent' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
       <span style="font-size:12px;font-weight:800;color:${i===0?'#fff':'#666'};font-family:'Orbitron',sans-serif">${i+1}</span>
       <div style="display:flex;align-items:center;gap:6px">
         <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
@@ -609,12 +620,12 @@ function renderLeaderboard() {
           <div style="font-size:7px;color:${isOn?'#00ff88':'#444'}">${isOn?'ON TRACK':r.runs+' RUNS'}</div>
         </div>
       </div>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
       <div style="text-align:right">
-        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:${i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
-        <div style="font-size:8px;color:#555;font-family:'Space Mono',monospace">${gap}</div>
+        <div style="font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:${i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
+        <div style="font-size:8px;color:#555;font-family:'JetBrains Mono',monospace">${gap}</div>
       </div>
     </div>`;
   });
