@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MEME GP — QUALIFYING LIVE | Satoshi Speedway</title>
-<meta name="description" content="Qualifying — Live at Degen Speedway. Q1, Q2, Q3. 10 teams fight for pole position.">
+<meta name="description" content="Qualifying — Live at Satoshi Speedway. Q1, Q2, Q3. 15 teams fight for pole position.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -62,8 +62,21 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .elim-tag{font-family:'Space Mono',monospace;font-size:7px;color:#ff0040;letter-spacing:1px;background:rgba(255,0,64,.1);padding:1px 5px;border-radius:2px}
 
 @media(max-width:1024px){
-  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
-  .left,.right{max-height:250px}
+  /* MOBILE: unlock body scroll, stack to one scrollable column, track + timing only */
+  body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
+  .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
+  .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
+  .center{min-height:45vh}                       /* keep the track prominent */
+  .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
+  .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
+  .brand{font-size:13px;letter-spacing:1.5px}
+  .session-tab{padding:3px 9px;font-size:9px;letter-spacing:1px}
+  .col-headers,.lb-row{grid-template-columns:24px 1fr 46px 46px 46px 58px}
+}
+@media(max-width:600px){
+  .center{min-height:40dvh}
+  .ticker{padding:6px 12px;font-size:9px}
+  .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
 }
 </style>
 </head>
@@ -105,9 +118,9 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">SESSION STARTS IN</div>
   <div class="countdown-big" id="waitCountdown">--:--:--</div>
   <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px;text-align:center;line-height:1.8">
-    Q1: 10 cars · 2 laps · Bottom 3 eliminated<br>
-    Q2: 7 cars · 2 laps · Bottom 3 eliminated<br>
-    Q3: Top 4 · 1 lap · Pole position shootout
+    Q1: 15 cars · 2 laps · Bottom 4 eliminated<br>
+    Q2: 11 cars · 2 laps · Bottom 3 eliminated<br>
+    Q3: Top 8 · 1 lap · Pole position shootout
   </div>
 </div>
 
@@ -271,8 +284,8 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 <script>
 // ═══════════════════════════════════════════════════
 // MEME GP — QUALIFYING DETERMINISTIC LIVE SIMULATOR
-// Q1: 10 cars, 2 laps, bottom 3 out
-// Q2: 7 cars, 2 laps, bottom 3 out
+// Q1: 15 cars, 2 laps, bottom 4 out
+// Q2: 11 cars, 2 laps, bottom 3 out
 // Q3: 4 cars, 1 lap, pole shootout
 // Session start: 2026-04-25 18:00:00 UTC (20:00 SAST)
 // ═══════════════════════════════════════════════════
@@ -357,7 +370,7 @@ function buildSchedule() {
 
   // ── Q1: All 10 cars, 2 laps each ──
   for (let lap = 0; lap < 2; lap++) {
-    const order = [...Array(10).keys()];
+    const order = [...Array(TEAMS.length).keys()];
     for (let i = order.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
@@ -391,8 +404,8 @@ function buildSchedule() {
     if (!q1Results[id] || lap < q1Results[id]) q1Results[id] = lap;
   });
   const q1Sorted = Object.entries(q1Results).sort((a, b) => a[1] - b[1]);
-  const q1Eliminated = q1Sorted.slice(7).map(e => e[0]); // bottom 3
-  const q2Drivers = q1Sorted.slice(0, 7).map(e => e[0]);
+  const q1Eliminated = q1Sorted.slice(11).map(e => e[0]); // bottom 4 (P12-15)
+  const q2Drivers = q1Sorted.slice(0, 11).map(e => e[0]); // 11 advance
 
   // ── Q2: 7 cars, 2 laps each ──
   t = q2Start;
@@ -429,10 +442,10 @@ function buildSchedule() {
     if (!q2Results[id] || lap < q2Results[id]) q2Results[id] = lap;
   });
   const q2Sorted = Object.entries(q2Results).sort((a, b) => a[1] - b[1]);
-  const q2Eliminated = q2Sorted.slice(4).map(e => e[0]); // bottom 3
-  const q3Drivers = q2Sorted.slice(0, 4).map(e => e[0]);
+  const q2Eliminated = q2Sorted.slice(8).map(e => e[0]); // bottom 3 (P9-11)
+  const q3Drivers = q2Sorted.slice(0, 8).map(e => e[0]); // top 8 to pole shootout
 
-  // ── Q3: Top 4, 1 lap each ──
+  // ── Q3: Top 8, 1 lap each ──
   t = q3Start;
   const q3Order = q3Drivers.map(id => TEAMS.findIndex(t => t.id === id));
   // Reverse order (slowest goes first, like F1)
@@ -712,9 +725,17 @@ function renderCarDots() {
 }
 
 function renderLeaderboard() {
+  // Tier for knockout grid: Q3 cars (P1-8) ahead of Q2-eliminated (P9-11)
+  // ahead of Q1-eliminated (P12-15). Within a tier, fastest lap wins.
+  // During live rounds, just sort by best lap.
+  const tierOf = id =>
+    SCHEDULE.q1Eliminated.includes(id) ? 2 :
+    SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
   const sorted = Object.entries(bestResults)
     .map(([id, br]) => ({ id, ...br, team: TEAMS.find(t => t.id === id) }))
-    .sort((a, b) => a.bestLap - b.bestLap);
+    .sort((a, b) => currentRound === 'COMPLETE'
+      ? (tierOf(a.id) - tierOf(b.id)) || (a.bestLap - b.bestLap)
+      : (a.bestLap - b.bestLap));
 
   const classifiedN = sorted.length;
   document.getElementById('classifiedCount').textContent = `SATOSHI SPEEDWAY • ${classifiedN}/15 CLASSIFIED`;
@@ -753,7 +774,7 @@ function renderLeaderboard() {
     </div>`;
   });
 
-  for (let i = sorted.length; i < 10; i++) {
+  for (let i = sorted.length; i < TEAMS.length; i++) {
     html += `<div class="lb-row" style="opacity:.3">
       <span style="font-size:12px;font-weight:800;color:#333;font-family:'Orbitron',sans-serif">${i+1}</span>
       <span style="color:#333">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span>

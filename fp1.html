@@ -58,8 +58,21 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .complete-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.9);border:1px solid #ff0040;border-radius:12px;padding:30px 50px}
 
 @media(max-width:1024px){
-  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
-  .left,.right{max-height:250px}
+  /* MOBILE: unlock body scroll, stack to one scrollable column, track + timing only */
+  body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
+  .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
+  .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
+  .center{min-height:45vh}                       /* keep the track prominent */
+  .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
+  .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
+  .brand{font-size:13px;letter-spacing:1.5px}
+  .session-tab{padding:3px 9px;font-size:9px;letter-spacing:1px}
+  .col-headers,.lb-row{grid-template-columns:24px 1fr 46px 46px 46px 58px}
+}
+@media(max-width:600px){
+  .center{min-height:40dvh}
+  .ticker{padding:6px 12px;font-size:9px}
+  .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
 }
 </style>
 </head>
@@ -329,7 +342,7 @@ function buildSchedule() {
   let prevTime = 0;
   for (let run = 0; run < 5; run++) {
     // Deterministic shuffle per run
-    const order = [...Array(10).keys()];
+    const order = [...Array(TEAMS.length).keys()];
     for (let i = order.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
@@ -607,7 +620,7 @@ function renderLeaderboard() {
   });
 
   // Empty slots
-  for (let i = sorted.length; i < 10; i++) {
+  for (let i = sorted.length; i < TEAMS.length; i++) {
     html += `<div class="lb-row" style="opacity:.3">
       <span style="font-size:12px;font-weight:800;color:#333;font-family:'Orbitron',sans-serif">${i+1}</span>
       <span style="color:#333">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span>
