@@ -114,6 +114,60 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
 .session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
 .session-tab{color:#888}
+
+/* ===== SESSION DATA DASHBOARD ===== */
+.vtoggle{display:inline-flex;border:1px solid rgba(255,204,0,.3);border-radius:7px;overflow:hidden;background:rgba(8,8,14,.6)}
+.vtoggle button{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.2px;padding:5px 11px;background:none;border:none;color:#888;cursor:pointer}
+.vtoggle button.on{background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000}
+#dashboardView{position:fixed;left:0;right:0;top:82px;bottom:0;overflow-y:auto;z-index:40;background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%)}
+#dashboardView .dwrap{max-width:940px;margin:0 auto;padding:22px 18px 70px}
+#dashboardView .dhead{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+#dashboardView .dh1{font-family:'Orbitron';font-weight:900;font-size:clamp(18px,3.4vw,26px);letter-spacing:2px;color:#fff;text-shadow:0 0 16px rgba(255,204,0,.4)}
+#dashboardView .dh1 b{color:var(--gold)}
+#dashboardView .dsub{font-size:11px;letter-spacing:2px;color:#7a7a88;margin-top:6px}
+#dashboardView .dtitle{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:var(--gold);text-shadow:0 0 12px rgba(255,204,0,.4);margin:0 0 14px}
+#dashboardView .podium{display:grid;grid-template-columns:1fr 1.22fr 1fr;gap:13px;align-items:end;margin-bottom:14px}
+#dashboardView .pcard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 26px rgba(0,0,0,.55),0 0 24px var(--pc-glow,transparent)}
+#dashboardView .media{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%, var(--pc-soft,rgba(255,255,255,.12)), rgba(6,6,12,.92) 80%)}
+#dashboardView .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:60px;line-height:1;color:#fff;opacity:.95;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#dashboardView .crown{position:absolute;top:9px;right:11px;z-index:2;font-size:19px;filter:drop-shadow(0 0 6px rgba(255,204,0,.7))}
+#dashboardView .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 12px 13px;text-align:left;background:linear-gradient(transparent, rgba(4,4,8,.5) 32%, rgba(4,4,8,.95))}
+#dashboardView .accent{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:var(--pc,#444);box-shadow:0 0 10px var(--pc,#444)}
+#dashboardView .tk{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.5px}
+#dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:var(--gold);margin-top:2px}
+#dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
+#dashboardView .pcard.p1 .num{font-size:72px}#dashboardView .pcard.p1 .tk{font-size:18px}#dashboardView .pcard.p1 .lap{font-size:20px}
+#dashboardView .list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;margin-bottom:24px;overflow:hidden}
+#dashboardView .lrow{display:grid;grid-template-columns:32px 34px 1fr 74px 64px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+#dashboardView .lrow:last-child{border-bottom:none}
+#dashboardView .lpos{font-family:'Orbitron';font-weight:800;font-size:14px;color:#888;text-align:center}
+#dashboardView .lav{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 7px var(--pc-glow,transparent)}
+#dashboardView .lav img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .ltk{font-family:'Orbitron';font-weight:700;font-size:12px}
+#dashboardView .llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
+#dashboardView .lgap{font-family:'JetBrains Mono';font-size:11px;color:#7a7a88;text-align:right}
+#dashboardView .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+#dashboardView .fc{position:relative;background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,var(--gold));border-radius:12px;padding:16px;overflow:hidden;box-shadow:0 0 24px rgba(0,0,0,.45)}
+#dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;display:flex;align-items:center;gap:7px;margin-bottom:10px}
+#dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(19px,3.2vw,25px);line-height:1.06;color:#fff}
+#dashboardView .fc-big .u{color:var(--ac,var(--gold))}
+#dashboardView .fc-sub{font-size:12px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+#dashboardView .fc-sub b{color:#fff}
+#dashboardView .mono{font-family:'JetBrains Mono';font-weight:700}
+#dashboardView .sk{display:flex;flex-direction:column;gap:7px}
+#dashboardView .skrow{display:flex;align-items:center;gap:9px;font-size:13px}
+#dashboardView .skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#dashboardView .sktk{font-family:'Orbitron';font-weight:700;font-size:12px;min-width:74px}
+#dashboardView .sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
+#dashboardView .skbest{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.12);font-size:12px;color:#cfcfd6}
+#dashboardView .skbest b{font-family:'JetBrains Mono';color:var(--gold)}
+#dashboardView .share{margin-top:13px;display:flex;justify-content:flex-end}
+#dashboardView .dshare,#dashboardView .share button{font-family:'Orbitron';font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#000;background:linear-gradient(90deg,#ffcc00,#ffe066);border:none;padding:7px 13px;border-radius:6px;cursor:pointer;box-shadow:0 0 12px rgba(255,204,0,.3)}
+#dashboardView .dshare.big{padding:9px 16px;font-size:11px}
+#dashboardView .empty{text-align:center;color:#666;font-family:'Orbitron';letter-spacing:2px;font-size:13px;padding:70px 0}
+@media(max-width:640px){#dashboardView .grid{grid-template-columns:1fr}#dashboardView .podium{gap:8px}}
 </style>
 </head>
 <body>
@@ -139,7 +193,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 <!-- TICKER -->
 <div class="ticker" id="ticker">
   <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ SESSION NOT STARTED</div>
-  <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="vtoggle"><button id="tabLive" class="on">LIVE</button><button id="tabData">SESSION DATA</button></div>
+    <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+  </div>
 </div>
 
 <!-- WAITING SCREEN (before session starts) -->
@@ -270,6 +327,20 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 </div>
 
+<!-- SESSION DATA DASHBOARD (overlays the live view; updates lap-by-lap) -->
+<div id="dashboardView" style="display:none">
+  <div class="dwrap">
+    <div class="dhead">
+      <div><div class="dh1">SESSION DATA <b>· PRACTICE</b></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
+      <button class="dshare big" data-share="session">𝕏 SHARE</button>
+    </div>
+    <div class="dtitle">⚡ FASTEST LAPS</div>
+    <div class="podium" id="dashPodium"></div>
+    <div class="list" id="dashList"></div>
+    <div class="grid" id="dashGrid"></div>
+  </div>
+</div>
+
 <script src="stats-calculator.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
@@ -385,6 +456,8 @@ TEAMS.forEach((t, i) => {
 });
 
 let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
+const lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
+let dashOpen = false, lastDash = 0;
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
 
 // ═══ RENDER CORNERS ═══
@@ -397,6 +470,69 @@ function getPoint(frac) {
   const len = pathEl.getTotalLength();
   const pt = pathEl.getPointAtLength(len * (frac % 1));
   return { x: pt.x, y: pt.y };
+}
+
+function fmtGap(g){ return '+' + g.toFixed(3); }
+function renderDashboard(){
+  const entries = TEAMS.map(t=>({t, br:bestResults[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
+                   .sort((a,b)=>a.br.bestLap - b.br.bestLap);
+  const sub=document.getElementById('dashSub'), podiumEl=document.getElementById('dashPodium'),
+        listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid');
+  sub.textContent = `SATOSHI SPEEDWAY · ROUND 1 · ${entries.length}/${TEAMS.length} CLASSIFIED`;
+  if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS…</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; return; }
+  const leader = entries[0].br.bestLap;
+  const pcard = (e,absPos) => {
+    const t=e.t, br=e.br, isP1=absPos===1;
+    const note = absPos===1 ? 'FASTEST LAP' : fmtGap(br.bestLap-leader);
+    return `<div class="pcard ${isP1?'p1':''}" style="--pc:${t.color};--pc-glow:${t.color}88;--pc-soft:${t.color}66">
+      <div class="media"><img src="${t.logo}" alt="$${t.id}"></div>
+      <div class="num">${absPos}</div>${isP1?'<div class="crown">👑</div>':''}
+      <div class="ov"><div class="tk">$${t.id}</div><div class="lap">${fmt(br.bestLap)}</div><div class="runs">${note} · ${br.runs} RUNS</div></div>
+      <div class="accent"></div></div>`;
+  };
+  // podium order P2 | P1 | P3
+  podiumEl.innerHTML = pcard(entries[1],2) + pcard(entries[0],1) + pcard(entries[2],3);
+  // list 4..N
+  listEl.innerHTML = entries.slice(3).map((e,i)=>{ const t=e.t, br=e.br;
+    return `<div class="lrow"><div class="lpos">${i+4}</div>
+      <div class="lav" style="--pc:${t.color};--pc-glow:${t.color}55"><img src="${t.logo}" alt=""></div>
+      <div class="ltk">$${t.id}</div><div class="llap">${fmt(br.bestLap)}</div><div class="lgap">${fmtGap(br.bestLap-leader)}</div></div>`;
+  }).join('');
+  // ---- fun-fact cards ----
+  let cards='';
+  if (globalBestS1 && globalBestS2 && globalBestS3){
+    const theo = globalBestS1.time+globalBestS2.time+globalBestS3.time, onTable = leader-theo;
+    cards += `<div class="fc" style="--ac:#ffcc00"><div class="fc-h">🏁 SECTOR KINGS</div>
+      <div class="sk">
+        <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk">$${globalBestS1.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${fmtS(globalBestS1.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk">$${globalBestS2.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${fmtS(globalBestS2.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk">$${globalBestS3.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${fmtS(globalBestS3.time)}</span></div>
+      </div>
+      <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` — ${onTable.toFixed(3)}s on the table.`:' — matched on track.'}</div>
+      <div class="share"><button data-tweet="🏁 SECTOR KINGS — FP Satoshi Speedway: S1 $${globalBestS1.id} · S2 $${globalBestS2.id} · S3 $${globalBestS3.id}. Theoretical best ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
+    cards += `<div class="fc" style="--ac:${entries[0].t.color}"><div class="fc-h">📏 BIGGEST MARGIN</div>
+      <div class="fc-big"><span class="u">$${entries[0].t.id}</span> leads by <span class="mono">${m.toFixed(3)}s</span></div>
+      <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the timesheet.</div>
+      <div class="share"><button data-tweet="📏 $${entries[0].t.id} tops FP ${m.toFixed(3)}s clear of $${entries[1].t.id} at Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  if (entries.length>=2){ let best={g:Infinity};
+    for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
+    cards += `<div class="fc" style="--ac:#22DD66"><div class="fc-h">⚔️ CLOSEST BATTLE</div>
+      <div class="fc-big"><span class="u">$${best.a.t.id}</span> vs <span class="u">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
+      <div class="fc-sub">Tightest gap on the timesheet — P${best.pos} v P${best.pos+1}.</div>
+      <div class="share"><button data-tweet="⚔️ CLOSEST BATTLE of FP: $${best.a.t.id} vs $${best.b.t.id} — just ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  let mc=null;
+  entries.forEach(e=>{ const h=lapHistory[e.t.id]; if(h&&h.length>=2){ const sp=Math.max(...h)-Math.min(...h); if(!mc||sp<mc.sp) mc={t:e.t,sp}; } });
+  if (mc){
+    cards += `<div class="fc" style="--ac:#e62538"><div class="fc-h">🎯 MOST CONSISTENT</div>
+      <div class="fc-big"><span class="u">$${mc.t.id}</span> <span class="mono" style="font-size:18px">±${(mc.sp/2).toFixed(3)}s</span></div>
+      <div class="fc-sub">Tightest lap-time spread across runs — metronomic.</div>
+      <div class="share"><button data-tweet="🎯 MOST CONSISTENT in FP: $${mc.t.id} — laps within ±${(mc.sp/2).toFixed(3)}s. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  gridEl.innerHTML = cards;
 }
 
 function update() {
@@ -483,6 +619,7 @@ function update() {
       cs.runs = Math.max(cs.runs, ev.run);
       // Update best results
       const lap = ev.s1 + ev.s2 + ev.s3;
+      (lapHistory[team.id] = lapHistory[team.id] || []).push(lap);
       if (!bestResults[team.id]) {
         bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
       } else {
@@ -541,6 +678,9 @@ function update() {
 
   // Leaderboard
   renderLeaderboard();
+
+  // Session Data dashboard — refresh ~1/sec while open
+  if (dashOpen && (performance.now() - lastDash > 900)) { renderDashboard(); lastDash = performance.now(); }
 
   requestAnimationFrame(update);
 }
@@ -641,6 +781,28 @@ function renderLeaderboard() {
 
 // Start the loop
 requestAnimationFrame(update);
+
+// ── SESSION DATA toggle + X-share ──
+(function(){
+  const live=document.getElementById('tabLive'), data=document.getElementById('tabData'), dash=document.getElementById('dashboardView');
+  function show(which){
+    dashOpen = which==='data';
+    if(live) live.classList.toggle('on', !dashOpen);
+    if(data) data.classList.toggle('on', dashOpen);
+    dash.style.display = dashOpen ? 'block' : 'none';
+    if(dashOpen){ renderDashboard(); lastDash = performance.now(); }
+  }
+  if(live && data){ live.onclick=()=>show('live'); data.onclick=()=>show('data'); }
+  dash.addEventListener('click', e=>{
+    const b = e.target.closest('button[data-tweet], button[data-share]'); if(!b) return;
+    let text = b.getAttribute('data-tweet');
+    if(!text && b.getAttribute('data-share')==='session'){
+      const top = TEAMS.map(t=>({t,br:bestResults[t.id]})).filter(x=>x.br&&isFinite(x.br.bestLap)).sort((a,b)=>a.br.bestLap-b.br.bestLap)[0];
+      text = top ? `🏁 Free Practice at Satoshi Speedway — $${top.t.id} fastest (${fmt(top.br.bestLap)}). Full session data 👇 memegrandprix.com $MEMEGP` : 'MEME GP · Satoshi Speedway $MEMEGP';
+    }
+    if(text) window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank','noopener');
+  });
+})();
 </script>
 </body>
 </html>
