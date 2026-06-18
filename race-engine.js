@@ -82,9 +82,11 @@
   // ---------- RACE ----------
   function runRace(stats, gridRows, strategies, r){
     let order = gridRows.map(g => g.t);
-    const base={}, wear={}, willDNF={}, dnfLap={}, pitted={};
+    const base={}, formVal={}, wear={}, willDNF={}, dnfLap={}, pitted={}, rawCum={};
+    gridRows.forEach((g,i) => rawCum[g.t] = i*0.5);
     TEAMS.forEach(t => {
-      base[t]   = cleanLap(stats[t], drawForm(r));   // race-day form
+      const f = drawForm(r); formVal[t] = f;             // store form (no extra draw)
+      base[t]   = cleanLap(stats[t], f);
       wear[t]   = 0; pitted[t] = {};
       willDNF[t]= r() < CFG.INCIDENT_P;
       if (willDNF[t]) dnfLap[t] = 2 + ((r()*(CFG.TOTAL_LAPS-2))|0);
@@ -98,56 +100,77 @@
       wear[t] += CFG.COMPOUNDS[comp].deg * (1 + m*CFG.DEG_FUEL);
       return base[t] + CFG.COMPOUNDS[comp].off + CFG.KFUEL*m + wear[t] + (r()-0.5)*CFG.RACE_NOISE;
     }
+    function splitSectors(t, ltv){                        // cosmetic, no RNG
+      const st=stats[t], f=formVal[t];
+      const c1=31.5-(st.engine*0.12+st.chassis*0.08)*f;
+      const c2=27.5-(st.drag*0.10 +st.aero*0.10)*f;
+      const c3=24.5-(st.pit*0.08   +st.aero*0.12)*f;
+      const extra=ltv-(c1+c2+c3);
+      return { s1:c1+extra*0.40, s2:c2+extra*0.35, s3:c3+extra*0.25 };
+    }
 
-    const lapPositions = [];           // [lap][pos] = ticker  (for animation)
-    const events = [];                 // {lap,type,...}  (for commentary)
-    const fastest = { lap: Infinity, t: null };
+    const laps=[], events=[], fastest={ time:Infinity, driver:'', lap:0 };
+    const fastestS1={time:Infinity,driver:'',lap:0}, fastestS2={time:Infinity,driver:'',lap:0}, fastestS3={time:Infinity,driver:'',lap:0};
 
     for (let L=1; L<=CFG.TOTAL_LAPS; L++){
-      const lt = {};
+      const lt={}, sect={}, pitThisLap=[];
       order.forEach(t => { lt[t] = stopped(t,L) ? Infinity : lapTime(t,L); });
-      order.forEach(t => { if (isFinite(lt[t]) && lt[t] < fastest.lap){ fastest.lap = lt[t]; fastest.t = t; } });
+      order.forEach(t => {
+        if (isFinite(lt[t])){ sect[t]=splitSectors(t,lt[t]); rawCum[t]+=lt[t];
+          if (lt[t] < fastest.time){ fastest.time=lt[t]; fastest.driver=t; fastest.lap=L; }
+          if (sect[t].s1<fastestS1.time){ fastestS1.time=sect[t].s1; fastestS1.driver=t; fastestS1.lap=L; events.push({lap:L,type:'fastest_s1',team:t,time:sect[t].s1,freshTyres:isStintStart(strategies[t],L)}); }
+          if (sect[t].s2<fastestS2.time){ fastestS2.time=sect[t].s2; fastestS2.driver=t; fastestS2.lap=L; events.push({lap:L,type:'fastest_s2',team:t,time:sect[t].s2,freshTyres:isStintStart(strategies[t],L)}); }
+          if (sect[t].s3<fastestS3.time){ fastestS3.time=sect[t].s3; fastestS3.driver=t; fastestS3.lap=L; events.push({lap:L,type:'fastest_s3',team:t,time:sect[t].s3,freshTyres:isStintStart(strategies[t],L)}); } }
+        else rawCum[t]+=200;
+      });
+      order.forEach(t => { if (willDNF[t] && L===dnfLap[t]) events.push({lap:L,type:'dnf',team:t}); });
 
-      // DNF events at their lap
-      order.forEach(t => { if (willDNF[t] && L === dnfLap[t]) events.push({lap:L, type:'dnf', t}); });
-
-      // pit stops -> rejoin further back
       order.forEach(t => {
         if (stopped(t,L)) return;
         const s = strategies[t];
         if (s.pits.includes(L) && !pitted[t][L]){
-          pitted[t][L] = true;
+          pitted[t][L]=true;
           const i = order.indexOf(t);
           const drop = Math.min(CFG.PIT_DROP, order.length-1-i + 5);
-          order.splice(i,1);
-          order.splice(Math.min(order.length, i+drop), 0, t);
-          events.push({lap:L, type:'pit', t, fuel:s.fuel, tyre:compoundAt(s,L+1)});
+          order.splice(i,1); order.splice(Math.min(order.length,i+drop),0,t);
+          const service = s.fuel==='FULL' ? (7+r()*3) : (5+r()*2);
+          rawCum[t]+=service; pitThisLap.push(t);
+          events.push({lap:L,type:'pit',team:t,fuel:s.fuel,tyre:compoundAt(s,L+1),service:+service.toFixed(1),timeLost:service.toFixed(1)});
         }
       });
 
-      // overtaking — faster car passes slower with P ~ pace delta * passEase
-      for (let p = order.length-1; p > 0; p--){
-        const b = order[p], a = order[p-1];
+      for (let p=order.length-1;p>0;p--){
+        const b=order[p], a=order[p-1];
         if (stopped(b,L)) continue;
-        if (stopped(a,L)) { order[p-1]=b; order[p]=a; continue; }
-        const d = lt[a] - lt[b];
-        if (d > 0){
-          const passP = Math.min(0.92, Math.max(0.015, d * CFG.PASS_EASE));
-          if (r() < passP){ order[p-1]=b; order[p]=a; events.push({lap:L, type:'overtake', pass:b, over:a}); }
-        }
+        if (stopped(a,L)){ order[p-1]=b; order[p]=a; continue; }
+        const d = lt[a]-lt[b];
+        if (d>0){ const passP=Math.min(0.92,Math.max(0.015,d*CFG.PASS_EASE));
+          if (r()<passP){ order[p-1]=b; order[p]=a; events.push({lap:L,type:'overtake',attacker:b,defender:a,newPos:p}); } }
       }
-      lapPositions.push(order.slice());
+
+      // display cumulative times consistent with order (monotonic)
+      const cumTimes={}, tyreAges={}, pittedStatus={}, lapTimes={}; let prev=null;
+      order.forEach((t)=>{ let c=rawCum[t]; if (prev!=null && c<prev+0.25) c=prev+0.25; prev=c;
+        cumTimes[t]=c; tyreAges[t]=0; pittedStatus[t]=Object.keys(pitted[t]).length>0; lapTimes[t]=isFinite(lt[t])?lt[t]:0; });
+      const gaps = order.map((t,i)=> i===0?0: cumTimes[t]-cumTimes[order[0]]);
+      laps.push({ lap:L, positions:order.slice(), gaps, cumTimes, tyreAges, pittedStatus,
+                  sectorTimes:sect, lapTimes, pitThisLap });
     }
 
     const running = order.filter(t => !willDNF[t]);
     const dnfs    = order.filter(t =>  willDNF[t]).sort((a,b) => dnfLap[b]-dnfLap[a]);
     const result  = running.concat(dnfs);
 
-    return {
-      result, grid: gridRows.map(g=>g.t), lapPositions, events, fastest,
-      dnf: TEAMS.filter(t => willDNF[t]),
-      classified: running.length
-    };
+    const progressive=[]; let pFL={time:999,driver:'',lap:0}, p1={time:999,driver:'',lap:0}, p2={time:999,driver:'',lap:0}, p3={time:999,driver:'',lap:0};
+    for (let L=1;L<=CFG.TOTAL_LAPS;L++){ const ld=laps[L-1];
+      TEAMS.forEach(t=>{ const x=ld.lapTimes[t]; if (x>0 && x<pFL.time) pFL={time:x,driver:t,lap:L};
+        const sc=ld.sectorTimes[t]; if (sc){ if(sc.s1<p1.time)p1={time:sc.s1,driver:t,lap:L};
+          if(sc.s2<p2.time)p2={time:sc.s2,driver:t,lap:L}; if(sc.s3<p3.time)p3={time:sc.s3,driver:t,lap:L}; } });
+      progressive.push({ fastestLap:{...pFL}, fastestS1:{...p1}, fastestS2:{...p2}, fastestS3:{...p3} }); }
+
+    return { result, grid: gridRows.map(g=>g.t), laps, events,
+             fastest, fastestLap:fastest, fastestS1, fastestS2, fastestS3, progressive,
+             dnf: TEAMS.filter(t => willDNF[t]), classified: running.length };
   }
 
   // ---------- WEEKEND ----------
@@ -161,8 +184,35 @@
     return { seed, quali, strategies, race };
   }
 
+  // ---------- ANIMATION-SHAPED RACE ----------
+  // Mirrors the validated runRace order-logic EXACTLY (so win-rate is identical),
+  // and derives per-lap display cumulative times consistent with that order for the
+  // animation. Overtaking + position-drop pits are the proven mechanics.
+  // Thin wrapper: qualifying (or a supplied grid) + community strategies + the
+  // validated runRace, returning runRace's rich animation output.
+  // gridOverride: optional array of tickers P1..P15 (e.g. the real Saturday quali result).
+  function buildAnimatedRace(seed, strategyConfig, gridOverride){
+    const r = makeRNG(seed);
+    const stats = {}; TEAMS.forEach(t => stats[t] = statsFor(t));
+    let grid;
+    if (gridOverride && gridOverride.length === TEAMS.length){
+      grid = gridOverride.map((t,i)=>({ t, pos:i+1, form:1, lap:0 }));
+    } else {
+      grid = runQualifying(stats, r);
+    }
+    const strategies = {};
+    TEAMS.forEach(t => strategies[t] = (strategyConfig && strategyConfig[t]) || defaultStrategy(r));
+    const race = runRace(stats, grid, strategies, r);
+    const pitLaps = {}; TEAMS.forEach(t => pitLaps[t] = strategies[t].pits.slice());
+    return Object.assign({}, race, {
+      strategies, pitLaps,
+      gridForm: grid.map(g => ({ t:g.t, form:g.form, lap:g.lap, pos:g.pos })),
+      quali: grid
+    });
+  }
+
   const API = { VERSION:'S2-ENGINE-1.0', CFG, TEAMS, makeRNG, statsFor,
-                runQualifying, runRace, simulateWeekend };
+                runQualifying, runRace, simulateWeekend, buildAnimatedRace };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   global.MEMEGP_Race = API;
 })(typeof window !== 'undefined' ? window : globalThis);
