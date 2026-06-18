@@ -180,6 +180,27 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .dshare.big{padding:9px 16px;font-size:11px}
 #dashboardView .empty{text-align:center;color:#666;font-family:'Orbitron';letter-spacing:2px;font-size:13px;padding:70px 0}
 @media(max-width:640px){#dashboardView .grid{grid-template-columns:1fr}#dashboardView .podium{gap:8px}}
+
+/* ===== TIMING-ROW HOVER TOOLTIP ===== */
+.lb-row[data-team]{cursor:pointer}
+#rowTip{position:fixed;z-index:60;display:none;width:268px;padding:13px 14px;border-radius:12px;
+ background:linear-gradient(165deg,rgba(22,22,32,.98),rgba(8,8,14,.99));border:1px solid rgba(255,204,0,.22);
+ box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'Chakra Petch',sans-serif;pointer-events:none}
+#rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#rowTip .tip-head img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4)}
+#rowTip .tip-head b{font-family:'Orbitron';font-size:14px;color:#fff}
+#rowTip .tip-h2{font-family:'Orbitron';font-size:8.5px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+#rowTip .tip-sec{margin-bottom:10px}
+#rowTip .ssec,#rowTip .ty-row,#rowTip .tl-row{display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 0}
+#rowTip .ssec>span:first-child,#rowTip .tyl{font-family:'Orbitron';font-size:10px;font-weight:700;letter-spacing:1px}
+#rowTip .tip-live{border-top:1px dashed rgba(255,255,255,.14);padding-top:9px;margin-top:2px}
+#rowTip .tip-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor}
+#rowTip .tcomp{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:var(--tc);border:1px solid var(--tc);border-radius:4px;padding:1px 7px}
+#rowTip .tl-row{gap:8px}
+#rowTip .tl-row>span:first-child{font-family:'Orbitron';font-size:9px;font-weight:700;letter-spacing:1px;color:#888;min-width:34px}
+#rowTip .bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+#rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
+#rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
 </style>
 </head>
 <body>
@@ -217,7 +238,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   <h1>PRACTICE — SATOSHI SPEEDWAY</h1>
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">SESSION STARTS IN</div>
   <div class="countdown-big" id="waitCountdown">--:--:--</div>
-  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">10 teams · 3 sectors · 14 corners · 5 runs each</div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">15 teams · 3 sectors · 17 corners · 3 runs each</div>
 </div>
 
 <!-- MAIN LAYOUT -->
@@ -353,6 +374,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 </div>
 
+<div id="rowTip"></div>
 <script src="stats-calculator.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
@@ -368,7 +390,7 @@ const S2_END = 0.68;
 const SEED = 20260424; // deterministic seed — same for everyone
 // Tyre compounds — FP runs cycle all three so we capture real per-compound pace
 const COMPOUNDS = { SOFT:{off:-0.55,deg:0.115}, MEDIUM:{off:0,deg:0.055}, HARD:{off:0.50,deg:0.028} };
-const COMPOUND_BY_RUN = ['SOFT','MEDIUM','HARD','SOFT','MEDIUM'];
+const COMPOUND_BY_RUN = ['SOFT','MEDIUM','HARD']; // one run per tyre
 
 // ── TEAM META — display only (colours / logos / names / emoji).
 // Stats come from stats-calculator.js (single source of truth).
@@ -436,7 +458,7 @@ function buildSchedule() {
   const rng = createRng(SEED);
   const events = [];
   let prevTime = 0;
-  for (let run = 0; run < 5; run++) {
+  for (let run = 0; run < 3; run++) {
     // Deterministic shuffle per run
     const order = [...Array(TEAMS.length).keys()];
     for (let i = order.length - 1; i > 0; i--) {
@@ -475,7 +497,9 @@ TEAMS.forEach((t, i) => {
 let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
 const lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
 const compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; // field laps per compound (tyre card)
+const compoundBest = {}; // id -> { SOFT, MEDIUM, HARD } best lap per compound
 let dashOpen = false, lastDash = 0;
+let tipTeam = null, tipX = 0, tipY = 0;
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
 
 // ═══ RENDER CORNERS ═══
@@ -654,7 +678,8 @@ function update() {
       // Update best results
       const lap = ev.s1 + ev.s2 + ev.s3;
       (lapHistory[team.id] = lapHistory[team.id] || []).push(lap);
-      if (ev.compound) compoundLaps[ev.compound].push(lap);
+      if (ev.compound){ compoundLaps[ev.compound].push(lap);
+        const pb = compoundBest[team.id] = compoundBest[team.id] || {}; pb[ev.compound] = Math.min(pb[ev.compound] ?? Infinity, lap); }
       if (!bestResults[team.id]) {
         bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
       } else {
@@ -716,6 +741,7 @@ function update() {
 
   // Session Data dashboard — refresh ~1/sec while open
   if (dashOpen && (performance.now() - lastDash > 900)) { renderDashboard(); lastDash = performance.now(); }
+  if (tipTeam) renderRowTip(tipTeam);
 
   requestAnimationFrame(update);
 }
@@ -743,7 +769,7 @@ function renderCarStatus() {
         </div>` : ''}
       </div>
       <div class="run-box" style="--rc:${cs.runs > 0 ? t.color : '#444'}">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/5</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/3</div>
         <div style="font-size:6px;color:#555;letter-spacing:1px">RUNS</div>
       </div>
     </div>`;
@@ -767,6 +793,43 @@ function renderCarDots() {
   dotsG.innerHTML = html;
 }
 
+function renderRowTip(id){
+  const tip = document.getElementById('rowTip');
+  const t = TEAMS.find(x=>x.id===id); if(!t){ tip.style.display='none'; return; }
+  const br = bestResults[id], cs = carStates[id], cb = compoundBest[id] || {};
+  const sBest = (v,gb,c)=>`<span style="color:${gb&&v===gb.time?'#c879ff':c};font-weight:${gb&&v===gb.time?800:600}">${v?fmtS(v):'—'}</span>`;
+  const tyreRow = (lab,c)=>`<div class="ty-row"><span class="tyl" style="color:${c}">${lab}</span><span>${cb[lab]?fmt(cb[lab]):'—'}</span></div>`;
+  let live='';
+  if (cs.onTrack && cs.runs>=1){
+    const comp = COMPOUND_BY_RUN[Math.min(cs.runs,COMPOUND_BY_RUN.length)-1] || 'SOFT';
+    const cc = {SOFT:'#ef4444',MEDIUM:'#ffcc00',HARD:'#e8e8ee'}[comp];
+    const deg = Math.min(100, cs.progress * COMPOUNDS[comp].deg * 160);
+    const fuel = Math.max(6, 100 - cs.progress*48);
+    const fcol = fuel>66?'#22DD66':fuel>33?'#ffcc00':'#ff3b3b';
+    live = `<div class="tip-live">
+      <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
+      <div class="tl-row"><span>TYRE</span><span class="tcomp" style="--tc:${cc}">${comp}</span></div>
+      <div class="tl-row"><span>DEG</span><div class="bar"><i style="width:${deg}%;background:${cc}"></i></div><b>${deg.toFixed(0)}%</b></div>
+      <div class="tl-row"><span>FUEL</span><div class="bar"><i style="width:${fuel}%;background:${fcol}"></i></div><b>${fuel>66?'F':fuel>33?'M':'E'}</b></div>
+    </div>`;
+  }
+  tip.innerHTML = `
+    <div class="tip-head"><img src="${t.logo}" alt=""><b>$${id}</b></div>
+    <div class="tip-sec"><div class="tip-h2">BEST SECTORS</div>
+      <div class="ssec"><span style="color:#3b82f6">SECTOR 1</span>${sBest(br&&br.bestS1,globalBestS1,'#9fc3ff')}</div>
+      <div class="ssec"><span style="color:#ef4444">SECTOR 2</span>${sBest(br&&br.bestS2,globalBestS2,'#ff9b9b')}</div>
+      <div class="ssec"><span style="color:#10b981">SECTOR 3</span>${sBest(br&&br.bestS3,globalBestS3,'#84e9c0')}</div>
+    </div>
+    <div class="tip-sec"><div class="tip-h2">BEST LAP BY TYRE</div>
+      ${tyreRow('SOFT','#ef4444')}${tyreRow('MEDIUM','#ffcc00')}${tyreRow('HARD','#e8e8ee')}
+    </div>${live}`;
+  tip.style.display='block';
+  const w = tip.offsetWidth||268, h = tip.offsetHeight||210;
+  let x = tipX - w - 18; if (x < 8) x = tipX + 18;
+  let y = Math.min(Math.max(8, tipY - 24), window.innerHeight - h - 8);
+  tip.style.left = x+'px'; tip.style.top = y+'px';
+}
+
 function renderLeaderboard() {
   const sorted = Object.entries(bestResults)
     .map(([id, br]) => ({ id, ...br, team: TEAMS.find(t => t.id === id) }))
@@ -784,7 +847,7 @@ function renderLeaderboard() {
     const isBestS2 = globalBestS2 && r.bestS2 === globalBestS2.time;
     const isBestS3 = globalBestS3 && r.bestS3 === globalBestS3.time;
 
-    html += `<div class="lb-row${i===0?' lb-lead':''}" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'transparent' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
+    html += `<div class="lb-row${i===0?' lb-lead':''}" data-team="${r.id}" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'transparent' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
       <span style="font-size:12px;font-weight:800;color:${i===0?'#fff':'#666'};font-family:'Orbitron',sans-serif">${i+1}</span>
       <div style="display:flex;align-items:center;gap:6px">
         <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
@@ -816,6 +879,18 @@ function renderLeaderboard() {
 
 // Start the loop
 requestAnimationFrame(update);
+
+// ── Timing-row hover tooltip ──
+(function(){
+  const lb = document.getElementById('leaderboard'), tip = document.getElementById('rowTip');
+  lb.addEventListener('mousemove', e=>{
+    tipX = e.clientX; tipY = e.clientY;
+    const row = e.target.closest('.lb-row[data-team]');
+    if (row){ tipTeam = row.getAttribute('data-team'); renderRowTip(tipTeam); }
+    else { tipTeam = null; tip.style.display='none'; }
+  });
+  lb.addEventListener('mouseleave', ()=>{ tipTeam = null; tip.style.display='none'; });
+})();
 
 // ── SESSION DATA toggle + X-share ──
 (function(){
