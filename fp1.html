@@ -168,6 +168,13 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .tyname{font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:2px;color:var(--tc)}
 #dashboardView .tytime{font-family:'JetBrains Mono';font-weight:700;font-size:clamp(18px,3vw,24px);color:#fff;margin:7px 0 4px}
 #dashboardView .tydeg{font-size:9.5px;color:#7a7a88;letter-spacing:.3px}
+#dashboardView .fc-photo{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:0;background-size:cover;background-position:center 22%;
+ -webkit-mask-image:linear-gradient(to right,transparent,#000 58%);mask-image:linear-gradient(to right,transparent,#000 58%)}
+#dashboardView .fc-photo.duo{display:flex}
+#dashboardView .fc-photo.duo>div{flex:1;background-size:cover;background-position:center 22%}
+#dashboardView .fc-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(to right,rgba(12,12,20,.97) 30%,rgba(12,12,20,.62) 55%,rgba(12,12,20,.30))}
+#dashboardView .fc>*:not(.fc-photo):not(.fc-scrim){position:relative;z-index:1}
+#dashboardView .fc.hasphoto .fc-h,#dashboardView .fc.hasphoto .fc-big,#dashboardView .fc.hasphoto .fc-sub{max-width:62%}
 #dashboardView .share{margin-top:13px;display:flex;justify-content:flex-end}
 #dashboardView .dshare,#dashboardView .share button{font-family:'Orbitron';font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#000;background:linear-gradient(90deg,#ffcc00,#ffe066);border:none;padding:7px 13px;border-radius:6px;cursor:pointer;box-shadow:0 0 12px rgba(255,204,0,.3)}
 #dashboardView .dshare.big{padding:9px 16px;font-size:11px}
@@ -523,22 +530,22 @@ function renderDashboard(){
       <div class="share"><button data-tweet="🏁 SECTOR KINGS — FP Satoshi Speedway: S1 $${globalBestS1.id} · S2 $${globalBestS2.id} · S3 $${globalBestS3.id}. Theoretical best ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
-    cards += `<div class="fc" style="--ac:${entries[0].t.color}"><div class="fc-h">BIGGEST MARGIN</div>
+    cards += `<div class="fc hasphoto" style="--ac:${entries[0].t.color}"><div class="fc-photo" style="background-image:url('${entries[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">BIGGEST MARGIN</div>
       <div class="fc-big"><span class="u">$${entries[0].t.id}</span> leads by <span class="mono">${m.toFixed(3)}s</span></div>
       <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the timesheet.</div>
       <div class="share"><button data-tweet="📏 $${entries[0].t.id} tops FP ${m.toFixed(3)}s clear of $${entries[1].t.id} at Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ let best={g:Infinity};
     for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
-    cards += `<div class="fc" style="--ac:#22DD66"><div class="fc-h">CLOSEST BATTLE</div>
-      <div class="fc-big"><span class="u">$${best.a.t.id}</span> vs <span class="u">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
+    cards += `<div class="fc hasphoto" style="--ac:${best.a.t.color}"><div class="fc-photo duo"><div style="background-image:url('${best.a.t.logo}')"></div><div style="background-image:url('${best.b.t.logo}')"></div></div><div class="fc-scrim"></div><div class="fc-h">CLOSEST BATTLE</div>
+      <div class="fc-big"><span class="u" style="color:${best.a.t.color}">$${best.a.t.id}</span> vs <span class="u" style="color:${best.b.t.color}">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
       <div class="fc-sub">Tightest gap on the timesheet — P${best.pos} v P${best.pos+1}.</div>
       <div class="share"><button data-tweet="⚔️ CLOSEST BATTLE of FP: $${best.a.t.id} vs $${best.b.t.id} — just ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
   }
   let mc=null;
   entries.forEach(e=>{ const h=lapHistory[e.t.id]; if(h&&h.length>=2){ const sp=Math.max(...h)-Math.min(...h); if(!mc||sp<mc.sp) mc={t:e.t,sp}; } });
   if (mc){
-    cards += `<div class="fc" style="--ac:#e62538"><div class="fc-h">MOST CONSISTENT</div>
+    cards += `<div class="fc hasphoto" style="--ac:${mc.t.color}"><div class="fc-photo" style="background-image:url('${mc.t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">MOST CONSISTENT</div>
       <div class="fc-big"><span class="u">$${mc.t.id}</span> <span class="mono" style="font-size:18px">±${(mc.sp/2).toFixed(3)}s</span></div>
       <div class="fc-sub">Tightest lap-time spread across runs — metronomic.</div>
       <div class="share"><button data-tweet="🎯 MOST CONSISTENT in FP: $${mc.t.id} — laps within ±${(mc.sp/2).toFixed(3)}s. $MEMEGP">𝕏 Share</button></div></div>`;
