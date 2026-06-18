@@ -53,13 +53,14 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .waiting .countdown-big{font-family:'Space Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
 
-.lights-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.lights-number{font-family:'Orbitron',sans-serif;font-size:120px;font-weight:900;color:#ff0040;animation:countdown-glow 1s infinite}
-.lights-text{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:#00ff88;letter-spacing:6px;text-shadow:0 0 30px #00ff88,0 0 60px #00ff8844}
-.lights-row{display:flex;gap:16px;margin-bottom:30px}
-.light-circle{width:40px;height:40px;border-radius:50%;background:#222;border:2px solid #333;transition:background .3s}
-.light-circle.on{background:#ff0040;border-color:#ff0040;box-shadow:0 0 20px #ff0040}
-.light-circle.green{background:#00ff88;border-color:#00ff88;box-shadow:0 0 20px #00ff88}
+.lights-overlay{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:30;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;pointer-events:none;background:none}
+.lights-number{font-family:'Orbitron',sans-serif;font-size:34px;font-weight:900;color:#ff0040;margin-top:10px;line-height:1;text-shadow:0 0 18px #ff0040;animation:countdown-glow 1s infinite}
+.lights-text{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#00ff88;letter-spacing:3px;margin-top:8px;text-align:center;text-shadow:0 0 16px #00ff88,0 0 32px #00ff8844}
+.lights-row{display:flex;gap:11px;padding:11px 18px;border-radius:0 0 14px 14px;background:linear-gradient(180deg,rgba(6,6,12,.94),rgba(6,6,12,.55));border:1px solid rgba(255,255,255,.10);border-top:none;box-shadow:0 12px 30px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4)}
+.light-circle{width:30px;height:30px;border-radius:50%;background:#1a1a22;border:2px solid #2a2a33;transition:background .3s}
+.light-circle.on{background:#ff0040;border-color:#ff0040;box-shadow:0 0 16px #ff0040}
+.light-circle.green{background:#00ff88;border-color:#00ff88;box-shadow:0 0 16px #00ff88}
 
 .team-picker-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,5,8,.95);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .team-picker-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px;max-width:500px;padding:0 16px}
@@ -156,18 +157,6 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:8px;letter-spacing:1px">WHO ARE YOU SUPPORTING?</div>
   <div class="team-picker-grid" id="teamPickerGrid"></div>
   <div style="font-family:'Chakra Petch';font-size:10px;color:#444;margin-top:20px">20 laps · Mandatory pit stop · Pick your team</div>
-</div>
-
-<div class="lights-overlay" id="lightsOverlay" style="display:none">
-  <div class="lights-row" id="lightsRow">
-    <div class="light-circle" id="light1"></div>
-    <div class="light-circle" id="light2"></div>
-    <div class="light-circle" id="light3"></div>
-    <div class="light-circle" id="light4"></div>
-    <div class="light-circle" id="light5"></div>
-  </div>
-  <div class="lights-number" id="lightsNumber"></div>
-  <div id="lightsText" style="margin-top:16px"></div>
 </div>
 
 <div class="top-bar">
@@ -268,6 +257,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 
   <div class="center">
     <div class="grid-bg"></div>
+    <!-- F1 lights gantry — hangs over the start line; track + grid stay fully visible -->
+    <div class="lights-overlay" id="lightsOverlay" style="display:none">
+      <div class="lights-row" id="lightsRow">
+        <div class="light-circle" id="light1"></div>
+        <div class="light-circle" id="light2"></div>
+        <div class="light-circle" id="light3"></div>
+        <div class="light-circle" id="light4"></div>
+        <div class="light-circle" id="light5"></div>
+      </div>
+      <div class="lights-number" id="lightsNumber"></div>
+      <div id="lightsText"></div>
+    </div>
     <svg id="trackSvg" viewBox="-30 95 600 340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;max-width:780px;position:relative;z-index:2">
       <defs>
         <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
