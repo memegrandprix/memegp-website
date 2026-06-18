@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — Session Data Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#ffcc00;--bg:#040408;--text:#f0f0f5;--muted:#7a7a88;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Chakra Petch',sans-serif;min-height:100dvh;
+background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),
+ radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%),
+ linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed}
+.wrap{max-width:940px;margin:0 auto;padding:24px 18px 70px}
+/* ===== HEADER + TOGGLE ===== */
+.dh{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:6px}
+.dh h1{font-family:'Orbitron';font-weight:900;font-size:clamp(19px,3.6vw,28px);letter-spacing:2px;color:#fff;text-shadow:0 0 16px rgba(255,204,0,.4)}
+.dh h1 b{color:var(--gold)}
+.toggle{display:inline-flex;border:1px solid rgba(255,204,0,.3);border-radius:8px;overflow:hidden;background:rgba(8,8,14,.6)}
+.toggle button{font-family:'Orbitron';font-size:10px;font-weight:800;letter-spacing:1.5px;padding:8px 16px;background:none;border:none;color:var(--muted);cursor:pointer}
+.toggle button.on{background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;text-shadow:none}
+.sub{font-size:11px;letter-spacing:2px;color:var(--muted);margin:6px 0 22px}
+/* ===== SECTION TITLE ===== */
+.card-title{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:var(--gold);text-shadow:0 0 12px rgba(255,204,0,.4);margin:0 0 14px;display:flex;align-items:center;gap:8px}
+/* ===== HERO: FULL-BLEED PODIUM ===== */
+.hero{margin-bottom:30px}
+.podium{display:grid;grid-template-columns:1fr 1.22fr 1fr;gap:13px;align-items:end;margin-bottom:14px}
+.pcard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid var(--pc,#444);
+ box-shadow:0 0 26px rgba(0,0,0,.55),0 0 24px var(--pc-glow,transparent)}
+.media{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(64px,12vw,110px);
+ background:radial-gradient(circle at 50% 36%, var(--pc-soft,rgba(255,255,255,.12)), rgba(6,6,12,.92) 80%);
+ filter:drop-shadow(0 0 18px var(--pc-glow,transparent))}
+.num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:62px;line-height:1;color:#fff;opacity:.95;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.crown{position:absolute;top:9px;right:11px;z-index:2;font-size:19px;filter:drop-shadow(0 0 6px rgba(255,204,0,.7))}
+.ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:28px 12px 13px;text-align:left;background:linear-gradient(transparent, rgba(4,4,8,.5) 32%, rgba(4,4,8,.94))}
+.accent{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:var(--pc,#444);box-shadow:0 0 10px var(--pc,#444)}
+.tk{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.5px}
+.lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:var(--gold);margin-top:2px}
+.runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
+.pcard.p1 .num{font-size:74px}.pcard.p1 .tk{font-size:18px}.pcard.p1 .lap{font-size:20px}
+.list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;max-height:230px;overflow-y:auto}
+.lrow{display:grid;grid-template-columns:32px 32px 1fr 70px 66px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+.lrow:last-child{border-bottom:none}
+.lpos{font-family:'Orbitron';font-weight:800;font-size:14px;color:#888;text-align:center}
+.lav{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;border:1.5px solid var(--pc,#444);box-shadow:0 0 7px var(--pc-glow,transparent)}
+.ltk{font-family:'Orbitron';font-weight:700;font-size:12px}
+.llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
+.lgap{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);text-align:right}
+.list::-webkit-scrollbar{width:5px}.list::-webkit-scrollbar-thumb{background:rgba(255,204,0,.3);border-radius:3px}
+/* ===== FUN-FACT CARD GRID ===== */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.podium{gap:8px}}
+.fc{position:relative;background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));backdrop-filter:blur(12px);
+ border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,var(--gold));border-radius:12px;padding:16px 16px 14px;overflow:hidden;
+ box-shadow:0 0 24px rgba(0,0,0,.45)}
+.fc::after{content:"";position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--ac,rgba(255,204,0,.5)),transparent 70%);opacity:.10}
+.fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.fc-h .ic{font-size:14px}
+.fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(20px,3.4vw,26px);line-height:1.05;color:#fff}
+.fc-big .u{color:var(--ac,var(--gold))}
+.fc-sub{font-size:12px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+.fc-sub b{color:#fff;font-weight:700}
+.mono{font-family:'JetBrains Mono';font-weight:700}
+/* sector kings rows */
+.sk{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+.skrow{display:flex;align-items:center;gap:9px;font-size:13px}
+.skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sktk{font-family:'Orbitron';font-weight:700;font-size:12px;min-width:78px}
+.sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
+.skbest{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.12);font-size:12px;color:#cfcfd6}
+.skbest b{font-family:'JetBrains Mono';color:var(--gold)}
+/* tyre pace (full width) */
+.fc.wide{margin-bottom:14px}
+.tyres{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:2px}
+.ty{text-align:center;padding:13px 8px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.06);border-top:3px solid var(--tc)}
+.tyname{font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:2px;color:var(--tc)}
+.tytime{font-family:'JetBrains Mono';font-weight:700;font-size:clamp(19px,3.2vw,25px);color:#fff;margin:7px 0 4px}
+.tydeg{font-size:9.5px;color:var(--muted);letter-spacing:.3px}
+/* share */
+.share{margin-top:13px;display:flex;justify-content:flex-end}
+.share button{font-family:'Orbitron';font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#000;background:linear-gradient(90deg,#ffcc00,#ffe066);
+ border:none;padding:7px 13px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 12px rgba(255,204,0,.3)}
+.share button:hover{filter:brightness(1.08)}
+.share.big button{padding:9px 17px;font-size:11px}
+.dh .share{margin:0}
+</style></head>
+<body>
+<div class="wrap">
+
+  <div class="dh">
+    <h1>SESSION DATA <b>· PRACTICE</b></h1>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="toggle"><button>LIVE</button><button class="on">DATA</button></div>
+      <div class="share big"><button data-tweet="🏁 Free Practice is in the books at Satoshi Speedway — $PUP fastest, full session data 👇 memegrandprix.com $MEMEGP">𝕏 SHARE</button></div>
+    </div>
+  </div>
+  <div class="sub">SATOSHI SPEEDWAY · ROUND 1 · 15/15 CLASSIFIED</div>
+
+  <!-- ===== HERO: TOP FASTEST ===== -->
+  <div class="hero">
+    <div class="card-title">⚡ FASTEST LAPS</div>
+    <div class="podium">
+      <div class="pcard" style="--pc:#F7931A;--pc-glow:rgba(247,147,26,.4);--pc-soft:rgba(247,147,26,.4)">
+        <div class="media">🐐</div><div class="num">2</div>
+        <div class="ov"><div class="tk">$BILLY</div><div class="lap">1:19.619</div><div class="runs">+0.780 · 5 RUNS</div></div>
+        <div class="accent"></div>
+      </div>
+      <div class="pcard p1" style="--pc:#F0B90B;--pc-glow:rgba(240,185,11,.55);--pc-soft:rgba(240,185,11,.5)">
+        <div class="media">🐶</div><div class="num">1</div><div class="crown">👑</div>
+        <div class="ov"><div class="tk">$PUP</div><div class="lap">1:18.839</div><div class="runs">FASTEST LAP · 5 RUNS</div></div>
+        <div class="accent"></div>
+      </div>
+      <div class="pcard" style="--pc:#1e7fd9;--pc-glow:rgba(30,127,217,.4);--pc-soft:rgba(30,127,217,.4)">
+        <div class="media">🤖</div><div class="num">3</div>
+        <div class="ov"><div class="tk">$TURBO</div><div class="lap">1:19.711</div><div class="runs">+0.872 · 5 RUNS</div></div>
+        <div class="accent"></div>
+      </div>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <!-- ===== AVG PACE BY COMPOUND (the FP strategy intel) ===== -->
+  <div class="fc wide" style="--ac:#ffcc00">
+    <div class="fc-h"><span class="ic">🛞</span>AVG PACE BY COMPOUND</div>
+    <div class="tyres">
+      <div class="ty" style="--tc:#ef4444"><div class="tyname">SOFT</div><div class="tytime">1:19.3</div><div class="tydeg">+0.115s/lap deg · quickest</div></div>
+      <div class="ty" style="--tc:#ffcc00"><div class="tyname">MEDIUM</div><div class="tytime">1:19.7</div><div class="tydeg">+0.055s/lap deg · balanced</div></div>
+      <div class="ty" style="--tc:#e8e8ee"><div class="tyname">HARD</div><div class="tytime">1:20.1</div><div class="tydeg">+0.028s/lap deg · durable</div></div>
+    </div>
+    <div class="skbest">Softs average <b>~0.8s/lap</b> quicker than hards — but degrade nearly <b>4× faster</b>. This is the intel your community uses to pick each team's Sunday strategy.</div>
+    <div class="share"><button data-tweet="🛞 TYRE PACE — FP1 Satoshi Speedway. Avg lap: SOFT 1:19.3 · MEDIUM 1:19.7 · HARD 1:20.1. Softs quickest but degrade 4× faster. Pick your Sunday strategy 👇 $MEMEGP">𝕏 Share</button></div>
+  </div>
+
+  <!-- ===== FUN-FACT CARDS ===== -->
+  <div class="grid">
+
+    <!-- SECTOR KINGS -->
+    <div class="fc" style="--ac:#ffcc00">
+      <div class="fc-h"><span class="ic">🏁</span>SECTOR KINGS</div>
+      <div class="sk">
+        <div class="skrow"><span class="skdot" style="background:var(--s1)"></span><span class="sktk">$TURBO</span><span style="color:var(--s1);font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">30.180</span></div>
+        <div class="skrow"><span class="skdot" style="background:var(--s2)"></span><span class="sktk">$MOMO</span><span style="color:var(--s2);font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">26.050</span></div>
+        <div class="skrow"><span class="skdot" style="background:var(--s3)"></span><span class="sktk">$PUP</span><span style="color:var(--s3);font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">22.402</span></div>
+      </div>
+      <div class="skbest">Theoretical best lap <b>1:18.632</b> — 0.207s quicker than anyone managed for real.</div>
+      <div class="share"><button data-tweet="🏁 SECTOR KINGS — FP1 Satoshi Speedway: S1 $TURBO · S2 $MOMO · S3 $PUP. Theoretical best lap 1:18.632 👀 $MEMEGP">𝕏 Share</button></div>
+    </div>
+
+    <!-- BIGGEST MARGIN -->
+    <div class="fc" style="--ac:#F0B90B">
+      <div class="fc-h"><span class="ic">📏</span>BIGGEST MARGIN</div>
+      <div class="fc-big"><span class="u">$PUP</span> topped FP <span class="mono">0.780s</span> clear</div>
+      <div class="fc-sub">Half a straight of daylight to <b>$BILLY</b> in P2. The dog set the pace and never looked back.</div>
+      <div class="share"><button data-tweet="📏 $PUP topped Free Practice 0.780s clear of the field at Satoshi Speedway. Statement run. $MEMEGP">𝕏 Share</button></div>
+    </div>
+
+    <!-- CLOSEST BATTLE -->
+    <div class="fc" style="--ac:#22DD66">
+      <div class="fc-h"><span class="ic">⚔️</span>CLOSEST BATTLE</div>
+      <div class="fc-big"><span class="u">$SHIH</span> vs <span class="u">$LOL</span><br><span class="mono" style="font-size:18px">0.013s</span> apart</div>
+      <div class="fc-sub">Thirteen thousandths split P6 and P7 — the tightest gap anywhere on the timesheet.</div>
+      <div class="share"><button data-tweet="⚔️ CLOSEST BATTLE of FP1: $SHIH vs $LOL separated by just 0.013s. Photo finish for P6. $MEMEGP">𝕏 Share</button></div>
+    </div>
+
+    <!-- MOST CONSISTENT -->
+    <div class="fc" style="--ac:#e62538">
+      <div class="fc-h"><span class="ic">🎯</span>MOST CONSISTENT</div>
+      <div class="fc-big"><span class="u">$MASK</span> <span class="mono" style="font-size:18px">±0.09s</span></div>
+      <div class="fc-sub">Tightest lap-time spread across all 5 runs — metronomic. Whoever's driving has ice in their veins.</div>
+      <div class="share"><button data-tweet="🎯 MOST CONSISTENT in FP1: $MASK — every lap within ±0.09s across 5 runs. Metronomic. $MEMEGP">𝕏 Share</button></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const rest=[
+ [4,'MOMO','🌸','#F989B9','1:20.216','+1.378'],[5,'MASK','🎭','#e62538','1:20.642','+1.803'],
+ [6,'SHIH','🐕','#FFD200','1:20.699','+1.860'],[7,'LOL','😂','#22DD66','1:20.712','+1.874'],
+ [8,'VIBECOIN','😺','#E91E63','1:20.944','+2.105'],[9,'PEPONK','🐸','#FB8802','1:21.088','+2.249'],
+ [10,'DOBERMANN','🐕‍🦺','#8a8a99','1:21.402','+2.563'],[11,'SUS','🛸','#C8102E','1:21.870','+3.031'],
+ [12,'420BLAZEIT','🌿','#7B2D8E','1:22.140','+3.301'],[13,'MARS','🪐','#3a5bd0','1:22.560','+3.721'],
+ [14,'MONKO','🐒','#ffcc00','1:22.910','+4.071'],[15,'NEURO','🧠','#F58A1F','1:23.480','+4.641'],
+];
+document.getElementById('list').innerHTML=rest.map(r=>`
+ <div class="lrow">
+   <div class="lpos">${r[0]}</div>
+   <div class="lav" style="--pc:${r[3]};--pc-glow:${r[3]}55">${r[2]}</div>
+   <div class="ltk">$${r[1]}</div>
+   <div class="llap">${r[4]}</div>
+   <div class="lgap">${r[5]}</div>
+ </div>`).join('');
+
+// working X share — opens a prefilled tweet intent
+document.querySelectorAll('[data-tweet]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const t=encodeURIComponent(b.getAttribute('data-tweet'));
+    window.open('https://twitter.com/intent/tweet?text='+t,'_blank','noopener');
+  });
+});
+</script>
+</body></html>
