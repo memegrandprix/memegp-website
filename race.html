@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- ============================================================ -->
-<!--  MEMEGP race.html · BUILD: S2-GRID-LIVE-r3 (sector fix + nav: FP2 dropped)   -->
+<!--  MEMEGP race.html · BUILD: S2-NEON-ENGINE (neon theme + race-engine.js)   -->
 <!--  Satoshi Speedway + 15-team live grid (reads stats-calculator) -->
 <!--  Correct file: pole sitter is PUP. Old test files have no stamp.  -->
 <!-- ============================================================ -->
@@ -109,6 +109,43 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   .col-headers{font-size:6px;padding:4px 8px}
   .lb-row{padding:4px 8px}
 }
+/* ===== NEON / GLASS THEME ===== */
+:root{--gold:#ffcc00;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
+body{background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),
+ radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%),
+ linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+ background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background-image:radial-gradient(1px 1px at 18% 28%,rgba(255,255,255,.45),transparent),
+ radial-gradient(1px 1px at 72% 18%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.3),transparent),
+ radial-gradient(1px 1px at 86% 62%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 10% 82%,rgba(255,255,255,.35),transparent)}
+.top-bar,.ticker,.main{position:relative;z-index:1}
+.center{background:transparent!important}
+.grid-bg{opacity:.35}
+.left,.right{background:linear-gradient(160deg,rgba(22,22,32,.72),rgba(10,10,18,.82))!important;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(255,204,0,.16)!important;box-shadow:0 0 26px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.05) inset}
+.left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
+.left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
+.run-box{position:relative;width:40px;height:40px;border-radius:50%!important;border:none!important;
+ display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0}
+.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;
+ border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
+.car-row{border-bottom:1px solid rgba(255,255,255,.04)!important}
+.car-row.active{background:rgba(255,204,0,.05)!important}
+.lb-row{border-bottom:1px solid rgba(255,255,255,.05)!important}
+.lb-row.lb-lead{background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.02))!important;border:1px solid rgba(255,204,0,.3)!important}
+.lb-lead>span:first-child{color:var(--gold)!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.col-headers{border-bottom:1px solid rgba(255,204,0,.12)!important}
+.top-bar{background:linear-gradient(180deg,rgba(12,12,20,.92),rgba(4,4,8,.82))!important;border-bottom:1px solid rgba(255,204,0,.3)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ticker{background:rgba(8,8,14,.6)!important;border-bottom:1px solid rgba(255,204,0,.1)!important}
+.brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
+.session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.session-tab{color:#888}
 </style>
 </head>
 <body>
@@ -236,6 +273,9 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
         <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
           <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
         </pattern>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
 
       <!-- ════════════════════════════════════════════════ -->
@@ -255,54 +295,22 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
       <!-- ════════════════════════════════════════════════ -->
       <g transform="matrix(1, 0, -0.04, 0.88, 10, 25)">
 
-        <!-- Mid glow -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Asphalt base -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="#1a1a22" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Subtle white edge -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" opacity="0.12"/>
-
-        <!-- PIT LANE underlays -->
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#1a1a24" stroke-width="20" stroke-linecap="butt" stroke-linejoin="round"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#f5f5f5" stroke-width="15" stroke-linecap="butt" stroke-linejoin="round" opacity="0.97"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="1" stroke-dasharray="5 6" stroke-linecap="butt"/>
-
-        <!-- 3 SECTOR COLOURED OVERLAYS (pathLength=3000, dasharray 1000/2000) -->
-        <!-- SECTOR 1 · BLUE -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#2563eb" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-        <!-- SECTOR 2 · RED -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#dc2626" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#ef4444" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-        <!-- SECTOR 3 · GREEN -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#10b981" stroke-width="11" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.92"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              pathLength="3000" fill="none" stroke="#34d399" stroke-width="5" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="butt" stroke-linejoin="round" opacity="0.7"/>
-
-        <!-- Center dashed white racing line -->
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z"
-              fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="5 8" stroke-linecap="round"/>
-
-        <!-- Garage bays -->
-        <g stroke="#0a0a14" stroke-width="1.3" opacity="0.55">
-          <line x1="195" y1="138" x2="195" y2="148"/><line x1="215" y1="138" x2="215" y2="148"/>
-          <line x1="235" y1="138" x2="235" y2="148"/><line x1="255" y1="138" x2="255" y2="148"/>
-          <line x1="275" y1="138" x2="275" y2="148"/><line x1="295" y1="138" x2="295" y2="148"/>
-          <line x1="315" y1="138" x2="315" y2="148"/><line x1="335" y1="138" x2="335" y2="148"/>
-        </g>
-        <text x="158" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">ENTRY</text>
-        <g transform="translate(170, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
-        <text x="362" y="135" font-family="Orbitron,sans-serif" font-size="6" font-weight="700" letter-spacing="1.5" fill="#0a0a14" text-anchor="middle" opacity="0.9">EXIT</text>
-        <g transform="translate(355, 142)"><path d="M -3 -2 L 3 0 L -3 2 Z" fill="#0a0a14" opacity="0.9"/></g>
+        <!-- ===== NEON ROAD ===== -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="#0a0a12" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
+        <!-- ===== NEON PIT LANE ===== -->
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="butt"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="butt"/>
+        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
         <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
 
         <!-- START / FINISH -->
@@ -359,6 +367,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 
 <!-- Single source of truth: frozen base + earned upgrades. Race reads stats from here. -->
 <script src="stats-calculator.js"></script>
+<script src="race-engine.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 // MEME GP — RACE DAY v2.1 (FIX: progressive fastest tracking)
@@ -580,7 +589,17 @@ function buildRace() {
   return race;
 }
 
-const RACE = buildRace();
+// ── RACE ENGINE (race-engine.js) — the validated S2 positional model (PUP ~60%).
+// STRATEGY_CONFIG: community tyre/fuel picks per team, collected via X/Telegram polls
+// after Friday FP. Empty {} => engine uses randomised stand-ins (still ~60%).
+// Grid: uses the real Saturday quali order if QUALIFYING_ORDER is filled; otherwise the
+// engine runs its own qualifying so previews show realistic grid variation.
+const STRATEGY_CONFIG = {};
+const RACE = MEMEGP_Race.buildAnimatedRace(
+  SEED,
+  STRATEGY_CONFIG,
+  (QUALIFYING_ORDER.length === TEAMS.length) ? QUALIFYING_ORDER : null
+);
 
 let selectedTeam = null;
 const fanCounts = {};
@@ -967,14 +986,18 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
 
     let pt;
     if (isPitting && carLapProgress > 0.70) {
-      if (carLapProgress < 0.78) {
-        const pitFrac = (carLapProgress - 0.70) / 0.08;
-        pt = getPitPoint(pitFrac * 0.45);
-      } else if (carLapProgress < 0.92) {
-        pt = getPitPoint(0.5);
+      // stationary hold sized to the engine's actual service time (5-10s) for this stop
+      const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id && e.lap === carLap);
+      const serviceFrac = Math.min(0.16, Math.max(0.055, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
+      const enterEnd = 0.74, holdEnd = enterEnd + serviceFrac;   // car sits still box during [enterEnd, holdEnd]
+      if (carLapProgress < enterEnd) {
+        const pitFrac = (carLapProgress - 0.70) / (enterEnd - 0.70);
+        pt = getPitPoint(pitFrac * 0.45);                        // drive into the box
+      } else if (carLapProgress < holdEnd) {
+        pt = getPitPoint(0.5);                                   // STATIONARY — tyres + refuel
       } else {
-        const exitFrac = (carLapProgress - 0.92) / 0.08;
-        pt = getPitPoint(0.55 + exitFrac * 0.45);
+        const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.02, (1 - holdEnd)));
+        pt = getPitPoint(0.55 + exitFrac * 0.45);                // accelerate back out
       }
     } else {
       const frac = (lapProgress - gapFraction + 1) % 1;
