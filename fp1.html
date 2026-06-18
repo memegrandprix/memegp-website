@@ -163,6 +163,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
 #dashboardView .skbest{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.12);font-size:12px;color:#cfcfd6}
 #dashboardView .skbest b{font-family:'JetBrains Mono';color:var(--gold)}
+#dashboardView .tyres{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:2px}
+#dashboardView .ty{text-align:center;padding:13px 8px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.06);border-top:3px solid var(--tc)}
+#dashboardView .tyname{font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:2px;color:var(--tc)}
+#dashboardView .tytime{font-family:'JetBrains Mono';font-weight:700;font-size:clamp(18px,3vw,24px);color:#fff;margin:7px 0 4px}
+#dashboardView .tydeg{font-size:9.5px;color:#7a7a88;letter-spacing:.3px}
 #dashboardView .share{margin-top:13px;display:flex;justify-content:flex-end}
 #dashboardView .dshare,#dashboardView .share button{font-family:'Orbitron';font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#000;background:linear-gradient(90deg,#ffcc00,#ffe066);border:none;padding:7px 13px;border-radius:6px;cursor:pointer;box-shadow:0 0 12px rgba(255,204,0,.3)}
 #dashboardView .dshare.big{padding:9px 16px;font-size:11px}
@@ -354,6 +359,9 @@ const SESSION_DURATION = 3600; // 60 min session
 const S1_END = 0.36;
 const S2_END = 0.68;
 const SEED = 20260424; // deterministic seed — same for everyone
+// Tyre compounds — FP runs cycle all three so we capture real per-compound pace
+const COMPOUNDS = { SOFT:{off:-0.55,deg:0.115}, MEDIUM:{off:0,deg:0.055}, HARD:{off:0.50,deg:0.028} };
+const COMPOUND_BY_RUN = ['SOFT','MEDIUM','HARD','SOFT','MEDIUM'];
 
 // ── TEAM META — display only (colours / logos / names / emoji).
 // Stats come from stats-calculator.js (single source of truth).
@@ -434,11 +442,13 @@ function buildSchedule() {
       const runBreak = idx === 0 && run > 0 ? 60 + Math.floor(rng() * 90) : 0; // 60-150 sec break between runs
       prevTime += gap + runBreak;
       const goTime = prevTime;
-      const s1 = calcSectorTime(team, 1, rng);
-      const s2 = calcSectorTime(team, 2, rng);
-      const s3 = calcSectorTime(team, 3, rng);
+      const compound = COMPOUND_BY_RUN[run];
+      const off = COMPOUNDS[compound].off;
+      const s1 = calcSectorTime(team, 1, rng) + off * 0.40;
+      const s2 = calcSectorTime(team, 2, rng) + off * 0.35;
+      const s3 = calcSectorTime(team, 3, rng) + off * 0.25;
       const lapSec = 90 - (team.overall * 2); // visual lap duration
-      events.push({ time: goTime, teamIdx: ti, run: run + 1, s1, s2, s3, lapDur: lapSec });
+      events.push({ time: goTime, teamIdx: ti, run: run + 1, s1, s2, s3, lapDur: lapSec, compound });
     });
   }
   return events;
@@ -457,6 +467,7 @@ TEAMS.forEach((t, i) => {
 
 let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
 const lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
+const compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; // field laps per compound (tyre card)
 let dashOpen = false, lastDash = 0;
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
 
@@ -502,7 +513,7 @@ function renderDashboard(){
   let cards='';
   if (globalBestS1 && globalBestS2 && globalBestS3){
     const theo = globalBestS1.time+globalBestS2.time+globalBestS3.time, onTable = leader-theo;
-    cards += `<div class="fc" style="--ac:#ffcc00"><div class="fc-h">🏁 SECTOR KINGS</div>
+    cards += `<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div>
       <div class="sk">
         <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk">$${globalBestS1.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${fmtS(globalBestS1.time)}</span></div>
         <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk">$${globalBestS2.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${fmtS(globalBestS2.time)}</span></div>
@@ -512,14 +523,14 @@ function renderDashboard(){
       <div class="share"><button data-tweet="🏁 SECTOR KINGS — FP Satoshi Speedway: S1 $${globalBestS1.id} · S2 $${globalBestS2.id} · S3 $${globalBestS3.id}. Theoretical best ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
-    cards += `<div class="fc" style="--ac:${entries[0].t.color}"><div class="fc-h">📏 BIGGEST MARGIN</div>
+    cards += `<div class="fc" style="--ac:${entries[0].t.color}"><div class="fc-h">BIGGEST MARGIN</div>
       <div class="fc-big"><span class="u">$${entries[0].t.id}</span> leads by <span class="mono">${m.toFixed(3)}s</span></div>
       <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the timesheet.</div>
       <div class="share"><button data-tweet="📏 $${entries[0].t.id} tops FP ${m.toFixed(3)}s clear of $${entries[1].t.id} at Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ let best={g:Infinity};
     for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
-    cards += `<div class="fc" style="--ac:#22DD66"><div class="fc-h">⚔️ CLOSEST BATTLE</div>
+    cards += `<div class="fc" style="--ac:#22DD66"><div class="fc-h">CLOSEST BATTLE</div>
       <div class="fc-big"><span class="u">$${best.a.t.id}</span> vs <span class="u">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
       <div class="fc-sub">Tightest gap on the timesheet — P${best.pos} v P${best.pos+1}.</div>
       <div class="share"><button data-tweet="⚔️ CLOSEST BATTLE of FP: $${best.a.t.id} vs $${best.b.t.id} — just ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
@@ -527,12 +538,28 @@ function renderDashboard(){
   let mc=null;
   entries.forEach(e=>{ const h=lapHistory[e.t.id]; if(h&&h.length>=2){ const sp=Math.max(...h)-Math.min(...h); if(!mc||sp<mc.sp) mc={t:e.t,sp}; } });
   if (mc){
-    cards += `<div class="fc" style="--ac:#e62538"><div class="fc-h">🎯 MOST CONSISTENT</div>
+    cards += `<div class="fc" style="--ac:#e62538"><div class="fc-h">MOST CONSISTENT</div>
       <div class="fc-big"><span class="u">$${mc.t.id}</span> <span class="mono" style="font-size:18px">±${(mc.sp/2).toFixed(3)}s</span></div>
       <div class="fc-sub">Tightest lap-time spread across runs — metronomic.</div>
       <div class="share"><button data-tweet="🎯 MOST CONSISTENT in FP: $${mc.t.id} — laps within ±${(mc.sp/2).toFixed(3)}s. $MEMEGP">𝕏 Share</button></div></div>`;
   }
-  gridEl.innerHTML = cards;
+  // tyre pace — field average per compound (real compound runs)
+  let tyreCard='';
+  if (compoundLaps.SOFT.length && compoundLaps.MEDIUM.length && compoundLaps.HARD.length){
+    const A = a => a.reduce((x,y)=>x+y,0)/a.length;
+    const sA=A(compoundLaps.SOFT), mA=A(compoundLaps.MEDIUM), hA=A(compoundLaps.HARD), spread=hA-sA;
+    tyreCard = `<div class="fc wide" style="--ac:#ffcc00;grid-column:1/-1">
+      <div class="fc-h">AVG PACE BY COMPOUND</div>
+      <div class="tyres">
+        <div class="ty" style="--tc:#ef4444"><div class="tyname">SOFT</div><div class="tytime">${fmt(sA)}</div><div class="tydeg">+0.115s/lap deg · quickest</div></div>
+        <div class="ty" style="--tc:#ffcc00"><div class="tyname">MEDIUM</div><div class="tytime">${fmt(mA)}</div><div class="tydeg">+0.055s/lap deg · balanced</div></div>
+        <div class="ty" style="--tc:#e8e8ee"><div class="tyname">HARD</div><div class="tytime">${fmt(hA)}</div><div class="tydeg">+0.028s/lap deg · durable</div></div>
+      </div>
+      <div class="skbest">Softs average <b>${spread.toFixed(3)}s/lap</b> quicker than hards — but degrade ~4\u00d7 faster. The intel your community uses to pick each team's Sunday strategy.</div>
+      <div class="share"><button data-tweet="🛞 TYRE PACE — FP Satoshi Speedway. Avg lap: SOFT ${fmt(sA)} · MEDIUM ${fmt(mA)} · HARD ${fmt(hA)}. Softs quickest, hards last 👇 Pick your Sunday strategy $MEMEGP">𝕏 Share</button></div>
+    </div>`;
+  }
+  gridEl.innerHTML = tyreCard + cards;
 }
 
 function update() {
@@ -620,6 +647,7 @@ function update() {
       // Update best results
       const lap = ev.s1 + ev.s2 + ev.s3;
       (lapHistory[team.id] = lapHistory[team.id] || []).push(lap);
+      if (ev.compound) compoundLaps[ev.compound].push(lap);
       if (!bestResults[team.id]) {
         bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
       } else {
