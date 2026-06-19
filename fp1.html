@@ -188,7 +188,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
  box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'Chakra Petch',sans-serif;pointer-events:none}
 #rowTip .tip-body{padding:13px 14px;width:248px;flex-shrink:0}
 #rowTip .tip-car{position:relative;width:154px;align-self:stretch;flex-shrink:0;background:#0c0c14;border-left:1px solid rgba(255,255,255,.1)}
-#rowTip .tip-car img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 28%}
+#rowTip .tcar-half{position:absolute;left:0;right:0;height:50%;overflow:hidden}
+#rowTip .tcar-half img{width:100%;height:100%;object-fit:cover}
+#rowTip .tcar-top{top:0}
+#rowTip .tcar-top img{object-position:center 30%}
+#rowTip .tcar-bot{bottom:0;border-top:1.5px solid var(--tc)}
+#rowTip .tcar-bot img{object-position:center}
 #rowTip .tip-car .acc{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;background:var(--tc);box-shadow:0 0 8px var(--tc)}
 #rowTip .tip-car .tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 8px 9px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.95))}
 #rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
@@ -431,7 +436,7 @@ function buildTeams() {
     const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
     const m = TEAM_META[tk];
     return {
-      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      id: tk, emoji: m.emoji, logo: m.logo, car: m.car || m.logo.replace('.png','-car.png'), color: m.color, name: m.name,
       engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
       pit: s.pit, overall: s.overall,
     };
@@ -522,6 +527,34 @@ function getPoint(frac) {
   const len = pathEl.getTotalLength();
   const pt = pathEl.getPointAtLength(len * (frac % 1));
   return { x: pt.x, y: pt.y };
+}
+
+// ── Pit-lane routing: cars join/leave the track through the pit ──
+const OUT_PIT = 0.16;   // first 16% of the out-lap = driving out of the pit
+const IN_TRACK = 0.84;  // last 16% of the in-lap  = driving into the pit
+// pit lane is the straight "M 152 133 L 349 128"; u=0 entry(left) … u=1 exit(right), box at u=0.5
+function getPitPoint(u){ u = Math.max(0, Math.min(1, u)); return { x: 152 + 197*u, y: 133 - 5*u }; }
+const _trackLen = pathEl.getTotalLength();
+function fracNearest(tx, ty){            // track fraction of the straight point nearest (tx,ty)
+  let best = 0, bd = Infinity;
+  for (let i = 0; i <= 600; i++){ const f = i/600*0.28; const p = pathEl.getPointAtLength(_trackLen*f);
+    if (p.y > 132) continue;             // straight only (y≈115-122)
+    const d = (p.x-tx)**2 + (p.y-ty)**2; if (d < bd){ bd = d; best = f; } }
+  return best;
+}
+const PIT_EXIT_F  = fracNearest(349, 115.8); // out-lap rejoins the track here (above pit exit)
+const PIT_ENTRY_F = fracNearest(152, 121.1); // in-lap peels off here (above pit entry)
+function carPos(cs){
+  const pr = cs.progress;
+  if (cs.status === 'OUT LAP'){
+    if (pr < OUT_PIT) return getPitPoint(0.5 + (pr/OUT_PIT)*0.5);             // box → pit exit
+    return getPoint(PIT_EXIT_F + ((pr-OUT_PIT)/(1-OUT_PIT))*(1-PIT_EXIT_F));  // pit exit → S/F
+  }
+  if (cs.status === 'IN LAP'){
+    if (pr < IN_TRACK) return getPoint(((pr/IN_TRACK)*(1+PIT_ENTRY_F)) % 1);  // S/F → pit entry
+    return getPitPoint(((pr-IN_TRACK)/(1-IN_TRACK))*0.5);                     // pit entry → box
+  }
+  return getPoint(pr);                                                        // HOT LAP: flying lap
 }
 
 function fmtGap(g){ return '+' + g.toFixed(3); }
@@ -802,7 +835,7 @@ function renderCarDots() {
   TEAMS.forEach(t => {
     const cs = carStates[t.id];
     if (!cs.onTrack) return;
-    const pt = getPoint(cs.progress);
+    const pt = carPos(cs);
     const logoId = 'logo-clip-' + t.id;
     html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
       <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${t.color}" opacity="0.15"/>
@@ -846,7 +879,8 @@ function renderRowTip(id){
     </div>
     <div class="tip-car" style="--tc:${t.color}">
       <span class="acc"></span>
-      <img src="${t.logo}" alt="$${id}">
+      <div class="tcar-half tcar-top"><img src="${t.logo}" alt=""></div>
+      <div class="tcar-half tcar-bot"><img src="${t.car}" alt=""></div>
       <span class="tag">$${id}</span>
     </div>`;
   tip.style.display='flex';
