@@ -495,9 +495,9 @@ TEAMS.forEach((t, i) => {
 });
 
 let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
-const lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
-const compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; // field laps per compound (tyre card)
-const compoundBest = {}; // id -> { SOFT, MEDIUM, HARD } best lap per compound
+let lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
+let compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; // field laps per compound (tyre card)
+let compoundBest = {}; // id -> { SOFT, MEDIUM, HARD } best lap per compound
 let dashOpen = false, lastDash = 0;
 let tipTeam = null, tipX = 0, tipY = 0;
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
@@ -635,6 +635,7 @@ function update() {
 
   // Reset best results
   bestResults = {};
+  lapHistory = {}; compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; compoundBest = {};
   globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
 
   let lastActiveTeam = null;
