@@ -183,9 +183,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 
 /* ===== TIMING-ROW HOVER TOOLTIP ===== */
 .lb-row[data-team]{cursor:pointer}
-#rowTip{position:fixed;z-index:60;display:none;width:268px;padding:13px 14px;border-radius:12px;
+#rowTip{position:fixed;z-index:60;display:none;width:auto;padding:0;border-radius:12px;overflow:hidden;
  background:linear-gradient(165deg,rgba(22,22,32,.98),rgba(8,8,14,.99));border:1px solid rgba(255,204,0,.22);
  box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'Chakra Petch',sans-serif;pointer-events:none}
+#rowTip .tip-body{padding:13px 14px;width:248px;flex-shrink:0}
+#rowTip .tip-car{position:relative;width:154px;align-self:stretch;flex-shrink:0;background:#0c0c14;border-left:1px solid rgba(255,255,255,.1)}
+#rowTip .tip-car img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 28%}
+#rowTip .tip-car .acc{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+#rowTip .tip-car .tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 8px 9px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.95))}
 #rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 #rowTip .tip-head img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4)}
 #rowTip .tip-head b{font-family:'Orbitron';font-size:14px;color:#fff}
@@ -277,7 +282,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <!-- get tilted to match the visible track.             -->
       <!-- ════════════════════════════════════════════════ -->
       <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
-      <path id="pitPath" d="M 118 122 Q 150 141 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 152 133 L 349 128" fill="none" stroke="none"/>
 
       <!-- Background grid -->
       <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
@@ -300,10 +305,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" />
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
         <!-- ===== NEON PIT LANE ===== -->
-        <path d="M 118 122 Q 150 141 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="butt"/>
-        <path d="M 118 122 Q 150 141 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="butt"/>
-        <path d="M 118 122 Q 150 141 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
-        <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+        <path d="M 152 133 L 349 128" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
+        <text x="250" y="150" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
         <!-- START / FINISH -->
         <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
         <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
@@ -390,6 +395,7 @@ const SIM_SPEED = TEST_MODE ? (parseFloat(_qp.get('test')) || 15) : 1;
 const SESSION_START_UTC = TEST_MODE ? (Date.now() + 2500) : new Date('2026-04-24T18:00:00Z').getTime();
 const SESSION_DURATION = 3600; // 60 min session
 const S1_END = 0.36;
+const OUT_MULT = 1.35, IN_MULT = 1.35; // out/in laps slower than the flying lap
 const S2_END = 0.68;
 const SEED = 20260424; // deterministic seed — same for everyone
 // Tyre compounds — FP runs cycle all three so we capture real per-compound pace
@@ -472,7 +478,7 @@ function buildSchedule() {
     order.forEach((ti, idx) => {
       const team = TEAMS[ti];
       const gap = 35 + Math.floor(rng() * 40); // 35-75 sec random gap between cars
-      const runBreak = idx === 0 && run > 0 ? 60 + Math.floor(rng() * 90) : 0; // 60-150 sec break between runs
+      const runBreak = idx === 0 && run > 0 ? 300 + Math.floor(rng() * 80) : 0; // long break so previous run's 3 laps complete first
       prevTime += gap + runBreak;
       const goTime = prevTime;
       const compound = COMPOUND_BY_RUN[run];
@@ -488,7 +494,7 @@ function buildSchedule() {
 }
 
 const SCHEDULE = buildSchedule();
-const TOTAL_SESSION_TIME = SCHEDULE[SCHEDULE.length - 1].time + 100; // session ends after last car finishes
+const TOTAL_SESSION_TIME = SCHEDULE[SCHEDULE.length - 1].time + 330; // session ends after last car finishes
 
 // ═══ STATE ═══
 const carStates = {};
@@ -642,8 +648,8 @@ function update() {
   lapHistory = {}; compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; compoundBest = {};
   globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
 
-  let lastActiveTeam = null;
-  let lastActiveRun = 0;
+  let hotTeam = null, hotRun = 0;
+  let onTrackTeam = null, onTrackRun = 0, onTrackPhase = '';
 
   // Process all events up to current time
   SCHEDULE.forEach(ev => {
@@ -653,34 +659,41 @@ function update() {
 
     if (timeSinceGo < 0) return; // hasn't started yet
 
-    // This run's lap duration
-    const lapDur = ev.lapDur;
+    // ── OUT LAP → FLYING LAP → IN LAP (F1-style run) ──
+    const L = ev.lapDur;
+    const outDur = L * OUT_MULT, flyDur = L, inDur = L * IN_MULT;
+    const flyEnd = outDur + flyDur, runEnd = flyEnd + inDur;
+    const t = timeSinceGo;
 
-    // Is this run still active? (car on track)
-    if (timeSinceGo < lapDur) {
-      // Car is ON TRACK right now
+    if (t < runEnd) {
+      // Car is ON TRACK (out, flying, or in lap)
       cs.onTrack = true;
-      cs.status = 'ON TRACK';
       cs.runs = ev.run;
-      cs.progress = timeSinceGo / lapDur;
       cs.goTime = ev.time;
-      cs.lapDur = lapDur;
-      cs.pendingS1 = ev.s1;
-      cs.pendingS2 = ev.s2;
-      cs.pendingS3 = ev.s3;
+      cs.lapDur = L;
+      cs.pendingS1 = ev.s1; cs.pendingS2 = ev.s2; cs.pendingS3 = ev.s3;
+      if (t < outDur) {
+        // OUT LAP — slow, warming up, not timed
+        cs.status = 'OUT LAP'; cs.progress = t / outDur; cs.sector = 0;
+        cs.liveS1 = null; cs.liveS2 = null; cs.liveS3 = null;
+      } else if (t < flyEnd) {
+        // FLYING LAP — the timed hot lap
+        cs.status = 'HOT LAP'; cs.progress = (t - outDur) / flyDur;
+        if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; } else { cs.sector = 1; }
+        if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
+        if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
+        hotTeam = team; hotRun = ev.run;
+      } else {
+        // IN LAP — slow, returning to pit
+        cs.status = 'IN LAP'; cs.progress = (t - flyEnd) / inDur; cs.sector = 0;
+        cs.liveS1 = ev.s1; cs.liveS2 = ev.s2; cs.liveS3 = ev.s3;
+      }
+      onTrackTeam = team; onTrackRun = ev.run; onTrackPhase = cs.status;
+    }
 
-      // Sector reveals
-      if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; }
-      else { cs.sector = 1; }
-      if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
-      if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
-
-      lastActiveTeam = team;
-      lastActiveRun = ev.run;
-    } else {
-      // Run is completed
+    // Flying lap done → lock the timed result (even while the car is on its in-lap)
+    if (t >= flyEnd) {
       cs.runs = Math.max(cs.runs, ev.run);
-      // Update best results
       const lap = ev.s1 + ev.s2 + ev.s3;
       (lapHistory[team.id] = lapHistory[team.id] || []).push(lap);
       if (ev.compound){ compoundLaps[ev.compound].push(lap);
@@ -714,10 +727,11 @@ function update() {
     tickerEl.textContent = '▸ CHEQUERED FLAG — SESSION COMPLETE';
     tickerEl.style.color = '#888';
     tickerDiv.style.background = 'rgba(255,255,255,0.02)';
-  } else if (lastActiveTeam) {
-    tickerEl.textContent = `▸ ${lastActiveTeam.emoji} $${lastActiveTeam.id} — HOT LAP — RUN ${lastActiveRun}/5`;
-    tickerEl.style.color = '#ff6644';
-    tickerDiv.style.background = 'rgba(255,0,64,0.06)';
+  } else if (hotTeam || onTrackTeam) {
+    const sT = hotTeam || onTrackTeam, sR = hotTeam ? hotRun : onTrackRun, sP = hotTeam ? 'HOT LAP' : onTrackPhase;
+    tickerEl.textContent = `▸ ${sT.emoji} $${sT.id} — ${sP} — RUN ${sR}/3`;
+    tickerEl.style.color = sP === 'HOT LAP' ? '#ff6644' : '#ffaa44';
+    tickerDiv.style.background = sP === 'HOT LAP' ? 'rgba(255,0,64,0.06)' : 'rgba(255,170,0,0.05)';
   } else {
     tickerEl.textContent = '▸ ALL CARS IN PIT';
     tickerEl.style.color = '#444';
@@ -819,16 +833,23 @@ function renderRowTip(id){
     </div>`;
   }
   tip.innerHTML = `
-    <div class="tip-head"><img src="${t.logo}" alt=""><b>$${id}</b></div>
-    <div class="tip-sec"><div class="tip-h2">BEST SECTORS</div>
-      <div class="ssec"><span style="color:#3b82f6">SECTOR 1</span>${sBest(br&&br.bestS1,globalBestS1,'#9fc3ff')}</div>
-      <div class="ssec"><span style="color:#ef4444">SECTOR 2</span>${sBest(br&&br.bestS2,globalBestS2,'#ff9b9b')}</div>
-      <div class="ssec"><span style="color:#10b981">SECTOR 3</span>${sBest(br&&br.bestS3,globalBestS3,'#84e9c0')}</div>
+    <div class="tip-body">
+      <div class="tip-head"><b>$${id}</b></div>
+      <div class="tip-sec"><div class="tip-h2">BEST SECTORS</div>
+        <div class="ssec"><span style="color:#3b82f6">SECTOR 1</span>${sBest(br&&br.bestS1,globalBestS1,'#9fc3ff')}</div>
+        <div class="ssec"><span style="color:#ef4444">SECTOR 2</span>${sBest(br&&br.bestS2,globalBestS2,'#ff9b9b')}</div>
+        <div class="ssec"><span style="color:#10b981">SECTOR 3</span>${sBest(br&&br.bestS3,globalBestS3,'#84e9c0')}</div>
+      </div>
+      <div class="tip-sec"><div class="tip-h2">BEST LAP BY TYRE</div>
+        ${tyreRow('SOFT','#ef4444')}${tyreRow('MEDIUM','#ffcc00')}${tyreRow('HARD','#e8e8ee')}
+      </div>${live}
     </div>
-    <div class="tip-sec"><div class="tip-h2">BEST LAP BY TYRE</div>
-      ${tyreRow('SOFT','#ef4444')}${tyreRow('MEDIUM','#ffcc00')}${tyreRow('HARD','#e8e8ee')}
-    </div>${live}`;
-  tip.style.display='block';
+    <div class="tip-car" style="--tc:${t.color}">
+      <span class="acc"></span>
+      <img src="${t.logo}" alt="$${id}">
+      <span class="tag">$${id}</span>
+    </div>`;
+  tip.style.display='flex';
   const w = tip.offsetWidth||268, h = tip.offsetHeight||210;
   let x = tipX - w - 18; if (x < 8) x = tipX + 18;
   let y = Math.min(Math.max(8, tipY - 24), window.innerHeight - h - 8);
