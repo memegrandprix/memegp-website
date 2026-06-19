@@ -114,6 +114,34 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 </style>
 </head>
 <body>
+<!-- ░░░░░░ ACCESS LOCK — delete this entire block to open the session ░░░░░░ -->
+<div id="sessionLock">
+  <div class="lk-card">
+    <div class="lk-badge"><span class="lk-dot"></span>LOCKED</div>
+    <div class="lk-title">QUALIFYING</div>
+    <div class="lk-sub">SATOSHI SPEEDWAY · ROUND 1</div>
+    <div class="lk-when">UNLOCKS SATURDAY · 20 JUNE<br>after Free Practice</div>
+    <a class="lk-back" href="index.html">← RACE CONTROL</a>
+  </div>
+</div>
+<style>
+  #sessionLock{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 38%, rgba(20,20,30,.97), rgba(4,4,8,.995));font-family:'Orbitron',sans-serif}
+  #sessionLock .lk-card{text-align:center;padding:46px 58px;border:1px solid rgba(255,204,0,.25);border-radius:16px;
+    background:linear-gradient(165deg,rgba(22,22,32,.92),rgba(8,8,14,.96));box-shadow:0 24px 70px rgba(0,0,0,.65)}
+  #sessionLock .lk-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff3b3b;
+    border:1px solid rgba(255,59,59,.5);border-radius:6px;padding:6px 16px;margin-bottom:24px}
+  #sessionLock .lk-dot{width:7px;height:7px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 8px #ff3b3b;animation:lkb 1s infinite}
+  @keyframes lkb{0%,100%{opacity:1}50%{opacity:.3}}
+  #sessionLock .lk-title{font-size:40px;font-weight:900;letter-spacing:5px;color:#ffcc00;margin-bottom:6px}
+  #sessionLock .lk-sub{font-size:10.5px;letter-spacing:2.5px;color:#777;margin-bottom:28px}
+  #sessionLock .lk-when{font-family:'Chakra Petch',sans-serif;font-size:14px;letter-spacing:1px;color:#d4d4dc;line-height:1.7;margin-bottom:30px}
+  #sessionLock .lk-back{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;color:#ffcc00;text-decoration:none;
+    border:1px solid #ffcc00;padding:11px 24px;border-radius:6px;transition:filter .15s}
+  #sessionLock .lk-back:hover{filter:brightness(1.15)}
+</style>
+<!-- ░░░░░░ END ACCESS LOCK ░░░░░░ -->
+
 
 <!-- TOP BAR -->
 <div class="top-bar">

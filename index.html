@@ -186,6 +186,9 @@ body::before{
   box-shadow:0 0 8px rgba(255,204,0,.8);
   animation:blink 1.4s infinite;
 }
+.tnav-badge.live{ animation:livepulse 1.6s ease-in-out infinite; }
+@keyframes livepulse{ 0%,100%{box-shadow:0 0 10px rgba(255,204,0,.22)} 50%{box-shadow:0 0 20px rgba(255,204,0,.5)} }
+.tnav-badge.live .dot{ background:#ff2a2a; box-shadow:0 0 9px rgba(255,42,42,.95); animation:blink .85s infinite; }
 .tnav-center{
   justify-self:center;
   display:flex;align-items:center;
@@ -923,10 +926,12 @@ text-align:center;}
 
 <!-- TOP NAV -->
 <nav class="topnav-pro">
-  <a href="index.html" class="tnav-badge">
+  <!-- FP NIGHT: WATCH LIVE. To revert after the session, delete this block and uncomment the ORIGINAL line below. -->
+  <a href="fp1.html" class="tnav-badge live" aria-label="Watch Free Practice live">
     <span class="dot"></span>
-    <span>MEME GP</span>
+    <span>WATCH LIVE</span>
   </a>
+  <!-- ORIGINAL: <a href="index.html" class="tnav-badge"><span class="dot"></span><span>MEME GP</span></a> -->
   <div class="tnav-center">
     <a href="season-2.html" class="tnav-link">SEASON 2</a>
     <span class="tnav-sep"></span>
