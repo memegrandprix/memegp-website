@@ -397,7 +397,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 const _qp = new URLSearchParams(location.search);
 const TEST_MODE = _qp.has('test') || _qp.has('preview');
 const SIM_SPEED = TEST_MODE ? (parseFloat(_qp.get('test')) || 15) : 1;
-const SESSION_START_UTC = TEST_MODE ? (Date.now() + 2500) : new Date('2026-04-24T18:00:00Z').getTime();
+const SESSION_START_UTC = TEST_MODE ? (Date.now() + 2500) : new Date('2026-06-19T18:00:00Z').getTime();
 const SESSION_DURATION = 3600; // 60 min session
 const S1_END = 0.36;
 const OUT_MULT = 1.35, IN_MULT = 1.35; // out/in laps slower than the flying lap
@@ -880,7 +880,7 @@ function renderRowTip(id){
     <div class="tip-car" style="--tc:${t.color}">
       <span class="acc"></span>
       <div class="tcar-half tcar-top"><img src="${t.logo}" alt=""></div>
-      <div class="tcar-half tcar-bot"><img src="${t.car}" alt=""></div>
+      <div class="tcar-half tcar-bot"><img src="${t.car}" alt="" onerror="if(this.src.slice(-4).toLowerCase()=='.png'){this.src=this.src.slice(0,-4)+'.jpg';}else{this.onerror=null;this.src='${t.logo}';}"></div>
       <span class="tag">$${id}</span>
     </div>`;
   tip.style.display='flex';
