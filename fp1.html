@@ -645,6 +645,11 @@ function update() {
     document.getElementById('waitingScreen').style.display = 'flex';
     document.getElementById('mainLayout').style.display = 'none';
     document.getElementById('liveBadge').style.display = 'none';
+    // keep SESSION DATA reset/closed until the session starts (the dashboard is a separate overlay)
+    dashOpen = false;
+    var _dv = document.getElementById('dashboardView'); if (_dv) _dv.style.display = 'none';
+    var _tl = document.getElementById('tabLive'), _td = document.getElementById('tabData');
+    if (_tl) _tl.classList.add('on'); if (_td) _td.classList.remove('on');
     const remaining = Math.abs(elapsed);
     const h = Math.floor(remaining / 3600);
     const m = Math.floor((remaining % 3600) / 60);
