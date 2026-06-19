@@ -39,6 +39,19 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 
 /* Center */
 .center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.fund-banner{position:absolute;left:18px;right:18px;bottom:16px;z-index:3;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:11px 18px;border-radius:14px;background:linear-gradient(100deg,rgba(20,20,30,.92),rgba(10,10,16,.95));border:1px solid rgba(255,204,0,.18);box-shadow:0 10px 36px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.fund-banner .fb-text{flex:1;min-width:210px}
+.fund-banner .fb-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;letter-spacing:1.4px;color:#fff}
+.fund-banner .fb-title span{color:#ffcc00;text-shadow:0 0 14px rgba(255,204,0,.45)}
+.fund-banner .fb-sub{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.3px;color:#8a8a96;margin-top:3px}
+.fund-banner .fb-ca{display:flex;align-items:center;gap:9px;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid rgba(255,204,0,.22);border-radius:9px;padding:6px 8px 6px 10px;transition:border-color .15s}
+.fund-banner .fb-ca:hover{border-color:rgba(255,204,0,.5)}
+.fund-banner .fb-tag{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1.4px;color:#ffcc00;border:1px solid rgba(255,204,0,.4);border-radius:5px;padding:3px 7px}
+.fund-banner .fb-addr{font-family:'JetBrains Mono',monospace;font-size:11px;color:#cfcfd6;max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
+.fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
+.fund-banner .fb-buy:hover{filter:brightness(1.08)}
+@media(max-width:980px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:8px 12px 16px}}
 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
 
 /* Right panel */
@@ -334,6 +347,20 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <g id="carDots"></g>
       </g>
     </svg>
+
+    <!-- ===== FUND banner (blank space below the track) ===== -->
+    <div class="fund-banner">
+      <div class="fb-text">
+        <div class="fb-title">FUND THE FUTURE OF <span>MEME&nbsp;GP</span></div>
+        <div class="fb-sub">Entertainment first. Back the grid — every holder fuels the next race.</div>
+      </div>
+      <div class="fb-ca" id="fbCa" role="button" tabindex="0" title="Copy contract address">
+        <span class="fb-tag">CONTRACT</span>
+        <span class="fb-addr">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+        <span class="fb-copy" id="fbCopy">COPY</span>
+      </div>
+      <a class="fb-buy" href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener">FUND $MEMEGP →</a>
+    </div>
   </div>
 
   <!-- RIGHT PANEL -->
@@ -943,6 +970,9 @@ function renderLeaderboard() {
 }
 
 // Preview-mode badge
+(function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
+  if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
+    if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
 if (TEST_MODE){
   const b=document.createElement('div');
   b.textContent='\u26a1 PREVIEW MODE \u00d7'+SIM_SPEED;
