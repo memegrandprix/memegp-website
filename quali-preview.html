@@ -32,11 +32,13 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 
 .left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
 .left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
-.car-row{display:flex;align-items:center;gap:8px;padding:6px 14px;border-bottom:1px solid #111;transition:all .3s}
+.car-row{display:flex;align-items:flex-start;gap:8px;padding:8px 14px;border-bottom:1px solid #111;transition:all .3s}
 .car-row.active{background:rgba(0,255,136,.06)}
 .car-row.eliminated{opacity:.35}
-.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0}
-.run-box{background:rgba(255,255,255,.05);border:1px solid #333;border-radius:4px;padding:2px 8px;text-align:center}
+.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;align-self:center}
+.run-box{position:relative;width:40px;height:40px;border-radius:50%;border:none;display:grid;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0;align-self:center}
+.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
+.run-box>div{font-size:10px;font-family:'JetBrains Mono','Space Mono',monospace;font-weight:700;color:#fff;letter-spacing:.5px}
 
 .center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
@@ -111,6 +113,35 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
 .session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
 .session-tab{color:#888}
+#rowTip{position:fixed;z-index:60;display:none;width:auto;padding:0;border-radius:12px;overflow:hidden;
+ background:linear-gradient(165deg,rgba(22,22,32,.98),rgba(8,8,14,.99));border:1px solid rgba(255,204,0,.22);
+ box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'Chakra Petch',sans-serif;pointer-events:none}
+#rowTip .tip-body{padding:13px 14px;width:248px;flex-shrink:0}
+#rowTip .tip-car{position:relative;width:154px;align-self:stretch;flex-shrink:0;background:#0c0c14;border-left:1px solid rgba(255,255,255,.1)}
+#rowTip .tcar-half{position:absolute;left:0;right:0;height:50%;overflow:hidden}
+#rowTip .tcar-half img{width:100%;height:100%;object-fit:cover}
+#rowTip .tcar-top{top:0}
+#rowTip .tcar-top img{object-position:center 30%}
+#rowTip .tcar-bot{bottom:0;border-top:1.5px solid var(--tc)}
+#rowTip .tcar-bot img{object-position:center}
+#rowTip .tip-car .acc{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+#rowTip .tip-car .tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 8px 9px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.95))}
+#rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#rowTip .tip-head img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4)}
+#rowTip .tip-head b{font-family:'Orbitron';font-size:14px;color:#fff}
+#rowTip .tip-h2{font-family:'Orbitron';font-size:8.5px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+#rowTip .tip-sec{margin-bottom:10px}
+#rowTip .ssec,#rowTip .ty-row,#rowTip .tl-row{display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 0}
+#rowTip .ssec>span:first-child,#rowTip .tyl{font-family:'Orbitron';font-size:10px;font-weight:700;letter-spacing:1px}
+#rowTip .tip-live{border-top:1px dashed rgba(255,255,255,.14);padding-top:9px;margin-top:2px}
+#rowTip .tip-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor}
+#rowTip .tcomp{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:var(--tc);border:1px solid var(--tc);border-radius:4px;padding:1px 7px}
+#rowTip .tl-row{gap:8px}
+#rowTip .tl-row>span:first-child{font-family:'Orbitron';font-size:9px;font-weight:700;letter-spacing:1px;color:#888;min-width:34px}
+#rowTip .bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+#rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
+#rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
+
 </style>
 </head>
 <body>
@@ -1170,6 +1201,7 @@ TEAMS.forEach(t => {
 let bestResults = {};
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
 let currentRound = 'WAITING';
+let tipTeam = null, tipX = 0, tipY = 0;
 
 // Corners
 // Turn markers (T1–T17) are baked into the Satoshi SVG.
@@ -1178,7 +1210,7 @@ const pathEl = document.getElementById('trackPath');
 
 function update() {
   const now = Date.now();
-  const elapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW: fast clock from page load
+  const elapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW fast clock
 
   // Before session
   if (elapsed < 0) {
@@ -1377,6 +1409,9 @@ function renderCarStatus() {
     const sectorColors = { 1:'#3b82f6', 2:'#ef4444', 3:'#10b981' };
     const statusColor = isElim ? '#ff0040' : isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
     const sectorLabel = isElim ? `ELIMINATED (${cs.elimRound})` : isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
+    const RC = {Q1:'#ff0040',Q2:'#ff9900',Q3:'#00ff88'};
+    const roundLevel = isElim ? cs.elimRound : (currentRound.indexOf('Q3')===0||currentRound==='COMPLETE'?'Q3':currentRound.indexOf('Q2')===0?'Q2':'Q1');
+    const ringCol = currentRound==='WAITING' ? '#444' : (RC[roundLevel]||'#444');
 
     html += `<div class="car-row${isOn ? ' active' : ''}${isElim ? ' eliminated' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
       <div class="color-bar" style="background:${t.color}"></div>
@@ -1390,7 +1425,7 @@ function renderCarStatus() {
           <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
         </div>` : ''}
       </div>
-      ${isElim ? `<span class="elim-tag">OUT</span>` : ''}
+      <div class="run-box" style="--rc:${ringCol}${isElim?';opacity:.45':''}"><div>${roundLevel}</div></div>
     </div>`;
   });
   el.innerHTML = html;
@@ -1410,6 +1445,52 @@ function renderCarDots() {
       <image href="${t.logo}" x="${pt.x-9}" y="${pt.y-9}" width="18" height="18" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>`;
   });
   dotsG.innerHTML = html;
+}
+
+function renderRowTip(id){
+  const tip = document.getElementById('rowTip');
+  const t = TEAMS.find(x=>x.id===id); if(!t){ tip.style.display='none'; return; }
+  const br = bestResults[id], cs = carStates[id];
+  const sBest = (v,gb,c)=>`<span style="color:${gb&&v===gb.time?'#c879ff':c};font-weight:${gb&&v===gb.time?800:600}">${v?fmtS(v):'—'}</span>`;
+  const RC = {Q1:'#ff0040',Q2:'#ff9900',Q3:'#00ff88'};
+  const roundLevel = cs.eliminated ? cs.elimRound : (currentRound.indexOf('Q3')===0||currentRound==='COMPLETE'?'Q3':currentRound.indexOf('Q2')===0?'Q2':'Q1');
+  const rc = RC[roundLevel]||'#888';
+  let live='';
+  if (cs.onTrack){
+    live = `<div class="tip-live">
+      <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
+      <div class="tl-row"><span>ROUND</span><span class="tcomp" style="--tc:${rc}">${roundLevel}</span></div>
+      <div class="tl-row"><span>SECTOR</span><b>S${cs.sector||1}</b></div>
+    </div>`;
+  } else if (cs.eliminated){
+    live = `<div class="tip-live">
+      <div class="tip-h2" style="color:#ff0040"><span class="tip-dot" style="color:#ff0040;background:#ff0040"></span>KNOCKED OUT</div>
+      <div class="tl-row"><span>OUT IN</span><span class="tcomp" style="--tc:${rc}">${cs.elimRound}</span></div>
+    </div>`;
+  }
+  tip.innerHTML = `
+    <div class="tip-body">
+      <div class="tip-head"><b>$${id}</b></div>
+      <div class="tip-sec"><div class="tip-h2">BEST SECTORS</div>
+        <div class="ssec"><span style="color:#3b82f6">SECTOR 1</span>${sBest(br&&br.bestS1,globalBestS1,'#9fc3ff')}</div>
+        <div class="ssec"><span style="color:#ef4444">SECTOR 2</span>${sBest(br&&br.bestS2,globalBestS2,'#ff9b9b')}</div>
+        <div class="ssec"><span style="color:#10b981">SECTOR 3</span>${sBest(br&&br.bestS3,globalBestS3,'#84e9c0')}</div>
+      </div>
+      <div class="tip-sec"><div class="tip-h2">BEST LAP</div>
+        <div class="ssec"><span style="color:${rc}">${roundLevel}</span><span style="font-family:'JetBrains Mono','Space Mono',monospace;font-weight:800;color:#fff">${br&&br.bestLap?fmt(br.bestLap):'—'}</span></div>
+      </div>${live}
+    </div>
+    <div class="tip-car" style="--tc:${t.color}">
+      <span class="acc"></span>
+      <div class="tcar-half tcar-top"><img src="${t.logo}" alt=""></div>
+      <div class="tcar-half tcar-bot"><img src="${t.car}" alt="" onerror="if(this.src.slice(-4).toLowerCase()=='.png'){this.src=this.src.slice(0,-4)+'.jpg';}else{this.onerror=null;this.src='${t.logo}';}"></div>
+      <span class="tag">$${id}</span>
+    </div>`;
+  tip.style.display='flex';
+  const w = tip.offsetWidth||268, h = tip.offsetHeight||210;
+  let x = tipX - w - 18; if (x < 8) x = tipX + 18;
+  let y = Math.min(Math.max(8, tipY - 24), window.innerHeight - h - 8);
+  tip.style.left = x+'px'; tip.style.top = y+'px';
 }
 
 function renderLeaderboard() {
@@ -1442,7 +1523,7 @@ function renderLeaderboard() {
     const posColor = currentRound === 'COMPLETE' && i === 0 ? '#00ff88' : i === 0 ? '#fff' : isElim ? '#444' : '#666';
     const posLabel = currentRound === 'COMPLETE' && i === 0 ? 'P1' : `${i+1}`;
 
-    html += `<div class="lb-row" style="background:${isOn ? 'rgba(0,255,136,.04)' : isElim ? 'rgba(255,0,0,.02)' : i===0 ? 'rgba(255,255,255,.02)' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : isElim ? '#ff004033' : 'transparent'};opacity:${isElim ? '.5' : '1'}">
+    html += `<div class="lb-row" data-team="${r.id}" style="background:${isOn ? 'rgba(0,255,136,.04)' : isElim ? 'rgba(255,0,0,.02)' : i===0 ? 'rgba(255,255,255,.02)' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : isElim ? '#ff004033' : 'transparent'};opacity:${isElim ? '.5' : '1'}">
       <span style="font-size:12px;font-weight:800;color:${posColor};font-family:'Orbitron',sans-serif">${posLabel}</span>
       <div style="display:flex;align-items:center;gap:6px">
         <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
@@ -1472,7 +1553,21 @@ function renderLeaderboard() {
 }
 
 requestAnimationFrame(update);
+
+// ── Timing-row hover share-card ──
+(function(){
+  const lb = document.getElementById('leaderboard'), tip = document.getElementById('rowTip');
+  if(!lb) return;
+  lb.addEventListener('mousemove', e=>{
+    tipX = e.clientX; tipY = e.clientY;
+    const row = e.target.closest('.lb-row[data-team]');
+    if (row){ tipTeam = row.getAttribute('data-team'); renderRowTip(tipTeam); }
+    else { tipTeam = null; tip.style.display='none'; }
+  });
+  lb.addEventListener('mouseleave', ()=>{ tipTeam = null; tip.style.display='none'; });
+})();
 </script>
+<div id="rowTip"></div>
 <script>document.addEventListener("DOMContentLoaded",()=>{const d=document.createElement("div");d.innerHTML=`<div style="position:fixed;bottom:8px;left:8px;z-index:99998;font-family:monospace;font-size:10px;color:#ffcc00;background:rgba(0,0,0,.6);padding:3px 8px;border:1px solid #ffcc00;border-radius:4px">PREVIEW · ${_PVSPD}x · add ?test=N to change speed</div>`;document.body.appendChild(d.firstChild);});</script>
 </body>
 </html>
