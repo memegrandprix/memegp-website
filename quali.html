@@ -142,6 +142,20 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
 #rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
 
+.fund-banner{position:absolute;left:18px;right:18px;bottom:16px;z-index:3;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:11px 18px;border-radius:14px;background:linear-gradient(100deg,rgba(20,20,30,.92),rgba(10,10,16,.95));border:1px solid rgba(255,204,0,.18);box-shadow:0 10px 36px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.fund-banner .fb-text{flex:1;min-width:210px}
+.fund-banner .fb-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;letter-spacing:1.4px;color:#fff}
+.fund-banner .fb-title span{color:#ffcc00;text-shadow:0 0 14px rgba(255,204,0,.45)}
+.fund-banner .fb-sub{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.3px;color:#8a8a96;margin-top:3px}
+.fund-banner .fb-ca{display:flex;align-items:center;gap:9px;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid rgba(255,204,0,.22);border-radius:9px;padding:6px 8px 6px 10px;transition:border-color .15s}
+.fund-banner .fb-ca:hover{border-color:rgba(255,204,0,.5)}
+.fund-banner .fb-tag{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1.4px;color:#ffcc00;border:1px solid rgba(255,204,0,.4);border-radius:5px;padding:3px 7px}
+.fund-banner .fb-addr{font-family:'JetBrains Mono',monospace;font-size:11px;color:#cfcfd6;max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
+.fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
+.fund-banner .fb-buy:hover{filter:brightness(1.08)}
+@media(max-width:1024px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:4px 12px 14px;width:auto;max-width:760px;align-self:center}}
+
 </style>
 </head>
 <body>
@@ -302,6 +316,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       </g>
     </svg>
     <!-- Round break overlay -->
+    <div class="fund-banner">
+      <div class="fb-text">
+        <div class="fb-title">FUND THE FUTURE OF <span>MEME&nbsp;GP</span></div>
+        <div class="fb-sub">Help us build the first 3D MEMEGP Virtual Racing Platform.</div>
+      </div>
+      <div class="fb-ca" id="fbCa" role="button" tabindex="0" title="Copy contract address">
+        <span class="fb-tag">CONTRACT</span>
+        <span class="fb-addr">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+        <span class="fb-copy" id="fbCopy">COPY</span>
+      </div>
+      <a class="fb-buy" href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener">FUND $MEMEGP →</a>
+    </div>
     <div id="roundBreak" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.92);border:1px solid #ff0040;border-radius:12px;padding:30px 50px">
       <div id="roundBreakTitle" style="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:#ff0040;letter-spacing:4px"></div>
       <div id="roundBreakSub" style="font-family:'Chakra Petch';font-size:13px;color:#888;margin-top:8px"></div>
@@ -552,6 +578,34 @@ let tipTeam = null, tipX = 0, tipY = 0;
 
 const pathEl = document.getElementById('trackPath');
 
+// ═══ PIT ROUTING — F1-style out/in laps (matches Practice) ═══
+const OUT_MULT = 1.35, IN_MULT = 1.35;   // out/in laps slower than the flying lap
+const OUT_PIT = 0.16;    // first 16% of out-lap = driving out of the pit box
+const IN_TRACK = 0.84;   // last 16% of in-lap = driving into the pit box
+function getPitPoint(u){ u = Math.max(0, Math.min(1, u)); return { x: 152 + 197*u, y: 133 - 5*u }; }
+const _trackLen = pathEl.getTotalLength();
+function fracNearest(tx, ty){
+  let best = 0, bd = Infinity;
+  for (let i = 0; i <= 600; i++){ const f = i/600*0.28; const p = pathEl.getPointAtLength(_trackLen*f);
+    if (p.y > 132) continue;
+    const d = (p.x-tx)**2 + (p.y-ty)**2; if (d < bd){ bd = d; best = f; } }
+  return best;
+}
+const PIT_EXIT_F  = fracNearest(349, 115.8);  // out-lap rejoins the track here
+const PIT_ENTRY_F = fracNearest(152, 121.1);  // in-lap peels off here
+function carPos(cs){
+  const pr = cs.progress;
+  if (cs.status === 'OUT LAP'){
+    if (pr < OUT_PIT) return getPitPoint(0.5 + (pr/OUT_PIT)*0.5);            // box → pit exit
+    return getPoint(PIT_EXIT_F + ((pr-OUT_PIT)/(1-OUT_PIT))*(1-PIT_EXIT_F)); // pit exit → S/F
+  }
+  if (cs.status === 'IN LAP'){
+    if (pr < IN_TRACK) return getPoint(((pr/IN_TRACK)*(1+PIT_ENTRY_F)) % 1); // S/F → pit entry
+    return getPitPoint(((pr-IN_TRACK)/(1-IN_TRACK))*0.5);                    // pit entry → box
+  }
+  return getPoint(pr);                                                       // HOT LAP: flying lap
+}
+
 function update() {
   const now = Date.now();
   const elapsed = (now - SESSION_START_UTC) / 1000;
@@ -658,25 +712,34 @@ function update() {
 
     if (timeSinceGo < 0) return;
 
-    const lapDur = ev.lapDur;
+    const L = ev.lapDur;
+    const outDur = L * OUT_MULT, flyDur = L, inDur = L * IN_MULT;
+    const flyEnd = outDur + flyDur, runEnd = flyEnd + inDur;
+    const t = timeSinceGo;
 
-    if (timeSinceGo < lapDur) {
+    if (t < runEnd) {
+      // ON TRACK — OUT LAP (slow, from pit) → HOT LAP (timed) → IN LAP (slow, to pit)
       cs.onTrack = true;
-      cs.status = 'ON TRACK';
       cs.runs = ev.lap;
-      cs.progress = timeSinceGo / lapDur;
-      cs.pendingS1 = ev.s1;
-      cs.pendingS2 = ev.s2;
-      cs.pendingS3 = ev.s3;
-
-      if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; }
-      else { cs.sector = 1; }
-      if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
-      if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
-
+      cs.pendingS1 = ev.s1; cs.pendingS2 = ev.s2; cs.pendingS3 = ev.s3;
+      if (t < outDur) {
+        cs.status = 'OUT LAP'; cs.progress = t / outDur; cs.sector = 0;
+        cs.liveS1 = null; cs.liveS2 = null; cs.liveS3 = null;
+      } else if (t < flyEnd) {
+        cs.status = 'HOT LAP'; cs.progress = (t - outDur) / flyDur;
+        if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; } else { cs.sector = 1; }
+        if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
+        if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
+      } else {
+        cs.status = 'IN LAP'; cs.progress = (t - flyEnd) / inDur; cs.sector = 0;
+        cs.liveS1 = ev.s1; cs.liveS2 = ev.s2; cs.liveS3 = ev.s3;
+      }
       lastActiveTeam = team;
-      lastActiveRun = `${ev.round} LAP ${ev.lap}`;
-    } else {
+      lastActiveRun = `${ev.round} ${cs.status} — LAP ${ev.lap}`;
+    }
+
+    // Flying lap done → lock the timed result (even while on the in-lap)
+    if (t >= flyEnd) {
       cs.runs = Math.max(cs.runs, ev.lap);
       const lap = ev.s1 + ev.s2 + ev.s3;
       if (!bestResults[team.id]) {
@@ -781,7 +844,7 @@ function renderCarDots() {
   TEAMS.forEach(t => {
     const cs = carStates[t.id];
     if (!cs.onTrack) return;
-    const pt = getPoint(cs.progress);
+    const pt = carPos(cs);
     const logoId = 'logo-clip-' + t.id;
     html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
       <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${t.color}" opacity="0.15"/>
@@ -910,6 +973,11 @@ requestAnimationFrame(update);
   });
   lb.addEventListener('mouseleave', ()=>{ tipTeam = null; tip.style.display='none'; });
 })();
+
+// ── fund banner: copy contract ──
+(function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
+  if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
+    if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
 </script>
 <div id="rowTip"></div>
 </body>

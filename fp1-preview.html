@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<!-- MEMEGP quali.html · BUILD: S2-NEON (Satoshi + 15-team grid, neon theme) -->
+<!-- MEMEGP practice.html (fp1.html) · BUILD: S2-NEON (glass/neon theme) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEME GP — QUALIFYING LIVE | Satoshi Speedway</title>
-<meta name="description" content="Qualifying — Live at Satoshi Speedway. Q1, Q2, Q3. 15 teams fight for pole position.">
+<title>MEME GP — PRACTICE LIVE | Satoshi Speedway</title>
+<meta name="description" content="Free Practice 1 — Live at Degen Speedway. 10 teams. 3 sectors. 14 corners.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overflow:hidden;height:100vh}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes eliminated{0%{opacity:1}100%{opacity:.4}}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#08080c}
 ::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
@@ -21,28 +20,41 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,0,64,.15);border:1px solid #ff0040;border-radius:4px;padding:3px 10px}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#ff0040;animation:pulse 1s infinite}
 .brand{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555;text-decoration:none}
+.session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555}
 .session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040;opacity:1}
-.countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+.countdown{font-family:'JetBrains Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
 
 .ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
 .ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
 
 .main{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 82px)}
 
+/* Left panel */
 .left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
 .left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
 .car-row{display:flex;align-items:flex-start;gap:8px;padding:8px 14px;border-bottom:1px solid #111;transition:all .3s}
 .car-row.active{background:rgba(0,255,136,.06)}
-.car-row.eliminated{opacity:.35}
 .color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;align-self:center}
-.run-box{position:relative;width:40px;height:40px;border-radius:50%;border:none;display:grid;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0;align-self:center}
-.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
-.run-box>div{font-size:10px;font-family:'JetBrains Mono','Space Mono',monospace;font-weight:700;color:#fff;letter-spacing:.5px}
+.run-box{background:rgba(255,255,255,.05);border:1px solid #333;border-radius:4px;padding:2px 8px;text-align:center}
 
+/* Center */
 .center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.fund-banner{position:absolute;left:18px;right:18px;bottom:16px;z-index:3;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:11px 18px;border-radius:14px;background:linear-gradient(100deg,rgba(20,20,30,.92),rgba(10,10,16,.95));border:1px solid rgba(255,204,0,.18);box-shadow:0 10px 36px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.fund-banner .fb-text{flex:1;min-width:210px}
+.fund-banner .fb-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;letter-spacing:1.4px;color:#fff}
+.fund-banner .fb-title span{color:#ffcc00;text-shadow:0 0 14px rgba(255,204,0,.45)}
+.fund-banner .fb-sub{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.3px;color:#8a8a96;margin-top:3px}
+.fund-banner .fb-ca{display:flex;align-items:center;gap:9px;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid rgba(255,204,0,.22);border-radius:9px;padding:6px 8px 6px 10px;transition:border-color .15s}
+.fund-banner .fb-ca:hover{border-color:rgba(255,204,0,.5)}
+.fund-banner .fb-tag{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1.4px;color:#ffcc00;border:1px solid rgba(255,204,0,.4);border-radius:5px;padding:3px 7px}
+.fund-banner .fb-addr{font-family:'JetBrains Mono',monospace;font-size:11px;color:#cfcfd6;max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
+.fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
+.fund-banner .fb-buy:hover{filter:brightness(1.08)}
+@media(max-width:1024px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:4px 12px 14px;width:auto;max-width:760px;align-self:center}}
 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
 
+/* Right panel */
 .right{background:#08080c;border-left:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
 .right-header{padding:12px 16px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
 .best-sectors{display:flex;border-bottom:1px solid #1a1a1a}
@@ -50,25 +62,21 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .col-headers{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:6px 12px;border-bottom:1px solid #1a1a1a;font-size:7px;color:#444;letter-spacing:1.5px;font-weight:700}
 .lb-row{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:7px 12px;border-bottom:1px solid #111;align-items:center;transition:all .3s}
 
+/* Waiting screen */
 .waiting{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;background:#050508}
 .waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.waiting .countdown-big{font-family:'Space Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
+.waiting .countdown-big{font-family:'JetBrains Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
 
-/* Q-round indicators */
-.q-badge{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;padding:2px 8px;border-radius:3px;display:inline-block}
-.q-badge.q1{background:rgba(255,0,64,.15);color:#ff0040;border:1px solid #ff0040}
-.q-badge.q2{background:rgba(255,165,0,.15);color:#ff9900;border:1px solid #ff9900}
-.q-badge.q3{background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88}
-.q-badge.inactive{opacity:.3}
-
-.elim-tag{font-family:'Space Mono',monospace;font-size:7px;color:#ff0040;letter-spacing:1px;background:rgba(255,0,64,.1);padding:1px 5px;border-radius:2px}
+/* Session complete */
+.complete-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.9);border:1px solid #ff0040;border-radius:12px;padding:30px 50px}
 
 @media(max-width:1024px){
   /* MOBILE: unlock body scroll, stack to one scrollable column, track + timing only */
   body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
   .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
   .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
-  .center{min-height:45vh}                       /* keep the track prominent */
+  .center{min-height:45vh;flex-direction:column;justify-content:center;gap:12px;overflow:visible;padding:14px 0}  /* stack track + fund banner */
+  #trackSvg{flex-shrink:0;height:auto}
   .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
   .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
   .brand{font-size:13px;letter-spacing:1.5px}
@@ -80,6 +88,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   .ticker{padding:6px 12px;font-size:9px}
   .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
 }
+
 /* ===== NEON / GLASS THEME ===== */
 :root{--gold:#ffcc00;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
 body{background:#040408;
@@ -102,6 +111,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
  border:1px solid rgba(255,204,0,.16)!important;box-shadow:0 0 26px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.05) inset}
 .left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
 .left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
+.run-box{position:relative;width:40px;height:40px;border-radius:50%!important;border:none!important;
+ display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0;align-self:center}
+.run-box::before{content:"";position:absolute;inset:0;border-radius:50%;
+ border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
+.run-box>div:first-child{font-size:10px!important;font-family:'JetBrains Mono',monospace!important}
+.run-box>div:last-child{display:none}
 .car-row{border-bottom:1px solid rgba(255,255,255,.04)!important}
 .car-row.active{background:rgba(255,204,0,.05)!important}
 .lb-row{border-bottom:1px solid rgba(255,255,255,.05)!important}
@@ -113,6 +128,75 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
 .session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
 .session-tab{color:#888}
+
+/* ===== SESSION DATA DASHBOARD ===== */
+.vtoggle{display:inline-flex;border:1px solid rgba(255,204,0,.3);border-radius:7px;overflow:hidden;background:rgba(8,8,14,.6)}
+.vtoggle button{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.2px;padding:5px 11px;background:none;border:none;color:#888;cursor:pointer}
+.vtoggle button.on{background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000}
+#dashboardView{position:fixed;left:0;right:0;top:82px;bottom:0;overflow-y:auto;z-index:40;background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%)}
+#dashboardView .dwrap{max-width:940px;margin:0 auto;padding:22px 18px 70px}
+#dashboardView .dhead{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+#dashboardView .dh1{font-family:'Orbitron';font-weight:900;font-size:clamp(18px,3.4vw,26px);letter-spacing:2px;color:#fff;text-shadow:0 0 16px rgba(255,204,0,.4)}
+#dashboardView .dh1 b{color:var(--gold)}
+#dashboardView .dsub{font-size:11px;letter-spacing:2px;color:#7a7a88;margin-top:6px}
+#dashboardView .dtitle{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:var(--gold);text-shadow:0 0 12px rgba(255,204,0,.4);margin:0 0 14px}
+#dashboardView .podium{display:grid;grid-template-columns:1fr 1.22fr 1fr;gap:13px;align-items:end;margin-bottom:14px}
+#dashboardView .pcard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 26px rgba(0,0,0,.55),0 0 24px var(--pc-glow,transparent)}
+#dashboardView .media{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%, var(--pc-soft,rgba(255,255,255,.12)), rgba(6,6,12,.92) 80%)}
+#dashboardView .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:60px;line-height:1;color:#fff;opacity:.95;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#dashboardView .crown{position:absolute;top:9px;right:11px;z-index:2;font-size:19px;filter:drop-shadow(0 0 6px rgba(255,204,0,.7))}
+#dashboardView .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 12px 13px;text-align:left;background:linear-gradient(transparent, rgba(4,4,8,.5) 32%, rgba(4,4,8,.95))}
+#dashboardView .accent{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:var(--pc,#444);box-shadow:0 0 10px var(--pc,#444)}
+#dashboardView .tk{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.5px}
+#dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:var(--gold);margin-top:2px}
+#dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
+#dashboardView .pcard.p1 .num{font-size:72px}#dashboardView .pcard.p1 .tk{font-size:18px}#dashboardView .pcard.p1 .lap{font-size:20px}
+#dashboardView .list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;margin-bottom:24px;overflow:hidden}
+#dashboardView .lrow{display:grid;grid-template-columns:32px 34px 1fr 74px 64px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+#dashboardView .lrow:last-child{border-bottom:none}
+#dashboardView .lpos{font-family:'Orbitron';font-weight:800;font-size:14px;color:#888;text-align:center}
+#dashboardView .lav{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 7px var(--pc-glow,transparent)}
+#dashboardView .lav img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .ltk{font-family:'Orbitron';font-weight:700;font-size:12px}
+#dashboardView .llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
+#dashboardView .lgap{font-family:'JetBrains Mono';font-size:11px;color:#7a7a88;text-align:right}
+#dashboardView .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+#dashboardView .fc{position:relative;background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,var(--gold));border-radius:12px;padding:16px;overflow:hidden;box-shadow:0 0 24px rgba(0,0,0,.45)}
+#dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;display:flex;align-items:center;gap:7px;margin-bottom:10px}
+#dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(19px,3.2vw,25px);line-height:1.06;color:#fff}
+#dashboardView .fc-big .u{color:var(--ac,var(--gold))}
+#dashboardView .fc-sub{font-size:12px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+#dashboardView .fc-sub b{color:#fff}
+#dashboardView .mono{font-family:'JetBrains Mono';font-weight:700}
+#dashboardView .sk{display:flex;flex-direction:column;gap:7px}
+#dashboardView .skrow{display:flex;align-items:center;gap:9px;font-size:13px}
+#dashboardView .skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#dashboardView .sktk{font-family:'Orbitron';font-weight:700;font-size:12px;min-width:74px}
+#dashboardView .sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
+#dashboardView .skbest{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.12);font-size:12px;color:#cfcfd6}
+#dashboardView .skbest b{font-family:'JetBrains Mono';color:var(--gold)}
+#dashboardView .tyres{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:2px}
+#dashboardView .ty{text-align:center;padding:13px 8px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.06);border-top:3px solid var(--tc)}
+#dashboardView .tyname{font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:2px;color:var(--tc)}
+#dashboardView .tytime{font-family:'JetBrains Mono';font-weight:700;font-size:clamp(18px,3vw,24px);color:#fff;margin:7px 0 4px}
+#dashboardView .tydeg{font-size:9.5px;color:#7a7a88;letter-spacing:.3px}
+#dashboardView .fc-photo{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:0;background-size:cover;background-position:center 22%;
+ -webkit-mask-image:linear-gradient(to right,transparent,#000 58%);mask-image:linear-gradient(to right,transparent,#000 58%)}
+#dashboardView .fc-photo.duo{display:flex}
+#dashboardView .fc-photo.duo>div{flex:1;background-size:cover;background-position:center 22%}
+#dashboardView .fc-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(to right,rgba(12,12,20,.97) 30%,rgba(12,12,20,.62) 55%,rgba(12,12,20,.30))}
+#dashboardView .fc>*:not(.fc-photo):not(.fc-scrim){position:relative;z-index:1}
+#dashboardView .fc.hasphoto .fc-h,#dashboardView .fc.hasphoto .fc-big,#dashboardView .fc.hasphoto .fc-sub{max-width:62%}
+#dashboardView .share{margin-top:13px;display:flex;justify-content:flex-end}
+#dashboardView .dshare,#dashboardView .share button{font-family:'Orbitron';font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#000;background:linear-gradient(90deg,#ffcc00,#ffe066);border:none;padding:7px 13px;border-radius:6px;cursor:pointer;box-shadow:0 0 12px rgba(255,204,0,.3)}
+#dashboardView .dshare.big{padding:9px 16px;font-size:11px}
+#dashboardView .empty{text-align:center;color:#666;font-family:'Orbitron';letter-spacing:2px;font-size:13px;padding:70px 0}
+@media(max-width:640px){#dashboardView .grid{grid-template-columns:1fr}#dashboardView .podium{gap:8px}}
+
+/* ===== TIMING-ROW HOVER TOOLTIP ===== */
+.lb-row[data-team]{cursor:pointer}
 #rowTip{position:fixed;z-index:60;display:none;width:auto;padding:0;border-radius:12px;overflow:hidden;
  background:linear-gradient(165deg,rgba(22,22,32,.98),rgba(8,8,14,.99));border:1px solid rgba(255,204,0,.22);
  box-shadow:0 12px 40px rgba(0,0,0,.6);font-family:'Chakra Petch',sans-serif;pointer-events:none}
@@ -141,26 +225,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #rowTip .bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
 #rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
 #rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
-
-.fund-banner{position:absolute;left:18px;right:18px;bottom:16px;z-index:3;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:11px 18px;border-radius:14px;background:linear-gradient(100deg,rgba(20,20,30,.92),rgba(10,10,16,.95));border:1px solid rgba(255,204,0,.18);box-shadow:0 10px 36px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
-.fund-banner .fb-text{flex:1;min-width:210px}
-.fund-banner .fb-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;letter-spacing:1.4px;color:#fff}
-.fund-banner .fb-title span{color:#ffcc00;text-shadow:0 0 14px rgba(255,204,0,.45)}
-.fund-banner .fb-sub{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.3px;color:#8a8a96;margin-top:3px}
-.fund-banner .fb-ca{display:flex;align-items:center;gap:9px;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid rgba(255,204,0,.22);border-radius:9px;padding:6px 8px 6px 10px;transition:border-color .15s}
-.fund-banner .fb-ca:hover{border-color:rgba(255,204,0,.5)}
-.fund-banner .fb-tag{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1.4px;color:#ffcc00;border:1px solid rgba(255,204,0,.4);border-radius:5px;padding:3px 7px}
-.fund-banner .fb-addr{font-family:'JetBrains Mono',monospace;font-size:11px;color:#cfcfd6;max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
-.fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
-.fund-banner .fb-buy:hover{filter:brightness(1.08)}
-@media(max-width:1024px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:4px 12px 14px;width:auto;max-width:760px;align-self:center}}
-
 </style>
 </head>
 <body>
-<!-- lock stripped for preview -->
-
 
 <!-- TOP BAR -->
 <div class="top-bar">
@@ -169,39 +236,33 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <div class="live-dot"></div>
       <span style="font-size:11px;font-weight:700;color:#ff0040;letter-spacing:2px">LIVE</span>
     </div>
-    <a href="index.html" class="brand" style="text-decoration:none">MEME GRAND PRIX</a>
+    <span class="brand">MEME GRAND PRIX</span>
     <span id="trackCount" style="font-size:10px;color:#555;margin-left:8px"></span>
   </div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <a href="fp1.html" class="session-tab" style="opacity:.6">PRACTICE</a>
-    <a href="quali.html" class="session-tab active">QUALI</a>
-    <a href="race.html" class="session-tab" style="opacity:.6">RACE</a>
-    <span style="margin-left:8px;display:flex;gap:6px" id="qRoundBadges">
-      <span class="q-badge q1" id="q1Badge">Q1</span>
-      <span class="q-badge q2 inactive" id="q2Badge">Q2</span>
-      <span class="q-badge q3 inactive" id="q3Badge">Q3</span>
-    </span>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="fp1.html" class="session-tab active" style="text-decoration:none">PRACTICE</a>
+    <a href="quali.html" class="session-tab" style="text-decoration:none">QUALI</a>
+    <a href="race.html" class="session-tab" style="text-decoration:none">RACE</a>
   </div>
-  <div class="countdown" id="sessionClock">--:--</div>
+  <div class="countdown" id="sessionClock">60:00</div>
 </div>
 
 <!-- TICKER -->
 <div class="ticker" id="ticker">
-  <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ QUALIFYING NOT STARTED</div>
-  <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+  <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ SESSION NOT STARTED</div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="vtoggle"><button id="tabLive" class="on">LIVE</button><button id="tabData">SESSION DATA</button></div>
+    <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+  </div>
 </div>
 
-<!-- WAITING SCREEN -->
+<!-- WAITING SCREEN (before session starts) -->
 <div class="waiting" id="waitingScreen">
   <img src="webcar.png" alt="Meme GP Car" style="width:200px;margin-bottom:16px">
-  <h1>QUALIFYING — SATOSHI SPEEDWAY</h1>
+  <h1>PRACTICE — SATOSHI SPEEDWAY</h1>
   <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">SESSION STARTS IN</div>
   <div class="countdown-big" id="waitCountdown">--:--:--</div>
-  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px;text-align:center;line-height:1.8">
-    Q1: 15 cars · 2 laps · Bottom 4 eliminated<br>
-    Q2: 11 cars · 2 laps · Bottom 3 eliminated<br>
-    Q3: Top 8 · 1 lap · Pole position shootout
-  </div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px">15 teams · 3 sectors · 17 corners · 3 runs each</div>
 </div>
 
 <!-- MAIN LAYOUT -->
@@ -211,7 +272,6 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="left">
     <div class="left-header">
       <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#888">CAR STATUS</div>
-      <div id="currentRound" style="font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#ff0040;margin-top:4px"></div>
     </div>
     <div id="carStatusList" style="flex:1;overflow-y:auto"></div>
     <div style="padding:8px 14px;border-top:1px solid #1a1a1a">
@@ -259,16 +319,15 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)"/>
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)"/>
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round"/>
-        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" />
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" />
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
         <!-- ===== NEON PIT LANE ===== -->
         <path d="M 152 133 L 349 128" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="round"/>
         <path d="M 152 133 L 349 128" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="round"/>
         <path d="M 152 133 L 349 128" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
         <text x="250" y="150" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
-
         <!-- START / FINISH -->
         <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
         <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
@@ -289,7 +348,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <g id="carDots"></g>
       </g>
     </svg>
-    <!-- Round break overlay -->
+
+    <!-- ===== FUND banner (blank space below the track) ===== -->
     <div class="fund-banner">
       <div class="fb-text">
         <div class="fb-title">FUND THE FUTURE OF <span>MEME&nbsp;GP</span></div>
@@ -302,33 +362,28 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
       <a class="fb-buy" href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener">FUND $MEMEGP →</a>
     </div>
-    <div id="roundBreak" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.92);border:1px solid #ff0040;border-radius:12px;padding:30px 50px">
-      <div id="roundBreakTitle" style="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:#ff0040;letter-spacing:4px"></div>
-      <div id="roundBreakSub" style="font-family:'Chakra Petch';font-size:13px;color:#888;margin-top:8px"></div>
-      <div id="roundBreakElim" style="font-family:'Space Mono',monospace;font-size:11px;color:#ff4444;margin-top:16px;line-height:1.8"></div>
-    </div>
   </div>
 
   <!-- RIGHT PANEL -->
   <div class="right">
     <div class="right-header">
-      <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px" id="timingTitle">QUALIFYING — TIMING</div>
-      <div id="classifiedCount" style="font-size:9px;color:#444;letter-spacing:1px">SATOSHI SPEEDWAY</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px">PRACTICE — TIMING</div>
+      <div id="classifiedCount" style="font-size:9px;color:#444;letter-spacing:1px">SATOSHI SPEEDWAY • 0/15 CLASSIFIED</div>
     </div>
     <div class="best-sectors">
       <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(255,51,51,.03),transparent)">
         <div style="font-size:8px;color:#3b82f6;font-weight:700;letter-spacing:2px;margin-bottom:2px">S1 BEST</div>
-        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS1Team" style="font-size:8px;color:#555"></div>
       </div>
       <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(0,187,255,.03),transparent)">
         <div style="font-size:8px;color:#ef4444;font-weight:700;letter-spacing:2px;margin-bottom:2px">S2 BEST</div>
-        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS2Team" style="font-size:8px;color:#555"></div>
       </div>
       <div class="best-sector" style="background:linear-gradient(180deg,rgba(255,204,0,.03),transparent)">
         <div style="font-size:8px;color:#10b981;font-weight:700;letter-spacing:2px;margin-bottom:2px">S3 BEST</div>
-        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace">—</div>
         <div id="bestS3Team" style="font-size:8px;color:#555"></div>
       </div>
     </div>
@@ -337,12 +392,27 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
     <div id="leaderboard" style="flex:1;overflow-y:auto"></div>
     <div style="padding:10px 16px;border-top:1px solid #1a1a1a;background:#06060a;display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:8px;color:#333;letter-spacing:1px">STARTING GRID</div>
+      <div style="font-size:8px;color:#333;letter-spacing:1px">15 TEAMS · 17 CORNERS</div>
       <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 2</div>
     </div>
   </div>
 </div>
 
+<!-- SESSION DATA DASHBOARD (overlays the live view; updates lap-by-lap) -->
+<div id="dashboardView" style="display:none">
+  <div class="dwrap">
+    <div class="dhead">
+      <div><div class="dh1">SESSION DATA <b>· PRACTICE</b></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
+      <button class="dshare big" data-share="session">𝕏 SHARE</button>
+    </div>
+    <div class="dtitle">⚡ FASTEST LAPS</div>
+    <div class="podium" id="dashPodium"></div>
+    <div class="list" id="dashList"></div>
+    <div class="grid" id="dashGrid"></div>
+  </div>
+</div>
+
+<div id="rowTip"></div>
 <script>
 /**
  * MEME GP — Shared Stat Calculator (B-prime, deployed 2026-05-19)
@@ -1026,19 +1096,24 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 </script>
 <script>
 // ═══════════════════════════════════════════════════
-// MEME GP — QUALIFYING DETERMINISTIC LIVE SIMULATOR
-// Q1: 15 cars, 2 laps, bottom 4 out
-// Q2: 11 cars, 2 laps, bottom 3 out
-// Q3: 8 cars, 1 lap, pole shootout
-// Session start: 2026-04-25 18:00:00 UTC (20:00 SAST)
+// MEME GP — FP1 DETERMINISTIC LIVE SIMULATOR
+// Session start: 2026-04-24 18:00:00 UTC (20:00 SAST)
+// Same seed + same clock = everyone sees the same race
 // ═══════════════════════════════════════════════════
 
-const SESSION_START_UTC = new Date('2026-06-20T18:00:00Z').getTime();
-const _PVSPD = parseFloat(new URLSearchParams(location.search).get('test')) || 18;
-const _PVT0 = Date.now();
+// Preview/test mode: append ?test (optional ?test=20 for speed) to watch a live session.
+const _qp = new URLSearchParams(location.search);
+const TEST_MODE = true;
+const SIM_SPEED = parseFloat(_qp.get('test')) || 20;
+const SESSION_START_UTC = TEST_MODE ? (Date.now() + 2500) : new Date('2026-06-19T18:00:00Z').getTime();
+const SESSION_DURATION = 3600; // 60 min session
 const S1_END = 0.36;
+const OUT_MULT = 1.35, IN_MULT = 1.35; // out/in laps slower than the flying lap
 const S2_END = 0.68;
-const SEED = 20260425003;
+const SEED = 20260424; // deterministic seed — same for everyone
+// Tyre compounds — FP runs cycle all three so we capture real per-compound pace
+const COMPOUNDS = { SOFT:{off:-0.55,deg:0.115}, MEDIUM:{off:0,deg:0.055}, HARD:{off:0.50,deg:0.028} };
+const COMPOUND_BY_RUN = ['SOFT','MEDIUM','HARD']; // one run per tyre
 
 // ── TEAM META — display only (colours / logos / names / emoji).
 // Stats come from stats-calculator.js (single source of truth).
@@ -1079,24 +1154,82 @@ function buildTeams() {
 const TEAMS = buildTeams();
 
 
+// Deterministic RNG
 function createRng(seed) {
   let s = seed;
   return () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
 }
 
 function calcSectorTime(team, sector, rng) {
-  // Qualifying = cars push harder, slightly faster base times
-  const v = (rng() - 0.5) * 1.4; // less variance in quali (drivers more focused)
+  const v = (rng() - 0.5) * 1.8;
   let base, bonus;
-  if (sector === 1) { base = 31.5; bonus = team.engine * 0.12 + team.chassis * 0.08; }
-  else if (sector === 2) { base = 27.5; bonus = team.drag * 0.10 + team.aero * 0.10; }
-  else { base = 24.5; bonus = team.pit * 0.08 + team.aero * 0.12; }
+  if (sector === 1) { base = 32; bonus = team.engine * 0.12 + team.chassis * 0.08; }
+  else if (sector === 2) { base = 28; bonus = team.drag * 0.10 + team.aero * 0.10; }
+  else { base = 25; bonus = team.pit * 0.08 + team.aero * 0.12; }
   return Math.max(base - bonus + v, base - 2.5);
 }
 
 function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
 function fmtS(s) { return s.toFixed(3); }
-function fmtCD(s) { const m = Math.floor(s/60); const ss = Math.floor(s)%60; return `${m}:${ss.toString().padStart(2,'0')}`; }
+function fmtCD(s) { return `${Math.floor(s/60)}:${(Math.floor(s)%60).toString().padStart(2,'0')}`; }
+
+// ═══ PRE-COMPUTE ALL EVENTS ═══
+// Using deterministic seed, compute the exact schedule of all runs
+// Each event: { time (seconds from session start), teamIdx, run, s1, s2, s3 }
+
+function buildSchedule() {
+  const rng = createRng(SEED);
+  const events = [];
+  let prevTime = 0;
+  for (let run = 0; run < 3; run++) {
+    // Deterministic shuffle per run
+    const order = [...Array(TEAMS.length).keys()];
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    order.forEach((ti, idx) => {
+      const team = TEAMS[ti];
+      const gap = 35 + Math.floor(rng() * 40); // 35-75 sec random gap between cars
+      const runBreak = idx === 0 && run > 0 ? 300 + Math.floor(rng() * 80) : 0; // long break so previous run's 3 laps complete first
+      prevTime += gap + runBreak;
+      const goTime = prevTime;
+      const compound = COMPOUND_BY_RUN[run];
+      const off = COMPOUNDS[compound].off;
+      const s1 = calcSectorTime(team, 1, rng) + off * 0.40;
+      const s2 = calcSectorTime(team, 2, rng) + off * 0.35;
+      const s3 = calcSectorTime(team, 3, rng) + off * 0.25;
+      const lapSec = 90 - (team.overall * 2); // visual lap duration
+      events.push({ time: goTime, teamIdx: ti, run: run + 1, s1, s2, s3, lapDur: lapSec, compound });
+    });
+  }
+  return events;
+}
+
+const SCHEDULE = buildSchedule();
+const TOTAL_SESSION_TIME = SCHEDULE[SCHEDULE.length - 1].time + 330; // session ends after last car finishes
+
+// ═══ STATE ═══
+const carStates = {};
+TEAMS.forEach((t, i) => {
+  carStates[t.id] = { runs: 0, status: 'IN PIT', onTrack: false, progress: 0, sector: 0,
+    liveS1: null, liveS2: null, liveS3: null, goTime: -1, lapDur: 80,
+    pendingS1: 0, pendingS2: 0, pendingS3: 0 };
+});
+
+let bestResults = {}; // id -> { bestS1, bestS2, bestS3, bestLap, runs }
+let lapHistory = {}; // id -> [lap, lap, ...]  (for Most Consistent)
+let compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; // field laps per compound (tyre card)
+let compoundBest = {}; // id -> { SOFT, MEDIUM, HARD } best lap per compound
+let dashOpen = false, lastDash = 0;
+let tipTeam = null, tipX = 0, tipY = 0;
+let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
+
+// ═══ RENDER CORNERS ═══
+// Turn markers (T1–T17) are baked into the Satoshi SVG.
+
+// ═══ MAIN LOOP ═══
+const pathEl = document.getElementById('trackPath');
 
 function getPoint(frac) {
   const len = pathEl.getTotalLength();
@@ -1104,173 +1237,127 @@ function getPoint(frac) {
   return { x: pt.x, y: pt.y };
 }
 
-// ═══ BUILD QUALIFYING SCHEDULE ═══
-// Events: { time, teamIdx, round (Q1/Q2/Q3), lap (1 or 2), s1, s2, s3, lapDur }
-// Also: break events between rounds
-
-function buildSchedule() {
-  const rng = createRng(SEED);
-  const events = [];
-  let t = 0;
-
-  // ── Q1: All 15 cars, 2 laps each ──
-  for (let lap = 0; lap < 2; lap++) {
-    const order = [...Array(TEAMS.length).keys()];
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(rng() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-    order.forEach((ti) => {
-      const team = TEAMS[ti];
-      const gap = 30 + Math.floor(rng() * 25);
-      t += gap;
-      const s1 = calcSectorTime(team, 1, rng);
-      const s2 = calcSectorTime(team, 2, rng);
-      const s3 = calcSectorTime(team, 3, rng);
-      const lapDur = 90 - (team.overall * 2);
-      events.push({ time: t, teamIdx: ti, round: 'Q1', lap: lap + 1, s1, s2, s3, lapDur, type: 'run' });
-    });
-    if (lap === 0) t += 30; // gap between Q1 lap 1 and lap 2
-  }
-
-  // Mark Q1 end time and add break
-  const q1End = t + 100; // last car finishes
-  events.push({ time: q1End, type: 'q1_end' });
-  const q2Start = q1End + 120; // 2 minute break
-  events.push({ time: q2Start, type: 'q2_start' });
-
-  // Determine Q1 results to know who's eliminated
-  // We'll compute this at runtime, but we need to pre-calculate which teams survive
-  // Since it's deterministic, we can figure it out now
-  const q1Results = {};
-  events.filter(e => e.type === 'run' && e.round === 'Q1').forEach(ev => {
-    const id = TEAMS[ev.teamIdx].id;
-    const lap = ev.s1 + ev.s2 + ev.s3;
-    if (!q1Results[id] || lap < q1Results[id]) q1Results[id] = lap;
-  });
-  const q1Sorted = Object.entries(q1Results).sort((a, b) => a[1] - b[1]);
-  const q1Eliminated = q1Sorted.slice(11).map(e => e[0]); // bottom 4 (P12-15)
-  const q2Drivers = q1Sorted.slice(0, 11).map(e => e[0]); // 11 advance
-
-  // ── Q2: 11 cars, 2 laps each ──
-  t = q2Start;
-  for (let lap = 0; lap < 2; lap++) {
-    const order = q2Drivers.map(id => TEAMS.findIndex(t => t.id === id));
-    // Shuffle
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(rng() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-    order.forEach((ti) => {
-      const team = TEAMS[ti];
-      const gap = 30 + Math.floor(rng() * 25);
-      t += gap;
-      const s1 = calcSectorTime(team, 1, rng);
-      const s2 = calcSectorTime(team, 2, rng);
-      const s3 = calcSectorTime(team, 3, rng);
-      const lapDur = 90 - (team.overall * 2);
-      events.push({ time: t, teamIdx: ti, round: 'Q2', lap: lap + 1, s1, s2, s3, lapDur, type: 'run' });
-    });
-    if (lap === 0) t += 30;
-  }
-
-  const q2End = t + 100;
-  events.push({ time: q2End, type: 'q2_end' });
-  const q3Start = q2End + 120;
-  events.push({ time: q3Start, type: 'q3_start' });
-
-  // Q2 results
-  const q2Results = {};
-  events.filter(e => e.type === 'run' && e.round === 'Q2').forEach(ev => {
-    const id = TEAMS[ev.teamIdx].id;
-    const lap = ev.s1 + ev.s2 + ev.s3;
-    if (!q2Results[id] || lap < q2Results[id]) q2Results[id] = lap;
-  });
-  const q2Sorted = Object.entries(q2Results).sort((a, b) => a[1] - b[1]);
-  const q2Eliminated = q2Sorted.slice(8).map(e => e[0]); // bottom 3 (P9-11)
-  const q3Drivers = q2Sorted.slice(0, 8).map(e => e[0]); // top 8 to pole shootout
-
-  // ── Q3: Top 8, 1 lap each ──
-  t = q3Start;
-  const q3Order = q3Drivers.map(id => TEAMS.findIndex(t => t.id === id));
-  // Reverse order (slowest goes first, like F1)
-  q3Order.reverse();
-  q3Order.forEach((ti) => {
-    const team = TEAMS[ti];
-    const gap = 45 + Math.floor(rng() * 20); // bigger gaps for drama
-    t += gap;
-    const s1 = calcSectorTime(team, 1, rng);
-    const s2 = calcSectorTime(team, 2, rng);
-    const s3 = calcSectorTime(team, 3, rng);
-    const lapDur = 90 - (team.overall * 2);
-    events.push({ time: t, teamIdx: ti, round: 'Q3', lap: 1, s1, s2, s3, lapDur, type: 'run' });
-  });
-
-  const q3End = t + 100;
-  events.push({ time: q3End, type: 'q3_end' });
-
-  return { events, q1Eliminated, q2Eliminated, q3Drivers, q1Sorted, q2Sorted };
-}
-
-const SCHEDULE = buildSchedule();
-const ALL_EVENTS = SCHEDULE.events;
-const TOTAL_SESSION_TIME = ALL_EVENTS[ALL_EVENTS.length - 1].time + 10;
-
-// ═══ STATE ═══
-const carStates = {};
-TEAMS.forEach(t => {
-  carStates[t.id] = { runs: 0, status: 'IN PIT', onTrack: false, progress: 0, sector: 0,
-    liveS1: null, liveS2: null, liveS3: null, eliminated: false, elimRound: '',
-    pendingS1: 0, pendingS2: 0, pendingS3: 0 };
-});
-
-let bestResults = {};
-let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
-let currentRound = 'WAITING';
-let tipTeam = null, tipX = 0, tipY = 0;
-
-// Corners
-// Turn markers (T1–T17) are baked into the Satoshi SVG.
-
-const pathEl = document.getElementById('trackPath');
-
-// ═══ PIT ROUTING — F1-style out/in laps (matches Practice) ═══
-const OUT_MULT = 1.35, IN_MULT = 1.35;   // out/in laps slower than the flying lap
-const OUT_PIT = 0.16;    // first 16% of out-lap = driving out of the pit box
-const IN_TRACK = 0.84;   // last 16% of in-lap = driving into the pit box
+// ── Pit-lane routing: cars join/leave the track through the pit ──
+const OUT_PIT = 0.16;   // first 16% of the out-lap = driving out of the pit
+const IN_TRACK = 0.84;  // last 16% of the in-lap  = driving into the pit
+// pit lane is the straight "M 152 133 L 349 128"; u=0 entry(left) … u=1 exit(right), box at u=0.5
 function getPitPoint(u){ u = Math.max(0, Math.min(1, u)); return { x: 152 + 197*u, y: 133 - 5*u }; }
 const _trackLen = pathEl.getTotalLength();
-function fracNearest(tx, ty){
+function fracNearest(tx, ty){            // track fraction of the straight point nearest (tx,ty)
   let best = 0, bd = Infinity;
   for (let i = 0; i <= 600; i++){ const f = i/600*0.28; const p = pathEl.getPointAtLength(_trackLen*f);
-    if (p.y > 132) continue;
+    if (p.y > 132) continue;             // straight only (y≈115-122)
     const d = (p.x-tx)**2 + (p.y-ty)**2; if (d < bd){ bd = d; best = f; } }
   return best;
 }
-const PIT_EXIT_F  = fracNearest(349, 115.8);  // out-lap rejoins the track here
-const PIT_ENTRY_F = fracNearest(152, 121.1);  // in-lap peels off here
+const PIT_EXIT_F  = fracNearest(349, 115.8); // out-lap rejoins the track here (above pit exit)
+const PIT_ENTRY_F = fracNearest(152, 121.1); // in-lap peels off here (above pit entry)
 function carPos(cs){
   const pr = cs.progress;
   if (cs.status === 'OUT LAP'){
-    if (pr < OUT_PIT) return getPitPoint(0.5 + (pr/OUT_PIT)*0.5);            // box → pit exit
-    return getPoint(PIT_EXIT_F + ((pr-OUT_PIT)/(1-OUT_PIT))*(1-PIT_EXIT_F)); // pit exit → S/F
+    if (pr < OUT_PIT) return getPitPoint(0.5 + (pr/OUT_PIT)*0.5);             // box → pit exit
+    return getPoint(PIT_EXIT_F + ((pr-OUT_PIT)/(1-OUT_PIT))*(1-PIT_EXIT_F));  // pit exit → S/F
   }
   if (cs.status === 'IN LAP'){
-    if (pr < IN_TRACK) return getPoint(((pr/IN_TRACK)*(1+PIT_ENTRY_F)) % 1); // S/F → pit entry
-    return getPitPoint(((pr-IN_TRACK)/(1-IN_TRACK))*0.5);                    // pit entry → box
+    if (pr < IN_TRACK) return getPoint(((pr/IN_TRACK)*(1+PIT_ENTRY_F)) % 1);  // S/F → pit entry
+    return getPitPoint(((pr-IN_TRACK)/(1-IN_TRACK))*0.5);                     // pit entry → box
   }
-  return getPoint(pr);                                                       // HOT LAP: flying lap
+  return getPoint(pr);                                                        // HOT LAP: flying lap
+}
+
+function fmtGap(g){ return '+' + g.toFixed(3); }
+function renderDashboard(){
+  const entries = TEAMS.map(t=>({t, br:bestResults[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
+                   .sort((a,b)=>a.br.bestLap - b.br.bestLap);
+  const sub=document.getElementById('dashSub'), podiumEl=document.getElementById('dashPodium'),
+        listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid');
+  sub.textContent = `SATOSHI SPEEDWAY · ROUND 1 · ${entries.length}/${TEAMS.length} CLASSIFIED`;
+  if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS…</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; return; }
+  const leader = entries[0].br.bestLap;
+  const pcard = (e,absPos) => {
+    const t=e.t, br=e.br, isP1=absPos===1;
+    const note = absPos===1 ? 'FASTEST LAP' : fmtGap(br.bestLap-leader);
+    return `<div class="pcard ${isP1?'p1':''}" style="--pc:${t.color};--pc-glow:${t.color}88;--pc-soft:${t.color}66">
+      <div class="media"><img src="${t.logo}" alt="$${t.id}"></div>
+      <div class="num">${absPos}</div>${isP1?'<div class="crown">👑</div>':''}
+      <div class="ov"><div class="tk">$${t.id}</div><div class="lap">${fmt(br.bestLap)}</div><div class="runs">${note} · ${br.runs} RUNS</div></div>
+      <div class="accent"></div></div>`;
+  };
+  // podium order P2 | P1 | P3
+  podiumEl.innerHTML = pcard(entries[1],2) + pcard(entries[0],1) + pcard(entries[2],3);
+  // list 4..N
+  listEl.innerHTML = entries.slice(3).map((e,i)=>{ const t=e.t, br=e.br;
+    return `<div class="lrow"><div class="lpos">${i+4}</div>
+      <div class="lav" style="--pc:${t.color};--pc-glow:${t.color}55"><img src="${t.logo}" alt=""></div>
+      <div class="ltk">$${t.id}</div><div class="llap">${fmt(br.bestLap)}</div><div class="lgap">${fmtGap(br.bestLap-leader)}</div></div>`;
+  }).join('');
+  // ---- fun-fact cards ----
+  let cards='';
+  if (globalBestS1 && globalBestS2 && globalBestS3){
+    const theo = globalBestS1.time+globalBestS2.time+globalBestS3.time, onTable = leader-theo;
+    cards += `<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div>
+      <div class="sk">
+        <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk">$${globalBestS1.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${fmtS(globalBestS1.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk">$${globalBestS2.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${fmtS(globalBestS2.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk">$${globalBestS3.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${fmtS(globalBestS3.time)}</span></div>
+      </div>
+      <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` — ${onTable.toFixed(3)}s on the table.`:' — matched on track.'}</div>
+      <div class="share"><button data-tweet="🏁 SECTOR KINGS — FP Satoshi Speedway: S1 $${globalBestS1.id} · S2 $${globalBestS2.id} · S3 $${globalBestS3.id}. Theoretical best ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
+    cards += `<div class="fc hasphoto" style="--ac:${entries[0].t.color}"><div class="fc-photo" style="background-image:url('${entries[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">BIGGEST MARGIN</div>
+      <div class="fc-big"><span class="u">$${entries[0].t.id}</span> leads by <span class="mono">${m.toFixed(3)}s</span></div>
+      <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the timesheet.</div>
+      <div class="share"><button data-tweet="📏 $${entries[0].t.id} tops FP ${m.toFixed(3)}s clear of $${entries[1].t.id} at Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  if (entries.length>=2){ let best={g:Infinity};
+    for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
+    cards += `<div class="fc hasphoto" style="--ac:${best.a.t.color}"><div class="fc-photo duo"><div style="background-image:url('${best.a.t.logo}')"></div><div style="background-image:url('${best.b.t.logo}')"></div></div><div class="fc-scrim"></div><div class="fc-h">CLOSEST BATTLE</div>
+      <div class="fc-big"><span class="u" style="color:${best.a.t.color}">$${best.a.t.id}</span> vs <span class="u" style="color:${best.b.t.color}">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
+      <div class="fc-sub">Tightest gap on the timesheet — P${best.pos} v P${best.pos+1}.</div>
+      <div class="share"><button data-tweet="⚔️ CLOSEST BATTLE of FP: $${best.a.t.id} vs $${best.b.t.id} — just ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  let mc=null;
+  entries.forEach(e=>{ const h=lapHistory[e.t.id]; if(h&&h.length>=2){ const sp=Math.max(...h)-Math.min(...h); if(!mc||sp<mc.sp) mc={t:e.t,sp}; } });
+  if (mc){
+    cards += `<div class="fc hasphoto" style="--ac:${mc.t.color}"><div class="fc-photo" style="background-image:url('${mc.t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">MOST CONSISTENT</div>
+      <div class="fc-big"><span class="u">$${mc.t.id}</span> <span class="mono" style="font-size:18px">±${(mc.sp/2).toFixed(3)}s</span></div>
+      <div class="fc-sub">Tightest lap-time spread across runs — metronomic.</div>
+      <div class="share"><button data-tweet="🎯 MOST CONSISTENT in FP: $${mc.t.id} — laps within ±${(mc.sp/2).toFixed(3)}s. $MEMEGP">𝕏 Share</button></div></div>`;
+  }
+  // tyre pace — field average per compound (real compound runs)
+  let tyreCard='';
+  if (compoundLaps.SOFT.length && compoundLaps.MEDIUM.length && compoundLaps.HARD.length){
+    const A = a => a.reduce((x,y)=>x+y,0)/a.length;
+    const sA=A(compoundLaps.SOFT), mA=A(compoundLaps.MEDIUM), hA=A(compoundLaps.HARD), spread=hA-sA;
+    tyreCard = `<div class="fc wide" style="--ac:#ffcc00;grid-column:1/-1">
+      <div class="fc-h">AVG PACE BY COMPOUND</div>
+      <div class="tyres">
+        <div class="ty" style="--tc:#ef4444"><div class="tyname">SOFT</div><div class="tytime">${fmt(sA)}</div><div class="tydeg">+0.115s/lap deg · quickest</div></div>
+        <div class="ty" style="--tc:#ffcc00"><div class="tyname">MEDIUM</div><div class="tytime">${fmt(mA)}</div><div class="tydeg">+0.055s/lap deg · balanced</div></div>
+        <div class="ty" style="--tc:#e8e8ee"><div class="tyname">HARD</div><div class="tytime">${fmt(hA)}</div><div class="tydeg">+0.028s/lap deg · durable</div></div>
+      </div>
+      <div class="skbest">Softs average <b>${spread.toFixed(3)}s/lap</b> quicker than hards — but degrade ~4\u00d7 faster. The intel your community uses to pick each team's Sunday strategy.</div>
+      <div class="share"><button data-tweet="🛞 TYRE PACE — FP Satoshi Speedway. Avg lap: SOFT ${fmt(sA)} · MEDIUM ${fmt(mA)} · HARD ${fmt(hA)}. Softs quickest, hards last 👇 Pick your Sunday strategy $MEMEGP">𝕏 Share</button></div>
+    </div>`;
+  }
+  gridEl.innerHTML = tyreCard + cards;
 }
 
 function update() {
   const now = Date.now();
-  const elapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW fast clock
+  const elapsed = (now - SESSION_START_UTC) / 1000 * SIM_SPEED; // seconds since session start (×SIM_SPEED in preview)
 
   // Before session
   if (elapsed < 0) {
     document.getElementById('waitingScreen').style.display = 'flex';
     document.getElementById('mainLayout').style.display = 'none';
     document.getElementById('liveBadge').style.display = 'none';
+    // keep SESSION DATA reset/closed until the session starts (the dashboard is a separate overlay)
+    dashOpen = false;
+    var _dv = document.getElementById('dashboardView'); if (_dv) _dv.style.display = 'none';
+    var _tl = document.getElementById('tabLive'), _td = document.getElementById('tabData');
+    if (_tl) _tl.classList.add('on'); if (_td) _td.classList.remove('on');
     const remaining = Math.abs(elapsed);
     const h = Math.floor(remaining / 3600);
     const m = Math.floor((remaining % 3600) / 60);
@@ -1280,62 +1367,17 @@ function update() {
     return;
   }
 
+  // Session active or complete
   document.getElementById('waitingScreen').style.display = 'none';
   document.getElementById('mainLayout').style.display = 'grid';
-
+  
   const isComplete = elapsed > TOTAL_SESSION_TIME;
   document.getElementById('liveBadge').style.display = isComplete ? 'none' : 'flex';
-
-  // Determine current round
-  currentRound = 'Q1';
-  let showBreak = false;
-  let breakTitle = '', breakSub = '', breakElim = '';
-
-  ALL_EVENTS.forEach(ev => {
-    if (ev.type === 'q1_end' && elapsed >= ev.time) {
-      currentRound = 'Q1_BREAK';
-      breakTitle = 'Q1 COMPLETE';
-      breakSub = 'Bottom 4 eliminated';
-      breakElim = SCHEDULE.q1Eliminated.map(id => {
-        const t = TEAMS.find(t => t.id === id);
-        return `${t.emoji} $${id} — ELIMINATED`;
-      }).join('\n');
-    }
-    if (ev.type === 'q2_start' && elapsed >= ev.time) { currentRound = 'Q2'; }
-    if (ev.type === 'q2_end' && elapsed >= ev.time) {
-      currentRound = 'Q2_BREAK';
-      breakTitle = 'Q2 COMPLETE';
-      breakSub = 'Bottom 3 eliminated — Top 8 shootout next';
-      breakElim = SCHEDULE.q2Eliminated.map(id => {
-        const t = TEAMS.find(t => t.id === id);
-        return `${t.emoji} $${id} — ELIMINATED`;
-      }).join('\n');
-    }
-    if (ev.type === 'q3_start' && elapsed >= ev.time) { currentRound = 'Q3'; }
-    if (ev.type === 'q3_end' && elapsed >= ev.time) { currentRound = 'COMPLETE'; }
-  });
-
-  // Show/hide break overlay
-  const breakEl = document.getElementById('roundBreak');
-  if (currentRound === 'Q1_BREAK' || currentRound === 'Q2_BREAK') {
-    breakEl.style.display = 'block';
-    document.getElementById('roundBreakTitle').textContent = breakTitle;
-    document.getElementById('roundBreakSub').textContent = breakSub;
-    document.getElementById('roundBreakElim').innerText = breakElim;
-  } else {
-    breakEl.style.display = 'none';
-  }
-
-  // Update Q badges
-  const activeRound = currentRound.replace('_BREAK', '');
-  document.getElementById('q1Badge').className = `q-badge q1${activeRound === 'Q1' || currentRound === 'Q1_BREAK' ? '' : elapsed > 0 ? '' : ' inactive'}`;
-  document.getElementById('q2Badge').className = `q-badge q2${activeRound === 'Q2' || currentRound === 'Q2_BREAK' ? '' : currentRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
-  document.getElementById('q3Badge').className = `q-badge q3${activeRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
-
-  const sessionRemaining = Math.max(0, TOTAL_SESSION_TIME - elapsed);
+  
+  const sessionRemaining = Math.max(0, SESSION_DURATION - elapsed);
   document.getElementById('sessionClock').textContent = fmtCD(sessionRemaining);
 
-  // Reset car states
+  // Reset all cars to pit first
   TEAMS.forEach(t => {
     const cs = carStates[t.id];
     cs.onTrack = false;
@@ -1345,74 +1387,77 @@ function update() {
     cs.liveS1 = null;
     cs.liveS2 = null;
     cs.liveS3 = null;
-    cs.eliminated = SCHEDULE.q1Eliminated.includes(t.id) && (currentRound !== 'Q1' && currentRound !== 'WAITING');
-    if (cs.eliminated) cs.elimRound = 'Q1';
-    if (SCHEDULE.q2Eliminated.includes(t.id) && ['Q3', 'COMPLETE', 'Q2_BREAK'].includes(currentRound)) {
-      cs.eliminated = true;
-      cs.elimRound = 'Q2';
-    }
   });
 
   // Reset best results
   bestResults = {};
+  lapHistory = {}; compoundLaps = { SOFT:[], MEDIUM:[], HARD:[] }; compoundBest = {};
   globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
 
-  let lastActiveTeam = null;
-  let lastActiveRun = '';
+  let hotTeam = null, hotRun = 0;
+  let onTrackTeam = null, onTrackRun = 0, onTrackPhase = '';
 
-  // Process events
-  ALL_EVENTS.filter(e => e.type === 'run').forEach(ev => {
+  // Process all events up to current time
+  SCHEDULE.forEach(ev => {
     const team = TEAMS[ev.teamIdx];
     const cs = carStates[team.id];
     const timeSinceGo = elapsed - ev.time;
 
-    if (timeSinceGo < 0) return;
+    if (timeSinceGo < 0) return; // hasn't started yet
 
+    // ── OUT LAP → FLYING LAP → IN LAP (F1-style run) ──
     const L = ev.lapDur;
     const outDur = L * OUT_MULT, flyDur = L, inDur = L * IN_MULT;
     const flyEnd = outDur + flyDur, runEnd = flyEnd + inDur;
     const t = timeSinceGo;
 
     if (t < runEnd) {
-      // ON TRACK — OUT LAP (slow, from pit) → HOT LAP (timed) → IN LAP (slow, to pit)
+      // Car is ON TRACK (out, flying, or in lap)
       cs.onTrack = true;
-      cs.runs = ev.lap;
+      cs.runs = ev.run;
+      cs.goTime = ev.time;
+      cs.lapDur = L;
       cs.pendingS1 = ev.s1; cs.pendingS2 = ev.s2; cs.pendingS3 = ev.s3;
       if (t < outDur) {
+        // OUT LAP — slow, warming up, not timed
         cs.status = 'OUT LAP'; cs.progress = t / outDur; cs.sector = 0;
         cs.liveS1 = null; cs.liveS2 = null; cs.liveS3 = null;
       } else if (t < flyEnd) {
+        // FLYING LAP — the timed hot lap
         cs.status = 'HOT LAP'; cs.progress = (t - outDur) / flyDur;
         if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; } else { cs.sector = 1; }
         if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
         if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
+        hotTeam = team; hotRun = ev.run;
       } else {
+        // IN LAP — slow, returning to pit
         cs.status = 'IN LAP'; cs.progress = (t - flyEnd) / inDur; cs.sector = 0;
         cs.liveS1 = ev.s1; cs.liveS2 = ev.s2; cs.liveS3 = ev.s3;
       }
-      lastActiveTeam = team;
-      lastActiveRun = `${ev.round} ${cs.status} — LAP ${ev.lap}`;
+      onTrackTeam = team; onTrackRun = ev.run; onTrackPhase = cs.status;
     }
 
-    // Flying lap done → lock the timed result (even while on the in-lap)
+    // Flying lap done → lock the timed result (even while the car is on its in-lap)
     if (t >= flyEnd) {
-      cs.runs = Math.max(cs.runs, ev.lap);
+      cs.runs = Math.max(cs.runs, ev.run);
       const lap = ev.s1 + ev.s2 + ev.s3;
+      (lapHistory[team.id] = lapHistory[team.id] || []).push(lap);
+      if (ev.compound){ compoundLaps[ev.compound].push(lap);
+        const pb = compoundBest[team.id] = compoundBest[team.id] || {}; pb[ev.compound] = Math.min(pb[ev.compound] ?? Infinity, lap); }
       if (!bestResults[team.id]) {
-        bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1, round: ev.round };
+        bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
       } else {
         const br = bestResults[team.id];
         br.bestS1 = Math.min(br.bestS1, ev.s1);
         br.bestS2 = Math.min(br.bestS2, ev.s2);
         br.bestS3 = Math.min(br.bestS3, ev.s3);
         br.bestLap = Math.min(br.bestLap, lap);
-        br.runs++;
-        br.round = ev.round;
+        br.runs = ev.run;
       }
     }
   });
 
-  // Global bests
+  // Compute global bests
   Object.entries(bestResults).forEach(([id, br]) => {
     if (!globalBestS1 || br.bestS1 < globalBestS1.time) globalBestS1 = { id, time: br.bestS1 };
     if (!globalBestS2 || br.bestS2 < globalBestS2.time) globalBestS2 = { id, time: br.bestS2 };
@@ -1420,37 +1465,35 @@ function update() {
   });
 
   // ═══ RENDER ═══
+  
+  // Ticker
   const tickerEl = document.getElementById('tickerMsg');
   const tickerDiv = document.getElementById('ticker');
-  const roundLabel = currentRound.replace('_BREAK', '');
-
-  document.getElementById('currentRound').textContent = currentRound === 'COMPLETE' ? 'QUALIFYING COMPLETE' : roundLabel;
-  document.getElementById('timingTitle').textContent = currentRound === 'COMPLETE' ? 'STARTING GRID' : `${roundLabel} — TIMING`;
-
-  if (isComplete || currentRound === 'COMPLETE') {
-    tickerEl.textContent = '▸ QUALIFYING COMPLETE — GRID IS SET';
-    tickerEl.style.color = '#00ff88';
-    tickerDiv.style.background = 'rgba(0,255,136,0.06)';
-  } else if (lastActiveTeam) {
-    tickerEl.textContent = `▸ ${lastActiveTeam.emoji} $${lastActiveTeam.id} — ${lastActiveRun}`;
-    tickerEl.style.color = '#ff6644';
-    tickerDiv.style.background = 'rgba(255,0,64,0.06)';
-  } else if (currentRound.includes('BREAK')) {
-    tickerEl.textContent = `▸ ${breakTitle} — BREAK`;
-    tickerEl.style.color = '#ff9900';
-    tickerDiv.style.background = 'rgba(255,153,0,0.06)';
+  if (isComplete) {
+    tickerEl.textContent = '▸ CHEQUERED FLAG — SESSION COMPLETE';
+    tickerEl.style.color = '#888';
+    tickerDiv.style.background = 'rgba(255,255,255,0.02)';
+  } else if (hotTeam || onTrackTeam) {
+    const sT = hotTeam || onTrackTeam, sR = hotTeam ? hotRun : onTrackRun, sP = hotTeam ? 'HOT LAP' : onTrackPhase;
+    tickerEl.textContent = `▸ ${sT.emoji} $${sT.id} — ${sP} — RUN ${sR}/3`;
+    tickerEl.style.color = sP === 'HOT LAP' ? '#ff6644' : '#ffaa44';
+    tickerDiv.style.background = sP === 'HOT LAP' ? 'rgba(255,0,64,0.06)' : 'rgba(255,170,0,0.05)';
   } else {
     tickerEl.textContent = '▸ ALL CARS IN PIT';
     tickerEl.style.color = '#444';
-    tickerDiv.style.background = 'rgba(255,255,255,0.02)';
   }
 
+  // Track count
   const onTrackN = TEAMS.filter(t => carStates[t.id].onTrack).length;
   document.getElementById('trackCount').textContent = onTrackN > 0 ? `${onTrackN} car${onTrackN>1?'s':''} on track` : '';
 
+  // Left panel
   renderCarStatus();
+  
+  // Car dots on track
   renderCarDots();
 
+  // Best sectors
   document.getElementById('bestS1').textContent = globalBestS1 ? fmtS(globalBestS1.time) : '—';
   document.getElementById('bestS1Team').textContent = globalBestS1 ? `$${globalBestS1.id}` : '';
   document.getElementById('bestS2').textContent = globalBestS2 ? fmtS(globalBestS2.time) : '—';
@@ -1458,7 +1501,13 @@ function update() {
   document.getElementById('bestS3').textContent = globalBestS3 ? fmtS(globalBestS3.time) : '—';
   document.getElementById('bestS3Team').textContent = globalBestS3 ? `$${globalBestS3.id}` : '';
 
+  // Leaderboard
   renderLeaderboard();
+
+  // Session Data dashboard — refresh ~1/sec while open
+  if (dashOpen && (performance.now() - lastDash > 900)) { renderDashboard(); lastDash = performance.now(); }
+  if (tipTeam) renderRowTip(tipTeam);
+
   requestAnimationFrame(update);
 }
 
@@ -1468,27 +1517,28 @@ function renderCarStatus() {
   TEAMS.forEach(t => {
     const cs = carStates[t.id];
     const isOn = cs.onTrack;
-    const isElim = cs.eliminated;
     const sectorColors = { 1:'#3b82f6', 2:'#ef4444', 3:'#10b981' };
-    const statusColor = isElim ? '#ff0040' : isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
-    const sectorLabel = isElim ? `ELIMINATED (${cs.elimRound})` : isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
-    const RC = {Q1:'#ff0040',Q2:'#ff9900',Q3:'#00ff88'};
-    const roundLevel = isElim ? cs.elimRound : (currentRound.indexOf('Q3')===0||currentRound==='COMPLETE'?'Q3':currentRound.indexOf('Q2')===0?'Q2':'Q1');
-    const ringCol = currentRound==='WAITING' ? '#444' : (RC[roundLevel]||'#444');
-
-    html += `<div class="car-row${isOn ? ' active' : ''}${isElim ? ' eliminated' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
+    const statusColor = isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
+    const sectorLabel = isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
+    const TYRE_COL = { SOFT:'#ef4444', MEDIUM:'#ffcc00', HARD:'#ffffff' }; // soft/medium/hard
+    const ringCol = cs.runs > 0 ? TYRE_COL[COMPOUND_BY_RUN[Math.min(cs.runs,3)-1]] : '#444';
+    
+    html += `<div class="car-row${isOn ? ' active' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
       <div class="color-bar" style="background:${t.color}"></div>
-      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0">
+      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:1px">
       <div style="flex:1">
-        <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : isElim ? '#555' : '#ccc'}">$${t.id}</div>
+        <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : '#ccc'}">$${t.id}</div>
         <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
         ${isOn ? `<div style="display:flex;gap:6px;margin-top:2px">
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
-          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
+          <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
         </div>` : ''}
       </div>
-      <div class="run-box" style="--rc:${ringCol}${isElim?';opacity:.45':''}"><div>${roundLevel}</div></div>
+      <div class="run-box" style="--rc:${ringCol}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/3</div>
+        <div style="font-size:6px;color:#555;letter-spacing:1px">RUNS</div>
+      </div>
     </div>`;
   });
   el.innerHTML = html;
@@ -1513,22 +1563,21 @@ function renderCarDots() {
 function renderRowTip(id){
   const tip = document.getElementById('rowTip');
   const t = TEAMS.find(x=>x.id===id); if(!t){ tip.style.display='none'; return; }
-  const br = bestResults[id], cs = carStates[id];
+  const br = bestResults[id], cs = carStates[id], cb = compoundBest[id] || {};
   const sBest = (v,gb,c)=>`<span style="color:${gb&&v===gb.time?'#c879ff':c};font-weight:${gb&&v===gb.time?800:600}">${v?fmtS(v):'—'}</span>`;
-  const RC = {Q1:'#ff0040',Q2:'#ff9900',Q3:'#00ff88'};
-  const roundLevel = cs.eliminated ? cs.elimRound : (currentRound.indexOf('Q3')===0||currentRound==='COMPLETE'?'Q3':currentRound.indexOf('Q2')===0?'Q2':'Q1');
-  const rc = RC[roundLevel]||'#888';
+  const tyreRow = (lab,c)=>`<div class="ty-row"><span class="tyl" style="color:${c}">${lab}</span><span>${cb[lab]?fmt(cb[lab]):'—'}</span></div>`;
   let live='';
-  if (cs.onTrack){
+  if (cs.onTrack && cs.runs>=1){
+    const comp = COMPOUND_BY_RUN[Math.min(cs.runs,COMPOUND_BY_RUN.length)-1] || 'SOFT';
+    const cc = {SOFT:'#ef4444',MEDIUM:'#ffcc00',HARD:'#e8e8ee'}[comp];
+    const deg = Math.min(100, cs.progress * COMPOUNDS[comp].deg * 160);
+    const fuel = Math.max(6, 100 - cs.progress*48);
+    const fcol = fuel>66?'#22DD66':fuel>33?'#ffcc00':'#ff3b3b';
     live = `<div class="tip-live">
       <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
-      <div class="tl-row"><span>ROUND</span><span class="tcomp" style="--tc:${rc}">${roundLevel}</span></div>
-      <div class="tl-row"><span>SECTOR</span><b>S${cs.sector||1}</b></div>
-    </div>`;
-  } else if (cs.eliminated){
-    live = `<div class="tip-live">
-      <div class="tip-h2" style="color:#ff0040"><span class="tip-dot" style="color:#ff0040;background:#ff0040"></span>KNOCKED OUT</div>
-      <div class="tl-row"><span>OUT IN</span><span class="tcomp" style="--tc:${rc}">${cs.elimRound}</span></div>
+      <div class="tl-row"><span>TYRE</span><span class="tcomp" style="--tc:${cc}">${comp}</span></div>
+      <div class="tl-row"><span>DEG</span><div class="bar"><i style="width:${deg}%;background:${cc}"></i></div><b>${deg.toFixed(0)}%</b></div>
+      <div class="tl-row"><span>FUEL</span><div class="bar"><i style="width:${fuel}%;background:${fcol}"></i></div><b>${fuel>66?'F':fuel>33?'M':'E'}</b></div>
     </div>`;
   }
   tip.innerHTML = `
@@ -1539,8 +1588,8 @@ function renderRowTip(id){
         <div class="ssec"><span style="color:#ef4444">SECTOR 2</span>${sBest(br&&br.bestS2,globalBestS2,'#ff9b9b')}</div>
         <div class="ssec"><span style="color:#10b981">SECTOR 3</span>${sBest(br&&br.bestS3,globalBestS3,'#84e9c0')}</div>
       </div>
-      <div class="tip-sec"><div class="tip-h2">BEST LAP</div>
-        <div class="ssec"><span style="color:${rc}">${roundLevel}</span><span style="font-family:'JetBrains Mono','Space Mono',monospace;font-weight:800;color:#fff">${br&&br.bestLap?fmt(br.bestLap):'—'}</span></div>
+      <div class="tip-sec"><div class="tip-h2">BEST LAP BY TYRE</div>
+        ${tyreRow('SOFT','#ef4444')}${tyreRow('MEDIUM','#ffcc00')}${tyreRow('HARD','#e8e8ee')}
       </div>${live}
     </div>
     <div class="tip-car" style="--tc:${t.color}">
@@ -1557,55 +1606,43 @@ function renderRowTip(id){
 }
 
 function renderLeaderboard() {
-  // Tier for knockout grid: Q3 cars (P1-8) ahead of Q2-eliminated (P9-11)
-  // ahead of Q1-eliminated (P12-15). Within a tier, fastest lap wins.
-  // During live rounds, just sort by best lap.
-  const tierOf = id =>
-    SCHEDULE.q1Eliminated.includes(id) ? 2 :
-    SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
   const sorted = Object.entries(bestResults)
     .map(([id, br]) => ({ id, ...br, team: TEAMS.find(t => t.id === id) }))
-    .sort((a, b) => currentRound === 'COMPLETE'
-      ? (tierOf(a.id) - tierOf(b.id)) || (a.bestLap - b.bestLap)
-      : (a.bestLap - b.bestLap));
+    .sort((a, b) => a.bestLap - b.bestLap);
 
-  const classifiedN = sorted.length;
-  document.getElementById('classifiedCount').textContent = `SATOSHI SPEEDWAY • ${classifiedN}/15 CLASSIFIED`;
+  document.getElementById('classifiedCount').textContent = `SATOSHI SPEEDWAY • ${sorted.length}/15 CLASSIFIED`;
 
   const leader = sorted[0];
   let html = '';
   sorted.forEach((r, i) => {
     const cs = carStates[r.id];
     const isOn = cs.onTrack;
-    const isElim = cs.eliminated;
     const gap = i === 0 ? '' : `+${(r.bestLap - leader.bestLap).toFixed(3)}`;
     const isBestS1 = globalBestS1 && r.bestS1 === globalBestS1.time;
     const isBestS2 = globalBestS2 && r.bestS2 === globalBestS2.time;
     const isBestS3 = globalBestS3 && r.bestS3 === globalBestS3.time;
 
-    const posColor = currentRound === 'COMPLETE' && i === 0 ? '#00ff88' : i === 0 ? '#fff' : isElim ? '#444' : '#666';
-    const posLabel = currentRound === 'COMPLETE' && i === 0 ? 'P1' : `${i+1}`;
-
-    html += `<div class="lb-row" data-team="${r.id}" style="background:${isOn ? 'rgba(0,255,136,.04)' : isElim ? 'rgba(255,0,0,.02)' : i===0 ? 'rgba(255,255,255,.02)' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : isElim ? '#ff004033' : 'transparent'};opacity:${isElim ? '.5' : '1'}">
-      <span style="font-size:12px;font-weight:800;color:${posColor};font-family:'Orbitron',sans-serif">${posLabel}</span>
+    html += `<div class="lb-row${i===0?' lb-lead':''}" data-team="${r.id}" style="background:${isOn ? 'rgba(0,255,136,.04)' : i===0 ? 'transparent' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : 'transparent'}">
+      <span style="font-size:12px;font-weight:800;color:${i===0?'#fff':'#666'};font-family:'Orbitron',sans-serif">${i+1}</span>
       <div style="display:flex;align-items:center;gap:6px">
         <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
         <img src="${r.team.logo}" alt="${r.id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
         <div>
-          <div style="font-size:11px;font-weight:700;color:${isElim ? '#888' : '#eee'}">$${r.id}</div>
-          <div style="font-size:7px;color:${isOn ? '#00ff88' : isElim ? '#ff0040' : '#444'}">${isOn ? 'ON TRACK' : isElim ? `ELIM ${cs.elimRound}` : `${r.runs} LAPS`}</div>
+          <div style="font-size:11px;font-weight:700;color:#eee">$${r.id}</div>
+          <div style="font-size:7px;color:${isOn?'#00ff88':'#444'}">${isOn?'ON TRACK':r.runs+' RUNS'}</div>
         </div>
       </div>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
-      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'JetBrains Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
       <div style="text-align:right">
-        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:${currentRound === 'COMPLETE' && i === 0 ? '#00ff88' : i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
-        <div style="font-size:8px;color:#555;font-family:'Space Mono',monospace">${gap}</div>
+        <div style="font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:${i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
+        <div style="font-size:8px;color:#555;font-family:'JetBrains Mono',monospace">${gap}</div>
       </div>
     </div>`;
   });
 
+  // Empty slots
   for (let i = sorted.length; i < TEAMS.length; i++) {
     html += `<div class="lb-row" style="opacity:.3">
       <span style="font-size:12px;font-weight:800;color:#333;font-family:'Orbitron',sans-serif">${i+1}</span>
@@ -1615,12 +1652,23 @@ function renderLeaderboard() {
   document.getElementById('leaderboard').innerHTML = html;
 }
 
+// Preview-mode badge
+(function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
+  if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
+    if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
+if (TEST_MODE){
+  const b=document.createElement('div');
+  b.textContent='\u26a1 PREVIEW MODE \u00d7'+SIM_SPEED;
+  b.style.cssText='position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:9999;background:linear-gradient(90deg,#ffcc00,#ffe066);color:#000;font:800 11px Orbitron,sans-serif;letter-spacing:1px;padding:5px 13px;border-radius:6px;box-shadow:0 0 14px rgba(255,204,0,.4)';
+  document.body.appendChild(b);
+}
+
+// Start the loop
 requestAnimationFrame(update);
 
-// ── Timing-row hover share-card ──
+// ── Timing-row hover tooltip ──
 (function(){
   const lb = document.getElementById('leaderboard'), tip = document.getElementById('rowTip');
-  if(!lb) return;
   lb.addEventListener('mousemove', e=>{
     tipX = e.clientX; tipY = e.clientY;
     const row = e.target.closest('.lb-row[data-team]');
@@ -1630,12 +1678,27 @@ requestAnimationFrame(update);
   lb.addEventListener('mouseleave', ()=>{ tipTeam = null; tip.style.display='none'; });
 })();
 
-// ── fund banner: copy contract ──
-(function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
-  if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
-    if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
+// ── SESSION DATA toggle + X-share ──
+(function(){
+  const live=document.getElementById('tabLive'), data=document.getElementById('tabData'), dash=document.getElementById('dashboardView');
+  function show(which){
+    dashOpen = which==='data';
+    if(live) live.classList.toggle('on', !dashOpen);
+    if(data) data.classList.toggle('on', dashOpen);
+    dash.style.display = dashOpen ? 'block' : 'none';
+    if(dashOpen){ renderDashboard(); lastDash = performance.now(); }
+  }
+  if(live && data){ live.onclick=()=>show('live'); data.onclick=()=>show('data'); }
+  dash.addEventListener('click', e=>{
+    const b = e.target.closest('button[data-tweet], button[data-share]'); if(!b) return;
+    let text = b.getAttribute('data-tweet');
+    if(!text && b.getAttribute('data-share')==='session'){
+      const top = TEAMS.map(t=>({t,br:bestResults[t.id]})).filter(x=>x.br&&isFinite(x.br.bestLap)).sort((a,b)=>a.br.bestLap-b.br.bestLap)[0];
+      text = top ? `🏁 Free Practice at Satoshi Speedway — $${top.t.id} fastest (${fmt(top.br.bestLap)}). Full session data 👇 memegrandprix.com $MEMEGP` : 'MEME GP · Satoshi Speedway $MEMEGP';
+    }
+    if(text) window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank','noopener');
+  });
+})();
 </script>
-<div id="rowTip"></div>
-<script>document.addEventListener("DOMContentLoaded",()=>{const d=document.createElement("div");d.innerHTML=`<div style="position:fixed;bottom:8px;left:8px;z-index:99998;font-family:monospace;font-size:10px;color:#ffcc00;background:rgba(0,0,0,.6);padding:3px 8px;border:1px solid #ffcc00;border-radius:4px">PREVIEW · ${_PVSPD}x · ?test=N to change speed</div>`;document.body.appendChild(d.firstChild);});</script>
 </body>
 </html>
