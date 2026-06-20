@@ -222,7 +222,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <!-- get tilted to match the visible track.             -->
       <!-- ════════════════════════════════════════════════ -->
       <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
-      <path id="pitPath" d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 152 133 L 349 128" fill="none" stroke="none"/>
 
       <!-- Background grid -->
       <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
@@ -245,10 +245,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round"/>
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
         <!-- ===== NEON PIT LANE ===== -->
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="butt"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="butt"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
-        <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+        <path d="M 152 133 L 349 128" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
+        <text x="250" y="150" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
 
         <!-- START / FINISH -->
         <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
@@ -318,11 +318,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 // MEME GP — QUALIFYING DETERMINISTIC LIVE SIMULATOR
 // Q1: 15 cars, 2 laps, bottom 4 out
 // Q2: 11 cars, 2 laps, bottom 3 out
-// Q3: 4 cars, 1 lap, pole shootout
+// Q3: 8 cars, 1 lap, pole shootout
 // Session start: 2026-04-25 18:00:00 UTC (20:00 SAST)
 // ═══════════════════════════════════════════════════
 
-const SESSION_START_UTC = new Date('2026-04-25T18:00:00Z').getTime();
+const SESSION_START_UTC = new Date('2026-06-20T18:00:00Z').getTime();
 const S1_END = 0.36;
 const S2_END = 0.68;
 const SEED = 20260425003;
@@ -400,7 +400,7 @@ function buildSchedule() {
   const events = [];
   let t = 0;
 
-  // ── Q1: All 10 cars, 2 laps each ──
+  // ── Q1: All 15 cars, 2 laps each ──
   for (let lap = 0; lap < 2; lap++) {
     const order = [...Array(TEAMS.length).keys()];
     for (let i = order.length - 1; i > 0; i--) {
@@ -439,7 +439,7 @@ function buildSchedule() {
   const q1Eliminated = q1Sorted.slice(11).map(e => e[0]); // bottom 4 (P12-15)
   const q2Drivers = q1Sorted.slice(0, 11).map(e => e[0]); // 11 advance
 
-  // ── Q2: 7 cars, 2 laps each ──
+  // ── Q2: 11 cars, 2 laps each ──
   t = q2Start;
   for (let lap = 0; lap < 2; lap++) {
     const order = q2Drivers.map(id => TEAMS.findIndex(t => t.id === id));
@@ -553,7 +553,7 @@ function update() {
     if (ev.type === 'q1_end' && elapsed >= ev.time) {
       currentRound = 'Q1_BREAK';
       breakTitle = 'Q1 COMPLETE';
-      breakSub = 'Bottom 3 eliminated';
+      breakSub = 'Bottom 4 eliminated';
       breakElim = SCHEDULE.q1Eliminated.map(id => {
         const t = TEAMS.find(t => t.id === id);
         return `${t.emoji} $${id} — ELIMINATED`;
@@ -563,7 +563,7 @@ function update() {
     if (ev.type === 'q2_end' && elapsed >= ev.time) {
       currentRound = 'Q2_BREAK';
       breakTitle = 'Q2 COMPLETE';
-      breakSub = 'Bottom 3 eliminated — Top 4 shootout next';
+      breakSub = 'Bottom 3 eliminated — Top 8 shootout next';
       breakElim = SCHEDULE.q2Eliminated.map(id => {
         const t = TEAMS.find(t => t.id === id);
         return `${t.emoji} $${id} — ELIMINATED`;
