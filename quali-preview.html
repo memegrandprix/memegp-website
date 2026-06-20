@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<!-- MEMEGP quali.html · BUILD: S2-NEON (Satoshi + 15-team grid, neon theme) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME GP — QUALIFYING LIVE | Satoshi Speedway</title>
+<meta name="description" content="Qualifying — Live at Satoshi Speedway. Q1, Q2, Q3. 15 teams fight for pole position.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overflow:hidden;height:100vh}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes eliminated{0%{opacity:1}100%{opacity:.4}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#08080c}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+
+.top-bar{background:linear-gradient(90deg,#0a0a10,#111118,#0a0a10);border-bottom:2px solid #ff0040;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,0,64,.15);border:1px solid #ff0040;border-radius:4px;padding:3px 10px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ff0040;animation:pulse 1s infinite}
+.brand{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555;text-decoration:none}
+.session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040;opacity:1}
+.countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+
+.ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
+.ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
+
+.main{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 82px)}
+
+.left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+.car-row{display:flex;align-items:center;gap:8px;padding:6px 14px;border-bottom:1px solid #111;transition:all .3s}
+.car-row.active{background:rgba(0,255,136,.06)}
+.car-row.eliminated{opacity:.35}
+.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0}
+.run-box{background:rgba(255,255,255,.05);border:1px solid #333;border-radius:4px;padding:2px 8px;text-align:center}
+
+.center{position:relative;background:radial-gradient(ellipse at 50% 40%,#0d0d14,#060609);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
+
+.right{background:#08080c;border-left:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.right-header{padding:12px 16px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
+.best-sectors{display:flex;border-bottom:1px solid #1a1a1a}
+.best-sector{flex:1;padding:8px 10px}
+.col-headers{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:6px 12px;border-bottom:1px solid #1a1a1a;font-size:7px;color:#444;letter-spacing:1.5px;font-weight:700}
+.lb-row{display:grid;grid-template-columns:28px 1fr 55px 55px 55px 72px;padding:7px 12px;border-bottom:1px solid #111;align-items:center;transition:all .3s}
+
+.waiting{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;background:#050508}
+.waiting h1{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#ff3333,#ff6644,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.waiting .countdown-big{font-family:'Space Mono',monospace;font-size:48px;color:#ff0040;margin-top:16px;font-weight:700}
+
+/* Q-round indicators */
+.q-badge{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;padding:2px 8px;border-radius:3px;display:inline-block}
+.q-badge.q1{background:rgba(255,0,64,.15);color:#ff0040;border:1px solid #ff0040}
+.q-badge.q2{background:rgba(255,165,0,.15);color:#ff9900;border:1px solid #ff9900}
+.q-badge.q3{background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88}
+.q-badge.inactive{opacity:.3}
+
+.elim-tag{font-family:'Space Mono',monospace;font-size:7px;color:#ff0040;letter-spacing:1px;background:rgba(255,0,64,.1);padding:1px 5px;border-radius:2px}
+
+@media(max-width:1024px){
+  /* MOBILE: unlock body scroll, stack to one scrollable column, track + timing only */
+  body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
+  .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
+  .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
+  .center{min-height:45vh}                       /* keep the track prominent */
+  .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
+  .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
+  .brand{font-size:13px;letter-spacing:1.5px}
+  .session-tab{padding:3px 9px;font-size:9px;letter-spacing:1px}
+  .col-headers,.lb-row{grid-template-columns:24px 1fr 46px 46px 46px 58px}
+}
+@media(max-width:600px){
+  .center{min-height:40dvh}
+  .ticker{padding:6px 12px;font-size:9px}
+  .col-headers,.lb-row{grid-template-columns:22px 1fr 40px 40px 40px 52px;padding:7px 9px;font-size:9px}
+}
+/* ===== NEON / GLASS THEME ===== */
+:root{--gold:#ffcc00;--s1:#3b82f6;--s2:#ef4444;--s3:#10b981;}
+body{background:#040408;
+ background-image:radial-gradient(ellipse 120% 70% at 50% -5%,rgba(255,204,0,.05),transparent 60%),
+ radial-gradient(ellipse 100% 60% at 50% 115%,rgba(59,130,246,.07),transparent 60%),
+ linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+ background-size:auto,auto,46px 46px,46px 46px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background-image:radial-gradient(1px 1px at 18% 28%,rgba(255,255,255,.45),transparent),
+ radial-gradient(1px 1px at 72% 18%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.3),transparent),
+ radial-gradient(1px 1px at 86% 62%,rgba(255,255,255,.4),transparent),
+ radial-gradient(1px 1px at 10% 82%,rgba(255,255,255,.35),transparent)}
+.top-bar,.ticker,.main{position:relative;z-index:1}
+.center{background:transparent!important}
+.grid-bg{opacity:.35}
+.left,.right{background:linear-gradient(160deg,rgba(22,22,32,.72),rgba(10,10,18,.82))!important;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(255,204,0,.16)!important;box-shadow:0 0 26px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.05) inset}
+.left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
+.left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
+.car-row{border-bottom:1px solid rgba(255,255,255,.04)!important}
+.car-row.active{background:rgba(255,204,0,.05)!important}
+.lb-row{border-bottom:1px solid rgba(255,255,255,.05)!important}
+.lb-row.lb-lead{background:linear-gradient(90deg,rgba(255,204,0,.16),rgba(255,204,0,.02))!important;border:1px solid rgba(255,204,0,.3)!important}
+.lb-lead>span:first-child{color:var(--gold)!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.col-headers{border-bottom:1px solid rgba(255,204,0,.12)!important}
+.top-bar{background:linear-gradient(180deg,rgba(12,12,20,.92),rgba(4,4,8,.82))!important;border-bottom:1px solid rgba(255,204,0,.3)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ticker{background:rgba(8,8,14,.6)!important;border-bottom:1px solid rgba(255,204,0,.1)!important}
+.brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
+.session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
+.session-tab{color:#888}
+</style>
+</head>
+<body>
+<!-- lock stripped for preview -->
+
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="live-badge" id="liveBadge" style="display:none">
+      <div class="live-dot"></div>
+      <span style="font-size:11px;font-weight:700;color:#ff0040;letter-spacing:2px">LIVE</span>
+    </div>
+    <a href="index.html" class="brand" style="text-decoration:none">MEME GRAND PRIX</a>
+    <span id="trackCount" style="font-size:10px;color:#555;margin-left:8px"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="fp1.html" class="session-tab" style="opacity:.6">PRACTICE</a>
+    <a href="quali.html" class="session-tab active">QUALI</a>
+    <a href="race.html" class="session-tab" style="opacity:.6">RACE</a>
+    <span style="margin-left:8px;display:flex;gap:6px" id="qRoundBadges">
+      <span class="q-badge q1" id="q1Badge">Q1</span>
+      <span class="q-badge q2 inactive" id="q2Badge">Q2</span>
+      <span class="q-badge q3 inactive" id="q3Badge">Q3</span>
+    </span>
+  </div>
+  <div class="countdown" id="sessionClock">--:--</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="ticker-msg" id="tickerMsg" style="color:#444">▸ QUALIFYING NOT STARTED</div>
+  <div style="font-size:10px;color:#333">SATOSHI SPEEDWAY — ROUND 1</div>
+</div>
+
+<!-- WAITING SCREEN -->
+<div class="waiting" id="waitingScreen">
+  <img src="webcar.png" alt="Meme GP Car" style="width:200px;margin-bottom:16px">
+  <h1>QUALIFYING — SATOSHI SPEEDWAY</h1>
+  <div style="font-family:'Chakra Petch';font-size:14px;color:#888;margin-top:12px;letter-spacing:1px">SESSION STARTS IN</div>
+  <div class="countdown-big" id="waitCountdown">--:--:--</div>
+  <div style="font-family:'Chakra Petch';font-size:11px;color:#444;margin-top:20px;text-align:center;line-height:1.8">
+    Q1: 15 cars · 2 laps · Bottom 4 eliminated<br>
+    Q2: 11 cars · 2 laps · Bottom 3 eliminated<br>
+    Q3: Top 8 · 1 lap · Pole position shootout
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main" id="mainLayout" style="display:none">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <div class="left-header">
+      <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#888">CAR STATUS</div>
+      <div id="currentRound" style="font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#ff0040;margin-top:4px"></div>
+    </div>
+    <div id="carStatusList" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:8px 14px;border-top:1px solid #1a1a1a">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:6px;height:6px;border-radius:50%;background:#3b82f6"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#3b82f6;letter-spacing:1px">S1</span><span style="font-size:7px;color:#444">ENGINE+CHASSIS</span></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:6px;height:6px;border-radius:50%;background:#ef4444"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#ef4444;letter-spacing:1px">S2</span><span style="font-size:7px;color:#444">DRAG+AERO</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#10b981"></div><span style="font-family:'Orbitron';font-size:7px;font-weight:700;color:#10b981;letter-spacing:1px">S3</span><span style="font-size:7px;color:#444">PIT+AERO</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER: Track -->
+  <div class="center">
+    <div class="grid-bg"></div>
+    <svg id="trackSvg" viewBox="-30 95 600 340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;max-width:780px;position:relative;z-index:2">
+      <defs>
+        <pattern id="gridBg" width="30" height="30" patternUnits="userSpaceOnUse">
+          <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+        </pattern>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- GEOMETRY PATHS (UNTILTED, HIDDEN)                  -->
+      <!-- getPointAtLength reads these in raw coords; the    -->
+      <!-- car dots live inside the tilt group below so they  -->
+      <!-- get tilted to match the visible track.             -->
+      <!-- ════════════════════════════════════════════════ -->
+      <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 152 133 L 349 128" fill="none" stroke="none"/>
+
+      <!-- Background grid -->
+      <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
+
+      <!-- ════════════════════════════════════════════════ -->
+      <!-- TILTED TRACK GROUP — visuals + car dots            -->
+      <!-- ════════════════════════════════════════════════ -->
+      <g transform="matrix(1, 0, -0.04, 0.88, 10, 25)">
+
+        <!-- ===== NEON ROAD ===== -->
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="30" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)" opacity="0.30"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="#0a0a12" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#3b82f6" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ef4444" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#10b981" stroke-width="15" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#cfe0ff" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="0" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#ffd0d0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-1000" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round"/>
+        <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
+        <!-- ===== NEON PIT LANE ===== -->
+        <path d="M 152 133 L 349 128" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
+        <text x="250" y="150" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+
+        <!-- START / FINISH -->
+        <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
+        <rect x="245" y="112" width="3" height="14" fill="#f5f5f5"/>
+        <rect x="250" y="112" width="3" height="14" fill="#ffcc00"/>
+        <g transform="translate(280, 118)"><path d="M -4 -3 L 4 0 L -4 3 Z" fill="#ffcc00"/></g>
+
+        <!-- 17 TURN MARKERS -->
+        <g class="turn-markers" font-family="Orbitron,sans-serif" font-size="6.2" font-weight="800" letter-spacing="0.5" fill="rgba(255,204,0,0.55)" text-anchor="middle">
+          <text x="395" y="103">T1</text><text x="430" y="143">T2</text><text x="500" y="159">T3</text>
+          <text x="535" y="200">T4</text><text x="528" y="240">T5</text><text x="478" y="258">T6</text>
+          <text x="410" y="241">T7</text><text x="345" y="201">T8</text><text x="180" y="208">T9</text>
+          <text x="143" y="265">T10</text><text x="208" y="297">T11</text><text x="273" y="278">T12</text>
+          <text x="252" y="312">T13</text><text x="142" y="362">T14</text><text x="68" y="372">T15</text>
+          <text x="32" y="285">T16</text><text x="68" y="142">T17</text>
+        </g>
+
+        <g id="corners"></g>
+        <g id="carDots"></g>
+      </g>
+    </svg>
+    <!-- Round break overlay -->
+    <div id="roundBreak" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.92);border:1px solid #ff0040;border-radius:12px;padding:30px 50px">
+      <div id="roundBreakTitle" style="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:#ff0040;letter-spacing:4px"></div>
+      <div id="roundBreakSub" style="font-family:'Chakra Petch';font-size:13px;color:#888;margin-top:8px"></div>
+      <div id="roundBreakElim" style="font-family:'Space Mono',monospace;font-size:11px;color:#ff4444;margin-top:16px;line-height:1.8"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="right-header">
+      <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff0040;margin-bottom:4px" id="timingTitle">QUALIFYING — TIMING</div>
+      <div id="classifiedCount" style="font-size:9px;color:#444;letter-spacing:1px">SATOSHI SPEEDWAY</div>
+    </div>
+    <div class="best-sectors">
+      <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(255,51,51,.03),transparent)">
+        <div style="font-size:8px;color:#3b82f6;font-weight:700;letter-spacing:2px;margin-bottom:2px">S1 BEST</div>
+        <div id="bestS1" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS1Team" style="font-size:8px;color:#555"></div>
+      </div>
+      <div class="best-sector" style="border-right:1px solid #1a1a1a;background:linear-gradient(180deg,rgba(0,187,255,.03),transparent)">
+        <div style="font-size:8px;color:#ef4444;font-weight:700;letter-spacing:2px;margin-bottom:2px">S2 BEST</div>
+        <div id="bestS2" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS2Team" style="font-size:8px;color:#555"></div>
+      </div>
+      <div class="best-sector" style="background:linear-gradient(180deg,rgba(255,204,0,.03),transparent)">
+        <div style="font-size:8px;color:#10b981;font-weight:700;letter-spacing:2px;margin-bottom:2px">S3 BEST</div>
+        <div id="bestS3" style="font-size:13px;color:#fff;font-weight:700;font-family:'Space Mono',monospace">—</div>
+        <div id="bestS3Team" style="font-size:8px;color:#555"></div>
+      </div>
+    </div>
+    <div class="col-headers">
+      <span>POS</span><span>DRIVER</span><span style="text-align:right">S1</span><span style="text-align:right">S2</span><span style="text-align:right">S3</span><span style="text-align:right">BEST LAP</span>
+    </div>
+    <div id="leaderboard" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:10px 16px;border-top:1px solid #1a1a1a;background:#06060a;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:8px;color:#333;letter-spacing:1px">STARTING GRID</div>
+      <div style="background:linear-gradient(135deg,#c8a84e,#f0d060);color:#1a1200;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:800;padding:3px 10px;border-radius:3px;letter-spacing:1px">SEASON 2</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/**
+ * MEME GP — Shared Stat Calculator (B-prime, deployed 2026-05-19)
+ * ============================================================
+ * Single source of truth for the 5-stat formulas.
+ *
+ * Design: B-prime — approved May 17, 2026 (see transcript
+ * 2026-05-17-14-33-38-memegp-formula-rebuild-magnet-strategy.txt)
+ *
+ * Used by:
+ *   - gp-central.html        (live Pit Wall rendering)
+ *   - team pages             (stat displays)
+ *   - Friday-freeze snapshot (every Friday 09:00 SAST)
+ *   - race engine            (consumes frozen stats)
+ *
+ * Why piecewise: the May 17 session diagnosed three problems with the
+ * old simple-log formulas:
+ *   1. DRAG ceiling pile-up (11 of 12 teams at 9.5)
+ *   2. AERO scores compressed to 1-3 (no differentiation)
+ *   3. ENGINE bottom too harsh ($10K coins → 1.0)
+ *
+ * B-prime fixes each by anchoring SCOREPOSTS at meaningful mcap/vol/liq
+ * levels and interpolating between them, so growth is measurable and
+ * the field spreads across the full 1.0-9.5 range.
+ *
+ * IMPORTANT: This file IS the formula. Any change here ripples
+ * across the entire platform. Modify with care.
+ * ============================================================
+ */
+(function (global) {
+  'use strict';
+
+  // ============================================================
+  // PRE_REVEAL_MODE — Sunday 7 June 2026 inaugural rankings drop
+  // ------------------------------------------------------------
+  // When true: calcStats returns null for engine/aero/chassis/drag/overall
+  // PIT stays visible (it's editorial, not measured)
+  // Rendering pages already handle null via existing chassis logic
+  //
+  // FLIP TO FALSE Sunday 7 June after the countdown reveal completes.
+  // ============================================================
+  const PRE_REVEAL_MODE = false;   // LIVE — reveals complete, full grid public
+
+  // ============================================================
+  // FREEZE OVERRIDE — force the whole platform into frozen mode
+  // ------------------------------------------------------------
+  // The automatic freeze only covers Fri 09:00 -> Sun 23:59 SAST.
+  // For a reveal that runs OUTSIDE that window (e.g. a Monday drop),
+  // set this to true so the Pit Wall reads the locked snapshot.json
+  // instead of going live and drifting mid-reveal. Flip back to
+  // false once the reveal is done and you want live data again.
+  // ============================================================
+  const FREEZE_OVERRIDE = false;
+
+  // ============================================================
+  // STAGGERED REVEAL — inaugural Power Rankings drop
+  // ------------------------------------------------------------
+  // Reveals one team every `intervalMinutes`, worst OVR first
+  // (P15 -> P1), purely time-gated on the client — NO redeploys.
+  //
+  // While `startUTC` is null, or before it passes, every score
+  // stays hidden (the pre-reveal blackout). As each interval
+  // elapses, the next team in `order` unlocks. Any page load — or
+  // the 60s tick on open pages — shows the correct state for the
+  // current time automatically.
+  //
+  // Set startUTC to an ISO-8601 UTC string once the time is locked,
+  // e.g. '2026-06-07T14:00:00Z'. Flip PRE_REVEAL_MODE to false after
+  // the drop completes to force everything live.
+  // ============================================================
+  const REVEAL = {
+    startUTC: null,            // TODO: set when the Sunday start time is locked
+    intervalMinutes: 30,
+    // P15 -> P1 (worst OVR first, champion last).
+    // VERIFIED against the frozen 2026-W23 snapshot + full history.json
+    // (DRAG uses all days) via verify-reveal-order.js on 6 Jun 2026.
+    // Near-ties within 0.1 OVR (a late move could swap these):
+    //   MONKO / MARS         (2.9 / 3.0)
+    //   PEPONK / MOMO / BILLY / VIBECOIN  (5.5 / 5.6 / 5.7 / 5.8)
+    order: [
+      'NEURO', 'MONKO', 'MARS', '420BLAZEIT', 'SUS', 'SHIH', 'DOBERMANN',
+      'LOL', 'PEPONK', 'MOMO', 'BILLY', 'VIBECOIN', 'MASK', 'TURBO', 'PUP',
+    ],
+  };
+
+  // PREVIEW KEY — open any page with ?preview=<this value> to force-reveal
+  // everything IN THAT BROWSER ONLY (for screenshotting cards before the
+  // public drop). Inert without the URL param. Use it on a LOCAL copy for
+  // zero public exposure. Note: the key lives in this public file, so it's
+  // convenience, not security — the truly private path is local-only.
+  const PREVIEW_KEY = 'gp-grid-preview-2026';
+  function _previewActive() {
+    try {
+      return typeof location !== 'undefined' &&
+             typeof location.search === 'string' &&
+             location.search.indexOf('preview=' + PREVIEW_KEY) !== -1;
+    } catch (e) { return false; }
+  }
+
+  // How many teams are revealed as of `now` (Date, optional)?
+  function revealedCount(now) {
+    if (_previewActive()) return REVEAL.order.length; // preview: show the full grid
+    if (!REVEAL.startUTC) return 0;
+    const start = Date.parse(REVEAL.startUTC);
+    if (isNaN(start)) return 0;
+    const t = now ? now.getTime() : Date.now();
+    if (t < start) return 0;
+    const step = REVEAL.intervalMinutes * 60 * 1000;
+    const count = Math.floor((t - start) / step) + 1; // team 1 reveals at start
+    return Math.min(count, REVEAL.order.length);
+  }
+
+  // Is a given team's score revealed yet?
+  // PRE_REVEAL_MODE === false is a master override -> everything live.
+  function isRevealed(ticker, now) {
+    if (_previewActive()) return true;          // preview: reveal in this browser only
+    if (PRE_REVEAL_MODE === false) return true;
+    const idx = REVEAL.order.indexOf(ticker);
+    if (idx === -1) return true;   // unknown ticker -> don't hide it
+    return idx < revealedCount(now);
+  }
+
+  // ----- helpers -----
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+  function round(v) { return Math.round(v * 10) / 10; }
+
+  // ============================================================
+  // ENGINE — raw power from market cap
+  // ------------------------------------------------------------
+  // Piecewise log10(mcap) with scoreposts:
+  //   $10K   → 1.5  (entry-tier)
+  //   $250K  → 4.5  (mid-tier)
+  //   $5M    → 7.0  (strong)
+  //   $100M+ → 9.5  (whale)
+  // ============================================================
+  function calcEngine(mcap) {
+    if (!mcap || mcap <= 0) return 1.0;
+    const lm = Math.log10(mcap);
+    let raw;
+    if (lm <= 4.0) {
+      raw = 1.5;
+    } else if (lm <= 5.4) {        // $10K → $250K
+      raw = 1.5 + (4.5 - 1.5) * (lm - 4.0) / (5.4 - 4.0);
+    } else if (lm <= 6.7) {        // $250K → $5M
+      raw = 4.5 + (7.0 - 4.5) * (lm - 5.4) / (6.7 - 5.4);
+    } else if (lm <= 8.0) {        // $5M → $100M
+      raw = 7.0 + (9.5 - 7.0) * (lm - 6.7) / (8.0 - 6.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // AERO — downforce from trading activity
+  // ------------------------------------------------------------
+  // DUAL PATH: take the MAX of two scores. A team strong in EITHER
+  // dimension gets credit. This fixes the old problem where huge-cap
+  // teams with real volume scored low on turnover %.
+  //
+  // Path 1 (turnover): vol / mcap as %
+  //   0.1%  → 1.0
+  //   5%    → 5.0
+  //   30%+  → 9.5
+  //
+  // Path 2 (absolute volume in USD):
+  //   $50      → 1.0
+  //   $5K      → 5.0
+  //   $100K+   → 9.5
+  // ============================================================
+  function calcAero(mcap, vol) {
+    if (!mcap || !vol) return 1.0;
+    // Path 1 — turnover
+    const turn = (vol / mcap) * 100;
+    let aerTurn;
+    if (turn <= 0.1) {
+      aerTurn = 1.0;
+    } else if (turn <= 5) {
+      // log scale: log10(0.1) = -1, log10(5) ≈ 0.7
+      aerTurn = 1.0 + 4.0 * (Math.log10(turn) - (-1)) / (Math.log10(5) - (-1));
+    } else if (turn <= 30) {
+      aerTurn = 5.0 + 4.5 * (Math.log10(turn) - Math.log10(5)) / (Math.log10(30) - Math.log10(5));
+    } else {
+      aerTurn = 9.5;
+    }
+    // Path 2 — absolute volume
+    let aerAbs;
+    if (vol <= 50) {
+      aerAbs = 1.0;
+    } else if (vol <= 5000) {
+      aerAbs = 1.0 + 4.0 * (Math.log10(vol) - 1.7) / (3.7 - 1.7);
+    } else if (vol <= 100000) {
+      aerAbs = 5.0 + 4.5 * (Math.log10(vol) - 3.7) / (5.0 - 3.7);
+    } else {
+      aerAbs = 9.5;
+    }
+    return clamp(Math.max(aerTurn, aerAbs), 1.0, 9.5);
+  }
+
+  // ============================================================
+  // CHASSIS — stiffness from liquidity depth (AMM teams)
+  // ------------------------------------------------------------
+  // Piecewise log10(liq) with scoreposts:
+  //   $5K    → 1.0  (thin pool)
+  //   $50K   → 5.0  (mid pool)
+  //   $500K+ → 9.5  (deep pool)
+  // Returns null if liq is missing — excluded from overall.
+  // ============================================================
+  function calcChassis(liq) {
+    if (!liq || liq <= 0) return null;
+    const ll = Math.log10(liq);
+    let raw;
+    if (ll <= 3.7) {              // ≤ $5K
+      raw = 1.0;
+    } else if (ll <= 4.7) {       // $5K → $50K
+      raw = 1.0 + 4.0 * (ll - 3.7);
+    } else if (ll <= 5.7) {       // $50K → $500K
+      raw = 5.0 + 4.5 * (ll - 4.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // CHASSIS (Runes proxy) — for Bitcoin Runes teams
+  // ------------------------------------------------------------
+  // Bitcoin Runes don't have AMM liquidity pools. Magic Eden uses
+  // an order book model that isn't directly comparable to AMM depth.
+  // Holders data isn't available on free APIs (Ordiscan free tier
+  // doesn't expose holder counts for runes).
+  //
+  // Proxy formula: wide log scale of absolute 24h volume, calibrated
+  // so a healthy Bitcoin Runes market lands mid-pack:
+  //   $500    → 1.0
+  //   $5K     → 5.0
+  //   $100K+  → 9.5
+  //
+  // This curve is DIFFERENT from AERO's abs-volume path (which has
+  // the same scoreposts but combines with turnover via max()).
+  // Here it's standalone, scaling absolute trade activity to chassis.
+  //
+  // Disclaimer: this is a proxy. Real holder integration is on
+  // the platform roadmap. See teams-billy.html for the public note.
+  // ============================================================
+  function calcChassisRunes(vol) {
+    if (!vol || vol <= 0) return 1.0;
+    const lv = Math.log10(vol);
+    let raw;
+    if (lv <= 2.7) {              // ≤ $500
+      raw = 1.0;
+    } else if (lv <= 3.7) {       // $500 → $5K
+      raw = 1.0 + 4.0 * (lv - 2.7);
+    } else if (lv <= 5.0) {       // $5K → $100K
+      raw = 5.0 + 4.5 * (lv - 3.7) / 1.3;
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // DRAG — straight-line stability from multi-day data
+  // ------------------------------------------------------------
+  // Multi-day composite:
+  //   drag_raw = 0.6 × vol_score + 0.4 × stab_score, then map to 1.0-9.5
+  //
+  //   vol_score:  log10(avg_vol) scaled (avg_vol $500 → 0, $100K → 10)
+  //   stab_score: 10 - std_chg/2 (std 0 → 10, std 20+ → 0)
+  //
+  // FLOOR: if avg_vol < $500, drag = 1.0 (dead-trade penalty)
+  //
+  // history is an array of past snapshots, each with .teams[ticker]
+  // containing { vol, change24h }. If history is missing/empty, falls
+  // back to single-day (vol, change24h) from `d` itself.
+  // ============================================================
+  function calcDrag(d, history, ticker) {
+    // Build the history we'll use — if no snapshots, use today only
+    let chgs = [];
+    let vols = [];
+    if (history && history.length > 0 && ticker) {
+      for (const snap of history) {
+        const t = snap && snap.teams && snap.teams[ticker];
+        if (t) {
+          if (typeof t.change24h === 'number') chgs.push(t.change24h);
+          else if (typeof t.change_24h === 'number') chgs.push(t.change_24h);
+          if (typeof t.vol === 'number') vols.push(t.vol);
+          else if (typeof t.vol_24h === 'number') vols.push(t.vol_24h);
+        }
+      }
+    }
+    // If no history found, use today's snapshot
+    if (chgs.length === 0 && d) {
+      chgs = [d.change24h || 0];
+      vols = [d.vol || 0];
+    }
+    // Compute avg_vol
+    const avgVol = vols.length ? vols.reduce((a, b) => a + b, 0) / vols.length : 0;
+    // Floor: dead trade → 1.0
+    if (avgVol < 500) return 1.0;
+    // Compute std of change24h
+    let std;
+    if (chgs.length < 2) {
+      std = Math.abs(chgs[0] || 0);
+    } else if (chgs.length === 2) {
+      // 2-point std — matches the Python: abs(diff) / sqrt(2)
+      std = Math.abs(chgs[0] - chgs[1]) / Math.sqrt(2);
+    } else {
+      const mean = chgs.reduce((a, b) => a + b, 0) / chgs.length;
+      const variance = chgs.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / (chgs.length - 1);
+      std = Math.sqrt(variance);
+    }
+    // Score components
+    // vol_score: (log10(avg_vol) - 2.7) / (5.0 - 2.7) * 10, clamped 0-10
+    // So log10($500) = 2.7 → 0; log10($100K) = 5.0 → 10
+    const volScore = clamp((Math.log10(avgVol) - 2.7) / (5.0 - 2.7) * 10, 0, 10);
+    const stabScore = clamp(10 - std / 2, 0, 10);
+    // Weighted composite (volume-led at 60/40)
+    const dragRaw = 0.6 * volScore + 0.4 * stabScore;
+    // Map 0-10 → 1.0-9.5 (so dead-perfect gets 9.5, dead-zero gets 1.0)
+    const drag = 1.0 + (9.5 - 1.0) * dragRaw / 10;
+    return clamp(drag, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // PIT — community raid score (weekly)
+  // ------------------------------------------------------------
+  // All teams start each race week at PIT = 5.0 (neutral baseline).
+  // PIT moves up/down based on community raid performance on
+  // designated MEME GP tweets during the week.
+  //
+  // The editorialPit value passed in comes from the TEAMS array
+  // in gp-central.html — currently locked at 5.0 for all teams.
+  // Future: post-race-1, this gets driven by raid scoring data.
+  // Defaults to 5.0 if absent.
+  // ============================================================
+  function calcPit(editorialPit) {
+    return editorialPit != null ? editorialPit : 5.0;
+  }
+
+  // ============================================================
+  // MAIN — compute all 5 stats + OVERALL
+  // ------------------------------------------------------------
+  // @param {object} d              — today's on-chain data
+  // @param {number} d.mcap         — market cap (USD)
+  // @param {number} d.vol          — 24h volume (USD)
+  // @param {number} d.liq          — liquidity pool depth (USD)
+  // @param {number} d.change24h    — 24h price change (percent)
+  // @param {number} [editorialPit] — PIT score (community raid; default 5.0)
+  // @param {array}  [history]      — array of past snapshots for DRAG
+  // @param {string} [ticker]       — team ticker (needed for history lookup)
+  //
+  // ============================================================
+  // FROZEN BASE  —  Week-1 measurement, LOCKED Friday.
+  // ------------------------------------------------------------
+  // The market no longer moves these scores. Only earned upgrades
+  // (+1 per locked stat) change a team's score. This is the single
+  // source of truth: every page runs through calcStats, so editing
+  // these two objects re-syncs the entire site at once.
+  //
+  // To record a new earned upgrade: add the stat to EARNED_UPGRADES.
+  // To set a new weekly base: replace the numbers in FROZEN_BASE.
+  // ============================================================
+  const FROZEN_BASE = {
+    TURBO:      { engine: 9.0, aero: 6.9, chassis: 6.5, drag: 7.1 },
+    MASK:       { engine: 5.7, aero: 6.6, chassis: 7.4, drag: 6.0 },
+    NEURO:      { engine: 1.5, aero: 3.5, chassis: 1.4, drag: 1.0 },
+    SUS:        { engine: 4.0, aero: 2.3, chassis: 4.0, drag: 3.3 },
+    LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
+    SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
+    VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
+    MARS:       { engine: 1.5, aero: 4.1, chassis: 1.3, drag: 2.9 },
+    '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
+    PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
+    PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
+    MOMO:       { engine: 4.9, aero: 5.2, chassis: 5.8, drag: 7.0 },
+    DOBERMANN:  { engine: 4.9, aero: 5.0, chassis: 4.8, drag: 4.2 },
+    MONKO:      { engine: 3.3, aero: 1.8, chassis: 3.2, drag: 1.0 },
+    BILLY:      { engine: 6.0, aero: 5.6, chassis: 5.6, drag: 6.1 }
+  };
+
+  // Earned upgrades — locked stats per team (+1 each, permanent for the season).
+  const EARNED_UPGRADES = {
+    BILLY: ['AERO'],
+    PUP:   ['ENGINE']
+  };
+
+  // CYCLE_LOCKED: false during the upgrade window (unearned targets show
+  // "DEVELOPMENT IN PROGRESS"), true once the window closes (unearned targets
+  // show "UPGRADE FAILED"). Flip to false at the start of each new cycle.
+  const CYCLE_LOCKED = true;
+
+  const FROZEN_PIT = 5.0; // PIT resets weekly to 5, not upgradeable
+
+  function cleanTk(t){ return String(t == null ? '' : t).toUpperCase().replace(/^\$/, '').trim(); }
+
+  // Pure frozen base (no upgrades) — for the dev cycle "base -> target" display.
+  function getBaseStats(ticker){
+    const b = FROZEN_BASE[cleanTk(ticker)];
+    if (!b) return null;
+    return { engine: b.engine, aero: b.aero, chassis: b.chassis, drag: b.drag, pit: FROZEN_PIT };
+  }
+  // Earned (locked) upgrade stat names for a team.
+  function getEarned(ticker){
+    return EARNED_UPGRADES[cleanTk(ticker)] || [];
+  }
+
+  // Given the published opening-grid entries (from rankings.json), overlay the
+  // CURRENT score (frozen base + earned upgrades), re-sort by it, and compute
+  // movement vs the opening grid. Returns a new array sorted by current rank,
+  // each entry carrying { rank, previous_rank, score, ...original fields }.
+  // This makes the power rankings + per-team grid rank reflect upgrades from
+  // the single source — edit EARNED_UPGRADES and the whole board re-sorts.
+  function rankWithUpgrades(openingEntries){
+    if (!Array.isArray(openingEntries)) return [];
+    var rows = openingEntries.map(function(e){
+      var s = calcStats({}, FROZEN_PIT, null, e.ticker);
+      var cur = (s && s.overall != null) ? s.overall : e.score;
+      var copy = {}; for (var k in e) { if (e.hasOwnProperty(k)) copy[k] = e[k]; }
+      copy._openingRank = e.rank;
+      copy.score = cur;
+      return copy;
+    });
+    rows.sort(function(a, b){
+      return (b.score - a.score) || (a._openingRank - b._openingRank);
+    });
+    rows.forEach(function(e, i){ e.rank = i + 1; e.previous_rank = e._openingRank; });
+    return rows;
+  }
+
+  // @returns {object|null} {engine, aero, chassis, drag, pit, overall}
+  //                        or null if mcap is missing/zero.
+  // ============================================================
+  function calcStats(d, editorialPit, history, ticker) {
+    const pitVal = round(calcPit(editorialPit));
+
+    // Reveal gate — hide a team's stats until its slot unlocks (PIT stays visible).
+    if (!isRevealed(ticker)) {
+      return { engine: null, aero: null, chassis: null, drag: null, pit: pitVal, overall: null };
+    }
+
+    // FROZEN PATH: return the locked Friday base + any earned upgrades.
+    // The market does not move these — only upgrades do.
+    const fb = getBaseStats(ticker);
+    if (fb) {
+      const up = getEarned(ticker);
+      const bump = (name, val) => Math.min(val + (up.indexOf(name) !== -1 ? 1 : 0), 9.5);
+      const eng = bump('ENGINE', fb.engine);
+      const aer = bump('AERO', fb.aero);
+      const cha = bump('CHASSIS', fb.chassis);
+      const dra = bump('DRAG', fb.drag);
+      const ovr = (eng + aer + cha + dra + pitVal) / 5;
+      return {
+        engine: round(eng), aero: round(aer), chassis: round(cha),
+        drag: round(dra), pit: pitVal, overall: round(ovr)
+      };
+    }
+
+    // LIVE FALLBACK: only used for tickers without a frozen base (safety net).
+    if (!d || !d.mcap) return null;
+    const engine  = calcEngine(d.mcap);
+    const aero    = calcAero(d.mcap, d.vol || d.vol_24h || 0);
+    let chassis;
+    const vol = d.vol || d.vol_24h || 0;
+    if (d.liq != null && d.liq > 0) {
+      chassis = calcChassis(d.liq);
+    } else if (vol > 0 && (d.dataSource === 'runes' || d.liq === null)) {
+      chassis = calcChassisRunes(vol);
+    } else {
+      chassis = null;
+    }
+    const drag    = calcDrag(d, history, ticker);
+    const stats = [engine, aero, chassis, drag, pitVal].filter(s => s !== null);
+    const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
+    return {
+      engine:  round(engine),
+      aero:    round(aero),
+      chassis: chassis !== null ? round(chassis) : null,
+      drag:    round(drag),
+      pit:     pitVal,
+      overall: overall !== null ? round(overall) : null,
+    };
+  }
+
+  // ----- formula metadata -----
+  // Subtitles updated to reflect B-prime mechanics. Communities reading
+  // this should understand what each stat measures and how to improve.
+  const STATS_META = {
+    overall: { name: 'OVERALL', mechanics: 'LIVE',                                       flavor: 'all stats combined',                                       icon: 'how-it-works.png' },
+    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                                 flavor: 'biggest cars on the grid',                                 icon: 'icon-engine.png' },
+    aero:    { name: 'AERO',    mechanics: 'TRADING ACTIVITY (TURNOVER OR ABS VOLUME)',  flavor: 'most active traders',                                      icon: 'icon-aero.png' },
+    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                            flavor: 'deepest pools',                                            icon: 'icon-chassis.png' },
+    drag:    { name: 'DRAG',    mechanics: 'MULTI-DAY VOLUME \u00d7 PRICE STABILITY',    flavor: 'smoothest at speed',                                       icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     mechanics: 'COMMUNITY RAID SCORE',                       flavor: 'how loud is your community',                               icon: 'icon-pit.png' },
+  };
+
+  // ============================================================
+  // MODE DETECTION — live vs frozen (Friday-Freeze mechanic)
+  // ------------------------------------------------------------
+  // Race weeks run Monday 00:00 SAST → Sunday 23:59 SAST.
+  // Stats move LIVE Monday through Friday 09:00 SAST.
+  // Stats are FROZEN Friday 09:00 SAST through Sunday 23:59 SAST.
+  // On Monday 00:00 SAST, the new week starts fresh and stats move
+  // again until the next Friday 09:00 freeze moment.
+  //
+  // SAST = UTC+2 year-round (no daylight saving in South Africa).
+  // Friday 09:00 SAST = Friday 07:00 UTC.
+  // Monday 00:00 SAST = Sunday 22:00 UTC.
+  //
+  // All functions accept an optional `date` parameter for testing.
+  // ============================================================
+
+  // SAST offset in milliseconds (UTC+2)
+  const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
+
+  // Convert a JS Date to a "SAST view" — a Date whose UTC methods
+  // return SAST values. This is the standard trick for timezone math
+  // without pulling in a library.
+  function toSAST(date) {
+    return new Date(date.getTime() + SAST_OFFSET_MS);
+  }
+
+  // Build a UTC Date from SAST components (year, month, day, hour).
+  function fromSAST(year, month, day, hour, min) {
+    return new Date(Date.UTC(year, month, day, hour, min || 0) - SAST_OFFSET_MS);
+  }
+
+  // getNextFreezeMoment(date) — when is the next Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns the NEXT one
+  // (i.e. one week later). This keeps semantics clean: at freeze
+  // moment, we're already frozen.
+  function getNextFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+    // Days until Friday (5). If today IS Friday, that's 0 days unless
+    // we're already past 09:00 SAST, in which case we want next Friday.
+    let daysUntilFri = (5 - dow + 7) % 7;
+    if (dow === 5) {
+      // It's Friday in SAST — check the hour
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h > 9 || (h === 9 && m > 0)) {
+        daysUntilFri = 7;
+      } else if (h === 9 && m === 0) {
+        // Exactly at the freeze moment → next one is in a week
+        daysUntilFri = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilFri, 9, 0);
+  }
+
+  // getLastFreezeMoment(date) — when was the most recent Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns THAT moment
+  // (i.e. we just entered frozen mode this very instant).
+  function getLastFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days since Friday (5)
+    let daysSinceFri = (dow - 5 + 7) % 7;
+    if (dow === 5) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h < 9 || (h === 9 && m === 0)) {
+        // Friday before or exactly at 09:00 — the last freeze was last Friday
+        // (exception: exactly at 09:00 is the freeze moment itself)
+        if (h === 9 && m === 0) {
+          daysSinceFri = 0; // freeze moment is right now
+        } else {
+          daysSinceFri = 7; // last freeze was last Friday
+        }
+      }
+      // Friday after 09:00 SAST — daysSinceFri = 0 is already correct
+    }
+    return fromSAST(year, month, day - daysSinceFri, 9, 0);
+  }
+
+  // getNextLiveMoment(date) — when does the next live week start?
+  // Live mode begins Monday 00:00 SAST.
+  function getNextLiveMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days until next Monday (1)
+    let daysUntilMon = (1 - dow + 7) % 7;
+    if (dow === 1) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      // If it's Monday and we're past 00:00 (which is basically always
+      // unless we hit the exact instant), the next Monday is a week away
+      if (h > 0 || m > 0) {
+        daysUntilMon = 7;
+      } else {
+        // Exactly Monday 00:00 → next live moment is a week away
+        daysUntilMon = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilMon, 0, 0);
+  }
+
+  // getCurrentMode(date) — 'live' or 'frozen'?
+  // Live:   Monday 00:00 SAST  →  Friday 09:00 SAST (exclusive)
+  // Frozen: Friday 09:00 SAST  →  Monday 00:00 SAST (exclusive)
+  function getCurrentMode(date) {
+    if (FREEZE_OVERRIDE) return 'frozen';   // manual hold (reveal outside Fri-Sun)
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const dow = sastView.getUTCDay();
+    const h   = sastView.getUTCHours();
+    const m   = sastView.getUTCMinutes();
+    // Frozen window: Fri 09:00+ through Sun 23:59
+    if (dow === 5 && (h > 9 || (h === 9 && m >= 0))) return 'frozen';
+    if (dow === 6) return 'frozen'; // Saturday
+    if (dow === 0) return 'frozen'; // Sunday
+    // Everything else is live
+    return 'live';
+  }
+
+  // ----- pre-reveal display helper -----
+  // Pages can use this to render placeholders consistently.
+  // Returns "—" for null/undefined (pre-reveal hidden), formatted number otherwise.
+  function displayStat(value, decimals) {
+    if (value === null || value === undefined || isNaN(value)) return '—';
+    return Number(value).toFixed(decimals != null ? decimals : 1);
+  }
+
+  // ----- public API -----
+  const MEMEGP_Stats = {
+    // Stat computation
+    calcStats:   calcStats,
+    getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
+    getEarned:    getEarned,       // earned/locked upgrade stat names for a team
+    cycleLocked:  CYCLE_LOCKED,     // true once the upgrade window has closed
+    rankWithUpgrades: rankWithUpgrades, // opening grid -> current standings + movement
+    FROZEN_BASE:  FROZEN_BASE,
+    EARNED_UPGRADES: EARNED_UPGRADES,
+    calcEngine:  calcEngine,
+    calcAero:    calcAero,
+    calcChassis: calcChassis,
+    calcChassisRunes: calcChassisRunes,
+    calcDrag:    calcDrag,
+    calcPit:     calcPit,
+    clamp:       clamp,
+    round:       round,
+    STATS_META:  STATS_META,
+    // Mode detection (Friday-Freeze)
+    getCurrentMode:      getCurrentMode,
+    getLastFreezeMoment: getLastFreezeMoment,
+    getNextFreezeMoment: getNextFreezeMoment,
+    getNextLiveMoment:   getNextLiveMoment,
+    // Pre-reveal mode (flip PRE_REVEAL_MODE to false in source to disable)
+    PRE_REVEAL_MODE:     PRE_REVEAL_MODE,
+    displayStat:         displayStat,
+    // Staggered reveal (Power Rankings drop)
+    REVEAL:              REVEAL,
+    revealedCount:       revealedCount,
+    isRevealed:          isRevealed,
+  };
+
+  // Browser global
+  if (typeof window !== 'undefined') {
+    global.MEMEGP_Stats = MEMEGP_Stats;
+  }
+  // CommonJS (Node.js — for Friday-freeze snapshot script + tests)
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MEMEGP_Stats;
+  }
+
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+// ═══════════════════════════════════════════════════
+// MEME GP — QUALIFYING DETERMINISTIC LIVE SIMULATOR
+// Q1: 15 cars, 2 laps, bottom 4 out
+// Q2: 11 cars, 2 laps, bottom 3 out
+// Q3: 8 cars, 1 lap, pole shootout
+// Session start: 2026-04-25 18:00:00 UTC (20:00 SAST)
+// ═══════════════════════════════════════════════════
+
+const SESSION_START_UTC = new Date('2026-06-20T18:00:00Z').getTime();
+const _PVSPD = parseFloat(new URLSearchParams(location.search).get('test')) || 18;
+const _PVT0 = Date.now();
+const S1_END = 0.36;
+const S2_END = 0.68;
+const SEED = 20260425003;
+
+// ── TEAM META — display only (colours / logos / names / emoji).
+// Stats come from stats-calculator.js (single source of truth).
+const TEAM_META = {
+  PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png", car:"turbo-car.jpg", name:"AI TURBO RACING", emoji:"🤖" },
+  MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
+  BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
+  VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
+  MOMO:        { color:"#F989B9", logo:"momo.png",       name:"MOMO MOTORS",     emoji:"🌸" },
+  PEPONK:      { color:"#FB8802", logo:"peponk.png",     name:"PEPONK RACING",   emoji:"🐸" },
+  LOL:         { color:"#22DD66", logo:"lol.png",        name:"LOL RACING",      emoji:"😂" },
+  DOBERMANN:   { color:"#8a8a99", logo:"dobermann.png",  name:"STEALTH DOBIE",   emoji:"🐕" },
+  SHIH:        { color:"#FFD200", logo:"shih.png",       name:"SHIH SPEED",      emoji:"🐶" },
+  SUS:         { color:"#C8102E", logo:"susdog.png",     name:"SUS SPEED",       emoji:"🛸" },
+  '420BLAZEIT':{ color:"#7B2D8E", logo:"420blazeit.png", name:"420BLAZEIT",      emoji:"🌿" },
+  MARS:        { color:"#3a5bd0", logo:"mars.png",       name:"MARS RACING",     emoji:"🪐" },
+  MONKO:       { color:"#ffcc00", logo:"monko.png",      name:"MONKO MOTORS",    emoji:"🐒" },
+  NEURO:       { color:"#F58A1F", logo:"neuroticat.png", name:"NEURO RACING",    emoji:"🧠" },
+};
+
+function buildTeams() {
+  const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
+  if (!S || typeof S.calcStats !== 'function') {
+    throw new Error('stats-calculator.js not loaded — grid unavailable.');
+  }
+  return Object.keys(TEAM_META).map(tk => {
+    const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
+    const m = TEAM_META[tk];
+    return {
+      id: tk, emoji: m.emoji, logo: m.logo, car: m.car || m.logo.replace('.png','-car.png'), color: m.color, name: m.name,
+      engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
+      pit: s.pit, overall: s.overall,
+    };
+  }).sort((a, b) => (b.overall - a.overall) || a.id.localeCompare(b.id));
+}
+
+const TEAMS = buildTeams();
+
+
+function createRng(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+}
+
+function calcSectorTime(team, sector, rng) {
+  // Qualifying = cars push harder, slightly faster base times
+  const v = (rng() - 0.5) * 1.4; // less variance in quali (drivers more focused)
+  let base, bonus;
+  if (sector === 1) { base = 31.5; bonus = team.engine * 0.12 + team.chassis * 0.08; }
+  else if (sector === 2) { base = 27.5; bonus = team.drag * 0.10 + team.aero * 0.10; }
+  else { base = 24.5; bonus = team.pit * 0.08 + team.aero * 0.12; }
+  return Math.max(base - bonus + v, base - 2.5);
+}
+
+function fmt(s) { return `${Math.floor(s/60)}:${(s%60).toFixed(3).padStart(6,'0')}`; }
+function fmtS(s) { return s.toFixed(3); }
+function fmtCD(s) { const m = Math.floor(s/60); const ss = Math.floor(s)%60; return `${m}:${ss.toString().padStart(2,'0')}`; }
+
+function getPoint(frac) {
+  const len = pathEl.getTotalLength();
+  const pt = pathEl.getPointAtLength(len * (frac % 1));
+  return { x: pt.x, y: pt.y };
+}
+
+// ═══ BUILD QUALIFYING SCHEDULE ═══
+// Events: { time, teamIdx, round (Q1/Q2/Q3), lap (1 or 2), s1, s2, s3, lapDur }
+// Also: break events between rounds
+
+function buildSchedule() {
+  const rng = createRng(SEED);
+  const events = [];
+  let t = 0;
+
+  // ── Q1: All 15 cars, 2 laps each ──
+  for (let lap = 0; lap < 2; lap++) {
+    const order = [...Array(TEAMS.length).keys()];
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    order.forEach((ti) => {
+      const team = TEAMS[ti];
+      const gap = 30 + Math.floor(rng() * 25);
+      t += gap;
+      const s1 = calcSectorTime(team, 1, rng);
+      const s2 = calcSectorTime(team, 2, rng);
+      const s3 = calcSectorTime(team, 3, rng);
+      const lapDur = 90 - (team.overall * 2);
+      events.push({ time: t, teamIdx: ti, round: 'Q1', lap: lap + 1, s1, s2, s3, lapDur, type: 'run' });
+    });
+    if (lap === 0) t += 30; // gap between Q1 lap 1 and lap 2
+  }
+
+  // Mark Q1 end time and add break
+  const q1End = t + 100; // last car finishes
+  events.push({ time: q1End, type: 'q1_end' });
+  const q2Start = q1End + 120; // 2 minute break
+  events.push({ time: q2Start, type: 'q2_start' });
+
+  // Determine Q1 results to know who's eliminated
+  // We'll compute this at runtime, but we need to pre-calculate which teams survive
+  // Since it's deterministic, we can figure it out now
+  const q1Results = {};
+  events.filter(e => e.type === 'run' && e.round === 'Q1').forEach(ev => {
+    const id = TEAMS[ev.teamIdx].id;
+    const lap = ev.s1 + ev.s2 + ev.s3;
+    if (!q1Results[id] || lap < q1Results[id]) q1Results[id] = lap;
+  });
+  const q1Sorted = Object.entries(q1Results).sort((a, b) => a[1] - b[1]);
+  const q1Eliminated = q1Sorted.slice(11).map(e => e[0]); // bottom 4 (P12-15)
+  const q2Drivers = q1Sorted.slice(0, 11).map(e => e[0]); // 11 advance
+
+  // ── Q2: 11 cars, 2 laps each ──
+  t = q2Start;
+  for (let lap = 0; lap < 2; lap++) {
+    const order = q2Drivers.map(id => TEAMS.findIndex(t => t.id === id));
+    // Shuffle
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    order.forEach((ti) => {
+      const team = TEAMS[ti];
+      const gap = 30 + Math.floor(rng() * 25);
+      t += gap;
+      const s1 = calcSectorTime(team, 1, rng);
+      const s2 = calcSectorTime(team, 2, rng);
+      const s3 = calcSectorTime(team, 3, rng);
+      const lapDur = 90 - (team.overall * 2);
+      events.push({ time: t, teamIdx: ti, round: 'Q2', lap: lap + 1, s1, s2, s3, lapDur, type: 'run' });
+    });
+    if (lap === 0) t += 30;
+  }
+
+  const q2End = t + 100;
+  events.push({ time: q2End, type: 'q2_end' });
+  const q3Start = q2End + 120;
+  events.push({ time: q3Start, type: 'q3_start' });
+
+  // Q2 results
+  const q2Results = {};
+  events.filter(e => e.type === 'run' && e.round === 'Q2').forEach(ev => {
+    const id = TEAMS[ev.teamIdx].id;
+    const lap = ev.s1 + ev.s2 + ev.s3;
+    if (!q2Results[id] || lap < q2Results[id]) q2Results[id] = lap;
+  });
+  const q2Sorted = Object.entries(q2Results).sort((a, b) => a[1] - b[1]);
+  const q2Eliminated = q2Sorted.slice(8).map(e => e[0]); // bottom 3 (P9-11)
+  const q3Drivers = q2Sorted.slice(0, 8).map(e => e[0]); // top 8 to pole shootout
+
+  // ── Q3: Top 8, 1 lap each ──
+  t = q3Start;
+  const q3Order = q3Drivers.map(id => TEAMS.findIndex(t => t.id === id));
+  // Reverse order (slowest goes first, like F1)
+  q3Order.reverse();
+  q3Order.forEach((ti) => {
+    const team = TEAMS[ti];
+    const gap = 45 + Math.floor(rng() * 20); // bigger gaps for drama
+    t += gap;
+    const s1 = calcSectorTime(team, 1, rng);
+    const s2 = calcSectorTime(team, 2, rng);
+    const s3 = calcSectorTime(team, 3, rng);
+    const lapDur = 90 - (team.overall * 2);
+    events.push({ time: t, teamIdx: ti, round: 'Q3', lap: 1, s1, s2, s3, lapDur, type: 'run' });
+  });
+
+  const q3End = t + 100;
+  events.push({ time: q3End, type: 'q3_end' });
+
+  return { events, q1Eliminated, q2Eliminated, q3Drivers, q1Sorted, q2Sorted };
+}
+
+const SCHEDULE = buildSchedule();
+const ALL_EVENTS = SCHEDULE.events;
+const TOTAL_SESSION_TIME = ALL_EVENTS[ALL_EVENTS.length - 1].time + 10;
+
+// ═══ STATE ═══
+const carStates = {};
+TEAMS.forEach(t => {
+  carStates[t.id] = { runs: 0, status: 'IN PIT', onTrack: false, progress: 0, sector: 0,
+    liveS1: null, liveS2: null, liveS3: null, eliminated: false, elimRound: '',
+    pendingS1: 0, pendingS2: 0, pendingS3: 0 };
+});
+
+let bestResults = {};
+let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
+let currentRound = 'WAITING';
+
+// Corners
+// Turn markers (T1–T17) are baked into the Satoshi SVG.
+
+const pathEl = document.getElementById('trackPath');
+
+function update() {
+  const now = Date.now();
+  const elapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW: fast clock from page load
+
+  // Before session
+  if (elapsed < 0) {
+    document.getElementById('waitingScreen').style.display = 'flex';
+    document.getElementById('mainLayout').style.display = 'none';
+    document.getElementById('liveBadge').style.display = 'none';
+    const remaining = Math.abs(elapsed);
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = Math.floor(remaining % 60);
+    document.getElementById('waitCountdown').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    requestAnimationFrame(update);
+    return;
+  }
+
+  document.getElementById('waitingScreen').style.display = 'none';
+  document.getElementById('mainLayout').style.display = 'grid';
+
+  const isComplete = elapsed > TOTAL_SESSION_TIME;
+  document.getElementById('liveBadge').style.display = isComplete ? 'none' : 'flex';
+
+  // Determine current round
+  currentRound = 'Q1';
+  let showBreak = false;
+  let breakTitle = '', breakSub = '', breakElim = '';
+
+  ALL_EVENTS.forEach(ev => {
+    if (ev.type === 'q1_end' && elapsed >= ev.time) {
+      currentRound = 'Q1_BREAK';
+      breakTitle = 'Q1 COMPLETE';
+      breakSub = 'Bottom 4 eliminated';
+      breakElim = SCHEDULE.q1Eliminated.map(id => {
+        const t = TEAMS.find(t => t.id === id);
+        return `${t.emoji} $${id} — ELIMINATED`;
+      }).join('\n');
+    }
+    if (ev.type === 'q2_start' && elapsed >= ev.time) { currentRound = 'Q2'; }
+    if (ev.type === 'q2_end' && elapsed >= ev.time) {
+      currentRound = 'Q2_BREAK';
+      breakTitle = 'Q2 COMPLETE';
+      breakSub = 'Bottom 3 eliminated — Top 8 shootout next';
+      breakElim = SCHEDULE.q2Eliminated.map(id => {
+        const t = TEAMS.find(t => t.id === id);
+        return `${t.emoji} $${id} — ELIMINATED`;
+      }).join('\n');
+    }
+    if (ev.type === 'q3_start' && elapsed >= ev.time) { currentRound = 'Q3'; }
+    if (ev.type === 'q3_end' && elapsed >= ev.time) { currentRound = 'COMPLETE'; }
+  });
+
+  // Show/hide break overlay
+  const breakEl = document.getElementById('roundBreak');
+  if (currentRound === 'Q1_BREAK' || currentRound === 'Q2_BREAK') {
+    breakEl.style.display = 'block';
+    document.getElementById('roundBreakTitle').textContent = breakTitle;
+    document.getElementById('roundBreakSub').textContent = breakSub;
+    document.getElementById('roundBreakElim').innerText = breakElim;
+  } else {
+    breakEl.style.display = 'none';
+  }
+
+  // Update Q badges
+  const activeRound = currentRound.replace('_BREAK', '');
+  document.getElementById('q1Badge').className = `q-badge q1${activeRound === 'Q1' || currentRound === 'Q1_BREAK' ? '' : elapsed > 0 ? '' : ' inactive'}`;
+  document.getElementById('q2Badge').className = `q-badge q2${activeRound === 'Q2' || currentRound === 'Q2_BREAK' ? '' : currentRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
+  document.getElementById('q3Badge').className = `q-badge q3${activeRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
+
+  const sessionRemaining = Math.max(0, TOTAL_SESSION_TIME - elapsed);
+  document.getElementById('sessionClock').textContent = fmtCD(sessionRemaining);
+
+  // Reset car states
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    cs.onTrack = false;
+    cs.status = isComplete ? 'SESSION END' : 'IN PIT';
+    cs.progress = 0;
+    cs.sector = 0;
+    cs.liveS1 = null;
+    cs.liveS2 = null;
+    cs.liveS3 = null;
+    cs.eliminated = SCHEDULE.q1Eliminated.includes(t.id) && (currentRound !== 'Q1' && currentRound !== 'WAITING');
+    if (cs.eliminated) cs.elimRound = 'Q1';
+    if (SCHEDULE.q2Eliminated.includes(t.id) && ['Q3', 'COMPLETE', 'Q2_BREAK'].includes(currentRound)) {
+      cs.eliminated = true;
+      cs.elimRound = 'Q2';
+    }
+  });
+
+  // Reset best results
+  bestResults = {};
+  globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
+
+  let lastActiveTeam = null;
+  let lastActiveRun = '';
+
+  // Process events
+  ALL_EVENTS.filter(e => e.type === 'run').forEach(ev => {
+    const team = TEAMS[ev.teamIdx];
+    const cs = carStates[team.id];
+    const timeSinceGo = elapsed - ev.time;
+
+    if (timeSinceGo < 0) return;
+
+    const lapDur = ev.lapDur;
+
+    if (timeSinceGo < lapDur) {
+      cs.onTrack = true;
+      cs.status = 'ON TRACK';
+      cs.runs = ev.lap;
+      cs.progress = timeSinceGo / lapDur;
+      cs.pendingS1 = ev.s1;
+      cs.pendingS2 = ev.s2;
+      cs.pendingS3 = ev.s3;
+
+      if (cs.progress >= S1_END) { cs.liveS1 = ev.s1; cs.sector = 2; }
+      else { cs.sector = 1; }
+      if (cs.progress >= S2_END) { cs.liveS2 = ev.s2; cs.sector = 3; }
+      if (cs.progress >= 0.98) { cs.liveS3 = ev.s3; }
+
+      lastActiveTeam = team;
+      lastActiveRun = `${ev.round} LAP ${ev.lap}`;
+    } else {
+      cs.runs = Math.max(cs.runs, ev.lap);
+      const lap = ev.s1 + ev.s2 + ev.s3;
+      if (!bestResults[team.id]) {
+        bestResults[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1, round: ev.round };
+      } else {
+        const br = bestResults[team.id];
+        br.bestS1 = Math.min(br.bestS1, ev.s1);
+        br.bestS2 = Math.min(br.bestS2, ev.s2);
+        br.bestS3 = Math.min(br.bestS3, ev.s3);
+        br.bestLap = Math.min(br.bestLap, lap);
+        br.runs++;
+        br.round = ev.round;
+      }
+    }
+  });
+
+  // Global bests
+  Object.entries(bestResults).forEach(([id, br]) => {
+    if (!globalBestS1 || br.bestS1 < globalBestS1.time) globalBestS1 = { id, time: br.bestS1 };
+    if (!globalBestS2 || br.bestS2 < globalBestS2.time) globalBestS2 = { id, time: br.bestS2 };
+    if (!globalBestS3 || br.bestS3 < globalBestS3.time) globalBestS3 = { id, time: br.bestS3 };
+  });
+
+  // ═══ RENDER ═══
+  const tickerEl = document.getElementById('tickerMsg');
+  const tickerDiv = document.getElementById('ticker');
+  const roundLabel = currentRound.replace('_BREAK', '');
+
+  document.getElementById('currentRound').textContent = currentRound === 'COMPLETE' ? 'QUALIFYING COMPLETE' : roundLabel;
+  document.getElementById('timingTitle').textContent = currentRound === 'COMPLETE' ? 'STARTING GRID' : `${roundLabel} — TIMING`;
+
+  if (isComplete || currentRound === 'COMPLETE') {
+    tickerEl.textContent = '▸ QUALIFYING COMPLETE — GRID IS SET';
+    tickerEl.style.color = '#00ff88';
+    tickerDiv.style.background = 'rgba(0,255,136,0.06)';
+  } else if (lastActiveTeam) {
+    tickerEl.textContent = `▸ ${lastActiveTeam.emoji} $${lastActiveTeam.id} — ${lastActiveRun}`;
+    tickerEl.style.color = '#ff6644';
+    tickerDiv.style.background = 'rgba(255,0,64,0.06)';
+  } else if (currentRound.includes('BREAK')) {
+    tickerEl.textContent = `▸ ${breakTitle} — BREAK`;
+    tickerEl.style.color = '#ff9900';
+    tickerDiv.style.background = 'rgba(255,153,0,0.06)';
+  } else {
+    tickerEl.textContent = '▸ ALL CARS IN PIT';
+    tickerEl.style.color = '#444';
+    tickerDiv.style.background = 'rgba(255,255,255,0.02)';
+  }
+
+  const onTrackN = TEAMS.filter(t => carStates[t.id].onTrack).length;
+  document.getElementById('trackCount').textContent = onTrackN > 0 ? `${onTrackN} car${onTrackN>1?'s':''} on track` : '';
+
+  renderCarStatus();
+  renderCarDots();
+
+  document.getElementById('bestS1').textContent = globalBestS1 ? fmtS(globalBestS1.time) : '—';
+  document.getElementById('bestS1Team').textContent = globalBestS1 ? `$${globalBestS1.id}` : '';
+  document.getElementById('bestS2').textContent = globalBestS2 ? fmtS(globalBestS2.time) : '—';
+  document.getElementById('bestS2Team').textContent = globalBestS2 ? `$${globalBestS2.id}` : '';
+  document.getElementById('bestS3').textContent = globalBestS3 ? fmtS(globalBestS3.time) : '—';
+  document.getElementById('bestS3Team').textContent = globalBestS3 ? `$${globalBestS3.id}` : '';
+
+  renderLeaderboard();
+  requestAnimationFrame(update);
+}
+
+function renderCarStatus() {
+  const el = document.getElementById('carStatusList');
+  let html = '';
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    const isOn = cs.onTrack;
+    const isElim = cs.eliminated;
+    const sectorColors = { 1:'#3b82f6', 2:'#ef4444', 3:'#10b981' };
+    const statusColor = isElim ? '#ff0040' : isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
+    const sectorLabel = isElim ? `ELIMINATED (${cs.elimRound})` : isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
+
+    html += `<div class="car-row${isOn ? ' active' : ''}${isElim ? ' eliminated' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
+      <div class="color-bar" style="background:${t.color}"></div>
+      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0">
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : isElim ? '#555' : '#ccc'}">$${t.id}</div>
+        <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
+        ${isOn ? `<div style="display:flex;gap:6px;margin-top:2px">
+          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS1 ? '#3b82f6' : '#333'}">S1:${cs.liveS1 ? fmtS(cs.liveS1) : '—'}</span>
+          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS2 ? '#ef4444' : '#333'}">S2:${cs.liveS2 ? fmtS(cs.liveS2) : '—'}</span>
+          <span style="font-size:8px;font-family:'Space Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
+        </div>` : ''}
+      </div>
+      ${isElim ? `<span class="elim-tag">OUT</span>` : ''}
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderCarDots() {
+  const dotsG = document.getElementById('carDots');
+  let html = '';
+  TEAMS.forEach(t => {
+    const cs = carStates[t.id];
+    if (!cs.onTrack) return;
+    const pt = getPoint(cs.progress);
+    const logoId = 'logo-clip-' + t.id;
+    html += `<defs><clipPath id="${logoId}"><circle cx="${pt.x}" cy="${pt.y}" r="9"/></clipPath></defs>
+      <circle cx="${pt.x}" cy="${pt.y}" r="11.5" fill="${t.color}" opacity="0.15"/>
+      <circle cx="${pt.x}" cy="${pt.y}" r="10" fill="#111" stroke="${t.color}" stroke-width="2"/>
+      <image href="${t.logo}" x="${pt.x-9}" y="${pt.y-9}" width="18" height="18" clip-path="url(#${logoId})" preserveAspectRatio="xMidYMid slice"/>`;
+  });
+  dotsG.innerHTML = html;
+}
+
+function renderLeaderboard() {
+  // Tier for knockout grid: Q3 cars (P1-8) ahead of Q2-eliminated (P9-11)
+  // ahead of Q1-eliminated (P12-15). Within a tier, fastest lap wins.
+  // During live rounds, just sort by best lap.
+  const tierOf = id =>
+    SCHEDULE.q1Eliminated.includes(id) ? 2 :
+    SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
+  const sorted = Object.entries(bestResults)
+    .map(([id, br]) => ({ id, ...br, team: TEAMS.find(t => t.id === id) }))
+    .sort((a, b) => currentRound === 'COMPLETE'
+      ? (tierOf(a.id) - tierOf(b.id)) || (a.bestLap - b.bestLap)
+      : (a.bestLap - b.bestLap));
+
+  const classifiedN = sorted.length;
+  document.getElementById('classifiedCount').textContent = `SATOSHI SPEEDWAY • ${classifiedN}/15 CLASSIFIED`;
+
+  const leader = sorted[0];
+  let html = '';
+  sorted.forEach((r, i) => {
+    const cs = carStates[r.id];
+    const isOn = cs.onTrack;
+    const isElim = cs.eliminated;
+    const gap = i === 0 ? '' : `+${(r.bestLap - leader.bestLap).toFixed(3)}`;
+    const isBestS1 = globalBestS1 && r.bestS1 === globalBestS1.time;
+    const isBestS2 = globalBestS2 && r.bestS2 === globalBestS2.time;
+    const isBestS3 = globalBestS3 && r.bestS3 === globalBestS3.time;
+
+    const posColor = currentRound === 'COMPLETE' && i === 0 ? '#00ff88' : i === 0 ? '#fff' : isElim ? '#444' : '#666';
+    const posLabel = currentRound === 'COMPLETE' && i === 0 ? 'P1' : `${i+1}`;
+
+    html += `<div class="lb-row" style="background:${isOn ? 'rgba(0,255,136,.04)' : isElim ? 'rgba(255,0,0,.02)' : i===0 ? 'rgba(255,255,255,.02)' : 'transparent'};border-left:2px solid ${isOn ? r.team.color : isElim ? '#ff004033' : 'transparent'};opacity:${isElim ? '.5' : '1'}">
+      <span style="font-size:12px;font-weight:800;color:${posColor};font-family:'Orbitron',sans-serif">${posLabel}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:3px;height:20px;border-radius:2px;background:${r.team.color}"></div>
+        <img src="${r.team.logo}" alt="${r.id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:${isElim ? '#888' : '#eee'}">$${r.id}</div>
+          <div style="font-size:7px;color:${isOn ? '#00ff88' : isElim ? '#ff0040' : '#444'}">${isOn ? 'ON TRACK' : isElim ? `ELIM ${cs.elimRound}` : `${r.runs} LAPS`}</div>
+        </div>
+      </div>
+      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS1?'#3b82f6':'#888'};font-weight:${isBestS1?700:400}">${fmtS(r.bestS1)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS2?'#ef4444':'#888'};font-weight:${isBestS2?700:400}">${fmtS(r.bestS2)}</span>
+      <span style="text-align:right;font-size:10px;font-family:'Space Mono',monospace;color:${isBestS3?'#10b981':'#888'};font-weight:${isBestS3?700:400}">${fmtS(r.bestS3)}</span>
+      <div style="text-align:right">
+        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:${currentRound === 'COMPLETE' && i === 0 ? '#00ff88' : i===0?'#ff0040':'#ccc'}">${fmt(r.bestLap)}</div>
+        <div style="font-size:8px;color:#555;font-family:'Space Mono',monospace">${gap}</div>
+      </div>
+    </div>`;
+  });
+
+  for (let i = sorted.length; i < TEAMS.length; i++) {
+    html += `<div class="lb-row" style="opacity:.3">
+      <span style="font-size:12px;font-weight:800;color:#333;font-family:'Orbitron',sans-serif">${i+1}</span>
+      <span style="color:#333">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span><span style="text-align:right;color:#222">—</span>
+    </div>`;
+  }
+  document.getElementById('leaderboard').innerHTML = html;
+}
+
+requestAnimationFrame(update);
+</script>
+<script>document.addEventListener("DOMContentLoaded",()=>{const d=document.createElement("div");d.innerHTML=`<div style="position:fixed;bottom:8px;left:8px;z-index:99998;font-family:monospace;font-size:10px;color:#ffcc00;background:rgba(0,0,0,.6);padding:3px 8px;border:1px solid #ffcc00;border-radius:4px">PREVIEW · ${_PVSPD}x · add ?test=N to change speed</div>`;document.body.appendChild(d.firstChild);});</script>
+</body>
+</html>
