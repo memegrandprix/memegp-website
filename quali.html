@@ -331,7 +331,7 @@ const SEED = 20260425003;
 // Stats come from stats-calculator.js (single source of truth).
 const TEAM_META = {
   PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
-  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png", car:"turbo-car.jpg", name:"AI TURBO RACING", emoji:"🤖" },
   MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
   BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
   VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
@@ -356,7 +356,7 @@ function buildTeams() {
     const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
     const m = TEAM_META[tk];
     return {
-      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      id: tk, emoji: m.emoji, logo: m.logo, car: m.car || m.logo.replace('.png','-car.png'), color: m.color, name: m.name,
       engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
       pit: s.pit, overall: s.overall,
     };
