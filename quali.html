@@ -596,6 +596,7 @@ function buildSchedule() {
 const SCHEDULE = buildSchedule();
 const ALL_EVENTS = SCHEDULE.events;
 const TOTAL_SESSION_TIME = ALL_EVENTS[ALL_EVENTS.length - 1].time + 10;
+const ROUND_BOUNDARIES = ALL_EVENTS.filter(e=>['q1_end','q2_start','q2_end','q3_start','q3_end'].includes(e.type)).map(e=>e.time).sort((a,b)=>a-b);
 
 // ═══ STATE ═══
 const carStates = {};
@@ -718,8 +719,9 @@ function update() {
   document.getElementById('q2Badge').className = `q-badge q2${activeRound === 'Q2' || currentRound === 'Q2_BREAK' ? '' : currentRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
   document.getElementById('q3Badge').className = `q-badge q3${activeRound === 'Q3' || currentRound === 'COMPLETE' ? '' : ' inactive'}`;
 
-  const sessionRemaining = Math.max(0, TOTAL_SESSION_TIME - elapsed);
-  document.getElementById('sessionClock').textContent = fmtCD(sessionRemaining);
+  const _nb = ROUND_BOUNDARIES.find(b => b > elapsed);
+  const roundRemaining = Math.max(0, (_nb !== undefined ? _nb : TOTAL_SESSION_TIME) - elapsed);
+  document.getElementById('sessionClock').textContent = fmtCD(roundRemaining);
 
   // Reset car states
   TEAMS.forEach(t => {
@@ -866,7 +868,7 @@ function renderCarStatus() {
     html += `<div class="car-row${isOn ? ' active' : ''}${isElim ? ' eliminated' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
       <div class="color-bar" style="background:${t.color}"></div>
       <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0">
-      <div style="flex:1">
+      <div style="flex:1;min-width:0;overflow:hidden">
         <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : isElim ? '#555' : '#ccc'}">$${t.id}</div>
         <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
         ${isOn ? `<div style="display:flex;gap:6px;margin-top:2px">
@@ -1062,30 +1064,35 @@ function renderLeaderboard() {
 
 requestAnimationFrame(update);
 
-// ── Timing-row hover share-card (document-level so it always clears) ──
+// ── Timing-row hover share-card — refs resolved at call-time (the card sits after this script in the DOM) ──
 (function(){
-  const tip = document.getElementById('rowTip');
   document.addEventListener('mousemove', e=>{
-    const row = e.target.closest('.lb-row[data-team]');
+    const tip = document.getElementById('rowTip'), lb = document.getElementById('leaderboard');
+    if (!tip || !lb) return;
+    const r = lb.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    const row = inside ? e.target.closest('.lb-row[data-team]') : null;
     if (row){ tipX = e.clientX; tipY = e.clientY; tipTeam = row.getAttribute('data-team'); renderRowTip(tipTeam); }
-    else if (tipTeam !== null){ tipTeam = null; tip.style.display='none'; }
+    else if (tipTeam !== null){ tipTeam = null; tip.style.display = 'none'; }
   });
 })();
 
 
-// ── SESSION DATA toggle + X-share ──
+// ── SESSION DATA toggle + X-share — dash resolved at call-time (it sits after this script in the DOM) ──
 (function(){
-  const live=document.getElementById('tabLive'), data=document.getElementById('tabData'), dash=document.getElementById('dashboardView');
+  const live=document.getElementById('tabLive'), data=document.getElementById('tabData');
   function show(which){
     dashOpen = which==='data';
+    const dash = document.getElementById('dashboardView');
     if(live) live.classList.toggle('on', !dashOpen);
     if(data) data.classList.toggle('on', dashOpen);
     if(dash) dash.style.display = dashOpen ? 'block' : 'none';
     if(dashOpen){ renderDashboard(); lastDash = performance.now(); }
   }
   if(live && data){ live.onclick=()=>show('live'); data.onclick=()=>show('data'); }
-  if(dash) dash.addEventListener('click', e=>{
-    const b = e.target.closest('button[data-tweet], button[data-share]'); if(!b) return;
+  document.addEventListener('click', e=>{
+    const dash = document.getElementById('dashboardView'); if(!dash) return;
+    const b = e.target.closest('button[data-tweet], button[data-share]'); if(!b || !dash.contains(b)) return;
     let text = b.getAttribute('data-tweet');
     if(!text && b.getAttribute('data-share')==='session'){
       const top = TEAMS.map(t=>({t,br:bestResults[t.id]})).filter(x=>x.br&&isFinite(x.br.bestLap)).sort((a,b)=>a.br.bestLap-b.br.bestLap)[0];
