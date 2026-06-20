@@ -32,9 +32,9 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 /* Left panel */
 .left{background:#08080c;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
 .left-header{padding:10px 14px;border-bottom:1px solid #1a1a1a;background:linear-gradient(180deg,#0f0f15,#08080c)}
-.car-row{display:flex;align-items:center;gap:8px;padding:6px 14px;border-bottom:1px solid #111;transition:all .3s}
+.car-row{display:flex;align-items:flex-start;gap:8px;padding:8px 14px;border-bottom:1px solid #111;transition:all .3s}
 .car-row.active{background:rgba(0,255,136,.06)}
-.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0}
+.color-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;align-self:center}
 .run-box{background:rgba(255,255,255,.05);border:1px solid #333;border-radius:4px;padding:2px 8px;text-align:center}
 
 /* Center */
@@ -51,7 +51,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
 .fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
 .fund-banner .fb-buy:hover{filter:brightness(1.08)}
-@media(max-width:980px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:8px 12px 16px}}
+@media(max-width:1024px){.fund-banner{position:static;left:auto;right:auto;bottom:auto;margin:4px 12px 14px;width:auto;max-width:760px;align-self:center}}
 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);background-size:40px 40px}
 
 /* Right panel */
@@ -75,7 +75,8 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
   body{overflow-y:auto;overflow-x:hidden;height:auto;min-height:100dvh}
   .main{grid-template-columns:1fr!important;grid-template-rows:auto;height:auto!important;overflow-y:auto}
   .left{display:none!important}                 /* car-status rail hidden; status is in the timing panel */
-  .center{min-height:45vh}                       /* keep the track prominent */
+  .center{min-height:45vh;flex-direction:column;justify-content:center;gap:12px;overflow:visible;padding:14px 0}  /* stack track + fund banner */
+  #trackSvg{flex-shrink:0;height:auto}
   .right{max-height:none;border-left:none;border-top:1px solid #1a1a1a}
   .top-bar{flex-wrap:wrap;gap:6px 10px;padding:6px 12px}
   .brand{font-size:13px;letter-spacing:1.5px}
@@ -111,7 +112,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .left-header,.right-header{background:rgba(10,10,18,.55)!important;border-bottom:1px solid rgba(255,204,0,.16)!important}
 .left-header>div:first-child,.right-header>div:first-child{color:var(--gold)!important;text-shadow:0 0 12px rgba(255,204,0,.45)}
 .run-box{position:relative;width:40px;height:40px;border-radius:50%!important;border:none!important;
- display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0}
+ display:grid!important;place-items:center;background:rgba(0,0,0,.3);flex-shrink:0;align-self:center}
 .run-box::before{content:"";position:absolute;inset:0;border-radius:50%;
  border:2px solid var(--rc,#555);box-shadow:0 0 10px var(--rc,#555),0 0 3px var(--rc,#555) inset;opacity:.92}
 .run-box>div:first-child{font-size:10px!important;font-family:'JetBrains Mono',monospace!important}
@@ -438,7 +439,7 @@ const COMPOUND_BY_RUN = ['SOFT','MEDIUM','HARD']; // one run per tyre
 // Stats come from stats-calculator.js (single source of truth).
 const TEAM_META = {
   PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
-  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png", car:"turbo-car.jpg", name:"AI TURBO RACING", emoji:"🤖" },
   MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
   BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
   VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
@@ -839,10 +840,12 @@ function renderCarStatus() {
     const sectorColors = { 1:'#3b82f6', 2:'#ef4444', 3:'#10b981' };
     const statusColor = isOn ? (sectorColors[cs.sector] || '#00ff88') : cs.status === 'IN PIT' ? '#ff9900' : '#444';
     const sectorLabel = isOn ? (cs.sector === 1 ? 'SECTOR 1' : cs.sector === 2 ? 'SECTOR 2' : 'SECTOR 3') : cs.status;
+    const TYRE_COL = { SOFT:'#ef4444', MEDIUM:'#ffcc00', HARD:'#ffffff' }; // soft/medium/hard
+    const ringCol = cs.runs > 0 ? TYRE_COL[COMPOUND_BY_RUN[Math.min(cs.runs,3)-1]] : '#444';
     
     html += `<div class="car-row${isOn ? ' active' : ''}" style="border-left:3px solid ${isOn ? t.color : 'transparent'}">
       <div class="color-bar" style="background:${t.color}"></div>
-      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0">
+      <img src="${t.logo}" alt="${t.id}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:1px">
       <div style="flex:1">
         <div style="font-size:11px;font-weight:700;color:${isOn ? '#fff' : '#ccc'}">$${t.id}</div>
         <div style="font-size:8px;color:${statusColor};font-weight:700;letter-spacing:1px">${isOn ? '● ' : ''}${sectorLabel}</div>
@@ -852,7 +855,7 @@ function renderCarStatus() {
           <span style="font-size:8px;font-family:'JetBrains Mono',monospace;color:${cs.liveS3 ? '#10b981' : '#333'}">S3:${cs.liveS3 ? fmtS(cs.liveS3) : '—'}</span>
         </div>` : ''}
       </div>
-      <div class="run-box" style="--rc:${cs.runs > 0 ? t.color : '#444'}">
+      <div class="run-box" style="--rc:${ringCol}">
         <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${cs.runs > 0 ? '#fff' : '#333'}">${cs.runs}/3</div>
         <div style="font-size:6px;color:#555;letter-spacing:1px">RUNS</div>
       </div>
