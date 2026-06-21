@@ -194,6 +194,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .drop-head::before,#dashboardView .drop-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,43,80,.55),transparent)}
 #dashboardView .drop-cards{display:grid;gap:11px}
 #dashboardView .ecard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid rgba(255,0,64,.45);box-shadow:0 0 22px rgba(255,0,64,.13),inset 0 0 44px rgba(255,0,64,.07);background:#0a0608}
+#dashboardView .ecard:not(.tape){animation:dangerPulse 1.8s ease-in-out infinite}
+@keyframes dangerPulse{0%,100%{box-shadow:0 0 22px rgba(255,0,64,.12),inset 0 0 44px rgba(255,0,64,.06)}50%{box-shadow:0 0 30px rgba(255,0,64,.32),inset 0 0 52px rgba(255,0,64,.13)}}
 #dashboardView .ecard .emedia{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,rgba(255,40,80,.10),rgba(6,4,6,.93) 78%)}
 #dashboardView .ecard .emedia img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.82) brightness(.5) contrast(1.05)}
 #dashboardView .ecard .enum{position:absolute;top:-3px;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:46px;line-height:1;color:#fff;opacity:.5;text-shadow:0 2px 12px rgba(0,0,0,.85)}
@@ -1632,8 +1634,9 @@ function renderDashboard(){
   podiumEl.innerHTML = pcard(entries[1],2) + pcard(entries[0],1) + pcard(entries[2],3);
 
   const roundOver = (currentRound === dashRound + '_BREAK');   // clock hit zero for this round
-  const showElim = roundOver && ELIM[dashRound] > 0 && entries.length === participants;
-  const survN = showElim ? participants - ELIM[dashRound] : entries.length;
+  const showDrop = ELIM[dashRound] > 0 && entries.length === participants;  // drop-zone cards go live once the field is set
+  const showTape = showDrop && roundOver;                                   // ELIMINATED tape only at clock zero
+  const survN = showDrop ? participants - ELIM[dashRound] : entries.length;
 
   listEl.innerHTML = entries.slice(3, survN).map((e,i)=>{ const t=e.t, br=e.br;
     const out = complete ? (SCHEDULE.q1Eliminated.includes(t.id)?'Q1':SCHEDULE.q2Eliminated.includes(t.id)?'Q2':'') : '';
@@ -1644,13 +1647,13 @@ function renderDashboard(){
   }).join('');
 
   if (elimEl){
-    if (showElim){
+    if (showDrop){
       const elim = entries.slice(survN);
       const _cards = elim.map((e,i)=>{ const t=e.t, br=e.br;
-        return `<div class="ecard">
+        return `<div class="ecard${showTape?' tape':''}">
           <div class="emedia"><img src="${t.logo}" alt="$${t.id}" onerror="this.style.display='none'"></div>
           <div class="enum">${survN+i+1}</div>
-          <div class="eband">ELIMINATED</div>
+          ${showTape?'<div class="eband">ELIMINATED</div>':''}
           <div class="eov"><div class="etk">$${t.id}</div><div class="elap">${fmt(br.bestLap)}</div></div>
           <div class="eaccent"></div></div>`;
       }).join('');
