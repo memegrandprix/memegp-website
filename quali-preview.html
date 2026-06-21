@@ -1602,24 +1602,35 @@ function renderDashboard(){
   const ELIM = { Q1: 4, Q2: 3, Q3: 0 };
   const participants = PART[dashRound];
 
-  let entries;
+  let entries, classifiedN;
   if (complete) {
     const tierOf = id => SCHEDULE.q1Eliminated.includes(id) ? 2 : SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
     entries = TEAMS.map(t=>({t, br:bestResults[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
       .sort((a,b)=> (tierOf(a.t.id)-tierOf(b.t.id)) || (a.br.bestLap-b.br.bestLap));
+    classifiedN = entries.length;
   } else {
     const rb = roundBest[dashRound] || {};
-    entries = TEAMS.map(t=>({t, br:rb[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
-      .sort((a,b)=> a.br.bestLap - b.br.bestLap);
+    let roster;
+    if (dashRound === 'Q2') roster = TEAMS.filter(t=>!SCHEDULE.q1Eliminated.includes(t.id));
+    else if (dashRound === 'Q3') roster = SCHEDULE.q3Drivers.map(id=>TEAMS.find(t=>t.id===id)).filter(Boolean);
+    else roster = TEAMS.slice();
+    // full roster — cars yet to set a time sit provisionally at the bottom, so the drop zone is live from green light
+    entries = roster.map(t=>({t, br:rb[t.id]})).sort((a,b)=>{
+      const ah=a.br&&isFinite(a.br.bestLap), bh=b.br&&isFinite(b.br.bestLap);
+      if(ah&&bh) return a.br.bestLap-b.br.bestLap; if(ah) return -1; if(bh) return 1; return b.t.overall-a.t.overall;
+    });
+    classifiedN = entries.filter(e=>e.br && isFinite(e.br.bestLap)).length;
   }
+  const clf = entries.filter(e=>e.br && isFinite(e.br.bestLap));
 
   const sub=document.getElementById('dashSub'), podiumEl=document.getElementById('dashPodium'),
         listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid'),
         elimEl=document.getElementById('dashElim');
-  sub.textContent = `SATOSHI SPEEDWAY · ${complete?'GRID SET':dashRound} · ${entries.length}/${participants} CLASSIFIED`;
+  sub.textContent = complete ? `SATOSHI SPEEDWAY · GRID SET · ${entries.length} CARS`
+    : `SATOSHI SPEEDWAY · ${dashRound} · ${classifiedN}/${participants} CLASSIFIED`;
   document.getElementById('dashTitle').textContent = complete ? '🏁 STARTING GRID' : `\u26A1 ${dashRound} \u00B7 FASTEST LAPS`;
 
-  if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS\u2026</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; if(elimEl)elimEl.innerHTML=''; return; }
+  if (classifiedN < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS\u2026</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; if(elimEl)elimEl.innerHTML=''; return; }
   const leader = entries[0].br.bestLap;
 
   const pcard = (e,absPos) => {
@@ -1643,7 +1654,7 @@ function renderDashboard(){
     return `<div class="lrow"><div class="lpos">${i+4}</div>
       <div class="lav" style="--pc:${t.color};--pc-glow:${t.color}55"><img src="${t.logo}" alt=""></div>
       <div class="ltk">$${t.id}${out?` <span style="color:#ff0040;font-size:8px;font-weight:700">OUT ${out}</span>`:''}</div>
-      <div class="llap">${fmt(br.bestLap)}</div><div class="lgap">${fmtGap(br.bestLap-leader)}</div></div>`;
+      <div class="llap">${br?fmt(br.bestLap):'—'}</div><div class="lgap">${br?fmtGap(br.bestLap-leader):''}</div></div>`;
   }).join('');
 
   if (elimEl){
@@ -1654,7 +1665,7 @@ function renderDashboard(){
           <div class="emedia"><img src="${t.logo}" alt="$${t.id}" onerror="this.style.display='none'"></div>
           <div class="enum">${survN+i+1}</div>
           ${showTape?'<div class="eband">ELIMINATED</div>':''}
-          <div class="eov"><div class="etk">$${t.id}</div><div class="elap">${fmt(br.bestLap)}</div></div>
+          <div class="eov"><div class="etk">$${t.id}</div><div class="elap">${br?fmt(br.bestLap):'—'}</div></div>
           <div class="eaccent"></div></div>`;
       }).join('');
       elimEl.innerHTML = `<div class="drop-head">DROP ZONE</div><div class="drop-cards" style="grid-template-columns:repeat(${elim.length},1fr)">${_cards}</div>`;
@@ -1662,7 +1673,7 @@ function renderDashboard(){
   }
 
   let bS1=null,bS2=null,bS3=null;
-  entries.forEach(e=>{ const br=e.br;
+  clf.forEach(e=>{ const br=e.br;
     if(!bS1||br.bestS1<bS1.time) bS1={id:e.t.id,time:br.bestS1};
     if(!bS2||br.bestS2<bS2.time) bS2={id:e.t.id,time:br.bestS2};
     if(!bS3||br.bestS3<bS3.time) bS3={id:e.t.id,time:br.bestS3};
@@ -1680,14 +1691,14 @@ function renderDashboard(){
       <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` \u2014 ${onTable.toFixed(3)}s on the table.`:' \u2014 matched on track.'}</div>
       <div class="share"><button data-tweet="🏁 ${complete?'QUALIFYING':dashRound} SECTOR KINGS \u00B7 Satoshi Speedway \u2014 S1 $${bS1.id} \u00B7 S2 $${bS2.id} \u00B7 S3 $${bS3.id}. Theoretical pole ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
   }
-  if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
-    cards += `<div class="fc hasphoto" style="--ac:${entries[0].t.color}"><div class="fc-photo" style="background-image:url('${entries[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">${complete?'POLE MARGIN':'BIGGEST MARGIN'}</div>
-      <div class="fc-big"><span class="u">$${entries[0].t.id}</span> ${complete?'on pole by':'leads by'} <span class="mono">${m.toFixed(3)}s</span></div>
-      <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the sheet.</div>
-      <div class="share"><button data-tweet="📏 $${entries[0].t.id} ${complete?'takes pole':`tops ${dashRound}`} ${m.toFixed(3)}s clear of $${entries[1].t.id} \u00B7 Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
+  if (clf.length>=2){ const m=clf[1].br.bestLap-leader;
+    cards += `<div class="fc hasphoto" style="--ac:${clf[0].t.color}"><div class="fc-photo" style="background-image:url('${clf[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">${complete?'POLE MARGIN':'BIGGEST MARGIN'}</div>
+      <div class="fc-big"><span class="u">$${clf[0].t.id}</span> ${complete?'on pole by':'leads by'} <span class="mono">${m.toFixed(3)}s</span></div>
+      <div class="fc-sub">Clear of <b>$${clf[1].t.id}</b> at the top of the sheet.</div>
+      <div class="share"><button data-tweet="📏 $${clf[0].t.id} ${complete?'takes pole':`tops ${dashRound}`} ${m.toFixed(3)}s clear of $${clf[1].t.id} \u00B7 Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
   }
-  if (entries.length>=2){ let best={g:Infinity};
-    for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
+  if (clf.length>=2){ let best={g:Infinity};
+    for(let i=1;i<clf.length;i++){ const g=clf[i].br.bestLap-clf[i-1].br.bestLap; if(g<best.g) best={g,a:clf[i-1],b:clf[i],pos:i}; }
     cards += `<div class="fc hasphoto" style="--ac:${best.a.t.color}"><div class="fc-photo duo"><div style="background-image:url('${best.a.t.logo}')"></div><div style="background-image:url('${best.b.t.logo}')"></div></div><div class="fc-scrim"></div><div class="fc-h">CLOSEST BATTLE</div>
       <div class="fc-big"><span class="u" style="color:${best.a.t.color}">$${best.a.t.id}</span> vs <span class="u" style="color:${best.b.t.color}">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
       <div class="fc-sub">Tightest gap on the sheet \u2014 P${best.pos} v P${best.pos+1}.</div>
