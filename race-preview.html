@@ -1538,10 +1538,26 @@ const RACE = MEMEGP_Race.buildAnimatedRace(
   (QUALIFYING_ORDER.length === TEAMS.length) ? QUALIFYING_ORDER : null
 );
 
-// ── monotonic per-car schedule for smooth animation (built from the engine's real cumTimes) ──
+// ── monotonic per-car schedule for smooth animation ──
+// Built from the engine's CLEAN lapTimes (cumTimes is unreliable — it mangles lapped/retired cars),
+// adding each car's real pit service time on its stop lap so it falls back correctly. DNFs handled separately.
+RACE.pitLossByLap = {}; RACE.dnfLap = {};
+RACE.events.forEach(e => {
+  if (e.type === 'pit') { (RACE.pitLossByLap[e.team] = RACE.pitLossByLap[e.team] || {})[e.lap] = e.service || 0; }
+  if (e.type === 'dnf') { RACE.dnfLap[e.team] = e.lap; }
+});
 RACE.cumByCar = {};
-TEAMS.forEach(t => { RACE.cumByCar[t.id] = [0].concat(RACE.laps.map(L => L.cumTimes[t.id])); });
-RACE.timeScale = (TOTAL_LAPS * LAP_REAL_SECONDS) / Math.min(...TEAMS.map(t => RACE.cumByCar[t.id][TOTAL_LAPS]));
+TEAMS.forEach(t => {
+  const arr = [0];
+  for (let L = 1; L <= TOTAL_LAPS; L++) {
+    let dur = RACE.laps[L-1].lapTimes[t.id] || 80;
+    const pl = RACE.pitLossByLap[t.id]; if (pl && pl[L]) dur += pl[L];
+    arr.push(arr[L-1] + dur);
+  }
+  RACE.cumByCar[t.id] = arr;
+});
+const _fin = TEAMS.filter(t => !RACE.dnfLap[t.id]).map(t => RACE.cumByCar[t.id][TOTAL_LAPS]);
+RACE.timeScale = (TOTAL_LAPS * LAP_REAL_SECONDS) / Math.min(...(_fin.length ? _fin : TEAMS.map(t => RACE.cumByCar[t.id][TOTAL_LAPS])));
 
 let selectedTeam = null;
 const fanCounts = {};
@@ -1929,6 +1945,7 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     const team = TEAMS.find(t => t.id === id);
     const cp = carProgress(id, elapsed);
     const carLap = cp.carLap, carLapProgress = cp.frac, carLapIdx = cp.carLapIdx;
+    if (RACE.dnfLap[id] && carLap > RACE.dnfLap[id]) return;   // retired — off the track
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
