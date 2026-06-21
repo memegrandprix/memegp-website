@@ -159,10 +159,83 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
 .fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
 .fund-banner .fb-buy:hover{filter:brightness(1.08)}
+
+/* ===== HOVER CARD ===== */
+.row-tip{position:fixed;z-index:500;pointer-events:none;opacity:0;transition:opacity .15s;
+  background:linear-gradient(160deg,rgba(14,14,22,.97),rgba(8,8,14,.99));
+  border:1px solid rgba(255,204,0,.28);border-radius:10px;padding:12px 14px;
+  min-width:200px;box-shadow:0 12px 36px rgba(0,0,0,.6),0 0 1px rgba(255,204,0,.15) inset;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.row-tip.visible{opacity:1}
+.row-tip-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.row-tip-name{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:1px}
+.row-tip-pos{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:#666}
+.row-tip-stat{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.row-tip-label{font-family:'Chakra Petch',sans-serif;font-size:9px;color:#555;letter-spacing:1px;font-weight:600}
+.row-tip-val{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:#ccc}
+.row-tip-compound{display:inline-flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:8px;font-weight:700}
+.row-tip-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+/* ===== SESSION DATA DASHBOARD ===== */
+.dash-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,4,8,.96);z-index:300;
+  display:none;flex-direction:column;overflow-y:auto;padding:20px}
+.dash-overlay.open{display:flex}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-shrink:0}
+.dash-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:3px;color:#ffcc00}
+.dash-close{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#444;
+  background:#111;border:1px solid #222;border-radius:4px;padding:5px 12px;cursor:pointer;transition:all .15s}
+.dash-close:hover{color:#fff;border-color:#555}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;flex:1}
+.dash-card{background:linear-gradient(160deg,rgba(18,18,28,.9),rgba(10,10,18,.95));
+  border:1px solid rgba(255,204,0,.14);border-radius:10px;padding:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.dash-card-title{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;color:#555;margin-bottom:10px}
+.dash-card-big{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:#fff;line-height:1}
+.dash-card-sub{font-family:'Chakra Petch',sans-serif;font-size:10px;color:#666;margin-top:3px}
+.dash-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.dash-row:last-child{border-bottom:none}
+.dash-row-label{font-family:'Chakra Petch',sans-serif;font-size:9px;color:#555;letter-spacing:.5px}
+.dash-row-val{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:#ccc}
+.dash-share-btn{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px;
+  background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.3);color:#ffcc00;
+  border-radius:5px;padding:4px 10px;cursor:pointer;margin-top:10px;transition:all .15s;display:inline-block}
+.dash-share-btn:hover{background:rgba(255,204,0,.22);border-color:#ffcc00}
+.dash-trigger{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;
+  color:#444;background:#0a0a10;border:1px solid #1a1a22;border-radius:4px;padding:4px 12px;
+  cursor:pointer;transition:all .15s}
+.dash-trigger:hover{color:#ffcc00;border-color:rgba(255,204,0,.3)}
 </style>
 </head>
 <body>
 <!-- lock stripped for preview -->
+
+<!-- HOVER CARD -->
+<div class="row-tip" id="rowTip">
+  <div class="row-tip-header">
+    <span id="tipImg" style="display:inline-flex;width:28px;height:28px;border-radius:50%;padding:2px;flex-shrink:0"><img id="tipLogo" src="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
+    <div>
+      <div class="row-tip-name" id="tipName"></div>
+      <div class="row-tip-pos" id="tipPos"></div>
+    </div>
+  </div>
+  <div class="row-tip-stat"><span class="row-tip-label">GAP TO LEADER</span><span class="row-tip-val" id="tipGap"></span></div>
+  <div class="row-tip-stat"><span class="row-tip-label">CURRENT LAP</span><span class="row-tip-val" id="tipLap"></span></div>
+  <div class="row-tip-stat"><span class="row-tip-label">TYRE</span><span class="row-tip-val" id="tipTyre"></span></div>
+  <div class="row-tip-stat"><span class="row-tip-label">PIT STOP</span><span class="row-tip-val" id="tipPit"></span></div>
+  <div class="row-tip-stat"><span class="row-tip-label">BEST LAP</span><span class="row-tip-val" id="tipFL"></span></div>
+  <div class="row-tip-stat"><span class="row-tip-label">GRID → NOW</span><span class="row-tip-val" id="tipMove"></span></div>
+</div>
+
+<!-- SESSION DATA DASHBOARD -->
+<div class="dash-overlay" id="dashOverlay">
+  <div class="dash-header">
+    <div class="dash-title">⚡ SESSION DATA</div>
+    <button class="dash-close" onclick="toggleDash()">✕ CLOSE</button>
+  </div>
+  <div class="dash-grid" id="dashGrid">
+    <!-- populated by buildDash() -->
+  </div>
+</div>
 
 
 <div class="team-picker-overlay" id="teamPicker">
@@ -187,6 +260,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     <a href="quali.html" class="session-tab" style="opacity:.6">QUALI</a>
     <a href="race.html" class="session-tab active">RACE</a>
     <span class="lap-counter" id="lapCounter">LAP 0/20</span>
+    <button class="dash-trigger" id="dashTrigger" onclick="toggleDash()" style="display:none">SESSION DATA ▸</button>
   </div>
   <div class="countdown" id="sessionClock">--:--</div>
 </div>
@@ -1906,6 +1980,16 @@ function update() {
   renderLeaderboard(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, elapsed);
   renderFanZone();
 
+  // feed live state to hover card + dashboard
+  window._TIP.elapsed   = elapsed;
+  window._TIP.positions = liveOrder;
+  window._TIP.gaps      = interpolatedGaps;
+  _dashState = { liveOrder, liveGaps: interpolatedGaps, elapsed, isComplete, prog };
+
+  // show SESSION DATA button once race is underway
+  const trigEl = document.getElementById('dashTrigger');
+  if (trigEl) trigEl.style.display = elapsed > 5 ? 'block' : 'none';
+
   requestAnimationFrame(update);
 }
 
@@ -2007,7 +2091,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     const carLap = _cp.carLap, carLapProgress = _cp.frac, carLapIdx = _cp.carLapIdx;
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.70;
 
-    html += `<div style="display:flex;align-items:center;gap:5px;padding:5px 12px;border-bottom:1px solid #111;
+    html += `<div data-tipid="${id}" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border-bottom:1px solid #111;cursor:default;
       background:${isWinner?'rgba(0,255,136,0.08)':isPitting?'rgba(255,153,0,0.06)':isSelected?'rgba(255,255,255,0.03)':'transparent'};
       border-left:3px solid ${isLeader?'#00ff88':isPitting?'#ff9900':isSelected?team.color:'transparent'}">
       <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:${isLeader?'#fff':'#666'};width:18px">${pos+1}</span>
@@ -2025,6 +2109,12 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     </div>`;
   });
   el.innerHTML = html;
+  // attach hover cards to each tower row
+  if (window._attachHover) {
+    el.querySelectorAll('[data-tipid]').forEach(row => {
+      window._attachHover(row, row.dataset.tipid);
+    });
+  }
 }
 
 function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isComplete, currentLap, elapsed) {
@@ -2055,7 +2145,7 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
       pitIndicator = `<span style="font-size:7px;color:#ff4444;font-family:'Space Mono',monospace">0</span>`;
     }
 
-    html += `<div class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
+    html += `<div data-tipid="${id}" class="lb-row" style="cursor:default;background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
       border-left:2px solid ${isLeader?'#00ff88':isPitting?'#ff9900':'transparent'}">
       <span style="font-size:11px;font-weight:800;color:${isWinner?'#00ff88':isLeader?'#fff':'#666'};font-family:'Orbitron',sans-serif">${pos+1}</span>
       <span style="display:inline-flex;width:23px;height:23px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
@@ -2069,6 +2159,12 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
     </div>`;
   });
   el.innerHTML = html;
+  // attach hover cards to each leaderboard row
+  if (window._attachHover) {
+    el.querySelectorAll('[data-tipid]').forEach(row => {
+      window._attachHover(row, row.dataset.tipid);
+    });
+  }
 }
 
 let podiumShown = false;
@@ -2117,6 +2213,271 @@ function showPodium(positions, gaps) {
 
 initTeamPicker();
 requestAnimationFrame(update);
+
+initTeamPicker();
+requestAnimationFrame(update);
+
+// ── HOVER CARD ──────────────────────────────────────────────
+(function(){
+  const tip = document.getElementById('rowTip');
+  let tipTarget = null, tipElapsed = 0, tipPositions = [], tipGaps = {};
+
+  // expose for the render loop to feed live state
+  window._TIP = { elapsed: 0, positions: [], gaps: {} };
+
+  function positionTip(e) {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let x = e.clientX + 14, y = e.clientY + 14;
+    const tw = 220, th = 200;
+    if (x + tw > vw - 8) x = e.clientX - tw - 10;
+    if (y + th > vh - 8) y = e.clientY - th - 10;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+
+  function populateTip(id) {
+    const team = TEAMS.find(t => t.id === id);
+    if (!team) return;
+    const elapsed = window._TIP.elapsed;
+    const positions = window._TIP.positions;
+    const gaps = window._TIP.gaps;
+
+    const pos = positions.indexOf(id);
+    const cp = carProgress(id, elapsed);
+    const retired = !!(RACE.dnfLap[id] && cp.carLap > RACE.dnfLap[id]);
+    const comp = currentCompound(id, cp.carLap);
+    const compColors = { SOFT:'#ff3b3b', MED:'#ffd21a', HARD:'#e8edf5' };
+    const compNames  = { SOFT:'SOFT 🔴', MED:'MEDIUM 🟡', HARD:'HARD ⚪' };
+
+    // best personal lap time
+    let bestLap = Infinity, bestLapNum = 0;
+    for (let L = 1; L <= Math.min(cp.carLap - 1, TOTAL_LAPS); L++) {
+      const lt = RACE.laps[L-1].lapTimes[id];
+      if (lt && lt < bestLap) { bestLap = lt; bestLapNum = L; }
+    }
+
+    const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id);
+    const pitStr = pitEv ? `LAP ${pitEv.lap} (lost ${pitEv.timeLost}s)` : 'NOT YET';
+    const gapStr = pos === 0 ? 'LEADER' : pos < 0 || retired ? 'RETIRED' : `+${(gaps[id]||0).toFixed(2)}s`;
+    const move = team.gridPos - (pos + 1);
+    const moveStr = move > 0 ? `▲${move} (P${team.gridPos} → P${pos+1})` : move < 0 ? `▼${Math.abs(move)} (P${team.gridPos} → P${pos+1})` : `— (P${pos+1})`;
+    const moveColor = move > 0 ? '#00ff88' : move < 0 ? '#ff4444' : '#555';
+
+    document.getElementById('tipImg').style.background = compColors[comp];
+    document.getElementById('tipLogo').src = team.logo;
+    document.getElementById('tipName').textContent = `$${id}`;
+    document.getElementById('tipName').style.color = team.color;
+    document.getElementById('tipPos').textContent = retired ? 'RETIRED' : pos < 0 ? '—' : `P${pos+1} of ${positions.length} running`;
+    document.getElementById('tipGap').textContent = gapStr;
+    document.getElementById('tipLap').textContent = retired ? `DNF (Lap ${RACE.dnfLap[id]})` : `${cp.carLap} / ${TOTAL_LAPS}`;
+    document.getElementById('tipTyre').innerHTML = `<span class="row-tip-dot" style="background:${compColors[comp]}"></span> ${compNames[comp]}`;
+    document.getElementById('tipPit').textContent = pitStr;
+    document.getElementById('tipFL').textContent = bestLap < Infinity ? `${fmt(bestLap)} (Lap ${bestLapNum})` : '—';
+    document.getElementById('tipMove').innerHTML = `<span style="color:${moveColor}">${moveStr}</span>`;
+  }
+
+  function attachHover(el, id) {
+    el.addEventListener('mouseenter', function(e) {
+      tipTarget = id;
+      populateTip(id);
+      tip.classList.add('visible');
+      positionTip(e);
+    });
+    el.addEventListener('mousemove', function(e) {
+      if (tipTarget === id) { populateTip(id); positionTip(e); }
+    });
+    el.addEventListener('mouseleave', function() {
+      tipTarget = null;
+      tip.classList.remove('visible');
+    });
+  }
+  window._attachHover = attachHover;
+})();
+
+// ── DASHBOARD ────────────────────────────────────────────────
+let _dashState = { liveOrder:[], liveGaps:{}, elapsed:0, isComplete:false, prog:null };
+
+function toggleDash() {
+  const d = document.getElementById('dashOverlay');
+  const isOpen = d.classList.contains('open');
+  if (isOpen) {
+    d.classList.remove('open');
+  } else {
+    buildDash();
+    d.classList.add('open');
+  }
+}
+window.toggleDash = toggleDash;
+
+function buildDash() {
+  const { liveOrder, liveGaps, elapsed, isComplete, prog } = _dashState;
+  if (!liveOrder.length) return;
+
+  const positions = liveOrder;
+  const leader = TEAMS.find(t => t.id === positions[0]);
+
+  // biggest mover
+  let bigMover = null, bigMove = 0;
+  positions.forEach((id, pos) => {
+    const team = TEAMS.find(t => t.id === id);
+    const gain = team.gridPos - (pos + 1);
+    if (gain > bigMove) { bigMove = gain; bigMover = team; }
+  });
+
+  // biggest loser
+  let bigLoser = null, bigLoss = 0;
+  positions.forEach((id, pos) => {
+    const team = TEAMS.find(t => t.id === id);
+    const loss = (pos + 1) - team.gridPos;
+    if (loss > bigLoss) { bigLoss = loss; bigLoser = team; }
+  });
+
+  // pit stops done
+  const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
+  const pitsDone = RACE.events.filter(e => e.type === 'pit' && e.lap <= currentLap);
+  const pitsLeft = TEAMS.filter(t => !pitsDone.find(p => p.team === t.id) && !RACE.dnfLap[t.id]);
+
+  // sector kings
+  const s1King = prog && prog.fastestS1.driver ? TEAMS.find(t => t.id === prog.fastestS1.driver) : null;
+  const s2King = prog && prog.fastestS2.driver ? TEAMS.find(t => t.id === prog.fastestS2.driver) : null;
+  const s3King = prog && prog.fastestS3.driver ? TEAMS.find(t => t.id === prog.fastestS3.driver) : null;
+  const flKing = prog && prog.fastestLap.driver  ? TEAMS.find(t => t.id === prog.fastestLap.driver) : null;
+
+  // retirements
+  const dnfs = TEAMS.filter(t => RACE.dnfLap[t.id]);
+
+  // compound breakdown
+  const compCount = { SOFT:0, MED:0, HARD:0 };
+  positions.forEach(id => { const c = currentCompound(id, currentLap); if (compCount[c] !== undefined) compCount[c]++; });
+
+  // share text builder
+  function shareText(txt) {
+    const full = txt + '\n\n🏁 @MemeGrandPrix | memegrandprix.com';
+    try { navigator.clipboard.writeText(full); } catch(e){}
+  }
+
+  // podium rows
+  let podiumHtml = '';
+  const medals = ['🥇','🥈','🥉'];
+  positions.slice(0, 3).forEach((id, i) => {
+    const team = TEAMS.find(t => t.id === id);
+    const gap = i === 0 ? 'LEADER' : `+${(liveGaps[id]||0).toFixed(2)}s`;
+    podiumHtml += `<div class="dash-row">
+      <span class="dash-row-label">${medals[i]} <span style="color:${team.color}">$${id}</span></span>
+      <span class="dash-row-val">${gap}</span>
+    </div>`;
+  });
+
+  // full standings rows
+  let standingsHtml = '';
+  positions.forEach((id, i) => {
+    const team = TEAMS.find(t => t.id === id);
+    const gap = i === 0 ? 'LEADER' : `+${(liveGaps[id]||0).toFixed(1)}s`;
+    const move = team.gridPos - (i + 1);
+    const mStr = move > 0 ? `▲${move}` : move < 0 ? `▼${Math.abs(move)}` : '—';
+    const mCol = move > 0 ? '#00ff88' : move < 0 ? '#ff4444' : '#444';
+    standingsHtml += `<div class="dash-row">
+      <span class="dash-row-label" style="display:flex;align-items:center;gap:6px">
+        <span style="color:#555;font-family:'Orbitron',sans-serif;font-size:8px;width:16px">${i+1}</span>
+        <img src="${team.logo}" style="width:14px;height:14px;border-radius:50%;object-fit:cover">
+        <span style="color:${team.color}">$${id}</span>
+      </span>
+      <span class="dash-row-val" style="display:flex;gap:10px">
+        <span style="color:${mCol};font-size:8px">${mStr}</span>
+        <span>${gap}</span>
+      </span>
+    </div>`;
+  });
+
+  // pit summary rows
+  let pitHtml = '';
+  pitsDone.forEach(p => {
+    const team = TEAMS.find(t => t.id === p.team);
+    const compBefore = RACE.strategies[p.team]?.a || 'MED';
+    const compAfter  = RACE.strategies[p.team]?.b || 'MED';
+    const cColors = { SOFT:'#ff3b3b', MED:'#ffd21a', HARD:'#e8edf5' };
+    pitHtml += `<div class="dash-row">
+      <span class="dash-row-label" style="display:flex;align-items:center;gap:5px">
+        <img src="${team.logo}" style="width:13px;height:13px;border-radius:50%;object-fit:cover">
+        <span style="color:${team.color}">$${p.team}</span>
+        <span style="color:#333">L${p.lap}</span>
+      </span>
+      <span class="dash-row-val">
+        <span style="color:${cColors[compBefore]}">${compBefore}</span>
+        <span style="color:#333"> → </span>
+        <span style="color:${cColors[compAfter]}">${compAfter}</span>
+        <span style="color:#444;margin-left:6px">-${p.timeLost}s</span>
+      </span>
+    </div>`;
+  });
+  if (pitsLeft.length) {
+    pitsLeft.forEach(t => {
+      pitHtml += `<div class="dash-row">
+        <span class="dash-row-label" style="display:flex;align-items:center;gap:5px">
+          <img src="${t.logo}" style="width:13px;height:13px;border-radius:50%;object-fit:cover">
+          <span style="color:${t.color}">$${t.id}</span>
+        </span>
+        <span class="dash-row-val" style="color:#ff4444;font-size:8px">PIT PENDING</span>
+      </div>`;
+    });
+  }
+
+  const shareResultTxt = `🏁 MEME GRAND PRIX — SATOSHI SPEEDWAY\n\n` +
+    `🥇 $${positions[0]}\n🥈 $${positions[1]} (+${(liveGaps[positions[1]]||0).toFixed(1)}s)\n🥉 $${positions[2]} (+${(liveGaps[positions[2]]||0).toFixed(1)}s)\n\n` +
+    (flKing ? `⏱️ FASTEST LAP: $${flKing.id} — ${fmt(prog.fastestLap.time)}\n` : '') +
+    (bigMover ? `📈 BIGGEST MOVER: $${bigMover.id} (▲${bigMove} places)\n` : '') +
+    `\n#MemeGP #SatoshiSpeedway`;
+
+  const shareTopTxt = `📊 MEME GRAND PRIX — LAP ${currentLap}/${TOTAL_LAPS}\n\n` +
+    `🏆 LEADER: $${positions[0]}\n` +
+    (flKing ? `⚡ FASTEST: $${flKing.id} — ${fmt(prog.fastestLap.time)}\n` : '') +
+    (bigMover ? `📈 MOVER: $${bigMover.id} ▲${bigMove}\n` : '') +
+    `\n#MemeGP #SatoshiSpeedway`;
+
+  document.getElementById('dashGrid').innerHTML = `
+    <div class="dash-card">
+      <div class="dash-card-title">🏆 RACE LEADER</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <img src="${leader.logo}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid ${leader.color};box-shadow:0 0 12px ${leader.color}55">
+        <div>
+          <div class="dash-card-big" style="color:${leader.color}">$${leader.id}</div>
+          <div class="dash-card-sub">${leader.name}</div>
+        </div>
+      </div>
+      ${podiumHtml}
+      <button class="dash-share-btn" onclick='(function(){${JSON.stringify(shareResultTxt).replace(/'/g,"\\'")}; try{navigator.clipboard.writeText(${JSON.stringify(shareResultTxt)}+"\n\n🏁 @MemeGrandPrix | memegrandprix.com")}catch(e){}; this.textContent="COPIED!"; setTimeout(()=>this.textContent="𝕏 SHARE RESULT",1200)}).call(this)'>𝕏 SHARE RESULT</button>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-title">📊 FULL STANDINGS</div>
+      <div style="max-height:240px;overflow-y:auto">${standingsHtml}</div>
+      <button class="dash-share-btn" onclick='(function(){try{navigator.clipboard.writeText(${JSON.stringify(shareTopTxt)}+"\n\n🏁 @MemeGrandPrix | memegrandprix.com")}catch(e){}; this.textContent="COPIED!"; setTimeout(()=>this.textContent="𝕏 SHARE STANDINGS",1200)}).call(this)'>𝕏 SHARE STANDINGS</button>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-title">⏱️ SECTOR KINGS</div>
+      ${s1King ? `<div class="dash-row"><span class="dash-row-label">🔵 S1 KING</span><span class="dash-row-val" style="color:${s1King.color}">$${s1King.id} — ${prog.fastestS1.time.toFixed(3)}s</span></div>` : ''}
+      ${s2King ? `<div class="dash-row"><span class="dash-row-label">🔴 S2 KING</span><span class="dash-row-val" style="color:${s2King.color}">$${s2King.id} — ${prog.fastestS2.time.toFixed(3)}s</span></div>` : ''}
+      ${s3King ? `<div class="dash-row"><span class="dash-row-label">🟢 S3 KING</span><span class="dash-row-val" style="color:${s3King.color}">$${s3King.id} — ${prog.fastestS3.time.toFixed(3)}s</span></div>` : ''}
+      ${flKing  ? `<div class="dash-row"><span class="dash-row-label">🟣 FASTEST LAP</span><span class="dash-row-val" style="color:${flKing.color}">$${flKing.id} — ${fmt(prog.fastestLap.time)}</span></div>` : ''}
+      <div class="dash-card-title" style="margin-top:12px">📈 POSITION MOVES</div>
+      ${bigMover ? `<div class="dash-row"><span class="dash-row-label">BIGGEST GAIN</span><span class="dash-row-val" style="color:#00ff88">$${bigMover.id} ▲${bigMove}</span></div>` : ''}
+      ${bigLoser ? `<div class="dash-row"><span class="dash-row-label">BIGGEST LOSS</span><span class="dash-row-val" style="color:#ff4444">$${bigLoser.id} ▼${bigLoss}</span></div>` : ''}
+      ${dnfs.length ? `<div class="dash-row"><span class="dash-row-label">RETIREMENTS</span><span class="dash-row-val" style="color:#ff4444">${dnfs.map(t=>'$'+t.id).join(', ')}</span></div>` : ''}
+      <button class="dash-share-btn" onclick='(function(){const t=${JSON.stringify((s1King?`🔵 S1: $${s1King?.id}\n`:"")+`🔴 S2: $${s2King?.id}\n🟢 S3: $${s3King?.id}\n🟣 FL: $${flKing?.id} — `+(prog?.fastestLap?.time?fmt(prog.fastestLap.time):"")+(bigMover?`\n📈 MOVER: $${bigMover?.id} ▲${bigMove}`:""))};try{navigator.clipboard.writeText("⚡ MEME GP SECTOR KINGS — LAP ${currentLap}\n\n"+t+"\n\n#MemeGP | @MemeGrandPrix")}catch(e){}; this.textContent="COPIED!"; setTimeout(()=>this.textContent="𝕏 SHARE STATS",1200)}).call(this)'>𝕏 SHARE STATS</button>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-title">🔧 PIT STOP TRACKER</div>
+      <div style="display:flex;gap:12px;margin-bottom:8px">
+        <div style="text-align:center"><div class="dash-card-big" style="font-size:28px;color:#00ff88">${pitsDone.length}</div><div class="dash-card-sub">DONE</div></div>
+        <div style="text-align:center"><div class="dash-card-big" style="font-size:28px;color:#ff4444">${pitsLeft.length}</div><div class="dash-card-sub">PENDING</div></div>
+        <div style="text-align:center"><div class="dash-card-big" style="font-size:16px;margin-top:4px">🔴${compCount.SOFT} 🟡${compCount.MED} ⚪${compCount.HARD}</div><div class="dash-card-sub">ON-TRACK TYRES</div></div>
+      </div>
+      <div style="max-height:200px;overflow-y:auto">${pitHtml}</div>
+    </div>
+  `;
+}
 
 // ── fund banner: copy contract ──
 (function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
