@@ -1626,6 +1626,18 @@ function carProgress(id, elapsed) {
   return { carLap: Math.min(TOTAL_LAPS, L + 1), carLapIdx: Math.min(L, TOTAL_LAPS - 1), frac, finished: L >= TOTAL_LAPS };
 }
 
+// current tyre compound for a car on a given lap (from its strategy stints)
+const TYRE_COL = { SOFT:'#ff3b3b', MED:'#ffd21a', HARD:'#e8edf5' };
+function currentCompound(id, lap) {
+  const st = RACE.strategies && RACE.strategies[id];
+  if (!st) return 'MED';
+  const pits = st.pits || [];
+  let c = st.a || 'MED';
+  if (pits[0] && lap > pits[0]) c = st.b || c;
+  if (pits[1] && lap > pits[1]) c = st.c || st.b || c;
+  return c;
+}
+
 let lightsState = 'waiting';
 
 function updateLights(elapsed) {
@@ -1999,7 +2011,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
       background:${isWinner?'rgba(0,255,136,0.08)':isPitting?'rgba(255,153,0,0.06)':isSelected?'rgba(255,255,255,0.03)':'transparent'};
       border-left:3px solid ${isLeader?'#00ff88':isPitting?'#ff9900':isSelected?team.color:'transparent'}">
       <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:${isLeader?'#fff':'#666'};width:18px">${pos+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
+      <span style="display:inline-flex;width:25px;height:25px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
       <div style="flex:1">
         <div style="font-size:10px;font-weight:700;color:${isLeader?'#fff':'#ccc'}">$${id}</div>
         <div style="display:flex;gap:4px;align-items:center">
@@ -2046,7 +2058,7 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
     html += `<div class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
       border-left:2px solid ${isLeader?'#00ff88':isPitting?'#ff9900':'transparent'}">
       <span style="font-size:11px;font-weight:800;color:${isWinner?'#00ff88':isLeader?'#fff':'#666'};font-family:'Orbitron',sans-serif">${pos+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:18px;height:18px;border-radius:50%;object-fit:cover">
+      <span style="display:inline-flex;width:23px;height:23px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
       <div>
         <div style="font-size:10px;font-weight:700;color:#eee">$${id}</div>
         <div style="font-size:6px;color:#444">P${gridPos} · T${tyreAge}</div>
@@ -2079,6 +2091,7 @@ function showPodium(positions, gaps) {
   let html = '';
   positions.forEach((id, i) => {
     const team = TEAMS.find(t => t.id === id);
+    const carLap = TOTAL_LAPS;   // podium = final compound
     const gap = i === 0 ? 'WINNER' : `+${gaps[i].toFixed(1)}s`;
     const gridChange = team.gridPos - (i + 1);
     const changeStr = gridChange > 0 ? `▲${gridChange}` : gridChange < 0 ? `▼${Math.abs(gridChange)}` : '—';
@@ -2088,7 +2101,7 @@ function showPodium(positions, gaps) {
 
     html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid #1a1a1a;background:${bgColor}">
       <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:${posColor};width:24px">${i+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
+      <span style="display:inline-flex;width:25px;height:25px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
       <div style="flex:1"><span style="font-size:11px;font-weight:700;color:#eee">$${id}</span></div>
       <span style="font-family:'Space Mono',monospace;font-size:8px;color:${changeColor};font-weight:700;width:24px;text-align:center">${changeStr}</span>
       <span style="font-family:'Space Mono',monospace;font-size:9px;color:${i===0?'#ffcc00':'#888'};width:55px;text-align:right">${gap}</span>
