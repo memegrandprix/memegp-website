@@ -189,6 +189,16 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:var(--gold);margin-top:2px}
 #dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
 #dashboardView .pcard.p1 .num{font-size:72px}#dashboardView .pcard.p1 .tk{font-size:18px}#dashboardView .pcard.p1 .lap{font-size:20px}
+#dashboardView .elim{display:grid;gap:11px;margin:0 0 22px}
+#dashboardView .ecard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid rgba(255,0,64,.45);box-shadow:0 0 22px rgba(255,0,64,.13),inset 0 0 44px rgba(255,0,64,.07);background:#0a0608}
+#dashboardView .ecard .emedia{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,rgba(255,40,80,.10),rgba(6,4,6,.93) 78%)}
+#dashboardView .ecard .emedia img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.82) brightness(.5) contrast(1.05)}
+#dashboardView .ecard .enum{position:absolute;top:-3px;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:46px;line-height:1;color:#fff;opacity:.5;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#dashboardView .ecard .eband{position:absolute;top:45%;left:-10%;right:-10%;z-index:3;transform:rotate(-9deg);background:linear-gradient(90deg,rgba(255,0,64,0),rgba(255,0,64,.96) 16%,rgba(255,0,64,.96) 84%,rgba(255,0,64,0));color:#fff;font-family:'Orbitron',sans-serif;font-weight:900;text-align:center;padding:5px 0;letter-spacing:4px;font-size:11px;box-shadow:0 6px 18px rgba(255,0,64,.45)}
+#dashboardView .ecard .eov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:22px 11px 11px;text-align:left;background:linear-gradient(transparent,rgba(4,2,4,.6) 30%,rgba(4,2,4,.97))}
+#dashboardView .ecard .etk{font-family:'Chakra Petch',sans-serif;font-weight:800;font-size:13px;color:#fff;letter-spacing:.4px}
+#dashboardView .ecard .elap{font-family:'JetBrains Mono','Space Mono',monospace;font-weight:700;font-size:12px;color:#ff8095;margin-top:1px}
+#dashboardView .ecard .eaccent{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:4;background:#ff0040;box-shadow:0 0 10px #ff0040}
 #dashboardView .list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;margin-bottom:24px;overflow:hidden}
 #dashboardView .lrow{display:grid;grid-template-columns:32px 34px 1fr 74px 64px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
 #dashboardView .lrow:last-child{border-bottom:none}
@@ -616,6 +626,7 @@ TEAMS.forEach(t => {
 });
 
 let bestResults = {};
+let roundBest = {};
 let globalBestS1 = null, globalBestS2 = null, globalBestS3 = null;
 let currentRound = 'WAITING';
 let tipTeam = null, tipX = 0, tipY = 0;
@@ -752,6 +763,7 @@ function update() {
 
   // Reset best results
   bestResults = {};
+  roundBest = { Q1:{}, Q2:{}, Q3:{} };
   globalBestS1 = null; globalBestS2 = null; globalBestS3 = null;
 
   let lastActiveTeam = null;
@@ -805,6 +817,12 @@ function update() {
         br.bestLap = Math.min(br.bestLap, lap);
         br.runs++;
         br.round = ev.round;
+      }
+      // per-round bests — so SESSION DATA resets each round
+      const _rb = roundBest[ev.round];
+      if (_rb) {
+        if (!_rb[team.id]) _rb[team.id] = { bestS1: ev.s1, bestS2: ev.s2, bestS3: ev.s3, bestLap: lap, runs: 1 };
+        else { const x=_rb[team.id]; x.bestS1=Math.min(x.bestS1,ev.s1); x.bestS2=Math.min(x.bestS2,ev.s2); x.bestS3=Math.min(x.bestS3,ev.s3); x.bestLap=Math.min(x.bestLap,lap); x.runs++; }
       }
     }
   });
@@ -916,63 +934,106 @@ function renderCarDots() {
 
 function fmtGap(g){ return '+' + g.toFixed(3); }
 function renderDashboard(){
-  const tierOf = id => SCHEDULE.q1Eliminated.includes(id) ? 2 : SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
   const complete = (currentRound === 'COMPLETE');
-  const entries = TEAMS.map(t=>({t, br:bestResults[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
-    .sort((a,b)=> complete ? (tierOf(a.t.id)-tierOf(b.t.id)) || (a.br.bestLap-b.br.bestLap) : (a.br.bestLap-b.br.bestLap));
+  const dashRound = currentRound.indexOf('Q2')===0 ? 'Q2'
+                  : (currentRound.indexOf('Q3')===0 || complete) ? 'Q3' : 'Q1';
+  const PART = { Q1: TEAMS.length, Q2: 11, Q3: 8 };
+  const ELIM = { Q1: 4, Q2: 3, Q3: 0 };
+  const participants = PART[dashRound];
+
+  let entries;
+  if (complete) {
+    const tierOf = id => SCHEDULE.q1Eliminated.includes(id) ? 2 : SCHEDULE.q2Eliminated.includes(id) ? 1 : 0;
+    entries = TEAMS.map(t=>({t, br:bestResults[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
+      .sort((a,b)=> (tierOf(a.t.id)-tierOf(b.t.id)) || (a.br.bestLap-b.br.bestLap));
+  } else {
+    const rb = roundBest[dashRound] || {};
+    entries = TEAMS.map(t=>({t, br:rb[t.id]})).filter(x=>x.br && isFinite(x.br.bestLap))
+      .sort((a,b)=> a.br.bestLap - b.br.bestLap);
+  }
+
   const sub=document.getElementById('dashSub'), podiumEl=document.getElementById('dashPodium'),
-        listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid');
-  const roundLabel = currentRound.replace('_BREAK','');
-  sub.textContent = `SATOSHI SPEEDWAY · ${complete?'GRID SET':roundLabel} · ${entries.length}/${TEAMS.length} CLASSIFIED`;
-  document.getElementById('dashTitle').textContent = complete ? '🏁 STARTING GRID' : '⚡ FASTEST LAPS';
-  if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS…</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; return; }
+        listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid'),
+        elimEl=document.getElementById('dashElim');
+  sub.textContent = `SATOSHI SPEEDWAY · ${complete?'GRID SET':dashRound} · ${entries.length}/${participants} CLASSIFIED`;
+  document.getElementById('dashTitle').textContent = complete ? '\U0001F3C1 STARTING GRID' : `\u26A1 ${dashRound} \u00B7 FASTEST LAPS`;
+
+  if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS\u2026</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; if(elimEl)elimEl.innerHTML=''; return; }
   const leader = entries[0].br.bestLap;
+
   const pcard = (e,absPos) => {
     const t=e.t, br=e.br, isP1=absPos===1;
     const note = absPos===1 ? (complete?'POLE':'FASTEST') : fmtGap(br.bestLap-leader);
     return `<div class="pcard ${isP1?'p1':''}" style="--pc:${t.color};--pc-glow:${t.color}88;--pc-soft:${t.color}66">
       <div class="media"><img src="${t.logo}" alt="$${t.id}"></div>
-      <div class="num">${absPos}</div>${isP1?'<div class="crown">👑</div>':''}
+      <div class="num">${absPos}</div>${isP1?'<div class="crown">\U0001F451</div>':''}
       <div class="ov"><div class="tk">$${t.id}</div><div class="lap">${fmt(br.bestLap)}</div><div class="runs">${note}</div></div>
       <div class="accent"></div></div>`;
   };
   podiumEl.innerHTML = pcard(entries[1],2) + pcard(entries[0],1) + pcard(entries[2],3);
-  listEl.innerHTML = entries.slice(3).map((e,i)=>{ const t=e.t, br=e.br;
-    const out = SCHEDULE.q1Eliminated.includes(t.id)?'Q1':SCHEDULE.q2Eliminated.includes(t.id)?'Q2':'';
+
+  const showElim = !complete && ELIM[dashRound] > 0 && entries.length === participants;
+  const survN = showElim ? participants - ELIM[dashRound] : entries.length;
+
+  listEl.innerHTML = entries.slice(3, survN).map((e,i)=>{ const t=e.t, br=e.br;
+    const out = complete ? (SCHEDULE.q1Eliminated.includes(t.id)?'Q1':SCHEDULE.q2Eliminated.includes(t.id)?'Q2':'') : '';
     return `<div class="lrow"><div class="lpos">${i+4}</div>
       <div class="lav" style="--pc:${t.color};--pc-glow:${t.color}55"><img src="${t.logo}" alt=""></div>
-      <div class="ltk">$${t.id}${out&&complete?` <span style="color:#ff0040;font-size:8px;font-weight:700">OUT ${out}</span>`:''}</div>
+      <div class="ltk">$${t.id}${out?` <span style="color:#ff0040;font-size:8px;font-weight:700">OUT ${out}</span>`:''}</div>
       <div class="llap">${fmt(br.bestLap)}</div><div class="lgap">${fmtGap(br.bestLap-leader)}</div></div>`;
   }).join('');
+
+  if (elimEl){
+    if (showElim){
+      const elim = entries.slice(survN);
+      elimEl.style.gridTemplateColumns = `repeat(${elim.length},1fr)`;
+      elimEl.innerHTML = elim.map((e,i)=>{ const t=e.t, br=e.br;
+        return `<div class="ecard">
+          <div class="emedia"><img src="${t.logo}" alt="$${t.id}" onerror="this.style.display='none'"></div>
+          <div class="enum">${survN+i+1}</div>
+          <div class="eband">ELIMINATED</div>
+          <div class="eov"><div class="etk">$${t.id}</div><div class="elap">${fmt(br.bestLap)}</div></div>
+          <div class="eaccent"></div></div>`;
+      }).join('');
+    } else elimEl.innerHTML='';
+  }
+
+  let bS1=null,bS2=null,bS3=null;
+  entries.forEach(e=>{ const br=e.br;
+    if(!bS1||br.bestS1<bS1.time) bS1={id:e.t.id,time:br.bestS1};
+    if(!bS2||br.bestS2<bS2.time) bS2={id:e.t.id,time:br.bestS2};
+    if(!bS3||br.bestS3<bS3.time) bS3={id:e.t.id,time:br.bestS3};
+  });
+
   let cards='';
-  if (globalBestS1 && globalBestS2 && globalBestS3){
-    const theo = globalBestS1.time+globalBestS2.time+globalBestS3.time, onTable = leader-theo;
+  if (bS1 && bS2 && bS3){
+    const theo = bS1.time+bS2.time+bS3.time, onTable = leader-theo;
     cards += `<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div>
       <div class="sk">
-        <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk">$${globalBestS1.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${fmtS(globalBestS1.time)}</span></div>
-        <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk">$${globalBestS2.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${fmtS(globalBestS2.time)}</span></div>
-        <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk">$${globalBestS3.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${fmtS(globalBestS3.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk">$${bS1.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${fmtS(bS1.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk">$${bS2.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${fmtS(bS2.time)}</span></div>
+        <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk">$${bS3.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${fmtS(bS3.time)}</span></div>
       </div>
-      <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` — ${onTable.toFixed(3)}s on the table.`:' — matched on track.'}</div>
-      <div class="share"><button data-tweet="🏁 QUALIFYING SECTOR KINGS · Satoshi Speedway — S1 $${globalBestS1.id} · S2 $${globalBestS2.id} · S3 $${globalBestS3.id}. Theoretical pole ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
+      <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` \u2014 ${onTable.toFixed(3)}s on the table.`:' \u2014 matched on track.'}</div>
+      <div class="share"><button data-tweet="\U0001F3C1 ${complete?'QUALIFYING':dashRound} SECTOR KINGS \u00B7 Satoshi Speedway \u2014 S1 $${bS1.id} \u00B7 S2 $${bS2.id} \u00B7 S3 $${bS3.id}. Theoretical pole ${fmt(theo)} \U0001F440 $MEMEGP">\U0001D54F Share</button></div></div>`;
   }
   if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
     cards += `<div class="fc hasphoto" style="--ac:${entries[0].t.color}"><div class="fc-photo" style="background-image:url('${entries[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">${complete?'POLE MARGIN':'BIGGEST MARGIN'}</div>
       <div class="fc-big"><span class="u">$${entries[0].t.id}</span> ${complete?'on pole by':'leads by'} <span class="mono">${m.toFixed(3)}s</span></div>
       <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the sheet.</div>
-      <div class="share"><button data-tweet="📏 $${entries[0].t.id} ${complete?'takes pole':'leads quali'} ${m.toFixed(3)}s clear of $${entries[1].t.id} · Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
+      <div class="share"><button data-tweet="\U0001F4CF $${entries[0].t.id} ${complete?'takes pole':`tops ${dashRound}`} ${m.toFixed(3)}s clear of $${entries[1].t.id} \u00B7 Satoshi Speedway. $MEMEGP">\U0001D54F Share</button></div></div>`;
   }
   if (entries.length>=2){ let best={g:Infinity};
     for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
     cards += `<div class="fc hasphoto" style="--ac:${best.a.t.color}"><div class="fc-photo duo"><div style="background-image:url('${best.a.t.logo}')"></div><div style="background-image:url('${best.b.t.logo}')"></div></div><div class="fc-scrim"></div><div class="fc-h">CLOSEST BATTLE</div>
       <div class="fc-big"><span class="u" style="color:${best.a.t.color}">$${best.a.t.id}</span> vs <span class="u" style="color:${best.b.t.color}">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
-      <div class="fc-sub">Tightest gap on the sheet — P${best.pos} v P${best.pos+1}.</div>
-      <div class="share"><button data-tweet="⚔️ CLOSEST in QUALIFYING — $${best.a.t.id} vs $${best.b.t.id}, ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
+      <div class="fc-sub">Tightest gap on the sheet \u2014 P${best.pos} v P${best.pos+1}.</div>
+      <div class="share"><button data-tweet="\u2694\uFE0F CLOSEST in ${complete?'QUALIFYING':dashRound} \u2014 $${best.a.t.id} vs $${best.b.t.id}, ${best.g.toFixed(3)}s apart. $MEMEGP">\U0001D54F Share</button></div></div>`;
   }
   gridEl.innerHTML = cards;
 }
 
-function renderRowTip(id){
+ function renderRowTip(id){
   const tip = document.getElementById('rowTip');
   const t = TEAMS.find(x=>x.id===id); if(!t){ tip.style.display='none'; return; }
   const br = bestResults[id], cs = carStates[id];
@@ -1132,6 +1193,7 @@ requestAnimationFrame(update);
     <div class="dtitle" id="dashTitle">⚡ FASTEST LAPS</div>
     <div class="podium" id="dashPodium"></div>
     <div class="list" id="dashList"></div>
+    <div class="elim" id="dashElim"></div>
     <div class="grid" id="dashGrid"></div>
   </div>
 </div>
