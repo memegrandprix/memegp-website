@@ -259,13 +259,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
     </div>
     <div id="raceTower" style="flex:1;overflow-y:auto"></div>
-    <div style="padding:10px 14px;border-top:1px solid #1a1a1a">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#888">FAN ZONE</span>
-        <span id="fanCount" style="font-family:'Space Mono',monospace;font-size:10px;color:#ccc;font-weight:700"></span>
-      </div>
-      <div class="fan-zone" id="fanZone"></div>
-      <div id="yourTeam" style="font-family:'Space Mono',monospace;font-size:9px;color:#555;margin-top:6px"></div>
+    <div style="display:none">
+      <span id="fanCount"></span><div class="fan-zone" id="fanZone"></div><div id="yourTeam"></div>
     </div>
   </div>
 
@@ -1964,7 +1959,10 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
         pt = getPitPoint(0.55 + exitFrac * 0.45);                // accelerate back out
       }
     } else {
-      pt = getPoint(carLapProgress);
+      // launch from the grid slot (same stagger as the formation) and spread by pace
+      let _gf = ((carLap - 1) + carLapProgress) - (team.gridPos - 1) * 0.013;
+      _gf = ((_gf % 1) + 1) % 1;
+      pt = getPoint(_gf);
     }
 
     const logoId = 'logo-clip-' + id;
