@@ -1270,6 +1270,14 @@ function buildRace() {
   race.fastestS3 = fastestS3;
   race.pitLaps = pitLap;
 
+  // ── monotonic per-car schedule (smooth animation — position only ever advances) ──
+  race.cumByCar = {};
+  TEAMS.forEach(t => { race.cumByCar[t.id] = [ (t.gridPos - 1) * 0.5 ]; });
+  for (let lap = 1; lap <= TOTAL_LAPS; lap++) {
+    TEAMS.forEach(t => { const arr = race.cumByCar[t.id]; arr.push(arr[lap-1] + race.laps[lap-1].lapTimes[t.id]); });
+  }
+  race.timeScale = (TOTAL_LAPS * LAP_REAL_SECONDS) / Math.min(...TEAMS.map(t => race.cumByCar[t.id][TOTAL_LAPS]));
+
   // ★ NEW: precompute progressive fastest as-of each lap
   // For every lap N, what's the fastest lap/S1/S2/S3 seen across laps 1..N?
   race.progressive = [];
@@ -1369,6 +1377,17 @@ function getPoint(frac) {
 function getPitPoint(frac) {
   const len = pitPathEl.getTotalLength();
   return pitPathEl.getPointAtLength(len * Math.min(1, Math.max(0, frac)));
+}
+
+// ── monotonic progress for a car at race time `elapsed` (lap + on-track fraction, never goes backward) ──
+function carProgress(id, elapsed) {
+  const sched = RACE.cumByCar[id], scale = RACE.timeScale;
+  let L = 0;
+  while (L < TOTAL_LAPS && sched[L+1] * scale <= elapsed) L++;
+  let frac;
+  if (L >= TOTAL_LAPS) frac = 1;
+  else { const a = sched[L] * scale, b = sched[L+1] * scale; frac = Math.min(1, Math.max(0, (elapsed - a) / Math.max(0.001, b - a))); }
+  return { carLap: Math.min(TOTAL_LAPS, L + 1), carLapIdx: Math.min(L, TOTAL_LAPS - 1), frac, finished: L >= TOTAL_LAPS };
 }
 
 let lightsState = 'waiting';
@@ -1683,14 +1702,8 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
   let html = '';
   positions.forEach((id, pos) => {
     const team = TEAMS.find(t => t.id === id);
-    const gapSeconds = gaps[pos] || 0;
-    const gapFraction = gapSeconds / LAP_REAL_SECONDS;
-
-    const carElapsed = Math.max(0, elapsed - gapSeconds);
-    const carLap = Math.min(TOTAL_LAPS, Math.floor(carElapsed / LAP_REAL_SECONDS) + 1);
-    const carLapProgress = (carElapsed % LAP_REAL_SECONDS) / LAP_REAL_SECONDS;
-
-    const carLapIdx = Math.min(carLap - 1, TOTAL_LAPS - 1);
+    const cp = carProgress(id, elapsed);
+    const carLap = cp.carLap, carLapProgress = cp.frac, carLapIdx = cp.carLapIdx;
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
@@ -1709,8 +1722,7 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
         pt = getPitPoint(0.55 + exitFrac * 0.45);                // accelerate back out
       }
     } else {
-      const frac = (lapProgress - gapFraction + 1) % 1;
-      pt = getPoint(frac);
+      pt = getPoint(carLapProgress);
     }
 
     const logoId = 'logo-clip-' + id;
