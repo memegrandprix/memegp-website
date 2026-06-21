@@ -189,7 +189,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 #dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:var(--gold);margin-top:2px}
 #dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
 #dashboardView .pcard.p1 .num{font-size:72px}#dashboardView .pcard.p1 .tk{font-size:18px}#dashboardView .pcard.p1 .lap{font-size:20px}
-#dashboardView .elim{display:grid;gap:11px;margin:0 0 22px}
+#dashboardView .elim{margin:0 0 22px}
+#dashboardView .drop-head{display:flex;align-items:center;gap:14px;margin:2px 2px 13px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;letter-spacing:5px;color:#ff2b50;text-shadow:0 0 14px rgba(255,43,80,.5)}
+#dashboardView .drop-head::before,#dashboardView .drop-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,43,80,.55),transparent)}
+#dashboardView .drop-cards{display:grid;gap:11px}
 #dashboardView .ecard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid rgba(255,0,64,.45);box-shadow:0 0 22px rgba(255,0,64,.13),inset 0 0 44px rgba(255,0,64,.07);background:#0a0608}
 #dashboardView .ecard .emedia{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,rgba(255,40,80,.10),rgba(6,4,6,.93) 78%)}
 #dashboardView .ecard .emedia img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.82) brightness(.5) contrast(1.05)}
@@ -956,7 +959,7 @@ function renderDashboard(){
         listEl=document.getElementById('dashList'), gridEl=document.getElementById('dashGrid'),
         elimEl=document.getElementById('dashElim');
   sub.textContent = `SATOSHI SPEEDWAY · ${complete?'GRID SET':dashRound} · ${entries.length}/${participants} CLASSIFIED`;
-  document.getElementById('dashTitle').textContent = complete ? '\U0001F3C1 STARTING GRID' : `\u26A1 ${dashRound} \u00B7 FASTEST LAPS`;
+  document.getElementById('dashTitle').textContent = complete ? '🏁 STARTING GRID' : `\u26A1 ${dashRound} \u00B7 FASTEST LAPS`;
 
   if (entries.length < 3){ podiumEl.innerHTML='<div class="empty" style="grid-column:1/-1">WAITING FOR LAPS\u2026</div>'; listEl.innerHTML=''; gridEl.innerHTML=''; if(elimEl)elimEl.innerHTML=''; return; }
   const leader = entries[0].br.bestLap;
@@ -966,13 +969,14 @@ function renderDashboard(){
     const note = absPos===1 ? (complete?'POLE':'FASTEST') : fmtGap(br.bestLap-leader);
     return `<div class="pcard ${isP1?'p1':''}" style="--pc:${t.color};--pc-glow:${t.color}88;--pc-soft:${t.color}66">
       <div class="media"><img src="${t.logo}" alt="$${t.id}"></div>
-      <div class="num">${absPos}</div>${isP1?'<div class="crown">\U0001F451</div>':''}
+      <div class="num">${absPos}</div>${isP1?'<div class="crown">👑</div>':''}
       <div class="ov"><div class="tk">$${t.id}</div><div class="lap">${fmt(br.bestLap)}</div><div class="runs">${note}</div></div>
       <div class="accent"></div></div>`;
   };
   podiumEl.innerHTML = pcard(entries[1],2) + pcard(entries[0],1) + pcard(entries[2],3);
 
-  const showElim = !complete && ELIM[dashRound] > 0 && entries.length === participants;
+  const roundOver = (currentRound === dashRound + '_BREAK');   // clock hit zero for this round
+  const showElim = roundOver && ELIM[dashRound] > 0 && entries.length === participants;
   const survN = showElim ? participants - ELIM[dashRound] : entries.length;
 
   listEl.innerHTML = entries.slice(3, survN).map((e,i)=>{ const t=e.t, br=e.br;
@@ -986,8 +990,7 @@ function renderDashboard(){
   if (elimEl){
     if (showElim){
       const elim = entries.slice(survN);
-      elimEl.style.gridTemplateColumns = `repeat(${elim.length},1fr)`;
-      elimEl.innerHTML = elim.map((e,i)=>{ const t=e.t, br=e.br;
+      const _cards = elim.map((e,i)=>{ const t=e.t, br=e.br;
         return `<div class="ecard">
           <div class="emedia"><img src="${t.logo}" alt="$${t.id}" onerror="this.style.display='none'"></div>
           <div class="enum">${survN+i+1}</div>
@@ -995,6 +998,7 @@ function renderDashboard(){
           <div class="eov"><div class="etk">$${t.id}</div><div class="elap">${fmt(br.bestLap)}</div></div>
           <div class="eaccent"></div></div>`;
       }).join('');
+      elimEl.innerHTML = `<div class="drop-head">DROP ZONE</div><div class="drop-cards" style="grid-template-columns:repeat(${elim.length},1fr)">${_cards}</div>`;
     } else elimEl.innerHTML='';
   }
 
@@ -1015,20 +1019,20 @@ function renderDashboard(){
         <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk">$${bS3.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${fmtS(bS3.time)}</span></div>
       </div>
       <div class="skbest">Theoretical best lap <b>${fmt(theo)}</b>${onTable>0.0005?` \u2014 ${onTable.toFixed(3)}s on the table.`:' \u2014 matched on track.'}</div>
-      <div class="share"><button data-tweet="\U0001F3C1 ${complete?'QUALIFYING':dashRound} SECTOR KINGS \u00B7 Satoshi Speedway \u2014 S1 $${bS1.id} \u00B7 S2 $${bS2.id} \u00B7 S3 $${bS3.id}. Theoretical pole ${fmt(theo)} \U0001F440 $MEMEGP">\U0001D54F Share</button></div></div>`;
+      <div class="share"><button data-tweet="🏁 ${complete?'QUALIFYING':dashRound} SECTOR KINGS \u00B7 Satoshi Speedway \u2014 S1 $${bS1.id} \u00B7 S2 $${bS2.id} \u00B7 S3 $${bS3.id}. Theoretical pole ${fmt(theo)} 👀 $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ const m=entries[1].br.bestLap-leader;
     cards += `<div class="fc hasphoto" style="--ac:${entries[0].t.color}"><div class="fc-photo" style="background-image:url('${entries[0].t.logo}')"></div><div class="fc-scrim"></div><div class="fc-h">${complete?'POLE MARGIN':'BIGGEST MARGIN'}</div>
       <div class="fc-big"><span class="u">$${entries[0].t.id}</span> ${complete?'on pole by':'leads by'} <span class="mono">${m.toFixed(3)}s</span></div>
       <div class="fc-sub">Clear of <b>$${entries[1].t.id}</b> at the top of the sheet.</div>
-      <div class="share"><button data-tweet="\U0001F4CF $${entries[0].t.id} ${complete?'takes pole':`tops ${dashRound}`} ${m.toFixed(3)}s clear of $${entries[1].t.id} \u00B7 Satoshi Speedway. $MEMEGP">\U0001D54F Share</button></div></div>`;
+      <div class="share"><button data-tweet="📏 $${entries[0].t.id} ${complete?'takes pole':`tops ${dashRound}`} ${m.toFixed(3)}s clear of $${entries[1].t.id} \u00B7 Satoshi Speedway. $MEMEGP">𝕏 Share</button></div></div>`;
   }
   if (entries.length>=2){ let best={g:Infinity};
     for(let i=1;i<entries.length;i++){ const g=entries[i].br.bestLap-entries[i-1].br.bestLap; if(g<best.g) best={g,a:entries[i-1],b:entries[i],pos:i}; }
     cards += `<div class="fc hasphoto" style="--ac:${best.a.t.color}"><div class="fc-photo duo"><div style="background-image:url('${best.a.t.logo}')"></div><div style="background-image:url('${best.b.t.logo}')"></div></div><div class="fc-scrim"></div><div class="fc-h">CLOSEST BATTLE</div>
       <div class="fc-big"><span class="u" style="color:${best.a.t.color}">$${best.a.t.id}</span> vs <span class="u" style="color:${best.b.t.color}">$${best.b.t.id}</span><br><span class="mono" style="font-size:18px">${best.g.toFixed(3)}s</span> apart</div>
       <div class="fc-sub">Tightest gap on the sheet \u2014 P${best.pos} v P${best.pos+1}.</div>
-      <div class="share"><button data-tweet="\u2694\uFE0F CLOSEST in ${complete?'QUALIFYING':dashRound} \u2014 $${best.a.t.id} vs $${best.b.t.id}, ${best.g.toFixed(3)}s apart. $MEMEGP">\U0001D54F Share</button></div></div>`;
+      <div class="share"><button data-tweet="\u2694\uFE0F CLOSEST in ${complete?'QUALIFYING':dashRound} \u2014 $${best.a.t.id} vs $${best.b.t.id}, ${best.g.toFixed(3)}s apart. $MEMEGP">𝕏 Share</button></div></div>`;
   }
   gridEl.innerHTML = cards;
 }
