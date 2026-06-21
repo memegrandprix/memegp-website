@@ -26,7 +26,16 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
 
 .ticker{border-bottom:1px solid #1a1a1a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
-.ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px}
+.ticker-msg{font-size:11px;font-weight:600;letter-spacing:1px;display:inline-flex;align-items:center;gap:9px;min-width:0}
+.tk-dot{width:6px;height:6px;border-radius:50%;background:var(--tc,#ff6644);box-shadow:0 0 8px var(--tc,#ff6644);animation:tkpulse 1.4s ease-in-out infinite;flex-shrink:0}
+@keyframes tkpulse{0%,100%{opacity:1}50%{opacity:.3}}
+.tk-logo{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1.5px solid var(--tc,#444);background:#0c0c12;flex-shrink:0}
+.tk-team{font-weight:800;letter-spacing:.4px}
+.tk-status{color:#8a8a96;font-weight:500;letter-spacing:1.4px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rb-row{display:flex;align-items:center;justify-content:center;gap:9px;padding:2px 0}
+.rb-logo{width:24px;height:24px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,64,64,.45);background:#0c0c12;flex-shrink:0}
+.rb-name{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:13px;color:#fff;letter-spacing:.5px}
+.rb-tag{font-family:'Space Mono',monospace;font-size:9px;color:#ff5555;letter-spacing:2px;opacity:.7}
 
 .main{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 82px)}
 
@@ -403,7 +412,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     <div id="roundBreak" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;text-align:center;background:rgba(5,5,8,.92);border:1px solid #ff0040;border-radius:12px;padding:30px 50px">
       <div id="roundBreakTitle" style="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:#ff0040;letter-spacing:4px"></div>
       <div id="roundBreakSub" style="font-family:'Chakra Petch';font-size:13px;color:#888;margin-top:8px"></div>
-      <div id="roundBreakElim" style="font-family:'Space Mono',monospace;font-size:11px;color:#ff4444;margin-top:16px;line-height:1.8"></div>
+      <div id="roundBreakElim" style="margin-top:18px;display:flex;flex-direction:column;gap:5px;align-items:center"></div>
     </div>
   </div>
 
@@ -685,8 +694,8 @@ function update() {
       breakSub = 'Bottom 4 eliminated';
       breakElim = SCHEDULE.q1Eliminated.map(id => {
         const t = TEAMS.find(t => t.id === id);
-        return `${t.emoji} $${id} — ELIMINATED`;
-      }).join('\n');
+        return `<div class="rb-row"><img class="rb-logo" src="${t.logo}" alt="" onerror="this.style.display=&#39;none&#39;"><span class="rb-name">$${id}</span><span class="rb-tag">ELIMINATED</span></div>`;
+      }).join('');
     }
     if (ev.type === 'q2_start' && elapsed >= ev.time) { currentRound = 'Q2'; }
     if (ev.type === 'q2_end' && elapsed >= ev.time) {
@@ -695,8 +704,8 @@ function update() {
       breakSub = 'Bottom 3 eliminated — Top 8 shootout next';
       breakElim = SCHEDULE.q2Eliminated.map(id => {
         const t = TEAMS.find(t => t.id === id);
-        return `${t.emoji} $${id} — ELIMINATED`;
-      }).join('\n');
+        return `<div class="rb-row"><img class="rb-logo" src="${t.logo}" alt="" onerror="this.style.display=&#39;none&#39;"><span class="rb-name">$${id}</span><span class="rb-tag">ELIMINATED</span></div>`;
+      }).join('');
     }
     if (ev.type === 'q3_start' && elapsed >= ev.time) { currentRound = 'Q3'; }
     if (ev.type === 'q3_end' && elapsed >= ev.time) { currentRound = 'COMPLETE'; }
@@ -708,7 +717,7 @@ function update() {
     breakEl.style.display = 'block';
     document.getElementById('roundBreakTitle').textContent = breakTitle;
     document.getElementById('roundBreakSub').textContent = breakSub;
-    document.getElementById('roundBreakElim').innerText = breakElim;
+    document.getElementById('roundBreakElim').innerHTML = breakElim;
   } else {
     breakEl.style.display = 'none';
   }
@@ -779,7 +788,7 @@ function update() {
         cs.liveS1 = ev.s1; cs.liveS2 = ev.s2; cs.liveS3 = ev.s3;
       }
       lastActiveTeam = team;
-      lastActiveRun = `${ev.round} ${cs.status} — LAP ${ev.lap}`;
+      lastActiveRun = `${ev.round} · ${cs.status} · LAP ${ev.lap}`;
     }
 
     // Flying lap done → lock the timed result (even while on the in-lap)
@@ -820,9 +829,15 @@ function update() {
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
   } else if (lastActiveTeam) {
-    tickerEl.textContent = `▸ ${lastActiveTeam.emoji} $${lastActiveTeam.id} — ${lastActiveRun}`;
-    tickerEl.style.color = '#ff6644';
-    tickerDiv.style.background = 'rgba(255,0,64,0.06)';
+    const _c = lastActiveTeam.color || '#ff6644';
+    const _m = _c.replace('#','').match(/.{2}/g) || ['ff','66','44'];
+    const _r = parseInt(_m[0],16), _g = parseInt(_m[1],16), _b = parseInt(_m[2],16);
+    tickerEl.innerHTML = `<span class="tk-dot" style="--tc:${_c}"></span>`
+      + `<img class="tk-logo" src="${lastActiveTeam.logo}" alt="" style="--tc:${_c}" onerror="this.style.display='none'">`
+      + `<span class="tk-team" style="color:${_c}">$${lastActiveTeam.id}</span>`
+      + `<span class="tk-status">${lastActiveRun}</span>`;
+    tickerEl.style.color = '';
+    tickerDiv.style.background = `rgba(${_r},${_g},${_b},0.07)`;
   } else if (currentRound.includes('BREAK')) {
     tickerEl.textContent = `▸ ${breakTitle} — BREAK`;
     tickerEl.style.color = '#ff9900';
