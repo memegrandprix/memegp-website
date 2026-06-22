@@ -28,6 +28,67 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555;text-decoration:none}
 .session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040}
 .countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+/* vtoggle — FP-identical */
+.vtoggle{display:none;border:1px solid rgba(255,204,0,.3);border-radius:7px;overflow:hidden;background:rgba(8,8,14,.6)}
+.vtoggle button{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.2px;padding:5px 11px;background:none;border:none;color:#888;cursor:pointer;white-space:nowrap}
+.vtoggle button.on{background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000}
+/* tower column headers */
+.tower-cols{display:none;padding:3px 8px;border-bottom:1px solid rgba(255,204,0,.12);font-family:'Orbitron',sans-serif;font-size:6px;font-weight:700;letter-spacing:1.5px;color:#444;display:flex;gap:0}
+.tower-cols span{flex-shrink:0}
+.tower-cols.show{display:flex}
+.lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
+/* SESSION DATA DASHBOARD — FP-identical */
+#dashboardView{position:fixed;left:0;right:0;top:38px;bottom:0;overflow-y:auto;z-index:200;background:#040408}
+#dashboardView .dwrap{max-width:960px;margin:0 auto;padding:22px 18px 70px}
+#dashboardView .dhead{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+#dashboardView .dh1{font-family:'Orbitron';font-weight:900;font-size:clamp(18px,3.4vw,26px);letter-spacing:2px;color:#fff}
+#dashboardView .dh1 b{color:#ffcc00}
+#dashboardView .dsub{font-size:11px;letter-spacing:2px;color:#7a7a88;margin-top:6px}
+#dashboardView .dtitle{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:#ffcc00;text-shadow:0 0 12px rgba(255,204,0,.4);margin:0 0 14px}
+#dashboardView .podium{display:grid;grid-template-columns:1fr 1.22fr 1fr;gap:13px;align-items:end;margin-bottom:14px}
+#dashboardView .pcard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 26px rgba(0,0,0,.55),0 0 24px var(--pc-glow,transparent)}
+#dashboardView .media{position:absolute;inset:0}
+#dashboardView .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:60px;line-height:1;color:#fff;opacity:.95;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#dashboardView .crown{position:absolute;top:9px;right:11px;z-index:2;font-size:19px}
+#dashboardView .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 12px 13px;background:linear-gradient(transparent,rgba(4,4,8,.5) 32%,rgba(4,4,8,.95))}
+#dashboardView .accent{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:var(--pc,#444);box-shadow:0 0 10px var(--pc,#444)}
+#dashboardView .tk{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.5px}
+#dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:#ffcc00;margin-top:2px}
+#dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
+#dashboardView .pcard.p1 .num{font-size:72px}
+#dashboardView .pcard.p1 .tk{font-size:18px}
+#dashboardView .pcard.p1 .lap{font-size:20px}
+#dashboardView .list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;margin-bottom:24px;overflow:hidden}
+#dashboardView .lrow{display:grid;grid-template-columns:32px 34px 1fr 90px 64px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+#dashboardView .lrow:last-child{border-bottom:none}
+#dashboardView .lpos{font-family:'Orbitron';font-weight:800;font-size:14px;color:#888;text-align:center}
+#dashboardView .lav{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--pc,#444)}
+#dashboardView .lav img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .ltk{font-family:'Orbitron';font-weight:700;font-size:12px}
+#dashboardView .llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
+#dashboardView .lgap{font-family:'JetBrains Mono';font-size:11px;color:#7a7a88;text-align:right}
+#dashboardView .fcgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+#dashboardView .fc{background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,#ffcc00);border-radius:12px;padding:16px}
+#dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;margin-bottom:10px}
+#dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(16px,2.8vw,22px);line-height:1.06;color:#fff}
+#dashboardView .fc-sub{font-size:11px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+#dashboardView .sk{display:flex;flex-direction:column;gap:7px}
+#dashboardView .skrow{display:flex;align-items:center;gap:9px;font-size:13px}
+#dashboardView .skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#dashboardView .sktk{font-family:'Orbitron';font-weight:700;font-size:12px;min-width:74px}
+#dashboardView .sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
+#dashboardView .dz-title{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:#ff4444;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+#dashboardView .dz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+#dashboardView .dz-card{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid #ff4444}
+#dashboardView .dz-card .media{position:absolute;inset:0;filter:grayscale(100%) brightness(.55)}
+#dashboardView .dz-card .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .dz-card .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:52px;line-height:1;color:#fff;opacity:.9}
+#dashboardView .dz-card .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:20px 10px 10px;background:linear-gradient(transparent,rgba(4,4,8,.96))}
+#dashboardView .dz-card .tk{font-family:'Orbitron';font-weight:800;font-size:12px;color:#fff}
+#dashboardView .dz-card .dnf-tag{font-family:'Orbitron';font-size:8px;font-weight:700;letter-spacing:2px;color:#ff4444;margin-top:3px}
+#dashboardView .dz-card .accent{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:#ff4444}
+@media(max-width:640px){#dashboardView .fcgrid{grid-template-columns:1fr}#dashboardView .podium{gap:8px}}
 .lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
 
 .stats-bar{background:#08080c;border-bottom:1px solid #1a1a1a;padding:4px 20px;display:flex;align-items:center;gap:24px;overflow:hidden}
@@ -276,7 +337,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       </div>
     </div>
     <div class="tower-cols" id="towerCols">
-      <span></span><span>DRIVER</span><span></span><span style="text-align:right">FUEL</span><span>TYRES</span><span></span>
+      <span style="width:16px"></span>
+      <span style="flex:1">DRIVER</span>
+      <span style="width:20px;text-align:right">FUEL</span>
+      <span style="width:38px;text-align:center;margin-left:6px">TYRES</span>
+      <span style="width:22px"></span>
     </div>
     <div id="raceTower" style="flex:1;overflow-y:auto"></div>
     <div style="display:none">
@@ -2075,7 +2140,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     </div>`;
 
     // Column order: POS | DRIVER (logo+name) | FUEL | TYRE CIRCLE | +/-
-    html += `<div data-tipid="${id}" style="display:grid;grid-template-columns:16px 1fr 14px 36px 22px;
+    html += `<div style="display:grid;grid-template-columns:16px 1fr 14px 36px 22px;
         align-items:center;gap:4px;padding:4px 8px;border-bottom:1px solid #111;cursor:default;
         background:${isWinner?'rgba(0,255,136,0.08)':isPitting?'rgba(255,153,0,0.06)':isSelected?'rgba(255,255,255,0.03)':'transparent'};
         border-left:3px solid ${isLeader?'#00ff88':isPitting?'#ff9900':isSelected?team.color:'transparent'}">
@@ -2093,7 +2158,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     </div>`;
   });
   el.innerHTML = html;
-  el.querySelectorAll('[data-tipid]').forEach(r => attachTip(r, r.dataset.tipid));
+  // NO hover on left tower — hover only on right leaderboard
 }
 
 function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isComplete, currentLap, elapsed) {
@@ -2138,6 +2203,8 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
     </div>`;
   });
   el.innerHTML = html;
+  // Hover cards only on right-side leaderboard
+  el.querySelectorAll('[data-tipid]').forEach(r => attachTip(r, r.dataset.tipid));
 }
 
 let podiumShown = false;
@@ -2200,13 +2267,19 @@ function vtShow(which) {
 }
 window.vtShow = vtShow;
 
-// ── hover card (FP-identical) ──────────────────────────────
-let _tipX=0, _tipY=0;
+// ── hover card — RIGHT LEADERBOARD ONLY ───────────────────
+let _tipX=0, _tipY=0, _tipActive=false;
 function attachTip(el, id) {
-  el.addEventListener('mouseenter', e=>{ _tipX=e.clientX; _tipY=e.clientY; renderRowTip(id); });
+  el.addEventListener('mouseenter', e=>{ _tipX=e.clientX; _tipY=e.clientY; _tipActive=true; renderRowTip(id); });
   el.addEventListener('mousemove',  e=>{ _tipX=e.clientX; _tipY=e.clientY; renderRowTip(id); });
-  el.addEventListener('mouseleave', ()=>{ const t=document.getElementById('rowTip'); if(t) t.style.display='none'; });
+  el.addEventListener('mouseleave', ()=>{ _tipActive=false; hideTip(); });
 }
+function hideTip() {
+  const t=document.getElementById('rowTip');
+  if(t){ t.style.display='none'; t.style.pointerEvents='none'; }
+}
+// hide on any scroll
+document.addEventListener('scroll', hideTip, true);
 
 function renderRowTip(id) {
   const tip=document.getElementById('rowTip'); if(!tip) return;
@@ -2240,7 +2313,7 @@ function renderRowTip(id) {
   const mvCol=mv>0?'#00ff88':mv<0?'#ff4444':'#888';
   const carSrc=team.car||team.logo.replace('.png','-car.png');
 
-  tip.style.cssText = 'position:fixed;z-index:500;display:flex;flex-direction:row;width:360px;height:220px;border-radius:12px;overflow:hidden;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)';
+  tip.style.cssText = 'position:fixed;z-index:500;display:flex;flex-direction:row;width:360px;height:220px;border-radius:12px;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)';
   tip.innerHTML=`
     <div style="padding:13px 14px;width:220px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
