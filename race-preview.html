@@ -2394,8 +2394,8 @@ function renderRowTip(id) {
   if (!lb || !tip) return;
   lb.addEventListener('mousemove', e => {
     tipX = e.clientX; tipY = e.clientY;
-    const row = e.target.closest('[data-team]');
-    if (row) { tipTeam = row.getAttribute('data-team'); renderRowTip(tipTeam); }
+    const row = e.target.closest('[data-tipid]');
+    if (row) { tipTeam = row.getAttribute('data-tipid'); renderRowTip(tipTeam); }
     else { tipTeam = null; tip.style.display = 'none'; }
   });
   lb.addEventListener('mouseleave', () => { tipTeam = null; tip.style.display = 'none'; });
@@ -2403,14 +2403,28 @@ function renderRowTip(id) {
 
 // ── SESSION DATA dashboard ──────────────────────────────────
 function buildDash() {
-  const {positions:liveOrder,gaps:liveGaps,elapsed,isComplete,prog}=window._LIVE||{};
-  if(!liveOrder||!liveOrder.length) return;
-  const currentLap=Math.min(TOTAL_LAPS,Math.floor((elapsed||0)/LAP_REAL_SECONDS)+1);
+  const live = window._LIVE || {};
+  const liveOrder = live.positions || [];
+  const liveGaps  = live.gaps || {};
+  const elapsed   = live.elapsed || 0;
+  const isComplete= live.isComplete || false;
+  const prog      = live.prog || null;
 
-  const titleEl=document.getElementById('dashResultTitle');
-  if(titleEl) titleEl.textContent=isComplete?'RACE RESULT':`RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
-  const subEl=document.getElementById('dashSub');
-  if(subEl) subEl.textContent=`SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
+  if (!liveOrder.length) {
+    // Race not started yet — show placeholder
+    const podEl = document.getElementById('dashPodium');
+    if (podEl) podEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#555;font-family:Orbitron;font-size:12px;padding:40px">RACE NOT YET STARTED</div>';
+    const listEl = document.getElementById('dashList'); if (listEl) listEl.innerHTML = '';
+    const gridEl = document.getElementById('dashGrid'); if (gridEl) gridEl.innerHTML = '';
+    return;
+  }
+
+  const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
+
+  const titleEl = document.getElementById('dashResultTitle');
+  if (titleEl) titleEl.textContent = isComplete ? 'RACE RESULT' : `RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
+  const subEl = document.getElementById('dashSub');
+  if (subEl) subEl.textContent = `SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
 
   const pcard=(id,absPos)=>{
     const team=TEAMS.find(t=>t.id===id);
@@ -2434,10 +2448,10 @@ function buildDash() {
   }).join('');
 
   // fun fact cards
-  const s1K=prog&&prog.fastestS1.driver?TEAMS.find(t=>t.id===prog.fastestS1.driver):null;
-  const s2K=prog&&prog.fastestS2.driver?TEAMS.find(t=>t.id===prog.fastestS2.driver):null;
-  const s3K=prog&&prog.fastestS3.driver?TEAMS.find(t=>t.id===prog.fastestS3.driver):null;
-  const flK=prog&&prog.fastestLap.driver?TEAMS.find(t=>t.id===prog.fastestLap.driver):null;
+  const s1K = prog && prog.fastestS1 && isFinite(prog.fastestS1.time) ? TEAMS.find(t=>t.id===prog.fastestS1.driver) : null;
+  const s2K = prog && prog.fastestS2 && isFinite(prog.fastestS2.time) ? TEAMS.find(t=>t.id===prog.fastestS2.driver) : null;
+  const s3K = prog && prog.fastestS3 && isFinite(prog.fastestS3.time) ? TEAMS.find(t=>t.id===prog.fastestS3.driver) : null;
+  const flK  = prog && prog.fastestLap && isFinite(prog.fastestLap.time) ? TEAMS.find(t=>t.id===prog.fastestLap.driver) : null;
   let bigMover=null,bigMove=0;
   liveOrder.forEach((id,p)=>{const t=TEAMS.find(x=>x.id===id);const g=t.gridPos-(p+1);if(g>bigMove){bigMove=g;bigMover=t;}});
   const pitsDone=RACE.events.filter(e=>e.type==='pit'&&e.lap<=currentLap);
