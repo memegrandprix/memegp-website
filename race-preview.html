@@ -1877,6 +1877,13 @@ function update() {
     document.getElementById('raceStatus').textContent = 'LIGHTS OUT...';
     document.getElementById('tickerMsg').textContent = '▸ FORMATION LAP — LIGHTS OUT SEQUENCE';
     document.getElementById('tickerMsg').style.color = '#ff0040';
+    // Seed _LIVE with grid order so SESSION DATA works during formation
+    if (!window._LIVE.positions.length) {
+      const gridOrder = RACE.laps[0].positions || QUALIFYING_ORDER || TEAMS.map(t=>t.id);
+      const gridGaps = {};
+      gridOrder.forEach((id,i) => { gridGaps[id] = i * 1.2; });
+      window._LIVE = { positions: gridOrder, gaps: gridGaps, elapsed: 0, isComplete: false, prog: null };
+    }
     requestAnimationFrame(update);
     return;
   }
@@ -2403,17 +2410,26 @@ function renderRowTip(id) {
 
 // ── SESSION DATA dashboard ──────────────────────────────────
 function buildDash() {
-  const live = window._LIVE || {};
-  const liveOrder = live.positions || [];
-  const liveGaps  = live.gaps || {};
+  let live = window._LIVE || {};
+  let liveOrder = live.positions || [];
+  let liveGaps  = live.gaps || {};
   const elapsed   = live.elapsed || 0;
   const isComplete= live.isComplete || false;
   const prog      = live.prog || null;
 
+  // If _LIVE hasn't been populated yet (race just started), compute from engine directly
+  if (!liveOrder.length && RACE && RACE.laps && RACE.laps[0]) {
+    const firstPositions = RACE.laps[0].positions || [];
+    if (firstPositions.length) {
+      liveOrder = firstPositions.map(id => typeof id === 'string' ? id : id.id || id);
+      liveGaps = {};
+      liveOrder.forEach((id, i) => { liveGaps[id] = i === 0 ? 0 : 0; });
+    }
+  }
+
   if (!liveOrder.length) {
-    // Race not started yet — show placeholder
     const podEl = document.getElementById('dashPodium');
-    if (podEl) podEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#555;font-family:Orbitron;font-size:12px;padding:40px">RACE NOT YET STARTED</div>';
+    if (podEl) podEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#555;font-family:Orbitron;font-size:12px;padding:40px">WAITING FOR RACE TO START…</div>';
     const listEl = document.getElementById('dashList'); if (listEl) listEl.innerHTML = '';
     const gridEl = document.getElementById('dashGrid'); if (gridEl) gridEl.innerHTML = '';
     return;
