@@ -231,12 +231,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <div><div class="dh1">SESSION DATA <b>· RACE</b></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
       <button id="dashShareBtn" style="font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;border:none;border-radius:6px;padding:7px 16px;cursor:pointer">𝕏 SHARE</button>
     </div>
-    <div class="dtitle">🏆 RACE RESULT</div>
+    <div class="dtitle" id="dashResultTitle">RACE RESULT</div>
     <div class="podium" id="dashPodium"></div>
     <div class="list" id="dashList"></div>
     <div class="fcgrid" id="dashGrid"></div>
     <div id="dzSection" style="display:none">
-      <div class="dz-title">💀 DNF — DID NOT FINISH</div>
+      <div class="dz-title">DNF — DID NOT FINISH</div>
       <div class="dz-grid" id="dzGrid"></div>
     </div>
   </div>
@@ -2044,19 +2044,24 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
-    if (isPitting && carLapProgress > 0.70) {
-      // stationary hold sized to the engine's actual service time (5-10s) for this stop
+    if (isPitting && carLapProgress > 0.88) {
+      // Pit lane runs along the S/F straight (top of track)
+      // Entry: last ~6% of lap (approaching pit entry after final corner)
+      // Service: stationary in box
+      // Exit: rejoins at start of next lap via pit exit
       const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id && e.lap === carLap);
-      const serviceFrac = Math.min(0.16, Math.max(0.055, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
-      const enterEnd = 0.74, holdEnd = enterEnd + serviceFrac;   // car sits still box during [enterEnd, holdEnd]
+      const serviceFrac = Math.min(0.07, Math.max(0.03, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
+      const enterEnd = 0.94, holdEnd = enterEnd + serviceFrac;
       if (carLapProgress < enterEnd) {
-        const pitFrac = (carLapProgress - 0.70) / (enterEnd - 0.70);
-        pt = getPitPoint(pitFrac * 0.45);                        // drive into the box
+        // driving into pit box from track (entry at ~T17 before S/F)
+        const pitFrac = (carLapProgress - 0.88) / (enterEnd - 0.88);
+        pt = getPitPoint(pitFrac * 0.4);
       } else if (carLapProgress < holdEnd) {
-        pt = getPitPoint(0.5);                                   // STATIONARY — tyres + refuel
+        pt = getPitPoint(0.5); // stationary in box
       } else {
+        // exiting pit onto track (rejoins just after S/F line)
         const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.02, (1 - holdEnd)));
-        pt = getPitPoint(0.55 + exitFrac * 0.45);                // accelerate back out
+        pt = getPitPoint(0.6 + exitFrac * 0.4);
       }
     } else {
       // launch from the grid slot (same stagger as the formation) and spread by pace
@@ -2066,7 +2071,7 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     }
 
     const logoId = 'logo-clip-' + id;
-    const showPitBadge = isPitting && carLapProgress > 0.70;
+    const showPitBadge = isPitting && carLapProgress > 0.88;
     const ringColor = showPitBadge ? '#ff9900' : team.color;
     const isLeaderDot = pos === 0;
     const leaderHalo = isLeaderDot ? `<circle cx="${pt.x}" cy="${pt.y}" r="13.5" fill="${team.color}" opacity="0.22"/>` : '';
@@ -2100,7 +2105,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     const hasPitted = currentLapData.pittedStatus ? currentLapData.pittedStatus[id] : false;
     const _cp = carProgress(id, elapsed);
     const carLap = _cp.carLap, carLapIdx = _cp.carLapIdx;
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac > 0.70;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac > 0.88;
 
     // Compute real tyre age: laps on current set since last pit
     const pitLaps = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
@@ -2127,10 +2132,15 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
       <span style="font-size:9px;font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1">${wearPct}%</span>
     </div>`;
 
-    // FUEL BAR vertical
+    // FUEL BAR: full tank at start, burns to empty at finish. After pit = refuel to full for remaining laps.
     let fuelFrac;
-    if (hasPittedCalc) { const la = Math.max(0, carLap - lastPitLap); fuelFrac = Math.max(0, (TOTAL_LAPS/2 - la) / (TOTAL_LAPS/2)) * 0.5; }
-    else { fuelFrac = Math.max(0, 1 - (carLap - 1) / TOTAL_LAPS); }
+    if (hasPittedCalc) {
+      const lapsRemaining = Math.max(1, TOTAL_LAPS - lastPitLap);
+      const lapsAfterPit = Math.max(0, carLap - lastPitLap);
+      fuelFrac = Math.max(0, 1 - lapsAfterPit / lapsRemaining);
+    } else {
+      fuelFrac = Math.max(0, 1 - (carLap - 1) / TOTAL_LAPS);
+    }
     const GAUGE_H = 30, fillH = Math.round(fuelFrac * GAUGE_H);
     const fuelCol = fuelFrac > 0.4 ? '#3b82f6' : fuelFrac > 0.15 ? '#ffd21a' : '#ff4444';
     const fuelGauge = `<div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0">
@@ -2151,7 +2161,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
         <img src="${team.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid ${team.color}55">
         <div style="min-width:0">
           <div style="font-size:10px;font-weight:700;color:${isLeader?'#fff':'#ccc'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">$${id}</div>
-          <div style="font-size:6.5px;color:#555;margin-top:1px">${isPitting?'<span style="color:#ff9900;font-weight:700">IN PIT</span>':hasPitted?'<span style="color:#00ff88">✓ PITTED</span>':comp}</div>
+          <div style="font-size:6.5px;color:#555;margin-top:1px">${isPitting?'<span style="color:#ff9900;font-weight:700">IN PIT</span>':hasPittedCalc?'<span style="color:#00ff88">✓ PITTED</span>':comp}</div>
         </div>
       </div>
       ${fuelGauge}
@@ -2180,12 +2190,17 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
 
     const _cp = carProgress(id, elapsed);
     const carLap = _cp.carLap, carLapProgress = _cp.frac, carLapIdx = _cp.carLapIdx;
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.70;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.88;
+
+    // Use pitLaps array to determine if car has COMPLETED its stop (not just entered)
+    const _pitLapsLb = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+    const _lastPitLb = _pitLapsLb.filter(p => p < carLap).pop() || 0;
+    const hasPittedActual = _lastPitLb > 0;
 
     let pitIndicator;
     if (isPitting) {
       pitIndicator = `<span class="pit-badge">IN PIT</span>`;
-    } else if (hasPitted) {
+    } else if (hasPittedActual) {
       pitIndicator = `<span style="font-size:8px;color:#00ff88">✓</span>`;
     } else {
       pitIndicator = `<span style="font-size:7px;color:#ff4444;font-family:'Space Mono',monospace">0</span>`;
@@ -2273,7 +2288,17 @@ window.vtShow = vtShow;
 let _tipX=0, _tipY=0, _tipActive=false;
 function attachTip(el, id) {
   el.addEventListener('mouseenter', e=>{ _tipX=e.clientX; _tipY=e.clientY; _tipActive=true; renderRowTip(id); });
-  el.addEventListener('mousemove',  e=>{ _tipX=e.clientX; _tipY=e.clientY; renderRowTip(id); });
+  el.addEventListener('mousemove',  e=>{
+    _tipX=e.clientX; _tipY=e.clientY;
+    // update position live on move
+    const tip=document.getElementById('rowTip');
+    if(tip&&tip.style.display!=='none'){
+      const W=360,H=220;
+      let x=_tipX-W-14; if(x<8) x=_tipX+14;
+      let y=Math.min(Math.max(8,_tipY-H/2),window.innerHeight-H-8);
+      tip.style.left=x+'px'; tip.style.top=y+'px';
+    }
+  });
   el.addEventListener('mouseleave', ()=>{ _tipActive=false; hideTip(); });
 }
 function hideTip() {
@@ -2302,7 +2327,9 @@ function renderRowTip(id) {
   const deg=Math.min(100,Math.round(tyreAge/(COMP_MAX[comp]||14)*100));
   const degCol=deg<40?'#00ff88':deg<70?'#ffd21a':'#ff4444';
   // fuel
-  let fuelFrac=hasPitted?Math.max(0,(TOTAL_LAPS/2-Math.max(0,cp.carLap-lastPitLap2))/(TOTAL_LAPS/2))*0.5:Math.max(0.04,1-(cp.carLap-1)/TOTAL_LAPS);
+  let fuelFrac=hasPitted
+    ? Math.max(0, 1 - Math.max(0,cp.carLap-lastPitLap2) / Math.max(1, TOTAL_LAPS-lastPitLap2))
+    : Math.max(0.04,1-(cp.carLap-1)/TOTAL_LAPS);
   const fuel=Math.round(fuelFrac*100);
   const fcol=fuel>50?'#22DD66':fuel>25?'#ffcc00':'#ff3b3b';
   // best lap (skip 0-time laps from DNF)
@@ -2314,7 +2341,12 @@ function renderRowTip(id) {
   const mvCol=mv>0?'#00ff88':mv<0?'#ff4444':'#888';
   const carSrc=team.car||team.logo.replace('.png','-car.png');
 
-  tip.style.cssText = 'position:fixed;z-index:500;display:flex;flex-direction:row;width:360px;height:220px;border-radius:12px;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)';
+  // Calculate position FIRST before touching display
+  const W=360, H=220;
+  let x=_tipX-W-14; if(x<8) x=_tipX+14;
+  let y=Math.min(Math.max(8,_tipY-H/2), window.innerHeight-H-8);
+
+  tip.style.cssText = `position:fixed;z-index:500;display:flex;flex-direction:row;width:${W}px;height:${H}px;left:${x}px;top:${y}px;border-radius:12px;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)`;
   tip.innerHTML=`
     <div style="padding:13px 14px;width:220px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -2343,11 +2375,6 @@ function renderRowTip(id) {
       </div>
       <div style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:16px 8px 8px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.92))">$${id}</div>
     </div>`;
-  // position: prefer left of cursor, fall back to right
-  const W=360, H=220;
-  let x=_tipX-W-14; if(x<8) x=_tipX+14;
-  let y=Math.min(Math.max(8,_tipY-H/2), window.innerHeight-H-8);
-  tip.style.left=x+'px'; tip.style.top=y+'px';
 }
 
 // ── SESSION DATA dashboard ──────────────────────────────────
@@ -2355,12 +2382,13 @@ function buildDash() {
   const {positions:liveOrder,gaps:liveGaps,elapsed,isComplete,prog}=window._LIVE||{};
   if(!liveOrder||!liveOrder.length) return;
   const currentLap=Math.min(TOTAL_LAPS,Math.floor((elapsed||0)/LAP_REAL_SECONDS)+1);
-  const subEl=document.getElementById('dashSub');
+  const titleEl=document.getElementById('dashResultTitle');
+  if(titleEl) titleEl.textContent=isComplete?'RACE RESULT':`RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
   if(subEl) subEl.textContent=`SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
 
   const pcard=(id,absPos)=>{
     const team=TEAMS.find(t=>t.id===id);
-    const gap=absPos===1?'RACE LEADER':`+${(liveGaps[id]||0).toFixed(3)}s`;
+    const gap=absPos===1?(isComplete?'RACE WINNER':'RACE LEADER'):`+${(liveGaps[id]||0).toFixed(3)}s`;
     const mv=team.gridPos-absPos; const mvS=mv>0?`▲${mv}`:mv<0?`▼${Math.abs(mv)}`:'—';
     return `<div class="pcard${absPos===1?' p1':''}" style="--pc:${team.color};--pc-glow:${team.color}88">
       <div class="media"><img src="${team.logo}" alt="$${id}"></div>
@@ -2390,13 +2418,13 @@ function buildDash() {
   const pitsLeft=TEAMS.filter(t=>!pitsDone.find(p=>p.team===t.id)&&!RACE.dnfLap[t.id]);
   const CC={SOFT:'#ff3b3b',MED:'#ffd21a',HARD:'#e8edf5'};
   let cards='';
-  if(s1K&&s2K&&s3K) cards+=`<div class="fc" style="--ac:#ffcc00"><div class="fc-h">⚡ SECTOR KINGS</div><div class="sk">
+  if(s1K&&s2K&&s3K) cards+=`<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div><div class="sk">
     <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk" style="color:#3b82f6">$${s1K.id}</span><span style="color:#3b82f6;font-size:10px">S1</span><span class="sktime">${prog.fastestS1.time.toFixed(3)}s</span></div>
     <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk" style="color:#ef4444">$${s2K.id}</span><span style="color:#ef4444;font-size:10px">S2</span><span class="sktime">${prog.fastestS2.time.toFixed(3)}s</span></div>
     <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk" style="color:#10b981">$${s3K.id}</span><span style="color:#10b981;font-size:10px">S3</span><span class="sktime">${prog.fastestS3.time.toFixed(3)}s</span></div>
   </div>${flK?`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.12);font-size:11px;color:#cfcfd6">Fastest lap: <b style="font-family:'JetBrains Mono';color:#ffcc00">$${flK.id} — ${fmt(prog.fastestLap.time)}</b> (Lap ${prog.fastestLap.lap})</div>`:''}</div>`;
-  if(bigMover) cards+=`<div class="fc" style="--ac:${bigMover.color}"><div class="fc-h">📈 BIGGEST MOVER</div><div class="fc-big"><span class="u" style="color:${bigMover.color}">$${bigMover.id}</span> <span style="font-family:'JetBrains Mono'">▲${bigMove}</span></div><div class="fc-sub">Started P${bigMover.gridPos} — now P${bigMover.gridPos-bigMove}</div></div>`;
-  cards+=`<div class="fc" style="--ac:#ff9900"><div class="fc-h">🔧 PIT STOPS — ${pitsDone.length} DONE</div><div class="sk" style="max-height:160px;overflow-y:auto">
+  if(bigMover) cards+=`<div class="fc" style="--ac:${bigMover.color}"><div class="fc-h">BIGGEST MOVER</div><div class="fc-big"><span class="u" style="color:${bigMover.color}">$${bigMover.id}</span> <span style="font-family:'JetBrains Mono'">▲${bigMove}</span></div><div class="fc-sub">Started P${bigMover.gridPos} — now P${bigMover.gridPos-bigMove}</div></div>`;
+  cards+=`<div class="fc" style="--ac:#ff9900"><div class="fc-h">PIT STOPS — ${pitsDone.length} DONE</div><div class="sk" style="max-height:160px;overflow-y:auto">
     ${pitsDone.map(p=>{const t=TEAMS.find(x=>x.id===p.team);const ca=RACE.strategies[p.team]?.a||'MED',cb=RACE.strategies[p.team]?.b||'MED';return `<div class="skrow"><span class="skdot" style="background:${t.color}"></span><span class="sktk" style="color:${t.color};font-size:10px">$${p.team}</span><span style="color:${CC[ca]};font-size:9px">${ca}</span><span style="color:#444">→</span><span style="color:${CC[cb]};font-size:9px">${cb}</span><span class="sktime" style="font-size:9px">L${p.lap}</span></div>`;}).join('')}
     ${pitsLeft.map(t=>`<div class="skrow"><span class="skdot" style="background:#333"></span><span class="sktk" style="color:#555;font-size:10px">$${t.id}</span><span style="color:#ff4444;font-size:9px">PENDING</span></div>`).join('')}
   </div></div>`;
