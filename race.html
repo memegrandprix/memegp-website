@@ -28,6 +28,104 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .session-tab{border-radius:4px;padding:4px 14px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid #222;color:#555;text-decoration:none}
 .session-tab.active{background:#ff0040;color:#fff;border-color:#ff0040}
 .countdown{font-family:'Space Mono',monospace;font-size:16px;color:#ccc;font-weight:700}
+/* vtoggle — FP-identical */
+.vtoggle{display:none;border:1px solid rgba(255,204,0,.3);border-radius:7px;overflow:hidden;background:rgba(8,8,14,.6)}
+.vtoggle button{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.2px;padding:5px 11px;background:none;border:none;color:#888;cursor:pointer;white-space:nowrap}
+.vtoggle button.on{background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000}
+/* tower column headers */
+.tower-cols{display:none;padding:3px 8px;border-bottom:1px solid rgba(255,204,0,.12);font-family:'Orbitron',sans-serif;font-size:6px;font-weight:700;letter-spacing:1.5px;color:#444;display:flex;gap:0}
+.tower-cols span{flex-shrink:0}
+.tower-cols.show{display:flex}
+.lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
+/* ── ROW TIP hover card — matches FP exactly ── */
+#rowTip{position:fixed;z-index:600;display:none;width:auto;padding:0;border-radius:12px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));
+  border:1px solid rgba(255,204,0,.25);
+  box-shadow:0 16px 48px rgba(0,0,0,.75);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);pointer-events:none}
+#rowTip .tip-body{padding:13px 14px;width:220px;flex-shrink:0}
+#rowTip .tip-car{position:relative;width:140px;align-self:stretch;flex-shrink:0;background:#0c0c14;border-left:1px solid rgba(255,255,255,.1)}
+#rowTip .tcar-half{position:absolute;left:0;right:0;height:50%;overflow:hidden}
+#rowTip .tcar-half img{width:100%;height:100%;object-fit:cover}
+#rowTip .tcar-top{top:0}
+#rowTip .tcar-top img{object-position:center 30%}
+#rowTip .tcar-bot{bottom:0;border-top:1.5px solid var(--tc)}
+#rowTip .tcar-bot img{object-position:center}
+#rowTip .tip-car .acc{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+#rowTip .tip-car .tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 8px 9px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.95))}
+#rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#rowTip .tip-head img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4)}
+#rowTip .tip-head b{font-family:'Orbitron';font-size:14px;color:#fff}
+#rowTip .tip-h2{font-family:'Orbitron';font-size:8.5px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+#rowTip .tip-sec{margin-bottom:10px}
+#rowTip .ssec{display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 0}
+#rowTip .ssec>span:first-child{font-family:'Orbitron';font-size:10px;font-weight:700;letter-spacing:1px}
+#rowTip .tip-live{border-top:1px dashed rgba(255,255,255,.14);padding-top:9px;margin-top:2px}
+#rowTip .tip-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor}
+#rowTip .tcomp{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:var(--tc);border:1px solid var(--tc);border-radius:4px;padding:1px 7px}
+#rowTip .tl-row{display:flex;align-items:center;gap:8px;padding:2px 0}
+#rowTip .tl-row>span:first-child{font-family:'Orbitron';font-size:9px;font-weight:700;letter-spacing:1px;color:#888;min-width:34px}
+#rowTip .bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+#rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
+#rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
+/* SESSION DATA DASHBOARD — FP-identical */
+#dashboardView{position:fixed;left:0;right:0;top:38px;bottom:0;overflow-y:auto;z-index:200;background:#040408}
+#dashboardView .dwrap{max-width:960px;margin:0 auto;padding:22px 18px 70px}
+#dashboardView .dhead{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+#dashboardView .dh1{font-family:'Orbitron';font-weight:900;font-size:clamp(18px,3.4vw,26px);letter-spacing:2px;color:#fff}
+#dashboardView .dh1 b{color:#ffcc00}
+#dashboardView .dsub{font-size:11px;letter-spacing:2px;color:#7a7a88;margin-top:6px}
+#dashboardView .dtitle{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:#ffcc00;text-shadow:0 0 12px rgba(255,204,0,.4);margin:0 0 14px}
+#dashboardView .podium{display:grid;grid-template-columns:1fr 1.22fr 1fr;gap:13px;align-items:end;margin-bottom:14px}
+#dashboardView .pcard{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid var(--pc,#444);box-shadow:0 0 26px rgba(0,0,0,.55),0 0 24px var(--pc-glow,transparent)}
+#dashboardView .media{position:absolute;inset:0}
+#dashboardView .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:60px;line-height:1;color:#fff;opacity:.95;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#dashboardView .crown{position:absolute;top:9px;right:11px;z-index:2;font-size:19px}
+#dashboardView .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 12px 13px;background:linear-gradient(transparent,rgba(4,4,8,.5) 32%,rgba(4,4,8,.95))}
+#dashboardView .accent{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:3;background:var(--pc,#444);box-shadow:0 0 10px var(--pc,#444)}
+#dashboardView .tk{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.5px}
+#dashboardView .lap{font-family:'JetBrains Mono';font-weight:700;font-size:17px;color:#ffcc00;margin-top:2px}
+#dashboardView .runs{font-size:9px;letter-spacing:1.2px;color:#bbb;margin-top:3px}
+#dashboardView .pcard.p1 .num{font-size:72px}
+#dashboardView .pcard.p1 .tk{font-size:18px}
+#dashboardView .pcard.p1 .lap{font-size:20px}
+#dashboardView .list{background:linear-gradient(170deg,rgba(20,20,30,.6),rgba(8,8,14,.7));border:1px solid rgba(255,204,0,.12);border-radius:12px;margin-bottom:24px;overflow:hidden}
+#dashboardView .lrow{display:grid;grid-template-columns:32px 34px 1fr 90px 64px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+#dashboardView .lrow:last-child{border-bottom:none}
+#dashboardView .lpos{font-family:'Orbitron';font-weight:800;font-size:14px;color:#888;text-align:center}
+#dashboardView .lav{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--pc,#444)}
+#dashboardView .lav img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .ltk{font-family:'Orbitron';font-weight:700;font-size:12px}
+#dashboardView .llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
+#dashboardView .lgap{font-family:'JetBrains Mono';font-size:11px;color:#7a7a88;text-align:right}
+#dashboardView .fcgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+#dashboardView .fc{position:relative;overflow:hidden;background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,#ffcc00);border-radius:12px;padding:16px}
+#dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;margin-bottom:10px}
+#dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(16px,2.8vw,22px);line-height:1.06;color:#fff}
+#dashboardView .fc-sub{font-size:11px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+#dashboardView .fc-photo{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:0;background-size:cover;background-position:center 22%;border-radius:0 12px 12px 0}
+#dashboardView .fc-photo.duo{display:flex}
+#dashboardView .fc-photo.duo>div{flex:1;background-size:cover;background-position:center 22%}
+#dashboardView .fc-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(to right,rgba(12,12,20,.97) 30%,rgba(12,12,20,.62) 55%,rgba(12,12,20,.30))}
+#dashboardView .fc>*:not(.fc-photo):not(.fc-scrim){position:relative;z-index:1}
+#dashboardView .fc.hasphoto .fc-h,#dashboardView .fc.hasphoto .fc-big,#dashboardView .fc.hasphoto .fc-sub{max-width:62%}
+#dashboardView .sk{display:flex;flex-direction:column;gap:7px}
+#dashboardView .skrow{display:flex;align-items:center;gap:9px;font-size:13px}
+#dashboardView .skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#dashboardView .sktk{font-family:'Orbitron';font-weight:700;font-size:12px;min-width:74px}
+#dashboardView .sktime{font-family:'JetBrains Mono';font-weight:700;margin-left:auto;color:#eee}
+#dashboardView .dz-title{font-family:'Orbitron';font-weight:800;font-size:13px;letter-spacing:3px;color:#ff4444;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+#dashboardView .dz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+#dashboardView .dz-card{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1.5px solid #ff4444}
+#dashboardView .dz-card .media{position:absolute;inset:0;filter:grayscale(100%) brightness(.55)}
+#dashboardView .dz-card .media img{width:100%;height:100%;object-fit:cover;display:block}
+#dashboardView .dz-card .num{position:absolute;top:0;left:9px;z-index:2;font-family:'Orbitron';font-weight:900;font-size:52px;line-height:1;color:#fff;opacity:.9}
+#dashboardView .dz-card .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:20px 10px 10px;background:linear-gradient(transparent,rgba(4,4,8,.96))}
+#dashboardView .dz-card .tk{font-family:'Orbitron';font-weight:800;font-size:12px;color:#fff}
+#dashboardView .dz-card .dnf-tag{font-family:'Orbitron';font-size:8px;font-weight:700;letter-spacing:2px;color:#ff4444;margin-top:3px}
+#dashboardView .dz-card .accent{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:#ff4444}
+@media(max-width:640px){#dashboardView .fcgrid{grid-template-columns:1fr}#dashboardView .podium{gap:8px}}
 .lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
 
 .stats-bar{background:#08080c;border-bottom:1px solid #1a1a1a;padding:4px 20px;display:flex;align-items:center;gap:24px;overflow:hidden}
@@ -147,36 +245,39 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .brand{background:none!important;color:#ffcc00!important;-webkit-text-fill-color:#ffcc00!important;text-shadow:0 0 10px rgba(255,204,0,.45)!important}
 .session-tab.active{color:#ffcc00!important;text-shadow:0 0 8px rgba(255,204,0,.5)}
 .session-tab{color:#888}
+.fund-banner{position:absolute;left:18px;right:18px;bottom:16px;z-index:3;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:11px 18px;border-radius:14px;background:linear-gradient(100deg,rgba(20,20,30,.92),rgba(10,10,16,.95));border:1px solid rgba(255,204,0,.18);box-shadow:0 10px 36px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.fund-banner .fb-text{flex:1;min-width:210px}
+.fund-banner .fb-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;letter-spacing:1.4px;color:#fff}
+.fund-banner .fb-title span{color:#ffcc00;text-shadow:0 0 14px rgba(255,204,0,.45)}
+.fund-banner .fb-sub{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.3px;color:#8a8a96;margin-top:3px}
+.fund-banner .fb-ca{display:flex;align-items:center;gap:9px;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid rgba(255,204,0,.22);border-radius:9px;padding:6px 8px 6px 10px;transition:border-color .15s}
+.fund-banner .fb-ca:hover{border-color:rgba(255,204,0,.5)}
+.fund-banner .fb-tag{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1.4px;color:#ffcc00;border:1px solid rgba(255,204,0,.4);border-radius:5px;padding:3px 7px}
+.fund-banner .fb-addr{font-family:'JetBrains Mono',monospace;font-size:11px;color:#cfcfd6;max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fund-banner .fb-copy{font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;color:#0a0a12;background:#ffcc00;border-radius:5px;padding:5px 10px}
+.fund-banner .fb-buy{font-family:'Orbitron';font-size:11px;font-weight:800;letter-spacing:1.4px;color:#0a0a12;text-decoration:none;background:linear-gradient(180deg,#ffe27a,#ffc400);border-radius:9px;padding:10px 18px;white-space:nowrap;box-shadow:0 0 18px rgba(255,196,0,.35);transition:filter .15s}
+.fund-banner .fb-buy:hover{filter:brightness(1.08)}
 </style>
 </head>
 <body>
-<!-- ░░░░░░ ACCESS LOCK — delete this entire block to open the session ░░░░░░ -->
-<div id="sessionLock">
-  <div class="lk-card">
-    <div class="lk-badge"><span class="lk-dot"></span>LOCKED</div>
-    <div class="lk-title">RACE DAY</div>
-    <div class="lk-sub">SATOSHI SPEEDWAY · ROUND 1</div>
-    <div class="lk-when">UNLOCKS SUNDAY · 21 JUNE · 18:00 UTC</div>
-    <a class="lk-back" href="index.html">← RACE CONTROL</a>
+<!-- lock stripped for preview -->
+<div id="rowTip"></div>
+<div id="dashboardView" style="display:none">
+  <div class="dwrap">
+    <div class="dhead">
+      <div><div class="dh1">SESSION DATA <b>· RACE</b> <span style="font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:1px;color:#3a6;vertical-align:middle;margin-left:6px;opacity:.8">● LIVE-DASH<span id="dashHeartbeat" style="color:#ffcc00;margin-left:4px"></span></span></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
+      <button id="dashShareBtn" style="font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;border:none;border-radius:6px;padding:7px 16px;cursor:pointer">𝕏 SHARE</button>
+    </div>
+    <div class="dtitle" id="dashResultTitle">RACE COMPLETED</div>
+    <div class="podium" id="dashPodium"></div>
+    <div class="list" id="dashList"></div>
+    <div class="fcgrid" id="dashGrid"></div>
+    <div id="dzSection" style="display:none">
+      <div class="dz-title">DNF — DID NOT FINISH</div>
+      <div class="dz-grid" id="dzGrid"></div>
+    </div>
   </div>
 </div>
-<style>
-  #sessionLock{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at 50% 38%, rgba(20,20,30,.97), rgba(4,4,8,.995));font-family:'Orbitron',sans-serif}
-  #sessionLock .lk-card{text-align:center;padding:46px 58px;border:1px solid rgba(255,204,0,.25);border-radius:16px;
-    background:linear-gradient(165deg,rgba(22,22,32,.92),rgba(8,8,14,.96));box-shadow:0 24px 70px rgba(0,0,0,.65)}
-  #sessionLock .lk-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:3px;color:#ff3b3b;
-    border:1px solid rgba(255,59,59,.5);border-radius:6px;padding:6px 16px;margin-bottom:24px}
-  #sessionLock .lk-dot{width:7px;height:7px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 8px #ff3b3b;animation:lkb 1s infinite}
-  @keyframes lkb{0%,100%{opacity:1}50%{opacity:.3}}
-  #sessionLock .lk-title{font-size:40px;font-weight:900;letter-spacing:5px;color:#ffcc00;margin-bottom:6px}
-  #sessionLock .lk-sub{font-size:10.5px;letter-spacing:2.5px;color:#777;margin-bottom:28px}
-  #sessionLock .lk-when{font-family:'Chakra Petch',sans-serif;font-size:14px;letter-spacing:1px;color:#d4d4dc;line-height:1.7;margin-bottom:30px}
-  #sessionLock .lk-back{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;color:#ffcc00;text-decoration:none;
-    border:1px solid #ffcc00;padding:11px 24px;border-radius:6px;transition:filter .15s}
-  #sessionLock .lk-back:hover{filter:brightness(1.15)}
-</style>
-<!-- ░░░░░░ END ACCESS LOCK ░░░░░░ -->
 
 
 <div class="team-picker-overlay" id="teamPicker">
@@ -189,18 +290,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <div class="top-bar">
   <div style="display:flex;align-items:center;gap:12px">
-    <div class="live-badge" id="liveBadge" style="display:none">
-      <div class="live-dot"></div>
-      <span style="font-size:11px;font-weight:700;color:#ff0040;letter-spacing:2px">LIVE</span>
-    </div>
     <a href="index.html" class="brand">MEME GRAND PRIX</a>
-    <span id="trackInfo" style="font-size:10px;color:#555;margin-left:8px"></span>
+    <span id="trackInfo" style="font-size:10px;color:#555;margin-left:4px"></span>
   </div>
-  <div style="display:flex;align-items:center;gap:12px">
+  <div style="display:flex;align-items:center;gap:10px">
     <a href="fp1.html" class="session-tab" style="opacity:.6">PRACTICE</a>
     <a href="quali.html" class="session-tab" style="opacity:.6">QUALI</a>
     <a href="race.html" class="session-tab active">RACE</a>
     <span class="lap-counter" id="lapCounter">LAP 0/20</span>
+    <div class="vtoggle" id="vtoggle" style="display:none">
+      <button id="tabLive" class="on" onclick="vtShow('live')">LIVE</button>
+      <button id="tabData" onclick="vtShow('data')">SESSION DATA</button>
+    </div>
   </div>
   <div class="countdown" id="sessionClock">--:--</div>
 </div>
@@ -272,14 +373,16 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#ffcc00" id="lapDisplay">LAP 0/20</div>
       </div>
     </div>
+    <div class="tower-cols" id="towerCols">
+      <span style="width:16px"></span>
+      <span style="flex:1">DRIVER</span>
+      <span style="width:20px;text-align:right">FUEL</span>
+      <span style="width:38px;text-align:center;margin-left:6px">TYRES</span>
+      <span style="width:22px"></span>
+    </div>
     <div id="raceTower" style="flex:1;overflow-y:auto"></div>
-    <div style="padding:10px 14px;border-top:1px solid #1a1a1a">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#888">FAN ZONE</span>
-        <span id="fanCount" style="font-family:'Space Mono',monospace;font-size:10px;color:#ccc;font-weight:700"></span>
-      </div>
-      <div class="fan-zone" id="fanZone"></div>
-      <div id="yourTeam" style="font-family:'Space Mono',monospace;font-size:9px;color:#555;margin-top:6px"></div>
+    <div style="display:none">
+      <span id="fanCount"></span><div class="fan-zone" id="fanZone"></div><div id="yourTeam"></div>
     </div>
   </div>
 
@@ -314,7 +417,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <!-- get tilted to match the visible track.             -->
       <!-- ════════════════════════════════════════════════ -->
       <path id="trackPath" d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="none"/>
-      <path id="pitPath" d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="none"/>
+      <path id="pitPath" d="M 152 133 L 349 128" fill="none" stroke="none"/>
 
       <!-- Background grid -->
       <rect x="-30" y="95" width="600" height="340" fill="url(#gridBg)"/>
@@ -337,10 +440,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" pathLength="3000" fill="none" stroke="#c8f5e0" stroke-width="4" stroke-dasharray="1000 2000" stroke-dashoffset="-2000" stroke-linecap="round"/>
         <path d="M 120 122 L 380 115 C 415 122, 423 137, 418 152 C 443 162, 477 167, 492 182 C 517 197, 529 215, 514 225 C 512 240, 493 243, 483 238 C 458 246, 443 231, 428 221 C 413 226, 395 230, 385 225 C 360 220, 357 201, 332 186 C 282 196, 210 215, 160 225 C 155 250, 173 257, 188 272 C 213 282, 227 287, 252 277 C 262 282, 263 289, 258 294 C 228 324, 182 351, 132 346 C 117 351, 120 342, 105 337 C 90 342, 87 353, 77 358 C 62 343, 51 306, 46 281 C 51 231, 77 152, 92 122 C 107 120, 115 120, 120 122 Z" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.8" stroke-dasharray="5 12"/>
         <!-- ===== NEON PIT LANE ===== -->
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="butt"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="butt"/>
-        <path d="M 84 138 Q 130 142 185 142 L 345 142 Q 365 142 380 115" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
-        <text x="258" y="170" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
+        <path d="M 152 133 L 349 128" fill="none" stroke="#0e0e18" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(190,196,216,.20)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 152 133 L 349 128" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.1" stroke-dasharray="5 9" stroke-linecap="butt"/>
+        <text x="250" y="150" font-family="Orbitron,sans-serif" font-size="11" font-weight="900" letter-spacing="5" fill="#ffcc00" text-anchor="middle" opacity="0.92">PIT LANE</text>
 
         <!-- START / FINISH -->
         <rect x="240" y="112" width="3" height="14" fill="#ffcc00"/>
@@ -362,6 +465,18 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
         <g id="carDots"></g>
       </g>
     </svg>
+    <div class="fund-banner">
+      <div class="fb-text">
+        <div class="fb-title">FUND THE FUTURE OF <span>MEME&nbsp;GP</span></div>
+        <div class="fb-sub">Help us build the first 3D MEMEGP Virtual Racing Platform.</div>
+      </div>
+      <div class="fb-ca" id="fbCa" role="button" tabindex="0" title="Copy contract address">
+        <span class="fb-tag">CONTRACT</span>
+        <span class="fb-addr">4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump</span>
+        <span class="fb-copy" id="fbCopy">COPY</span>
+      </div>
+      <a class="fb-buy" href="https://pump.fun/coin/4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump" target="_blank" rel="noopener">FUND $MEMEGP →</a>
+    </div>
   </div>
 
   <div class="right">
@@ -395,28 +510,936 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 </div>
 
 <!-- Single source of truth: frozen base + earned upgrades. Race reads stats from here. -->
-<script src="stats-calculator.js"></script>
-<script src="race-engine.js"></script>
+<script>
+/**
+ * MEME GP — Shared Stat Calculator (B-prime, deployed 2026-05-19)
+ * ============================================================
+ * Single source of truth for the 5-stat formulas.
+ *
+ * Design: B-prime — approved May 17, 2026 (see transcript
+ * 2026-05-17-14-33-38-memegp-formula-rebuild-magnet-strategy.txt)
+ *
+ * Used by:
+ *   - gp-central.html        (live Pit Wall rendering)
+ *   - team pages             (stat displays)
+ *   - Friday-freeze snapshot (every Friday 09:00 SAST)
+ *   - race engine            (consumes frozen stats)
+ *
+ * Why piecewise: the May 17 session diagnosed three problems with the
+ * old simple-log formulas:
+ *   1. DRAG ceiling pile-up (11 of 12 teams at 9.5)
+ *   2. AERO scores compressed to 1-3 (no differentiation)
+ *   3. ENGINE bottom too harsh ($10K coins → 1.0)
+ *
+ * B-prime fixes each by anchoring SCOREPOSTS at meaningful mcap/vol/liq
+ * levels and interpolating between them, so growth is measurable and
+ * the field spreads across the full 1.0-9.5 range.
+ *
+ * IMPORTANT: This file IS the formula. Any change here ripples
+ * across the entire platform. Modify with care.
+ * ============================================================
+ */
+(function (global) {
+  'use strict';
+
+  // ============================================================
+  // PRE_REVEAL_MODE — Sunday 7 June 2026 inaugural rankings drop
+  // ------------------------------------------------------------
+  // When true: calcStats returns null for engine/aero/chassis/drag/overall
+  // PIT stays visible (it's editorial, not measured)
+  // Rendering pages already handle null via existing chassis logic
+  //
+  // FLIP TO FALSE Sunday 7 June after the countdown reveal completes.
+  // ============================================================
+  const PRE_REVEAL_MODE = false;   // LIVE — reveals complete, full grid public
+
+  // ============================================================
+  // FREEZE OVERRIDE — force the whole platform into frozen mode
+  // ------------------------------------------------------------
+  // The automatic freeze only covers Fri 09:00 -> Sun 23:59 SAST.
+  // For a reveal that runs OUTSIDE that window (e.g. a Monday drop),
+  // set this to true so the Pit Wall reads the locked snapshot.json
+  // instead of going live and drifting mid-reveal. Flip back to
+  // false once the reveal is done and you want live data again.
+  // ============================================================
+  const FREEZE_OVERRIDE = false;
+
+  // ============================================================
+  // STAGGERED REVEAL — inaugural Power Rankings drop
+  // ------------------------------------------------------------
+  // Reveals one team every `intervalMinutes`, worst OVR first
+  // (P15 -> P1), purely time-gated on the client — NO redeploys.
+  //
+  // While `startUTC` is null, or before it passes, every score
+  // stays hidden (the pre-reveal blackout). As each interval
+  // elapses, the next team in `order` unlocks. Any page load — or
+  // the 60s tick on open pages — shows the correct state for the
+  // current time automatically.
+  //
+  // Set startUTC to an ISO-8601 UTC string once the time is locked,
+  // e.g. '2026-06-07T14:00:00Z'. Flip PRE_REVEAL_MODE to false after
+  // the drop completes to force everything live.
+  // ============================================================
+  const REVEAL = {
+    startUTC: null,            // TODO: set when the Sunday start time is locked
+    intervalMinutes: 30,
+    // P15 -> P1 (worst OVR first, champion last).
+    // VERIFIED against the frozen 2026-W23 snapshot + full history.json
+    // (DRAG uses all days) via verify-reveal-order.js on 6 Jun 2026.
+    // Near-ties within 0.1 OVR (a late move could swap these):
+    //   MONKO / MARS         (2.9 / 3.0)
+    //   PEPONK / MOMO / BILLY / VIBECOIN  (5.5 / 5.6 / 5.7 / 5.8)
+    order: [
+      'NEURO', 'MONKO', 'MARS', '420BLAZEIT', 'SUS', 'SHIH', 'DOBERMANN',
+      'LOL', 'PEPONK', 'MOMO', 'BILLY', 'VIBECOIN', 'MASK', 'TURBO', 'PUP',
+    ],
+  };
+
+  // PREVIEW KEY — open any page with ?preview=<this value> to force-reveal
+  // everything IN THAT BROWSER ONLY (for screenshotting cards before the
+  // public drop). Inert without the URL param. Use it on a LOCAL copy for
+  // zero public exposure. Note: the key lives in this public file, so it's
+  // convenience, not security — the truly private path is local-only.
+  const PREVIEW_KEY = 'gp-grid-preview-2026';
+  function _previewActive() {
+    try {
+      return typeof location !== 'undefined' &&
+             typeof location.search === 'string' &&
+             location.search.indexOf('preview=' + PREVIEW_KEY) !== -1;
+    } catch (e) { return false; }
+  }
+
+  // How many teams are revealed as of `now` (Date, optional)?
+  function revealedCount(now) {
+    if (_previewActive()) return REVEAL.order.length; // preview: show the full grid
+    if (!REVEAL.startUTC) return 0;
+    const start = Date.parse(REVEAL.startUTC);
+    if (isNaN(start)) return 0;
+    const t = now ? now.getTime() : Date.now();
+    if (t < start) return 0;
+    const step = REVEAL.intervalMinutes * 60 * 1000;
+    const count = Math.floor((t - start) / step) + 1; // team 1 reveals at start
+    return Math.min(count, REVEAL.order.length);
+  }
+
+  // Is a given team's score revealed yet?
+  // PRE_REVEAL_MODE === false is a master override -> everything live.
+  function isRevealed(ticker, now) {
+    if (_previewActive()) return true;          // preview: reveal in this browser only
+    if (PRE_REVEAL_MODE === false) return true;
+    const idx = REVEAL.order.indexOf(ticker);
+    if (idx === -1) return true;   // unknown ticker -> don't hide it
+    return idx < revealedCount(now);
+  }
+
+  // ----- helpers -----
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+  function round(v) { return Math.round(v * 10) / 10; }
+
+  // ============================================================
+  // ENGINE — raw power from market cap
+  // ------------------------------------------------------------
+  // Piecewise log10(mcap) with scoreposts:
+  //   $10K   → 1.5  (entry-tier)
+  //   $250K  → 4.5  (mid-tier)
+  //   $5M    → 7.0  (strong)
+  //   $100M+ → 9.5  (whale)
+  // ============================================================
+  function calcEngine(mcap) {
+    if (!mcap || mcap <= 0) return 1.0;
+    const lm = Math.log10(mcap);
+    let raw;
+    if (lm <= 4.0) {
+      raw = 1.5;
+    } else if (lm <= 5.4) {        // $10K → $250K
+      raw = 1.5 + (4.5 - 1.5) * (lm - 4.0) / (5.4 - 4.0);
+    } else if (lm <= 6.7) {        // $250K → $5M
+      raw = 4.5 + (7.0 - 4.5) * (lm - 5.4) / (6.7 - 5.4);
+    } else if (lm <= 8.0) {        // $5M → $100M
+      raw = 7.0 + (9.5 - 7.0) * (lm - 6.7) / (8.0 - 6.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // AERO — downforce from trading activity
+  // ------------------------------------------------------------
+  // DUAL PATH: take the MAX of two scores. A team strong in EITHER
+  // dimension gets credit. This fixes the old problem where huge-cap
+  // teams with real volume scored low on turnover %.
+  //
+  // Path 1 (turnover): vol / mcap as %
+  //   0.1%  → 1.0
+  //   5%    → 5.0
+  //   30%+  → 9.5
+  //
+  // Path 2 (absolute volume in USD):
+  //   $50      → 1.0
+  //   $5K      → 5.0
+  //   $100K+   → 9.5
+  // ============================================================
+  function calcAero(mcap, vol) {
+    if (!mcap || !vol) return 1.0;
+    // Path 1 — turnover
+    const turn = (vol / mcap) * 100;
+    let aerTurn;
+    if (turn <= 0.1) {
+      aerTurn = 1.0;
+    } else if (turn <= 5) {
+      // log scale: log10(0.1) = -1, log10(5) ≈ 0.7
+      aerTurn = 1.0 + 4.0 * (Math.log10(turn) - (-1)) / (Math.log10(5) - (-1));
+    } else if (turn <= 30) {
+      aerTurn = 5.0 + 4.5 * (Math.log10(turn) - Math.log10(5)) / (Math.log10(30) - Math.log10(5));
+    } else {
+      aerTurn = 9.5;
+    }
+    // Path 2 — absolute volume
+    let aerAbs;
+    if (vol <= 50) {
+      aerAbs = 1.0;
+    } else if (vol <= 5000) {
+      aerAbs = 1.0 + 4.0 * (Math.log10(vol) - 1.7) / (3.7 - 1.7);
+    } else if (vol <= 100000) {
+      aerAbs = 5.0 + 4.5 * (Math.log10(vol) - 3.7) / (5.0 - 3.7);
+    } else {
+      aerAbs = 9.5;
+    }
+    return clamp(Math.max(aerTurn, aerAbs), 1.0, 9.5);
+  }
+
+  // ============================================================
+  // CHASSIS — stiffness from liquidity depth (AMM teams)
+  // ------------------------------------------------------------
+  // Piecewise log10(liq) with scoreposts:
+  //   $5K    → 1.0  (thin pool)
+  //   $50K   → 5.0  (mid pool)
+  //   $500K+ → 9.5  (deep pool)
+  // Returns null if liq is missing — excluded from overall.
+  // ============================================================
+  function calcChassis(liq) {
+    if (!liq || liq <= 0) return null;
+    const ll = Math.log10(liq);
+    let raw;
+    if (ll <= 3.7) {              // ≤ $5K
+      raw = 1.0;
+    } else if (ll <= 4.7) {       // $5K → $50K
+      raw = 1.0 + 4.0 * (ll - 3.7);
+    } else if (ll <= 5.7) {       // $50K → $500K
+      raw = 5.0 + 4.5 * (ll - 4.7);
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // CHASSIS (Runes proxy) — for Bitcoin Runes teams
+  // ------------------------------------------------------------
+  // Bitcoin Runes don't have AMM liquidity pools. Magic Eden uses
+  // an order book model that isn't directly comparable to AMM depth.
+  // Holders data isn't available on free APIs (Ordiscan free tier
+  // doesn't expose holder counts for runes).
+  //
+  // Proxy formula: wide log scale of absolute 24h volume, calibrated
+  // so a healthy Bitcoin Runes market lands mid-pack:
+  //   $500    → 1.0
+  //   $5K     → 5.0
+  //   $100K+  → 9.5
+  //
+  // This curve is DIFFERENT from AERO's abs-volume path (which has
+  // the same scoreposts but combines with turnover via max()).
+  // Here it's standalone, scaling absolute trade activity to chassis.
+  //
+  // Disclaimer: this is a proxy. Real holder integration is on
+  // the platform roadmap. See teams-billy.html for the public note.
+  // ============================================================
+  function calcChassisRunes(vol) {
+    if (!vol || vol <= 0) return 1.0;
+    const lv = Math.log10(vol);
+    let raw;
+    if (lv <= 2.7) {              // ≤ $500
+      raw = 1.0;
+    } else if (lv <= 3.7) {       // $500 → $5K
+      raw = 1.0 + 4.0 * (lv - 2.7);
+    } else if (lv <= 5.0) {       // $5K → $100K
+      raw = 5.0 + 4.5 * (lv - 3.7) / 1.3;
+    } else {
+      raw = 9.5;
+    }
+    return clamp(raw, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // DRAG — straight-line stability from multi-day data
+  // ------------------------------------------------------------
+  // Multi-day composite:
+  //   drag_raw = 0.6 × vol_score + 0.4 × stab_score, then map to 1.0-9.5
+  //
+  //   vol_score:  log10(avg_vol) scaled (avg_vol $500 → 0, $100K → 10)
+  //   stab_score: 10 - std_chg/2 (std 0 → 10, std 20+ → 0)
+  //
+  // FLOOR: if avg_vol < $500, drag = 1.0 (dead-trade penalty)
+  //
+  // history is an array of past snapshots, each with .teams[ticker]
+  // containing { vol, change24h }. If history is missing/empty, falls
+  // back to single-day (vol, change24h) from `d` itself.
+  // ============================================================
+  function calcDrag(d, history, ticker) {
+    // Build the history we'll use — if no snapshots, use today only
+    let chgs = [];
+    let vols = [];
+    if (history && history.length > 0 && ticker) {
+      for (const snap of history) {
+        const t = snap && snap.teams && snap.teams[ticker];
+        if (t) {
+          if (typeof t.change24h === 'number') chgs.push(t.change24h);
+          else if (typeof t.change_24h === 'number') chgs.push(t.change_24h);
+          if (typeof t.vol === 'number') vols.push(t.vol);
+          else if (typeof t.vol_24h === 'number') vols.push(t.vol_24h);
+        }
+      }
+    }
+    // If no history found, use today's snapshot
+    if (chgs.length === 0 && d) {
+      chgs = [d.change24h || 0];
+      vols = [d.vol || 0];
+    }
+    // Compute avg_vol
+    const avgVol = vols.length ? vols.reduce((a, b) => a + b, 0) / vols.length : 0;
+    // Floor: dead trade → 1.0
+    if (avgVol < 500) return 1.0;
+    // Compute std of change24h
+    let std;
+    if (chgs.length < 2) {
+      std = Math.abs(chgs[0] || 0);
+    } else if (chgs.length === 2) {
+      // 2-point std — matches the Python: abs(diff) / sqrt(2)
+      std = Math.abs(chgs[0] - chgs[1]) / Math.sqrt(2);
+    } else {
+      const mean = chgs.reduce((a, b) => a + b, 0) / chgs.length;
+      const variance = chgs.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / (chgs.length - 1);
+      std = Math.sqrt(variance);
+    }
+    // Score components
+    // vol_score: (log10(avg_vol) - 2.7) / (5.0 - 2.7) * 10, clamped 0-10
+    // So log10($500) = 2.7 → 0; log10($100K) = 5.0 → 10
+    const volScore = clamp((Math.log10(avgVol) - 2.7) / (5.0 - 2.7) * 10, 0, 10);
+    const stabScore = clamp(10 - std / 2, 0, 10);
+    // Weighted composite (volume-led at 60/40)
+    const dragRaw = 0.6 * volScore + 0.4 * stabScore;
+    // Map 0-10 → 1.0-9.5 (so dead-perfect gets 9.5, dead-zero gets 1.0)
+    const drag = 1.0 + (9.5 - 1.0) * dragRaw / 10;
+    return clamp(drag, 1.0, 9.5);
+  }
+
+  // ============================================================
+  // PIT — community raid score (weekly)
+  // ------------------------------------------------------------
+  // All teams start each race week at PIT = 5.0 (neutral baseline).
+  // PIT moves up/down based on community raid performance on
+  // designated MEME GP tweets during the week.
+  //
+  // The editorialPit value passed in comes from the TEAMS array
+  // in gp-central.html — currently locked at 5.0 for all teams.
+  // Future: post-race-1, this gets driven by raid scoring data.
+  // Defaults to 5.0 if absent.
+  // ============================================================
+  function calcPit(editorialPit) {
+    return editorialPit != null ? editorialPit : 5.0;
+  }
+
+  // ============================================================
+  // MAIN — compute all 5 stats + OVERALL
+  // ------------------------------------------------------------
+  // @param {object} d              — today's on-chain data
+  // @param {number} d.mcap         — market cap (USD)
+  // @param {number} d.vol          — 24h volume (USD)
+  // @param {number} d.liq          — liquidity pool depth (USD)
+  // @param {number} d.change24h    — 24h price change (percent)
+  // @param {number} [editorialPit] — PIT score (community raid; default 5.0)
+  // @param {array}  [history]      — array of past snapshots for DRAG
+  // @param {string} [ticker]       — team ticker (needed for history lookup)
+  //
+  // ============================================================
+  // FROZEN BASE  —  Week-1 measurement, LOCKED Friday.
+  // ------------------------------------------------------------
+  // The market no longer moves these scores. Only earned upgrades
+  // (+1 per locked stat) change a team's score. This is the single
+  // source of truth: every page runs through calcStats, so editing
+  // these two objects re-syncs the entire site at once.
+  //
+  // To record a new earned upgrade: add the stat to EARNED_UPGRADES.
+  // To set a new weekly base: replace the numbers in FROZEN_BASE.
+  // ============================================================
+  const FROZEN_BASE = {
+    TURBO:      { engine: 9.0, aero: 6.9, chassis: 6.5, drag: 7.1 },
+    MASK:       { engine: 5.7, aero: 6.6, chassis: 7.4, drag: 6.0 },
+    NEURO:      { engine: 1.5, aero: 3.5, chassis: 1.4, drag: 1.0 },
+    SUS:        { engine: 4.0, aero: 2.3, chassis: 4.0, drag: 3.3 },
+    LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
+    SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
+    VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
+    MARS:       { engine: 1.5, aero: 4.1, chassis: 1.3, drag: 2.9 },
+    '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
+    PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
+    PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
+    MOMO:       { engine: 4.9, aero: 5.2, chassis: 5.8, drag: 7.0 },
+    DOBERMANN:  { engine: 4.9, aero: 5.0, chassis: 4.8, drag: 4.2 },
+    MONKO:      { engine: 3.3, aero: 1.8, chassis: 3.2, drag: 1.0 },
+    BILLY:      { engine: 6.0, aero: 5.6, chassis: 5.6, drag: 6.1 }
+  };
+
+  // Earned upgrades — locked stats per team (+1 each, permanent for the season).
+  const EARNED_UPGRADES = {
+    BILLY: ['AERO'],
+    PUP:   ['ENGINE']
+  };
+
+  // CYCLE_LOCKED: false during the upgrade window (unearned targets show
+  // "DEVELOPMENT IN PROGRESS"), true once the window closes (unearned targets
+  // show "UPGRADE FAILED"). Flip to false at the start of each new cycle.
+  const CYCLE_LOCKED = true;
+
+  const FROZEN_PIT = 5.0; // PIT resets weekly to 5, not upgradeable
+
+  function cleanTk(t){ return String(t == null ? '' : t).toUpperCase().replace(/^\$/, '').trim(); }
+
+  // Pure frozen base (no upgrades) — for the dev cycle "base -> target" display.
+  function getBaseStats(ticker){
+    const b = FROZEN_BASE[cleanTk(ticker)];
+    if (!b) return null;
+    return { engine: b.engine, aero: b.aero, chassis: b.chassis, drag: b.drag, pit: FROZEN_PIT };
+  }
+  // Earned (locked) upgrade stat names for a team.
+  function getEarned(ticker){
+    return EARNED_UPGRADES[cleanTk(ticker)] || [];
+  }
+
+  // Given the published opening-grid entries (from rankings.json), overlay the
+  // CURRENT score (frozen base + earned upgrades), re-sort by it, and compute
+  // movement vs the opening grid. Returns a new array sorted by current rank,
+  // each entry carrying { rank, previous_rank, score, ...original fields }.
+  // This makes the power rankings + per-team grid rank reflect upgrades from
+  // the single source — edit EARNED_UPGRADES and the whole board re-sorts.
+  function rankWithUpgrades(openingEntries){
+    if (!Array.isArray(openingEntries)) return [];
+    var rows = openingEntries.map(function(e){
+      var s = calcStats({}, FROZEN_PIT, null, e.ticker);
+      var cur = (s && s.overall != null) ? s.overall : e.score;
+      var copy = {}; for (var k in e) { if (e.hasOwnProperty(k)) copy[k] = e[k]; }
+      copy._openingRank = e.rank;
+      copy.score = cur;
+      return copy;
+    });
+    rows.sort(function(a, b){
+      return (b.score - a.score) || (a._openingRank - b._openingRank);
+    });
+    rows.forEach(function(e, i){ e.rank = i + 1; e.previous_rank = e._openingRank; });
+    return rows;
+  }
+
+  // @returns {object|null} {engine, aero, chassis, drag, pit, overall}
+  //                        or null if mcap is missing/zero.
+  // ============================================================
+  function calcStats(d, editorialPit, history, ticker) {
+    const pitVal = round(calcPit(editorialPit));
+
+    // Reveal gate — hide a team's stats until its slot unlocks (PIT stays visible).
+    if (!isRevealed(ticker)) {
+      return { engine: null, aero: null, chassis: null, drag: null, pit: pitVal, overall: null };
+    }
+
+    // FROZEN PATH: return the locked Friday base + any earned upgrades.
+    // The market does not move these — only upgrades do.
+    const fb = getBaseStats(ticker);
+    if (fb) {
+      const up = getEarned(ticker);
+      const bump = (name, val) => Math.min(val + (up.indexOf(name) !== -1 ? 1 : 0), 9.5);
+      const eng = bump('ENGINE', fb.engine);
+      const aer = bump('AERO', fb.aero);
+      const cha = bump('CHASSIS', fb.chassis);
+      const dra = bump('DRAG', fb.drag);
+      const ovr = (eng + aer + cha + dra + pitVal) / 5;
+      return {
+        engine: round(eng), aero: round(aer), chassis: round(cha),
+        drag: round(dra), pit: pitVal, overall: round(ovr)
+      };
+    }
+
+    // LIVE FALLBACK: only used for tickers without a frozen base (safety net).
+    if (!d || !d.mcap) return null;
+    const engine  = calcEngine(d.mcap);
+    const aero    = calcAero(d.mcap, d.vol || d.vol_24h || 0);
+    let chassis;
+    const vol = d.vol || d.vol_24h || 0;
+    if (d.liq != null && d.liq > 0) {
+      chassis = calcChassis(d.liq);
+    } else if (vol > 0 && (d.dataSource === 'runes' || d.liq === null)) {
+      chassis = calcChassisRunes(vol);
+    } else {
+      chassis = null;
+    }
+    const drag    = calcDrag(d, history, ticker);
+    const stats = [engine, aero, chassis, drag, pitVal].filter(s => s !== null);
+    const overall = stats.length ? stats.reduce((a, b) => a + b, 0) / stats.length : null;
+    return {
+      engine:  round(engine),
+      aero:    round(aero),
+      chassis: chassis !== null ? round(chassis) : null,
+      drag:    round(drag),
+      pit:     pitVal,
+      overall: overall !== null ? round(overall) : null,
+    };
+  }
+
+  // ----- formula metadata -----
+  // Subtitles updated to reflect B-prime mechanics. Communities reading
+  // this should understand what each stat measures and how to improve.
+  const STATS_META = {
+    overall: { name: 'OVERALL', mechanics: 'LIVE',                                       flavor: 'all stats combined',                                       icon: 'how-it-works.png' },
+    engine:  { name: 'ENGINE',  mechanics: 'MARKET CAP',                                 flavor: 'biggest cars on the grid',                                 icon: 'icon-engine.png' },
+    aero:    { name: 'AERO',    mechanics: 'TRADING ACTIVITY (TURNOVER OR ABS VOLUME)',  flavor: 'most active traders',                                      icon: 'icon-aero.png' },
+    chassis: { name: 'CHASSIS', mechanics: 'LIQUIDITY DEPTH',                            flavor: 'deepest pools',                                            icon: 'icon-chassis.png' },
+    drag:    { name: 'DRAG',    mechanics: 'MULTI-DAY VOLUME \u00d7 PRICE STABILITY',    flavor: 'smoothest at speed',                                       icon: 'icon-drag.png' },
+    pit:     { name: 'PIT',     mechanics: 'COMMUNITY RAID SCORE',                       flavor: 'how loud is your community',                               icon: 'icon-pit.png' },
+  };
+
+  // ============================================================
+  // MODE DETECTION — live vs frozen (Friday-Freeze mechanic)
+  // ------------------------------------------------------------
+  // Race weeks run Monday 00:00 SAST → Sunday 23:59 SAST.
+  // Stats move LIVE Monday through Friday 09:00 SAST.
+  // Stats are FROZEN Friday 09:00 SAST through Sunday 23:59 SAST.
+  // On Monday 00:00 SAST, the new week starts fresh and stats move
+  // again until the next Friday 09:00 freeze moment.
+  //
+  // SAST = UTC+2 year-round (no daylight saving in South Africa).
+  // Friday 09:00 SAST = Friday 07:00 UTC.
+  // Monday 00:00 SAST = Sunday 22:00 UTC.
+  //
+  // All functions accept an optional `date` parameter for testing.
+  // ============================================================
+
+  // SAST offset in milliseconds (UTC+2)
+  const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
+
+  // Convert a JS Date to a "SAST view" — a Date whose UTC methods
+  // return SAST values. This is the standard trick for timezone math
+  // without pulling in a library.
+  function toSAST(date) {
+    return new Date(date.getTime() + SAST_OFFSET_MS);
+  }
+
+  // Build a UTC Date from SAST components (year, month, day, hour).
+  function fromSAST(year, month, day, hour, min) {
+    return new Date(Date.UTC(year, month, day, hour, min || 0) - SAST_OFFSET_MS);
+  }
+
+  // getNextFreezeMoment(date) — when is the next Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns the NEXT one
+  // (i.e. one week later). This keeps semantics clean: at freeze
+  // moment, we're already frozen.
+  function getNextFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+    // Days until Friday (5). If today IS Friday, that's 0 days unless
+    // we're already past 09:00 SAST, in which case we want next Friday.
+    let daysUntilFri = (5 - dow + 7) % 7;
+    if (dow === 5) {
+      // It's Friday in SAST — check the hour
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h > 9 || (h === 9 && m > 0)) {
+        daysUntilFri = 7;
+      } else if (h === 9 && m === 0) {
+        // Exactly at the freeze moment → next one is in a week
+        daysUntilFri = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilFri, 9, 0);
+  }
+
+  // getLastFreezeMoment(date) — when was the most recent Friday 09:00 SAST?
+  // If `date` is exactly at a freeze moment, returns THAT moment
+  // (i.e. we just entered frozen mode this very instant).
+  function getLastFreezeMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days since Friday (5)
+    let daysSinceFri = (dow - 5 + 7) % 7;
+    if (dow === 5) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      if (h < 9 || (h === 9 && m === 0)) {
+        // Friday before or exactly at 09:00 — the last freeze was last Friday
+        // (exception: exactly at 09:00 is the freeze moment itself)
+        if (h === 9 && m === 0) {
+          daysSinceFri = 0; // freeze moment is right now
+        } else {
+          daysSinceFri = 7; // last freeze was last Friday
+        }
+      }
+      // Friday after 09:00 SAST — daysSinceFri = 0 is already correct
+    }
+    return fromSAST(year, month, day - daysSinceFri, 9, 0);
+  }
+
+  // getNextLiveMoment(date) — when does the next live week start?
+  // Live mode begins Monday 00:00 SAST.
+  function getNextLiveMoment(date) {
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const year  = sastView.getUTCFullYear();
+    const month = sastView.getUTCMonth();
+    const day   = sastView.getUTCDate();
+    const dow   = sastView.getUTCDay();
+    // Days until next Monday (1)
+    let daysUntilMon = (1 - dow + 7) % 7;
+    if (dow === 1) {
+      const h = sastView.getUTCHours();
+      const m = sastView.getUTCMinutes();
+      // If it's Monday and we're past 00:00 (which is basically always
+      // unless we hit the exact instant), the next Monday is a week away
+      if (h > 0 || m > 0) {
+        daysUntilMon = 7;
+      } else {
+        // Exactly Monday 00:00 → next live moment is a week away
+        daysUntilMon = 7;
+      }
+    }
+    return fromSAST(year, month, day + daysUntilMon, 0, 0);
+  }
+
+  // getCurrentMode(date) — 'live' or 'frozen'?
+  // Live:   Monday 00:00 SAST  →  Friday 09:00 SAST (exclusive)
+  // Frozen: Friday 09:00 SAST  →  Monday 00:00 SAST (exclusive)
+  function getCurrentMode(date) {
+    if (FREEZE_OVERRIDE) return 'frozen';   // manual hold (reveal outside Fri-Sun)
+    const now = date || new Date();
+    const sastView = toSAST(now);
+    const dow = sastView.getUTCDay();
+    const h   = sastView.getUTCHours();
+    const m   = sastView.getUTCMinutes();
+    // Frozen window: Fri 09:00+ through Sun 23:59
+    if (dow === 5 && (h > 9 || (h === 9 && m >= 0))) return 'frozen';
+    if (dow === 6) return 'frozen'; // Saturday
+    if (dow === 0) return 'frozen'; // Sunday
+    // Everything else is live
+    return 'live';
+  }
+
+  // ----- pre-reveal display helper -----
+  // Pages can use this to render placeholders consistently.
+  // Returns "—" for null/undefined (pre-reveal hidden), formatted number otherwise.
+  function displayStat(value, decimals) {
+    if (value === null || value === undefined || isNaN(value)) return '—';
+    return Number(value).toFixed(decimals != null ? decimals : 1);
+  }
+
+  // ----- public API -----
+  const MEMEGP_Stats = {
+    // Stat computation
+    calcStats:   calcStats,
+    getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
+    getEarned:    getEarned,       // earned/locked upgrade stat names for a team
+    cycleLocked:  CYCLE_LOCKED,     // true once the upgrade window has closed
+    rankWithUpgrades: rankWithUpgrades, // opening grid -> current standings + movement
+    FROZEN_BASE:  FROZEN_BASE,
+    EARNED_UPGRADES: EARNED_UPGRADES,
+    calcEngine:  calcEngine,
+    calcAero:    calcAero,
+    calcChassis: calcChassis,
+    calcChassisRunes: calcChassisRunes,
+    calcDrag:    calcDrag,
+    calcPit:     calcPit,
+    clamp:       clamp,
+    round:       round,
+    STATS_META:  STATS_META,
+    // Mode detection (Friday-Freeze)
+    getCurrentMode:      getCurrentMode,
+    getLastFreezeMoment: getLastFreezeMoment,
+    getNextFreezeMoment: getNextFreezeMoment,
+    getNextLiveMoment:   getNextLiveMoment,
+    // Pre-reveal mode (flip PRE_REVEAL_MODE to false in source to disable)
+    PRE_REVEAL_MODE:     PRE_REVEAL_MODE,
+    displayStat:         displayStat,
+    // Staggered reveal (Power Rankings drop)
+    REVEAL:              REVEAL,
+    revealedCount:       revealedCount,
+    isRevealed:          isRevealed,
+  };
+
+  // Browser global
+  if (typeof window !== 'undefined') {
+    global.MEMEGP_Stats = MEMEGP_Stats;
+  }
+  // CommonJS (Node.js — for Friday-freeze snapshot script + tests)
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MEMEGP_Stats;
+  }
+
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* ============================================================
+   MEME GRAND PRIX — SEASON 2 RACE ENGINE  (race-engine.js)
+   Deterministic positional race simulation.
+   Single source of truth for race logic — consumed by race.html / quali.html / fp1.html.
+   Pairs with stats-calculator.js (team stats) the way the site already does.
+
+   LOCKED MODEL (designed + tuned by simulation):
+     - Race Day Form 80-100%  (per team, per session)
+     - Qualifying sets the grid (track position is real)
+     - Tyres: SOFT / MED / HARD  (pace vs degradation)
+     - Fuel: FULL (1 stop, heavy) / HALF (2 stops, light)
+         fuel mass drives BOTH lap time AND tyre wear
+     - Overtaking: probabilistic (~ pace delta), passEase 0.34
+     - Incidents: 5% DNF per car
+     - Seeded -> fully deterministic & reproducible
+   Result of tuning: PUP (P1) ~60% win rate, full top-8 can win.
+   ============================================================ */
+(function (global) {
+  const S = global.MEMEGP_Stats ||
+            (typeof require !== 'undefined' ? require('./stats-calculator.js') : null);
+
+  const TEAMS = ['PUP','TURBO','MASK','BILLY','VIBECOIN','MOMO','PEPONK','LOL',
+                 'DOBERMANN','SHIH','SUS','420BLAZEIT','MARS','MONKO','NEURO'];
+
+  // ---------- LOCKED PARAMETERS ----------
+  const CFG = {
+    TOTAL_LAPS : 20,
+    FORM_FLOOR : 0.80,          // form ranges FORM_FLOOR..1.00
+    QUALI_NOISE: 0.40,
+    RACE_NOISE : 0.50,
+    COMPOUNDS  : { SOFT:{off:-0.55,deg:0.115}, MED:{off:0,deg:0.055}, HARD:{off:0.50,deg:0.028} },
+    KFUEL      : 1.00,          // s/lap penalty at a full brim (scales with mass)
+    DEG_FUEL   : 0.60,          // heavy fuel raises wear rate by up to +60%
+    STOP_LOSS  : 5.00,          // pit time loss (folded into the position drop)
+    PASS_EASE  : 0.34,          // overtaking ease (tuned: PUP ~60%)
+    INCIDENT_P : 0.05,          // per-car DNF probability
+    PIT_DROP   : 7              // positions lost rejoining from a stop
+  };
+
+  // ---------- deterministic RNG ----------
+  function makeRNG(seed){ let s = seed % 2147483647; if (s <= 0) s += 2147483646;
+    return () => { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+
+  const statsFor = t => S.calcStats({}, 5.0, null, t);
+  const drawForm = r => CFG.FORM_FLOOR + (1 - CFG.FORM_FLOOR) * r();
+  function cleanLap(st, form){
+    return (31.5 - (st.engine*0.12 + st.chassis*0.08)*form)
+         + (27.5 - (st.drag*0.10  + st.aero*0.10)*form)
+         + (24.5 - (st.pit*0.08   + st.aero*0.12)*form);
+  }
+
+  // ---------- QUALIFYING ----------
+  function runQualifying(stats, r){
+    const rows = TEAMS.map(t => {
+      const form = drawForm(r);
+      return { t, form, lap: cleanLap(stats[t], form) + (r()-0.5)*CFG.QUALI_NOISE };
+    });
+    rows.sort((a,b) => a.lap - b.lap);
+    rows.forEach((row,i) => row.pos = i+1);
+    return rows;
+  }
+
+  // ---------- STRATEGY ----------
+  // strategyConfig is { TICKER: {fuel, a,b[,c], pits:[...]} }  (community-chosen).
+  // If absent, a randomised pick stands in (behaves like varied community picks).
+  function defaultStrategy(r){
+    const C = ['SOFT','MED','HARD'];
+    if (r() < 0.5){ // FULL, 1 stop
+      const a = C[(r()*3)|0]; let b = C[(r()*3)|0]; while (b===a) b = C[(r()*3)|0];
+      return { fuel:'FULL', a, b, pits:[ [6,8,10,12][(r()*4)|0] ] };
+    }
+    return { fuel:'HALF', a:C[(r()*3)|0], b:C[(r()*3)|0], c:C[(r()*3)|0], pits:[7,14] }; // 2 stops
+  }
+  function fuelMass(s, L){
+    if (s.fuel === 'FULL') return 1 - (L-1)/(CFG.TOTAL_LAPS-1);
+    const seg = L<=7?0:(L<=14?1:2), ss=[1,8,15][seg], se=[7,14,20][seg];
+    return 0.5 * (1 - (L-ss)/(se-ss+3));
+  }
+  const compoundAt  = (s,L) => s.fuel==='FULL' ? (L<=s.pits[0]?s.a:s.b) : (L<=7?s.a:(L<=14?s.b:s.c));
+  const isStintStart= (s,L) => L===1 || (s.fuel==='FULL' ? L===s.pits[0]+1 : (L===8||L===15));
+
+  // ---------- RACE ----------
+  function runRace(stats, gridRows, strategies, r){
+    let order = gridRows.map(g => g.t);
+    const base={}, formVal={}, wear={}, willDNF={}, dnfLap={}, pitted={}, rawCum={};
+    gridRows.forEach((g,i) => rawCum[g.t] = i*0.5);
+    TEAMS.forEach(t => {
+      const f = drawForm(r); formVal[t] = f;             // store form (no extra draw)
+      base[t]   = cleanLap(stats[t], f);
+      wear[t]   = 0; pitted[t] = {};
+      willDNF[t]= r() < CFG.INCIDENT_P;
+      if (willDNF[t]) dnfLap[t] = 2 + ((r()*(CFG.TOTAL_LAPS-2))|0);
+    });
+
+    const stopped = (t,L) => willDNF[t] && L >= dnfLap[t];
+    function lapTime(t,L){
+      const s = strategies[t], comp = compoundAt(s,L);
+      if (isStintStart(s,L)) wear[t] = 0;
+      const m = fuelMass(s,L);
+      wear[t] += CFG.COMPOUNDS[comp].deg * (1 + m*CFG.DEG_FUEL);
+      return base[t] + CFG.COMPOUNDS[comp].off + CFG.KFUEL*m + wear[t] + (r()-0.5)*CFG.RACE_NOISE;
+    }
+    function splitSectors(t, ltv){                        // cosmetic, no RNG
+      const st=stats[t], f=formVal[t];
+      const c1=31.5-(st.engine*0.12+st.chassis*0.08)*f;
+      const c2=27.5-(st.drag*0.10 +st.aero*0.10)*f;
+      const c3=24.5-(st.pit*0.08   +st.aero*0.12)*f;
+      const extra=ltv-(c1+c2+c3);
+      return { s1:c1+extra*0.40, s2:c2+extra*0.35, s3:c3+extra*0.25 };
+    }
+
+    const laps=[], events=[], fastest={ time:Infinity, driver:'', lap:0 };
+    const fastestS1={time:Infinity,driver:'',lap:0}, fastestS2={time:Infinity,driver:'',lap:0}, fastestS3={time:Infinity,driver:'',lap:0};
+
+    for (let L=1; L<=CFG.TOTAL_LAPS; L++){
+      const lt={}, sect={}, pitThisLap=[];
+      order.forEach(t => { lt[t] = stopped(t,L) ? Infinity : lapTime(t,L); });
+      order.forEach(t => {
+        if (isFinite(lt[t])){ sect[t]=splitSectors(t,lt[t]); rawCum[t]+=lt[t];
+          if (lt[t] < fastest.time){ fastest.time=lt[t]; fastest.driver=t; fastest.lap=L; }
+          if (sect[t].s1<fastestS1.time){ fastestS1.time=sect[t].s1; fastestS1.driver=t; fastestS1.lap=L; events.push({lap:L,type:'fastest_s1',team:t,time:sect[t].s1,freshTyres:isStintStart(strategies[t],L)}); }
+          if (sect[t].s2<fastestS2.time){ fastestS2.time=sect[t].s2; fastestS2.driver=t; fastestS2.lap=L; events.push({lap:L,type:'fastest_s2',team:t,time:sect[t].s2,freshTyres:isStintStart(strategies[t],L)}); }
+          if (sect[t].s3<fastestS3.time){ fastestS3.time=sect[t].s3; fastestS3.driver=t; fastestS3.lap=L; events.push({lap:L,type:'fastest_s3',team:t,time:sect[t].s3,freshTyres:isStintStart(strategies[t],L)}); } }
+        else rawCum[t]+=200;
+      });
+      order.forEach(t => { if (willDNF[t] && L===dnfLap[t]) events.push({lap:L,type:'dnf',team:t}); });
+
+      order.forEach(t => {
+        if (stopped(t,L)) return;
+        const s = strategies[t];
+        if (s.pits.includes(L) && !pitted[t][L]){
+          pitted[t][L]=true;
+          const i = order.indexOf(t);
+          const drop = Math.min(CFG.PIT_DROP, order.length-1-i + 5);
+          order.splice(i,1); order.splice(Math.min(order.length,i+drop),0,t);
+          const service = s.fuel==='FULL' ? (7+r()*3) : (5+r()*2);
+          rawCum[t]+=service; pitThisLap.push(t);
+          events.push({lap:L,type:'pit',team:t,fuel:s.fuel,tyre:compoundAt(s,L+1),service:+service.toFixed(1),timeLost:service.toFixed(1)});
+        }
+      });
+
+      for (let p=order.length-1;p>0;p--){
+        const b=order[p], a=order[p-1];
+        if (stopped(b,L)) continue;
+        if (stopped(a,L)){ order[p-1]=b; order[p]=a; continue; }
+        const d = lt[a]-lt[b];
+        if (d>0){ const passP=Math.min(0.92,Math.max(0.015,d*CFG.PASS_EASE));
+          if (r()<passP){ order[p-1]=b; order[p]=a; events.push({lap:L,type:'overtake',attacker:b,defender:a,newPos:p}); } }
+      }
+
+      // display cumulative times consistent with order (monotonic)
+      const cumTimes={}, tyreAges={}, pittedStatus={}, lapTimes={}; let prev=null;
+      order.forEach((t)=>{ let c=rawCum[t]; if (prev!=null && c<prev+0.25) c=prev+0.25; prev=c;
+        cumTimes[t]=c; tyreAges[t]=0; pittedStatus[t]=Object.keys(pitted[t]).length>0; lapTimes[t]=isFinite(lt[t])?lt[t]:0; });
+      const gaps = order.map((t,i)=> i===0?0: cumTimes[t]-cumTimes[order[0]]);
+      laps.push({ lap:L, positions:order.slice(), gaps, cumTimes, tyreAges, pittedStatus,
+                  sectorTimes:sect, lapTimes, pitThisLap });
+    }
+
+    const running = order.filter(t => !willDNF[t]);
+    const dnfs    = order.filter(t =>  willDNF[t]).sort((a,b) => dnfLap[b]-dnfLap[a]);
+    const result  = running.concat(dnfs);
+
+    const progressive=[]; let pFL={time:999,driver:'',lap:0}, p1={time:999,driver:'',lap:0}, p2={time:999,driver:'',lap:0}, p3={time:999,driver:'',lap:0};
+    for (let L=1;L<=CFG.TOTAL_LAPS;L++){ const ld=laps[L-1];
+      TEAMS.forEach(t=>{ const x=ld.lapTimes[t]; if (x>0 && x<pFL.time) pFL={time:x,driver:t,lap:L};
+        const sc=ld.sectorTimes[t]; if (sc){ if(sc.s1<p1.time)p1={time:sc.s1,driver:t,lap:L};
+          if(sc.s2<p2.time)p2={time:sc.s2,driver:t,lap:L}; if(sc.s3<p3.time)p3={time:sc.s3,driver:t,lap:L}; } });
+      progressive.push({ fastestLap:{...pFL}, fastestS1:{...p1}, fastestS2:{...p2}, fastestS3:{...p3} }); }
+
+    return { result, grid: gridRows.map(g=>g.t), laps, events,
+             fastest, fastestLap:fastest, fastestS1, fastestS2, fastestS3, progressive,
+             dnf: TEAMS.filter(t => willDNF[t]), classified: running.length };
+  }
+
+  // ---------- WEEKEND ----------
+  function simulateWeekend(seed, strategyConfig){
+    const r = makeRNG(seed);
+    const stats = {}; TEAMS.forEach(t => stats[t] = statsFor(t));
+    const quali = runQualifying(stats, r);
+    const strategies = {};
+    TEAMS.forEach(t => strategies[t] = (strategyConfig && strategyConfig[t]) || defaultStrategy(r));
+    const race = runRace(stats, quali, strategies, r);
+    return { seed, quali, strategies, race };
+  }
+
+  // ---------- ANIMATION-SHAPED RACE ----------
+  // Mirrors the validated runRace order-logic EXACTLY (so win-rate is identical),
+  // and derives per-lap display cumulative times consistent with that order for the
+  // animation. Overtaking + position-drop pits are the proven mechanics.
+  // Thin wrapper: qualifying (or a supplied grid) + community strategies + the
+  // validated runRace, returning runRace's rich animation output.
+  // gridOverride: optional array of tickers P1..P15 (e.g. the real Saturday quali result).
+  function buildAnimatedRace(seed, strategyConfig, gridOverride){
+    const r = makeRNG(seed);
+    const stats = {}; TEAMS.forEach(t => stats[t] = statsFor(t));
+    let grid;
+    if (gridOverride && gridOverride.length === TEAMS.length){
+      grid = gridOverride.map((t,i)=>({ t, pos:i+1, form:1, lap:0 }));
+    } else {
+      grid = runQualifying(stats, r);
+    }
+    const strategies = {};
+    TEAMS.forEach(t => strategies[t] = (strategyConfig && strategyConfig[t]) || defaultStrategy(r));
+    const race = runRace(stats, grid, strategies, r);
+    const pitLaps = {}; TEAMS.forEach(t => pitLaps[t] = strategies[t].pits.slice());
+    return Object.assign({}, race, {
+      strategies, pitLaps,
+      gridForm: grid.map(g => ({ t:g.t, form:g.form, lap:g.lap, pos:g.pos })),
+      quali: grid
+    });
+  }
+
+  const API = { VERSION:'S2-ENGINE-1.0', CFG, TEAMS, makeRNG, statsFor,
+                runQualifying, runRace, simulateWeekend, buildAnimatedRace };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  global.MEMEGP_Race = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>
 // ═══════════════════════════════════════════════════
 // MEME GP — RACE DAY v2.1 (FIX: progressive fastest tracking)
 // ═══════════════════════════════════════════════════
 
-const RACE1_START_UTC = new Date('2026-06-21T18:00:00Z').getTime(); // Round 1 — Satoshi Speedway (Sun 21 Jun, 18:00 UTC)
-// ── PREVIEW MODE ── starts a few seconds from load so you can watch lights-out + the full race now.
-// For production: replace the line below with  const SESSION_START_UTC = RACE1_START_UTC;
-const SESSION_START_UTC = Date.now() + 4000;
+const RACE1_START_UTC = new Date('2026-06-22T18:15:00Z').getTime(); // Round 1 — Satoshi Speedway (Mon 22 Jun, 18:15 UTC — pushed from 18:00)
 const COUNTDOWN_SECONDS = 10;
 const TOTAL_LAPS = 20;
 const LAP_REAL_SECONDS = 90;
 const PIT_TIME_LOSS_BASE = 5;
-const SEED = 20260621001; // Round 1 — Satoshi Speedway
+const SEED = 20260622001; // Round 1 — Satoshi Speedway
+
+// ── TIMING ──────────────────────────────────────────────────────────────────
+// PRODUCTION=false → PREVIEW: race begins ~now at 2x speed (for testing the build).
+// PRODUCTION=true  → LIVE: lights-out at exactly RACE1_START_UTC (Mon 22 Jun 18:00 UTC),
+//                    real time. Before then the page shows the countdown-to-lights screen.
+// This is the ONLY line that differs between race-preview.html and the live race.html.
+const PRODUCTION = true;
+const _PVSPD = PRODUCTION ? 1 : 2;                                         // real time vs 2x preview
+let   _PVT0  = PRODUCTION ? (RACE1_START_UTC - COUNTDOWN_SECONDS * 1000)   // fixed anchor → lights-out at 18:00
+                         : Date.now();                                     // preview anchor → starts on load
+const SESSION_START_UTC = _PVT0;                                           // kept for compatibility
 
 // ── TEAM META — display only (colours / logos / names / emoji).
 // Stats are NOT here: they come from stats-calculator.js (single source of truth).
 const TEAM_META = {
   PUP:         { color:"#F0B90B", logo:"pup.png",        name:"PUP POWER",       emoji:"🐶" },
-  TURBO:       { color:"#1e7fd9", logo:"turbo.png",      name:"AI TURBO RACING", emoji:"🤖" },
+  TURBO:       { color:"#1e7fd9", logo:"turbo.png", car:"turbo-car.jpg", name:"AI TURBO RACING", emoji:"🤖" },
   MASK:        { color:"#e62538", logo:"mask.png",       name:"MASK STAYS ON",   emoji:"🎭" },
   BILLY:       { color:"#F7931A", logo:"billy.png",      name:"BILLY RACING",    emoji:"🐐" },
   VIBECOIN:    { color:"#E91E63", logo:"vibe.png",       name:"VIBING CAT",      emoji:"😺" },
@@ -436,7 +1459,7 @@ const TEAM_META = {
 // Empty  → grid set by championship standings (overall desc, derived live from
 //          stats-calculator.js).  Once Saturday quali has run, drop the P1→P15
 //          tickers in here and the starting grid uses them instead.
-const QUALIFYING_ORDER = []; // e.g. ['TURBO','PUP','MASK', ...]
+const QUALIFYING_ORDER = ['PUP','MOMO','TURBO','BILLY','MASK','LOL','DOBERMANN','VIBECOIN','PEPONK','SHIH','SUS','420BLAZEIT','MARS','MONKO','NEURO']; // locked — matches published grid card + Sat quali results post (PUP on pole)
 
 function buildTeams() {
   const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
@@ -447,7 +1470,7 @@ function buildTeams() {
     const s = S.calcStats({}, 5.0, null, tk); // frozen base + earned upgrades, PIT=5
     const m = TEAM_META[tk];
     return {
-      id: tk, emoji: m.emoji, logo: m.logo, color: m.color, name: m.name,
+      id: tk, emoji: m.emoji, logo: m.logo, car: m.car || m.logo.replace('.png','-car.png'), color: m.color, name: m.name,
       engine: s.engine, aero: s.aero, chassis: s.chassis, drag: s.drag,
       pit: s.pit, overall: s.overall,
     };
@@ -590,6 +1613,14 @@ function buildRace() {
   race.fastestS3 = fastestS3;
   race.pitLaps = pitLap;
 
+  // ── monotonic per-car schedule (smooth animation — position only ever advances) ──
+  race.cumByCar = {};
+  TEAMS.forEach(t => { race.cumByCar[t.id] = [ (t.gridPos - 1) * 0.5 ]; });
+  for (let lap = 1; lap <= TOTAL_LAPS; lap++) {
+    TEAMS.forEach(t => { const arr = race.cumByCar[t.id]; arr.push(arr[lap-1] + race.laps[lap-1].lapTimes[t.id]); });
+  }
+  race.timeScale = (TOTAL_LAPS * LAP_REAL_SECONDS) / Math.min(...TEAMS.map(t => race.cumByCar[t.id][TOTAL_LAPS]));
+
   // ★ NEW: precompute progressive fastest as-of each lap
   // For every lap N, what's the fastest lap/S1/S2/S3 seen across laps 1..N?
   race.progressive = [];
@@ -623,12 +1654,61 @@ function buildRace() {
 // after Friday FP. Empty {} => engine uses randomised stand-ins (still ~60%).
 // Grid: uses the real Saturday quali order if QUALIFYING_ORDER is filled; otherwise the
 // engine runs its own qualifying so previews show realistic grid variation.
-const STRATEGY_CONFIG = {};
+// STRATEGY_CONFIG — LOCKED for Round 1. Each team's STARTING compound (a) + fuel load
+// are taken verbatim from the published Starting Grid card (grid-strategy.html):
+//   MEDIUM -> MED (engine compound key).  FULL = 1 stop, HALF = 2 stops.
+// Second/third-stint compounds (b,c) + pit laps are sensible engine defaults
+// (complementary compound; 1-stop pits SOFT~L10/MED~L11/HARD~L12; 2-stop pits L7 & L14)
+// and can be tuned without affecting the grid-card start that fans voted on.
+const STRATEGY_CONFIG = {
+  PUP:         { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P1  SOFT/HALF
+  MOMO:        { fuel:'FULL', a:'SOFT', b:'HARD',           pits:[10]   }, // P2  SOFT/FULL
+  TURBO:       { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P3  SOFT/HALF
+  BILLY:       { fuel:'FULL', a:'HARD', b:'MED',            pits:[12]   }, // P4  HARD/FULL
+  MASK:        { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P5  MEDIUM/HALF
+  LOL:         { fuel:'FULL', a:'MED',  b:'HARD',           pits:[11]   }, // P6  MEDIUM/FULL
+  DOBERMANN:   { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P7  HARD/HALF
+  VIBECOIN:    { fuel:'FULL', a:'HARD', b:'MED',            pits:[12]   }, // P8  HARD/FULL (COMMUNITY)
+  PEPONK:      { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P9  MEDIUM/HALF
+  SHIH:        { fuel:'FULL', a:'SOFT', b:'HARD',           pits:[10]   }, // P10 SOFT/FULL
+  SUS:         { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P11 SOFT/HALF
+  '420BLAZEIT':{ fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P12 HARD/HALF
+  MARS:        { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P13 MEDIUM/HALF
+  MONKO:       { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P14 HARD/HALF
+  NEURO:       { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P15 HARD/HALF
+};
 const RACE = MEMEGP_Race.buildAnimatedRace(
   SEED,
   STRATEGY_CONFIG,
   (QUALIFYING_ORDER.length === TEAMS.length) ? QUALIFYING_ORDER : null
 );
+
+// ── monotonic per-car schedule for smooth animation ──
+// Built from the engine's CLEAN lapTimes (cumTimes is unreliable — it mangles lapped/retired cars),
+// adding each car's real pit service time on its stop lap so it falls back correctly. DNFs handled separately.
+RACE.pitLossByLap = {}; RACE.dnfLap = {};
+RACE.events.forEach(e => {
+  if (e.type === 'pit') { (RACE.pitLossByLap[e.team] = RACE.pitLossByLap[e.team] || {})[e.lap] = e.service || 0; }
+  if (e.type === 'dnf') { RACE.dnfLap[e.team] = e.lap; }
+});
+RACE.cumByCar = {};
+TEAMS.forEach(t => {
+  const arr = [0];
+  const dnfAt = RACE.dnfLap[t.id]; // undefined if no DNF
+  for (let L = 1; L <= TOTAL_LAPS; L++) {
+    let dur;
+    if (dnfAt && L > dnfAt) {
+      dur = 999; // car is retired — large step so carProgress while-loop always terminates
+    } else {
+      dur = RACE.laps[L-1].lapTimes[t.id] || 80;
+      const pl = RACE.pitLossByLap[t.id]; if (pl && pl[L]) dur += pl[L];
+    }
+    arr.push(arr[L-1] + dur);
+  }
+  RACE.cumByCar[t.id] = arr;
+});
+const _fin = TEAMS.filter(t => !RACE.dnfLap[t.id]).map(t => RACE.cumByCar[t.id][TOTAL_LAPS]);
+RACE.timeScale = (TOTAL_LAPS * LAP_REAL_SECONDS) / Math.min(...(_fin.length ? _fin : TEAMS.map(t => RACE.cumByCar[t.id][TOTAL_LAPS])));
 
 let selectedTeam = null;
 const fanCounts = {};
@@ -655,7 +1735,7 @@ function initTeamPicker() {
   grid.innerHTML = html;
 }
 function pickTeam(id) {
-  selectedTeam = id; fanCounts[id] += 1;
+  selectedTeam = id; fanCounts[id] += 1; if (!PRODUCTION) _PVT0 = Date.now();
   try { if(window.localStorage) localStorage.setItem('memegp-race-team', id); } catch(e) {}
   document.getElementById('teamPicker').style.display = 'none';
 }
@@ -689,6 +1769,42 @@ function getPoint(frac) {
 function getPitPoint(frac) {
   const len = pitPathEl.getTotalLength();
   return pitPathEl.getPointAtLength(len * Math.min(1, Math.max(0, frac)));
+}
+
+// ── monotonic progress for a car at race time `elapsed` (lap + on-track fraction, never goes backward) ──
+function carProgress(id, elapsed) {
+  const sched = RACE.cumByCar[id], scale = RACE.timeScale;
+  let L = 0;
+  while (L < TOTAL_LAPS && sched[L+1] * scale <= elapsed) L++;
+  let frac;
+  if (L >= TOTAL_LAPS) frac = 1;
+  else { const a = sched[L] * scale, b = sched[L+1] * scale; frac = Math.min(1, Math.max(0, (elapsed - a) / Math.max(0.001, b - a))); }
+  return { carLap: Math.min(TOTAL_LAPS, L + 1), carLapIdx: Math.min(L, TOTAL_LAPS - 1), frac, finished: L >= TOTAL_LAPS };
+}
+
+// current tyre compound for a car on a given lap (from its strategy stints)
+const TYRE_COL = { SOFT:'#ff3b3b', MED:'#ffd21a', HARD:'#e8edf5' };
+function currentCompound(id, lap) {
+  const st = RACE.strategies && RACE.strategies[id];
+  if (!st) return 'MED';
+  const pits = st.pits || [];
+  let c = st.a || 'MED';
+  if (pits[0] && lap > pits[0]) c = st.b || c;
+  if (pits[1] && lap > pits[1]) c = st.c || st.b || c;
+  return c;
+}
+
+// Strategy-aware fuel level (0..1) — mirrors the engine's fuelMass() so the gauge
+// matches each car's actual race strategy. FULL tank = heavy, 1 stop, drains across
+// the race from 100%. HALF tank = light, 2 stops, each stint starts at ~50% and burns
+// down (refuels to ~50% at L8 & L15). `lap` may be fractional for smooth animation.
+function currentFuelFrac(id, lap) {
+  const st = RACE.strategies && RACE.strategies[id];
+  if (!st) return Math.max(0, 1 - (lap - 1) / TOTAL_LAPS);
+  if (st.fuel === 'FULL') return Math.max(0, 1 - (lap - 1) / (TOTAL_LAPS - 1));
+  const seg = lap <= 7 ? 0 : (lap <= 14 ? 1 : 2);
+  const ss = [1, 8, 15][seg], se = [7, 14, 20][seg];
+  return Math.max(0, 0.5 * (1 - (lap - ss) / (se - ss + 3)));
 }
 
 let lightsState = 'waiting';
@@ -740,35 +1856,34 @@ let lastOvertakeMsg = '';
 //     line (counted once that lap is complete)
 //   • lap times include pit loss, so a pit lap can't steal fastest-lap
 // ═══════════════════════════════════════════════════
-function computeLiveBests(elapsed, gapById) {
+function computeLiveBests(elapsed) {
   const THIRD = 1 / 3;
   let bS1 = { time: Infinity }, bS2 = { time: Infinity },
       bS3 = { time: Infinity }, bLap = { time: Infinity };
 
   TEAMS.forEach(t => {
-    const g = gapById[t.id] || 0;
-    const carElapsed = Math.max(0, elapsed - g);
-    const carLapFloat = carElapsed / LAP_REAL_SECONDS;
-    const completed = Math.min(Math.floor(carLapFloat), TOTAL_LAPS); // fully-done laps
-    const curProg = carLapFloat - Math.floor(carLapFloat);
+    const cp = carProgress(t.id, elapsed);
+    // retired: skip if car has DNF'd (>= so we also skip on the DNF lap itself)
+    if (RACE.dnfLap[t.id] && cp.carLap >= RACE.dnfLap[t.id]) return;
+    const completed = Math.min(cp.carLap - 1, TOTAL_LAPS);
+    const curProg = cp.frac;
 
-    // fully completed laps → all sectors + lap time are official
     for (let L = 1; L <= completed; L++) {
       const st = RACE.laps[L - 1].sectorTimes[t.id];
       const lt = RACE.laps[L - 1].lapTimes[t.id];
+      if (!st || !isFinite(st.s1)) continue;  // guard: retired/DNF lap has no sectors
       if (st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: L };
       if (st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: L };
       if (st.s3 < bS3.time) bS3 = { time: st.s3, driver: t.id, lap: L };
-      if (lt   < bLap.time) bLap = { time: lt,   driver: t.id, lap: L };
+      if (lt && lt > 0 && lt < bLap.time) bLap = { time: lt, driver: t.id, lap: L };
     }
 
-    // in-progress lap → reveal S1/S2 as the car crosses each split
     const curLap = completed + 1;
     if (curLap <= TOTAL_LAPS) {
       const st = RACE.laps[curLap - 1].sectorTimes[t.id];
+      if (!st || !isFinite(st.s1)) return;  // guard
       if (curProg > THIRD     && st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: curLap };
       if (curProg > THIRD * 2 && st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: curLap };
-      // S3 completes at the line → picked up next lap as a completed lap
     }
   });
 
@@ -776,17 +1891,19 @@ function computeLiveBests(elapsed, gapById) {
 }
 
 function update() {
+  try {
   const now = Date.now();
-  const rawElapsed = (now - SESSION_START_UTC) / 1000;
+  const rawElapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW fast clock
 
   if (rawElapsed < 0) {
     document.getElementById('waitingScreen').style.display = 'flex';
     document.getElementById('mainLayout').style.display = 'none';
     document.getElementById('lightsOverlay').style.display = 'none';
-    document.getElementById('liveBadge').style.display = 'none';
+    (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='none';})();
     if (selectedTeam) document.getElementById('teamPicker').style.display = 'none';
-    const remaining = Math.abs(rawElapsed);
-    const h = Math.floor(remaining/3600); const m = Math.floor((remaining%3600)/60); const s = Math.floor(remaining%60);
+    // count to actual lights out (18:15 UTC), not page unlock
+    const lightsOut = Math.max(0, (RACE1_START_UTC - Date.now()) / 1000);
+    const h = Math.floor(lightsOut/3600); const m = Math.floor((lightsOut%3600)/60); const s = Math.floor(lightsOut%60);
     document.getElementById('waitCountdown').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     requestAnimationFrame(update);
     return;
@@ -797,7 +1914,7 @@ function update() {
 
   if (rawElapsed < COUNTDOWN_SECONDS) {
     document.getElementById('mainLayout').style.display = 'grid';
-    document.getElementById('liveBadge').style.display = 'flex';
+    (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='inline-flex';})();
     updateLights(rawElapsed);
     renderGridFormation();
     renderFanZone();
@@ -807,13 +1924,20 @@ function update() {
     document.getElementById('raceStatus').textContent = 'LIGHTS OUT...';
     document.getElementById('tickerMsg').textContent = '▸ FORMATION LAP — LIGHTS OUT SEQUENCE';
     document.getElementById('tickerMsg').style.color = '#ff0040';
+    // Seed _LIVE with grid order so SESSION DATA works during formation
+    if (!window._LIVE.positions.length) {
+      const gridOrder = RACE.laps[0].positions || QUALIFYING_ORDER || TEAMS.map(t=>t.id);
+      const gridGaps = {};
+      gridOrder.forEach((id,i) => { gridGaps[id] = i * 1.2; });
+      window._LIVE = { positions: gridOrder, gaps: gridGaps, elapsed: 0, isComplete: false, prog: null };
+    }
     requestAnimationFrame(update);
     return;
   }
 
   document.getElementById('lightsOverlay').style.display = 'none';
   document.getElementById('mainLayout').style.display = 'grid';
-  document.getElementById('liveBadge').style.display = 'flex';
+  (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='inline-flex';})();
 
   const elapsed = rawElapsed - COUNTDOWN_SECONDS;
   const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
@@ -824,7 +1948,7 @@ function update() {
   const isComplete = allCarsFinished;
   const displayLap = leaderFinished ? TOTAL_LAPS : currentLap;
 
-  document.getElementById('liveBadge').style.display = isComplete ? 'none' : 'flex';
+  (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='inline-flex';})();
   document.getElementById('lapCounter').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
   document.getElementById('lapDisplay').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
   document.getElementById('lapBig').textContent = `${displayLap}/${TOTAL_LAPS}`;
@@ -835,27 +1959,22 @@ function update() {
   const currentLapData = RACE.laps[lapIdx];
   const prevLapData = lapIdx > 0 ? RACE.laps[lapIdx - 1] : null;
 
-  const positions = currentLapData.positions;
-  let interpolatedGaps = {};
+  // ── CLEAN live state — single source of truth, identical to the cars on track ──
+  const _state = TEAMS.map(t => {
+    const cp = carProgress(t.id, elapsed);
+    const total = (cp.carLap - 1) + cp.frac - (t.gridPos - 1) * 0.013;   // same stagger the cars use
+    return { id: t.id, total, lap: cp.carLap, retired: !!(RACE.dnfLap[t.id] && cp.carLap > RACE.dnfLap[t.id]) };
+  });
+  const _running = _state.filter(c => !c.retired).sort((a, b) => b.total - a.total);
+  const _leadTotal = _running.length ? _running[0].total : 0;
+  const positions = _running.map(c => c.id);
+  const interpolatedGaps = {};
+  _running.forEach(c => { interpolatedGaps[c.id] = Math.max(0, (_leadTotal - c.total) * LAP_REAL_SECONDS); });
 
-  if (prevLapData) {
-    positions.forEach(id => {
-      const prevGapIdx = prevLapData.positions.indexOf(id);
-      const currGapIdx = positions.indexOf(id);
-      const prevGap = prevLapData.gaps[prevGapIdx] || 0;
-      const currGap = currentLapData.gaps[currGapIdx] || 0;
-      interpolatedGaps[id] = prevGap + (currGap - prevGap) * lapProgress;
-    });
-  } else {
-    positions.forEach((id, i) => { interpolatedGaps[id] = currentLapData.gaps[i] || 0; });
-  }
+  // SECTOR REVEAL — gated by each car's clean live position; never shows future sectors.
+  const prog = computeLiveBests(elapsed);
 
-  // ★ SECTOR REVEAL (broadcast-accurate): a sector record only appears once a
-  // car has actually crossed that split. S1 at ⅓ lap, S2 at ⅔, S3 at the line.
-  // Gated by each car's live track position — never shows future sectors.
-  const prog = computeLiveBests(elapsed, interpolatedGaps);
-
-  const liveOrder = Object.keys(interpolatedGaps).sort((a, b) => interpolatedGaps[a] - interpolatedGaps[b]);
+  const liveOrder = positions;
   const liveGaps = liveOrder.map(id => interpolatedGaps[id]);
 
   const leader = TEAMS.find(t => t.id === liveOrder[0]);
@@ -891,29 +2010,30 @@ function update() {
 
   const tickerEl = document.getElementById('tickerMsg');
   const tickerDiv = document.getElementById('ticker');
+  const tImg = t => `<img src="${t.logo}" style="width:14px;height:14px;border-radius:50%;object-fit:cover;vertical-align:middle;margin:0 2px 1px;border:1px solid ${t.color}55;display:inline">`;
 
   if (isComplete) {
-    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} WINS THE SATOSHI SPEEDWAY GRAND PRIX`;
+    tickerEl.innerHTML = `▸ 🏁 CHEQUERED FLAG — ${tImg(leader)} $${leader.id} WINS THE SATOSHI SPEEDWAY GRAND PRIX`;
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
     const timeSinceAllFinished = elapsed - (TOTAL_LAPS * LAP_REAL_SECONDS + 75);
-    if (timeSinceAllFinished > 5) {
-      showPodium(liveOrder, liveGaps);
+    if (timeSinceAllFinished > 5 && !raceCompleteShown) {
+      raceCompleteShown = true;
+      vtShow('data');   // go to the SESSION DATA screen → flips to "RACE COMPLETED"
     }
   } else if (leaderFinished) {
-    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} takes the win! Waiting for all cars to finish...`;
+    tickerEl.innerHTML = `▸ 🏁 CHEQUERED FLAG — ${tImg(leader)} $${leader.id} takes the win! Waiting for all cars to finish...`;
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
   } else {
     const pitsThisLap = RACE.events.filter(e => e.type === 'pit' && e.lap === currentLap);
     const overtakesThisLap = RACE.events.filter(e => e.type === 'overtake' && e.lap === currentLap);
-
     let tickerSet = false;
 
     if (pitsThisLap.length > 0 && lapProgress > 0.77 && lapProgress < 0.93) {
       const pit = pitsThisLap[pitsThisLap.length - 1];
       const team = TEAMS.find(t => t.id === pit.team);
-      tickerEl.textContent = `▸ PIT STOP! ${team.emoji} $${pit.team} — fresh tyres — lost ${pit.timeLost}s — LAP ${currentLap}`;
+      tickerEl.innerHTML = `▸ PIT STOP! ${tImg(team)} $${pit.team} — fresh tyres — lost ${pit.timeLost}s — LAP ${currentLap}`;
       tickerEl.style.color = '#ff9900';
       tickerDiv.style.background = 'rgba(255,153,0,0.06)';
       document.getElementById('statOvertake').textContent = `$${pit.team} PITS`;
@@ -924,18 +2044,14 @@ function update() {
       const sectorEvents = RACE.events.filter(e => e.lap === currentLap && (e.type === 'fastest_s1' || e.type === 'fastest_s2' || e.type === 'fastest_s3'));
       if (sectorEvents.length > 0) {
         let sectorEvent = null;
-        if (lapProgress > 0.15 && lapProgress < 0.35) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s1');
-        } else if (lapProgress > 0.40 && lapProgress < 0.60) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s2');
-        } else if (lapProgress > 0.65 && lapProgress < 0.85) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s3');
-        }
+        if (lapProgress > 0.15 && lapProgress < 0.35) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s1');
+        else if (lapProgress > 0.40 && lapProgress < 0.60) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s2');
+        else if (lapProgress > 0.65 && lapProgress < 0.85) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s3');
         if (sectorEvent) {
           const sTeam = TEAMS.find(t => t.id === sectorEvent.team);
           const sLabel = sectorEvent.type === 'fastest_s1' ? '🔵 FASTEST S1' : sectorEvent.type === 'fastest_s2' ? '🔴 FASTEST S2' : '🟢 FASTEST S3';
           const freshMsg = sectorEvent.freshTyres ? ' — FRESH TYRES! 🔥' : '';
-          tickerEl.textContent = `▸ ${sLabel} — ${sTeam.emoji} $${sectorEvent.team} — ${sectorEvent.time.toFixed(3)}${freshMsg}`;
+          tickerEl.innerHTML = `▸ ${sLabel} — ${tImg(sTeam)} $${sectorEvent.team} — ${sectorEvent.time.toFixed(3)}s${freshMsg}`;
           tickerEl.style.color = sectorEvent.type === 'fastest_s1' ? '#3b82f6' : sectorEvent.type === 'fastest_s2' ? '#ef4444' : '#10b981';
           tickerDiv.style.background = `${tickerEl.style.color}0a`;
           tickerSet = true;
@@ -946,7 +2062,7 @@ function update() {
     if (!tickerSet && overtakesThisLap.length > 0 && lapProgress > 0.4) {
       const ot = overtakesThisLap[overtakesThisLap.length - 1];
       const attacker = TEAMS.find(t => t.id === ot.attacker);
-      tickerEl.textContent = `▸ OVERTAKE! ${attacker.emoji} $${ot.attacker} passes $${ot.defender} for P${ot.newPos} — LAP ${currentLap}`;
+      tickerEl.innerHTML = `▸ OVERTAKE! ${tImg(attacker)} $${ot.attacker} passes $${ot.defender} for P${ot.newPos} — LAP ${currentLap}`;
       tickerEl.style.color = '#ffcc00';
       tickerDiv.style.background = 'rgba(255,204,0,0.06)';
       document.getElementById('statOvertake').textContent = `$${ot.attacker} → P${ot.newPos}`;
@@ -954,18 +2070,42 @@ function update() {
     }
 
     if (!tickerSet) {
-      tickerEl.textContent = `▸ LAP ${currentLap}/${TOTAL_LAPS} — ${leader.emoji} $${leader.id} leads`;
+      tickerEl.innerHTML = `▸ LAP ${currentLap}/${TOTAL_LAPS} — ${tImg(leader)} $${leader.id} leads`;
       tickerEl.style.color = '#ff6644';
       tickerDiv.style.background = 'rgba(255,0,64,0.06)';
     }
   }
 
-  renderCarDots(liveOrder, lapProgress, allCarsFinished, liveGaps, currentLap, elapsed);
-  renderRaceTower(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, leaderFinished, elapsed);
-  renderLeaderboard(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, elapsed);
-  renderFanZone();
+  // Publish live state FIRST — the SESSION DATA dashboard + heartbeat read this, so it must
+  // update every frame even if a render below throws. (Was set last, so any throw froze it.)
+  window._LIVE = { positions: liveOrder, gaps: interpolatedGaps, elapsed, isComplete, prog };
+
+  try { renderCarDots(liveOrder, lapProgress, allCarsFinished, liveGaps, currentLap, elapsed); } catch (e) { console.error('renderCarDots:', e); }
+  try { renderRaceTower(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, leaderFinished, elapsed); } catch (e) { console.error('renderRaceTower:', e); }
+  try { renderLeaderboard(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, elapsed); } catch (e) { console.error('renderLeaderboard:', e); }
+  try { renderFanZone(); } catch (e) { console.error('renderFanZone:', e); }
+
+  // Keep the SESSION DATA dashboard in sync with the live race while it is on screen.
+  // Rebuild only when something meaningful changes (lap, running order, a pit stop, or a
+  // retirement) so positions/gaps/pit-stops/DNFs track the race without per-frame flicker.
+  const _dv = document.getElementById('dashboardView');
+  if (_dv && _dv.style.display !== 'none') {
+    const _hb = document.getElementById('dashHeartbeat');
+    if (_hb) _hb.textContent = isComplete ? 'FINAL' : ('L' + currentLap);
+    const _pits = RACE.events.filter(e => e.type === 'pit' && e.lap <= currentLap).length;
+    const _dnfs = TEAMS.filter(t => RACE.dnfLap[t.id] && RACE.dnfLap[t.id] <= currentLap).length;
+    const _sig = currentLap + '|' + liveOrder.join(',') + '|' + _pits + '|' + _dnfs + '|' + (isComplete ? 1 : 0);
+    if (_sig !== window._dashSig) {
+      window._dashSig = _sig;
+      try { buildDash(); } catch (err) { if (_hb) _hb.textContent = 'ERR'; console.error('buildDash failed:', err); }
+    }
+  }
 
   requestAnimationFrame(update);
+  } catch(e) {
+    console.error('MemeGP update error:', e);
+    requestAnimationFrame(update); // keep running even if one frame throws
+  }
 }
 
 function renderGridFormation() {
@@ -1003,38 +2143,41 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
   let html = '';
   positions.forEach((id, pos) => {
     const team = TEAMS.find(t => t.id === id);
-    const gapSeconds = gaps[pos] || 0;
-    const gapFraction = gapSeconds / LAP_REAL_SECONDS;
-
-    const carElapsed = Math.max(0, elapsed - gapSeconds);
-    const carLap = Math.min(TOTAL_LAPS, Math.floor(carElapsed / LAP_REAL_SECONDS) + 1);
-    const carLapProgress = (carElapsed % LAP_REAL_SECONDS) / LAP_REAL_SECONDS;
-
-    const carLapIdx = Math.min(carLap - 1, TOTAL_LAPS - 1);
+    const cp = carProgress(id, elapsed);
+    const carLap = cp.carLap, carLapProgress = cp.frac, carLapIdx = cp.carLapIdx;
+    if (RACE.dnfLap[id] && carLap > RACE.dnfLap[id]) return;   // retired — off the track
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
-    if (isPitting && carLapProgress > 0.70) {
-      // stationary hold sized to the engine's actual service time (5-10s) for this stop
+    // Pit lane parallels the S/F straight (top) = the FIRST ~16% of the lap. The car eases
+    // OFF its racing line into the pit lane, services in the box, then eases BACK onto the
+    // racing line — blended so there is no jump at entry or exit (was snapping before).
+    const PIT_OUT = 0.16;
+    // the car's natural racing-line position this instant (used to blend in/out of the pit)
+    let _gf = ((carLap - 1) + carLapProgress) - (team.gridPos - 1) * 0.013;
+    _gf = ((_gf % 1) + 1) % 1;
+    const trackPt = getPoint(_gf);
+    if (isPitting && carLapProgress < PIT_OUT) {
       const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id && e.lap === carLap);
-      const serviceFrac = Math.min(0.16, Math.max(0.055, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
-      const enterEnd = 0.74, holdEnd = enterEnd + serviceFrac;   // car sits still box during [enterEnd, holdEnd]
+      const serviceFrac = Math.min(0.06, Math.max(0.03, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
+      const enterEnd = 0.04, holdEnd = enterEnd + serviceFrac;
+      let pitPt, blend;
       if (carLapProgress < enterEnd) {
-        const pitFrac = (carLapProgress - 0.70) / (enterEnd - 0.70);
-        pt = getPitPoint(pitFrac * 0.45);                        // drive into the box
+        const k = carLapProgress / enterEnd;                 // 0 -> 1
+        pitPt = getPitPoint(k * 0.4); blend = k;             // peel off racing line into the lane
       } else if (carLapProgress < holdEnd) {
-        pt = getPitPoint(0.5);                                   // STATIONARY — tyres + refuel
+        pitPt = getPitPoint(0.5); blend = 1;                 // stationary in the box
       } else {
-        const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.02, (1 - holdEnd)));
-        pt = getPitPoint(0.55 + exitFrac * 0.45);                // accelerate back out
+        const k = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.01, (PIT_OUT - holdEnd)));
+        pitPt = getPitPoint(0.6 + k * 0.4); blend = 1 - k;  // accelerate out, ease back onto racing line
       }
+      pt = { x: trackPt.x + (pitPt.x - trackPt.x) * blend, y: trackPt.y + (pitPt.y - trackPt.y) * blend };
     } else {
-      const frac = (lapProgress - gapFraction + 1) % 1;
-      pt = getPoint(frac);
+      pt = trackPt;
     }
 
     const logoId = 'logo-clip-' + id;
-    const showPitBadge = isPitting && carLapProgress > 0.70;
+    const showPitBadge = isPitting && carLapProgress < 0.16;
     const ringColor = showPitBadge ? '#ff9900' : team.color;
     const isLeaderDot = pos === 0;
     const leaderHalo = isLeaderDot ? `<circle cx="${pt.x}" cy="${pt.y}" r="13.5" fill="${team.color}" opacity="0.22"/>` : '';
@@ -1052,45 +2195,82 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
 
 function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplete, currentLap, leaderFinished, elapsed) {
   const el = document.getElementById('raceTower');
+  const COMP_MAX = { SOFT:8, MED:14, HARD:20 };
+  const tc = document.getElementById('towerCols');
+  if (tc) tc.classList.toggle('show', currentLap >= 4);
+
   let html = '';
   positions.forEach((id, pos) => {
     const team = TEAMS.find(t => t.id === id);
-    const prevPos = prevLapData ? prevLapData.positions.indexOf(id) : team.gridPos - 1;
-    const change = prevPos - pos;
+    const change = team.gridPos - (pos + 1);
     const changeStr = change > 0 ? `▲${change}` : change < 0 ? `▼${Math.abs(change)}` : '';
     const changeColor = change > 0 ? '#00ff88' : change < 0 ? '#ff4444' : '#333';
-    const gap = pos === 0 ? 'LEADER' : `+${gaps[pos].toFixed(1)}s`;
     const isLeader = pos === 0;
     const isSelected = selectedTeam === id;
     const isWinner = isComplete && pos === 0;
     const hasPitted = currentLapData.pittedStatus ? currentLapData.pittedStatus[id] : false;
-    const tyreAge = currentLapData.tyreAges ? currentLapData.tyreAges[id] || 0 : 0;
+    const _cp = carProgress(id, elapsed);
+    const carLap = _cp.carLap, carLapIdx = _cp.carLapIdx;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac < 0.16;
 
-    const gapSeconds = gaps[pos] || 0;
-    const carElapsed = Math.max(0, elapsed - gapSeconds);
-    const carLap = Math.min(TOTAL_LAPS, Math.floor(carElapsed / LAP_REAL_SECONDS) + 1);
-    const carLapProgress = (carElapsed % LAP_REAL_SECONDS) / LAP_REAL_SECONDS;
-    const carLapIdx = Math.min(carLap - 1, TOTAL_LAPS - 1);
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.70;
+    // Compute real tyre age: laps on current set since last pit
+    const pitLaps = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+    const lastPitLap = pitLaps.filter(p => p < carLap).pop() || 0; // last pit before current lap
+    const hasPittedCalc = lastPitLap > 0;
+    const tyreAge = Math.max(0, carLap - 1 - lastPitLap);
 
-    html += `<div style="display:flex;align-items:center;gap:5px;padding:5px 12px;border-bottom:1px solid #111;
-      background:${isWinner?'rgba(0,255,136,0.08)':isPitting?'rgba(255,153,0,0.06)':isSelected?'rgba(255,255,255,0.03)':'transparent'};
-      border-left:3px solid ${isLeader?'#00ff88':isPitting?'#ff9900':isSelected?team.color:'transparent'}">
-      <span style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:${isLeader?'#fff':'#666'};width:18px">${pos+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
-      <div style="flex:1">
-        <div style="font-size:10px;font-weight:700;color:${isLeader?'#fff':'#ccc'}">$${id}</div>
-        <div style="display:flex;gap:4px;align-items:center">
-          ${isPitting ? '<span class="pit-badge">PIT</span>' : ''}
-          <span style="font-size:7px;color:#444">T${tyreAge}</span>
-          ${hasPitted && !isPitting ? '<span style="font-size:6px;color:#333">●</span>' : ''}
+    // TYRE CIRCLE with live wear %
+    const comp = currentCompound(id, carLap);
+    const compColor = TYRE_COL[comp];
+    const wearPct = Math.min(99, Math.round(tyreAge / (COMP_MAX[comp] || 14) * 100));
+    const R = 13, CIRC = 2 * Math.PI * R;
+    const arcLen = (wearPct / 100) * CIRC;
+    const wearColor = wearPct < 40 ? '#00ff88' : wearPct < 70 ? '#ffd21a' : '#ff4444';
+    const tyreSvg = `<div style="position:relative;width:34px;height:34px;border-radius:50%;
+        background:rgba(0,0,0,.35);display:grid;place-items:center;flex-shrink:0;
+        border:2px solid ${compColor};box-shadow:0 0 8px ${compColor}77,0 0 3px ${compColor}44 inset">
+      <svg width="34" height="34" style="position:absolute;inset:0;overflow:visible">
+        <circle cx="17" cy="17" r="${R}" fill="none" stroke="${wearColor}33" stroke-width="3"/>
+        <circle cx="17" cy="17" r="${R}" fill="none" stroke="${wearColor}" stroke-width="3"
+          stroke-dasharray="${arcLen.toFixed(1)} ${CIRC.toFixed(1)}"
+          transform="rotate(-90 17 17)" stroke-linecap="round"/>
+      </svg>
+      <span style="font-size:9px;font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1">${wearPct}%</span>
+    </div>`;
+
+    // FUEL BAR: strategy-aware — FULL starters run high & drain across the race,
+    // HALF starters run ~50% and burn down each stint (refuel to ~50% at stops).
+    const fuelFrac = currentFuelFrac(id, carLap);
+    const GAUGE_H = 30, fillH = Math.round(fuelFrac * GAUGE_H);
+    const fuelCol = fuelFrac > 0.4 ? '#3b82f6' : fuelFrac > 0.15 ? '#ffd21a' : '#ff4444';
+    const fuelGauge = `<div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0">
+      <span style="font-family:'Orbitron',sans-serif;font-size:5.5px;color:#555">F</span>
+      <div style="width:8px;height:${GAUGE_H}px;background:#0d0d18;border:1px solid #2a2a3a;border-radius:3px;position:relative;overflow:hidden">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:${fillH}px;background:${fuelCol};border-radius:2px;box-shadow:0 0 4px ${fuelCol}88"></div>
+      </div>
+      <span style="font-family:'Orbitron',sans-serif;font-size:5.5px;color:#555">E</span>
+    </div>`;
+
+    // Column order: POS | DRIVER (logo+name) | FUEL | TYRE CIRCLE | +/-
+    html += `<div style="display:grid;grid-template-columns:16px 1fr 14px 36px 22px;
+        align-items:center;gap:4px;padding:4px 8px;border-bottom:1px solid #111;cursor:default;
+        background:${isWinner?'rgba(0,255,136,0.08)':isPitting?'rgba(255,153,0,0.06)':isSelected?'rgba(255,255,255,0.03)':'transparent'};
+        border-left:3px solid ${isLeader?'#00ff88':isPitting?'#ff9900':isSelected?team.color:'transparent'}">
+      <span style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;color:${isLeader?'#fff':'#666'}">${pos+1}</span>
+      <div style="min-width:0;display:flex;align-items:center;gap:5px">
+        <img src="${team.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid ${team.color}55">
+        <div style="min-width:0">
+          <div style="font-size:10px;font-weight:700;color:${isLeader?'#fff':'#ccc'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">$${id}</div>
+          <div style="font-size:6.5px;color:#555;margin-top:1px">${isPitting?'<span style="color:#ff9900;font-weight:700">IN PIT</span>':hasPittedCalc?'<span style="color:#00ff88">✓ PITTED</span>':comp}</div>
         </div>
       </div>
-      <span style="font-family:'Space Mono',monospace;font-size:8px;color:${changeColor};font-weight:700;width:22px;text-align:center">${changeStr}</span>
-      <span style="font-family:'Space Mono',monospace;font-size:8px;color:${isLeader?'#00ff88':'#888'};width:50px;text-align:right">${gap}</span>
+      ${fuelGauge}
+      ${tyreSvg}
+      <span style="font-family:'Space Mono',monospace;font-size:7.5px;color:${changeColor};font-weight:700;text-align:center">${changeStr}</span>
     </div>`;
   });
   el.innerHTML = html;
+  // NO hover on left tower — hover only on right leaderboard
 }
 
 function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isComplete, currentLap, elapsed) {
@@ -1108,26 +2288,28 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
     const hasPitted = currentLapData.pittedStatus ? currentLapData.pittedStatus[id] : false;
     const tyreAge = currentLapData.tyreAges ? currentLapData.tyreAges[id] || 0 : 0;
 
-    const gapSeconds = gaps[pos] || 0;
-    const carElapsed = Math.max(0, elapsed - gapSeconds);
-    const carLap = Math.min(TOTAL_LAPS, Math.floor(carElapsed / LAP_REAL_SECONDS) + 1);
-    const carLapProgress = (carElapsed % LAP_REAL_SECONDS) / LAP_REAL_SECONDS;
-    const carLapIdx = Math.min(carLap - 1, TOTAL_LAPS - 1);
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.70;
+    const _cp = carProgress(id, elapsed);
+    const carLap = _cp.carLap, carLapProgress = _cp.frac, carLapIdx = _cp.carLapIdx;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress < 0.16;
+
+    // Use pitLaps array to determine if car has COMPLETED its stop (not just entered)
+    const _pitLapsLb = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+    const _lastPitLb = _pitLapsLb.filter(p => p < carLap).pop() || 0;
+    const hasPittedActual = _lastPitLb > 0;
 
     let pitIndicator;
     if (isPitting) {
       pitIndicator = `<span class="pit-badge">IN PIT</span>`;
-    } else if (hasPitted) {
+    } else if (hasPittedActual) {
       pitIndicator = `<span style="font-size:8px;color:#00ff88">✓</span>`;
     } else {
       pitIndicator = `<span style="font-size:7px;color:#ff4444;font-family:'Space Mono',monospace">0</span>`;
     }
 
-    html += `<div class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
+    html += `<div data-tipid="${id}" class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
       border-left:2px solid ${isLeader?'#00ff88':isPitting?'#ff9900':'transparent'}">
       <span style="font-size:11px;font-weight:800;color:${isWinner?'#00ff88':isLeader?'#fff':'#666'};font-family:'Orbitron',sans-serif">${pos+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:18px;height:18px;border-radius:50%;object-fit:cover">
+      <span style="display:inline-flex;width:23px;height:23px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
       <div>
         <div style="font-size:10px;font-weight:700;color:#eee">$${id}</div>
         <div style="font-size:6px;color:#444">P${gridPos} · T${tyreAge}</div>
@@ -1138,9 +2320,12 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
     </div>`;
   });
   el.innerHTML = html;
+  // Hover cards only on right-side leaderboard
+  el.querySelectorAll('[data-tipid]').forEach(r => attachTip(r, r.dataset.tipid));
 }
 
 let podiumShown = false;
+let raceCompleteShown = false;   // one-time switch to the SESSION DATA dashboard at race end
 function showPodium(positions, gaps) {
   if (podiumShown) return;
   podiumShown = true;
@@ -1160,6 +2345,7 @@ function showPodium(positions, gaps) {
   let html = '';
   positions.forEach((id, i) => {
     const team = TEAMS.find(t => t.id === id);
+    const carLap = TOTAL_LAPS;   // podium = final compound
     const gap = i === 0 ? 'WINNER' : `+${gaps[i].toFixed(1)}s`;
     const gridChange = team.gridPos - (i + 1);
     const changeStr = gridChange > 0 ? `▲${gridChange}` : gridChange < 0 ? `▼${Math.abs(gridChange)}` : '—';
@@ -1169,7 +2355,7 @@ function showPodium(positions, gaps) {
 
     html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid #1a1a1a;background:${bgColor}">
       <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:${posColor};width:24px">${i+1}</span>
-      <img src="${team.logo}" alt="${id}" style="width:20px;height:20px;border-radius:50%;object-fit:cover">
+      <span style="display:inline-flex;width:25px;height:25px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
       <div style="flex:1"><span style="font-size:11px;font-weight:700;color:#eee">$${id}</span></div>
       <span style="font-family:'Space Mono',monospace;font-size:8px;color:${changeColor};font-weight:700;width:24px;text-align:center">${changeStr}</span>
       <span style="font-family:'Space Mono',monospace;font-size:9px;color:${i===0?'#ffcc00':'#888'};width:55px;text-align:right">${gap}</span>
@@ -1184,7 +2370,262 @@ function showPodium(positions, gaps) {
 }
 
 initTeamPicker();
+console.log('MemeGP race-preview — build: live-dash + pit-fix + strategies ✓');
+
+// Independent dashboard refresher — runs on its own 500ms timer (not tied to the
+// animation loop) so SESSION DATA stays in sync even if a frame is skipped. Reads the
+// live race state from window._LIVE, which the update() loop refreshes every frame.
+setInterval(function () {
+  var dv = document.getElementById('dashboardView');
+  if (!dv || dv.style.display === 'none') return;
+  var live = window._LIVE || {};
+  if (!live.positions || !live.positions.length) return;
+  var cl = Math.min(TOTAL_LAPS, Math.floor((live.elapsed || 0) / LAP_REAL_SECONDS) + 1);
+  var pits = RACE.events.filter(function (e) { return e.type === 'pit' && e.lap <= cl; }).length;
+  var dnfs = TEAMS.filter(function (t) { return RACE.dnfLap[t.id] && RACE.dnfLap[t.id] <= cl; }).length;
+  var sig = cl + '|' + live.positions.join(',') + '|' + pits + '|' + dnfs + '|' + (live.isComplete ? 1 : 0);
+  var hb = document.getElementById('dashHeartbeat');
+  if (hb) hb.textContent = live.isComplete ? 'FINAL' : ('L' + cl);
+  if (sig !== window._dashSig) {
+    window._dashSig = sig;
+    try { buildDash(); } catch (e) { if (hb) hb.textContent = 'ERR'; console.error('buildDash failed:', e); }
+  }
+}, 500);
+
 requestAnimationFrame(update);
+
+// ── vtoggle ─────────────────────────────────────────────────
+window._LIVE = { positions:[], gaps:{}, elapsed:0, isComplete:false, prog:null };
+function vtShow(which) {
+  const tl=document.getElementById('tabLive'), td=document.getElementById('tabData');
+  const dv=document.getElementById('dashboardView');
+  const isData = which==='data';
+  if(tl) tl.classList.toggle('on',!isData);
+  if(td) td.classList.toggle('on',isData);
+  if(dv) dv.style.display = isData ? 'block' : 'none';
+  if(isData) buildDash();
+}
+window.vtShow = vtShow;
+
+// HOVER REPLACED
+
+// ── HOVER CARD — FP-identical pattern ─────────────────────
+let tipTeam = null, tipX = 0, tipY = 0;
+
+function renderRowTip(id) {
+  const tip = document.getElementById('rowTip');
+  const team = TEAMS.find(t => t.id === id);
+  if (!team) { tip.style.display = 'none'; return; }
+  const {positions, gaps} = window._LIVE || {};
+  // elapsed FRESH from the clock (same basis as the tower) — never trust _LIVE.elapsed here
+  const elapsed = Math.max(0, ((Date.now() - _PVT0) / 1000) * _PVSPD - COUNTDOWN_SECONDS);
+  const pos = positions ? positions.indexOf(id) : -1;
+  const cp = carProgress(id, elapsed);
+  const retired = !!(RACE.dnfLap[id] && cp.carLap > RACE.dnfLap[id]);
+  const comp = currentCompound(id, cp.carLap);
+  const CC = { SOFT:'#ef4444', MED:'#ffcc00', HARD:'#e8e8ee' };
+  const cc = CC[comp] || '#888';
+  const COMP_MAX = { SOFT:8, MED:14, HARD:20 };
+  const pitLapsArr = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+  const lastPitLapT = pitLapsArr.filter(p => p < cp.carLap).pop() || 0;
+  const hasPittedT = lastPitLapT > 0;
+  const tyreAge = Math.max(0, cp.carLap - 1 - lastPitLapT);
+  const deg = Math.min(100, Math.round(tyreAge / (COMP_MAX[comp] || 14) * 100));
+  const degCol = deg < 40 ? '#00ff88' : deg < 70 ? '#ffd21a' : '#ff4444';
+  const fuelFrac = Math.max(0.04, currentFuelFrac(id, cp.carLap));
+  const fuel = Math.round(fuelFrac * 100);
+  const fcol = fuel > 66 ? '#22DD66' : fuel > 33 ? '#ffcc00' : '#ff3b3b';
+  let bLap = Infinity, bLapN = 0;
+  for (let L = 1; L <= Math.min(cp.carLap - 1, TOTAL_LAPS); L++) {
+    const lt = RACE.laps[L-1].lapTimes[id];
+    if (lt && lt > 0 && lt < bLap) { bLap = lt; bLapN = L; }
+  }
+  const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id);
+  const gapStr = pos === 0 ? 'LEADER' : retired ? 'RETIRED' : `+${((gaps && gaps[id]) || 0).toFixed(2)}s`;
+  const mv = team.gridPos - (pos + 1);
+  const mvStr = mv > 0 ? `▲${mv} (P${team.gridPos}→P${pos+1})` : mv < 0 ? `▼${Math.abs(mv)} (P${team.gridPos}→P${pos+1})` : `— P${pos+1}`;
+  const mvCol = mv > 0 ? '#00ff88' : mv < 0 ? '#ff4444' : '#888';
+  const carSrc = team.car || team.logo.replace('.png', '-car.png');
+  tip.style.display = 'none';
+  tip.innerHTML = `
+    <div class="tip-body">
+      <div class="tip-head"><img src="${team.logo}" alt=""><b>$${id}</b>
+        <span style="font-family:'Chakra Petch';font-size:9px;color:#555;margin-left:4px">${retired ? 'RETIRED' : pos < 0 ? '—' : `P${pos+1}`}</span>
+      </div>
+      <div class="tip-sec">
+        <div class="tip-h2">RACE DATA</div>
+        <div class="ssec"><span style="color:#aaa">GAP</span><span>${gapStr}</span></div>
+        <div class="ssec"><span style="color:#aaa">LAP</span><span>${retired ? `DNF (L${RACE.dnfLap[id]})` : `${cp.carLap} / ${TOTAL_LAPS}`}</span></div>
+        <div class="ssec"><span style="color:#aaa">BEST LAP</span><span>${bLap < Infinity ? `${fmt(bLap)} (L${bLapN})` : '—'}</span></div>
+        <div class="ssec"><span style="color:#aaa">PIT</span><span>${pitEv ? `LAP ${pitEv.lap} (-${pitEv.timeLost}s)` : 'NOT YET'}</span></div>
+        <div class="ssec"><span style="color:#aaa">GRID→NOW</span><span style="color:${mvCol}">${mvStr}</span></div>
+      </div>
+      <div class="tip-live">
+        <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
+        <div class="tl-row"><span>TYRE</span><span class="tcomp" style="--tc:${cc}">${comp}</span></div>
+        <div class="tl-row"><span>WEAR</span><div class="bar"><i style="width:${deg}%;background:${degCol}"></i></div><b>${deg}%</b></div>
+        <div class="tl-row"><span>FUEL</span><div class="bar"><i style="width:${fuel}%;background:${fcol}"></i></div><b>${fuel > 66 ? 'F' : fuel > 33 ? 'M' : 'E'}</b></div>
+      </div>
+    </div>
+    <div class="tip-car" style="--tc:${team.color}">
+      <span class="acc"></span>
+      <div class="tcar-half tcar-top"><img src="${team.logo}" alt=""></div>
+      <div class="tcar-half tcar-bot"><img src="${carSrc}" alt="" onerror="if(this.src.slice(-4).toLowerCase()=='.png'){this.src=this.src.slice(0,-4)+'.jpg';}else{this.onerror=null;this.src='${team.logo}';}"></div>
+      <span class="tag">$${id}</span>
+    </div>`;
+  tip.style.display = 'flex';
+  const w = tip.offsetWidth || 368, h = tip.offsetHeight || 220;
+  let x = tipX - w - 18; if (x < 8) x = tipX + 18;
+  let y = Math.min(Math.max(8, tipY - 24), window.innerHeight - h - 8);
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+
+(function() {
+  const tip = document.getElementById('rowTip');
+  const lb  = document.getElementById('leaderboard');
+  if (!lb || !tip) return;
+  lb.addEventListener('mousemove', e => {
+    tipX = e.clientX; tipY = e.clientY;
+    const row = e.target.closest('[data-tipid]');
+    if (row) { tipTeam = row.getAttribute('data-tipid'); renderRowTip(tipTeam); }
+    else { tipTeam = null; tip.style.display = 'none'; }
+  });
+  lb.addEventListener('mouseleave', () => { tipTeam = null; tip.style.display = 'none'; });
+})();
+
+// ── SESSION DATA dashboard ──────────────────────────────────
+function buildDash() {
+  let live = window._LIVE || {};
+  let liveOrder = live.positions || [];
+  let liveGaps  = live.gaps || {};
+  const elapsed   = live.elapsed || 0;
+  const isComplete= live.isComplete || false;
+  const prog      = live.prog || null;
+
+  // If _LIVE hasn't been populated yet (race just started), compute from engine directly
+  if (!liveOrder.length && RACE && RACE.laps && RACE.laps[0]) {
+    const firstPositions = RACE.laps[0].positions || [];
+    if (firstPositions.length) {
+      liveOrder = firstPositions.map(id => typeof id === 'string' ? id : id.id || id);
+      liveGaps = {};
+      liveOrder.forEach((id, i) => { liveGaps[id] = i === 0 ? 0 : 0; });
+    }
+  }
+
+  if (!liveOrder.length) {
+    const podEl = document.getElementById('dashPodium');
+    if (podEl) podEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#555;font-family:Orbitron;font-size:12px;padding:40px">WAITING FOR RACE TO START…</div>';
+    const listEl = document.getElementById('dashList'); if (listEl) listEl.innerHTML = '';
+    const gridEl = document.getElementById('dashGrid'); if (gridEl) gridEl.innerHTML = '';
+    return;
+  }
+
+  const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
+
+  const titleEl = document.getElementById('dashResultTitle');
+  if (titleEl) titleEl.textContent = isComplete ? 'RACE COMPLETED' : `RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
+  const subEl = document.getElementById('dashSub');
+  if (subEl) subEl.textContent = isComplete
+    ? `SATOSHI SPEEDWAY · ROUND 1 · ${TOTAL_LAPS} LAPS · FINAL CLASSIFICATION`
+    : `SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
+
+  const pcard=(id,absPos)=>{
+    const team=TEAMS.find(t=>t.id===id);
+    const gap=absPos===1?(isComplete?'RACE WINNER':'RACE LEADER'):`+${(liveGaps[id]||0).toFixed(3)}s`;
+    const mv=team.gridPos-absPos; const mvS=mv>0?`▲${mv}`:mv<0?`▼${Math.abs(mv)}`:'—';
+    return `<div class="pcard${absPos===1?' p1':''}" style="--pc:${team.color};--pc-glow:${team.color}88">
+      <div class="media"><img src="${team.logo}" alt="$${id}"></div>
+      <div class="num">${absPos}</div>${absPos===1?'<div class="crown">🏆</div>':''}
+      <div class="ov"><div class="tk" style="color:${team.color}">$${id}</div><div class="lap">${gap}</div><div class="runs">${mvS} from grid</div></div>
+      <div class="accent"></div></div>`;
+  };
+  const podEl=document.getElementById('dashPodium');
+  if(podEl&&liveOrder.length>=3) podEl.innerHTML=pcard(liveOrder[1],2)+pcard(liveOrder[0],1)+pcard(liveOrder[2],3);
+
+  const listEl=document.getElementById('dashList');
+  if(listEl) listEl.innerHTML=liveOrder.slice(3).map((id,i)=>{
+    const team=TEAMS.find(t=>t.id===id);
+    const gap=`+${(liveGaps[id]||0).toFixed(3)}s`;
+    const mv=team.gridPos-(i+4); const mS=mv>0?`▲${mv}`:mv<0?`▼${Math.abs(mv)}`:'—'; const mC=mv>0?'#00ff88':mv<0?'#ff4444':'#888';
+    return `<div class="lrow"><div class="lpos">${i+4}</div><div class="lav" style="--pc:${team.color}"><img src="${team.logo}" alt=""></div><div class="ltk" style="color:${team.color}">$${id}</div><div class="llap" style="color:${mC};font-family:'Orbitron';font-size:10px">${mS}</div><div class="lgap">${gap}</div></div>`;
+  }).join('');
+
+  // fun fact cards
+  const s1K = prog && prog.fastestS1 && isFinite(prog.fastestS1.time) ? TEAMS.find(t=>t.id===prog.fastestS1.driver) : null;
+  const s2K = prog && prog.fastestS2 && isFinite(prog.fastestS2.time) ? TEAMS.find(t=>t.id===prog.fastestS2.driver) : null;
+  const s3K = prog && prog.fastestS3 && isFinite(prog.fastestS3.time) ? TEAMS.find(t=>t.id===prog.fastestS3.driver) : null;
+  const flK  = prog && prog.fastestLap && isFinite(prog.fastestLap.time) ? TEAMS.find(t=>t.id===prog.fastestLap.driver) : null;
+  let bigMover=null,bigMove=0,bigLoser=null,bigLoss=0;
+  liveOrder.forEach((id,p)=>{
+    const t=TEAMS.find(x=>x.id===id);
+    const g=t.gridPos-(p+1); if(g>bigMove){bigMove=g;bigMover=t;}
+    const l=(p+1)-t.gridPos; if(l>bigLoss){bigLoss=l;bigLoser=t;}
+  });
+  const pitsDone=RACE.events.filter(e=>e.type==='pit'&&e.lap<=currentLap);
+  const pitsLeft=TEAMS.filter(t=>!pitsDone.find(p=>p.team===t.id)&&!RACE.dnfLap[t.id]);
+  const CC={SOFT:'#ff3b3b',MED:'#ffd21a',HARD:'#e8edf5'};
+  let cards='';
+  // SECTOR KINGS — with team logos as dots
+  if(s1K&&s2K&&s3K) cards+=`<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div><div class="sk">
+    <div class="skrow"><img src="${s1K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #3b82f6;flex-shrink:0"><span class="sktk" style="color:#3b82f6">$${s1K.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${prog.fastestS1.time.toFixed(3)}s</span></div>
+    <div class="skrow"><img src="${s2K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #ef4444;flex-shrink:0"><span class="sktk" style="color:#ef4444">$${s2K.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${prog.fastestS2.time.toFixed(3)}s</span></div>
+    <div class="skrow"><img src="${s3K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #10b981;flex-shrink:0"><span class="sktk" style="color:#10b981">$${s3K.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${prog.fastestS3.time.toFixed(3)}s</span></div>
+  </div>${flK?`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.12);font-size:11px;color:#cfcfd6;display:flex;align-items:center;gap:6px"><img src="${flK.logo}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;border:1px solid #ffcc00">Fastest lap: <b style="font-family:'JetBrains Mono';color:#ffcc00">$${flK.id} — ${fmt(prog.fastestLap.time)}</b> (Lap ${prog.fastestLap.lap})</div>`:''}</div>`;
+
+  // BIGGEST MOVER — hasphoto with team logo
+  if(bigMover) cards+=`<div class="fc hasphoto" style="--ac:${bigMover.color}">
+    <div class="fc-photo" style="background-image:url('${bigMover.logo}')"></div>
+    <div class="fc-scrim"></div>
+    <div class="fc-h">BIGGEST MOVER</div>
+    <div class="fc-big"><span class="u" style="color:${bigMover.color}">$${bigMover.id}</span> <span style="font-family:'JetBrains Mono'">▲${bigMove}</span></div>
+    <div class="fc-sub">Started P${bigMover.gridPos} — now P${bigMover.gridPos-bigMove}</div>
+  </div>`;
+
+  // BIGGEST LOSER — hasphoto with team logo
+  if(bigLoser&&bigLoss>0) cards+=`<div class="fc hasphoto" style="--ac:#ff4444">
+    <div class="fc-photo" style="background-image:url('${bigLoser.logo}');filter:grayscale(30%)"></div>
+    <div class="fc-scrim"></div>
+    <div class="fc-h" style="color:#ff6666">BIGGEST LOSER</div>
+    <div class="fc-big"><span class="u" style="color:#ff4444">$${bigLoser.id}</span> <span style="font-family:'JetBrains Mono'">▼${bigLoss}</span></div>
+    <div class="fc-sub">Started P${bigLoser.gridPos} — now P${bigLoser.gridPos+bigLoss}</div>
+  </div>`;
+  // PIT STOPS
+  cards+=`<div class="fc" style="--ac:#ff9900"><div class="fc-h">PIT STOPS — ${pitsDone.length} DONE</div><div class="sk" style="max-height:160px;overflow-y:auto">
+    ${pitsDone.map(p=>{const t=TEAMS.find(x=>x.id===p.team);const ca=RACE.strategies[p.team]?.a||'MED',cb=RACE.strategies[p.team]?.b||'MED';return `<div class="skrow"><img src="${t.logo}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1.5px solid ${t.color};flex-shrink:0"><span class="sktk" style="color:${t.color};font-size:10px">$${p.team}</span><span style="color:${CC[ca]};font-size:9px">${ca}</span><span style="color:#444">→</span><span style="color:${CC[cb]};font-size:9px">${cb}</span><span class="sktime" style="font-size:9px">L${p.lap}</span></div>`;}).join('')}
+    ${pitsLeft.map(t=>`<div class="skrow"><img src="${t.logo}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1.5px solid #333;flex-shrink:0;opacity:.5"><span class="sktk" style="color:#555;font-size:10px">$${t.id}</span><span style="color:#ff4444;font-size:9px">PENDING</span></div>`).join('')}
+  </div></div>`;
+  document.getElementById('dashGrid').innerHTML=cards;
+
+  // DNF section — only cars that have ACTUALLY retired by currentLap
+  const dnfs=TEAMS.filter(t=>RACE.dnfLap[t.id]&&RACE.dnfLap[t.id]<=currentLap)
+    .sort((a,b)=>RACE.dnfLap[b.id]-RACE.dnfLap[a.id]);
+  const dzSection=document.getElementById('dzSection');
+  const dzGrid=document.getElementById('dzGrid');
+  if(dzSection) dzSection.style.display=dnfs.length?'block':'none';
+  if(dzGrid) dzGrid.innerHTML=dnfs.map((team,i)=>{
+    const finalPos=liveOrder.length+i+1;
+    return `<div class="dz-card"><div class="media"><img src="${team.logo}" alt="$${team.id}"></div><div class="num">${finalPos}</div><div class="ov"><div class="tk">$${team.id}</div><div class="dnf-tag">DNF · LAP ${RACE.dnfLap[team.id]}</div></div><div class="accent"></div></div>`;
+  }).join('');
+}
+
+// share button
+(function(){
+  const sb=document.getElementById('dashShareBtn');
+  if(sb) sb.onclick=()=>{
+    const {positions,gaps,prog}=window._LIVE||{};
+    if(!positions||!positions.length) return;
+    const flK=prog&&prog.fastestLap.driver;
+    const text=`🏁 MEME GP — SATOSHI SPEEDWAY\n\n🥇 $${positions[0]}\n🥈 $${positions[1]||'—'} (+${(gaps[positions[1]]||0).toFixed(1)}s)\n🥉 $${positions[2]||'—'} (+${(gaps[positions[2]]||0).toFixed(1)}s)${flK?`\n\n⏱️ FL: $${flK} — ${fmt(prog.fastestLap.time)}`:''}\n\n#MemeGP #SatoshiSpeedway\n🏁 @MemeGrandPrix`;
+    try{navigator.clipboard.writeText(text);}catch(e){}
+    sb.textContent='COPIED!'; setTimeout(()=>sb.textContent='𝕏 SHARE',1400);
+  };
+})();
+
+// ── fund banner: copy contract ──
+(function(){var ca='4QMjp47neoMT3FTnKbLR9rCUcSTx4MZy1knuKFAVpump';var el=document.getElementById('fbCa'),btn=document.getElementById('fbCopy');
+  if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
+    if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
 </script>
+
 </body>
 </html>
