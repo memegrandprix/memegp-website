@@ -265,7 +265,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 <div id="dashboardView" style="display:none">
   <div class="dwrap">
     <div class="dhead">
-      <div><div class="dh1">SESSION DATA <b>· RACE</b> <span style="font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:1px;color:#3a6;vertical-align:middle;margin-left:6px;opacity:.8">● LIVE-DASH</span></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
+      <div><div class="dh1">SESSION DATA <b>· RACE</b> <span style="font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:1px;color:#3a6;vertical-align:middle;margin-left:6px;opacity:.8">● LIVE-DASH<span id="dashHeartbeat" style="color:#ffcc00;margin-left:4px"></span></span></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
       <button id="dashShareBtn" style="font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;border:none;border-radius:6px;padding:7px 16px;cursor:pointer">𝕏 SHARE</button>
     </div>
     <div class="dtitle" id="dashResultTitle">RACE COMPLETED</div>
@@ -2081,10 +2081,15 @@ function update() {
   // retirement) so positions/gaps/pit-stops/DNFs track the race without per-frame flicker.
   const _dv = document.getElementById('dashboardView');
   if (_dv && _dv.style.display !== 'none') {
+    const _hb = document.getElementById('dashHeartbeat');
+    if (_hb) _hb.textContent = isComplete ? 'FINAL' : ('L' + currentLap);
     const _pits = RACE.events.filter(e => e.type === 'pit' && e.lap <= currentLap).length;
     const _dnfs = TEAMS.filter(t => RACE.dnfLap[t.id] && RACE.dnfLap[t.id] <= currentLap).length;
     const _sig = currentLap + '|' + liveOrder.join(',') + '|' + _pits + '|' + _dnfs + '|' + (isComplete ? 1 : 0);
-    if (_sig !== window._dashSig) { window._dashSig = _sig; buildDash(); }
+    if (_sig !== window._dashSig) {
+      window._dashSig = _sig;
+      try { buildDash(); } catch (err) { if (_hb) _hb.textContent = 'ERR'; console.error('buildDash failed:', err); }
+    }
   }
 
   requestAnimationFrame(update);
@@ -2135,30 +2140,31 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
-    // Pit lane parallels the S/F straight (top of track) = the FIRST ~16% of the lap.
-    // Car crosses S/F, dives into the pit lane, services in the box, then rejoins the
-    // racing line ~16% into the lap. (Window was mis-tuned to 0.88-1.0 = the left side.)
+    // Pit lane parallels the S/F straight (top) = the FIRST ~16% of the lap. The car eases
+    // OFF its racing line into the pit lane, services in the box, then eases BACK onto the
+    // racing line — blended so there is no jump at entry or exit (was snapping before).
     const PIT_OUT = 0.16;
+    // the car's natural racing-line position this instant (used to blend in/out of the pit)
+    let _gf = ((carLap - 1) + carLapProgress) - (team.gridPos - 1) * 0.013;
+    _gf = ((_gf % 1) + 1) % 1;
+    const trackPt = getPoint(_gf);
     if (isPitting && carLapProgress < PIT_OUT) {
       const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id && e.lap === carLap);
       const serviceFrac = Math.min(0.06, Math.max(0.03, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
       const enterEnd = 0.04, holdEnd = enterEnd + serviceFrac;
+      let pitPt, blend;
       if (carLapProgress < enterEnd) {
-        // diving off the S/F line into the pit lane
-        const pitFrac = carLapProgress / enterEnd;
-        pt = getPitPoint(pitFrac * 0.4);
+        const k = carLapProgress / enterEnd;                 // 0 -> 1
+        pitPt = getPitPoint(k * 0.4); blend = k;             // peel off racing line into the lane
       } else if (carLapProgress < holdEnd) {
-        pt = getPitPoint(0.5); // stationary in the box
+        pitPt = getPitPoint(0.5); blend = 1;                 // stationary in the box
       } else {
-        // accelerating down the pit lane and rejoining the track
-        const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.01, (PIT_OUT - holdEnd)));
-        pt = getPitPoint(0.6 + exitFrac * 0.4);
+        const k = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.01, (PIT_OUT - holdEnd)));
+        pitPt = getPitPoint(0.6 + k * 0.4); blend = 1 - k;  // accelerate out, ease back onto racing line
       }
+      pt = { x: trackPt.x + (pitPt.x - trackPt.x) * blend, y: trackPt.y + (pitPt.y - trackPt.y) * blend };
     } else {
-      // launch from the grid slot (same stagger as the formation) and spread by pace
-      let _gf = ((carLap - 1) + carLapProgress) - (team.gridPos - 1) * 0.013;
-      _gf = ((_gf % 1) + 1) % 1;
-      pt = getPoint(_gf);
+      pt = trackPt;
     }
 
     const logoId = 'logo-clip-' + id;
@@ -2356,6 +2362,27 @@ function showPodium(positions, gaps) {
 
 initTeamPicker();
 console.log('MemeGP race-preview — build: live-dash + pit-fix + strategies ✓');
+
+// Independent dashboard refresher — runs on its own 500ms timer (not tied to the
+// animation loop) so SESSION DATA stays in sync even if a frame is skipped. Reads the
+// live race state from window._LIVE, which the update() loop refreshes every frame.
+setInterval(function () {
+  var dv = document.getElementById('dashboardView');
+  if (!dv || dv.style.display === 'none') return;
+  var live = window._LIVE || {};
+  if (!live.positions || !live.positions.length) return;
+  var cl = Math.min(TOTAL_LAPS, Math.floor((live.elapsed || 0) / LAP_REAL_SECONDS) + 1);
+  var pits = RACE.events.filter(function (e) { return e.type === 'pit' && e.lap <= cl; }).length;
+  var dnfs = TEAMS.filter(function (t) { return RACE.dnfLap[t.id] && RACE.dnfLap[t.id] <= cl; }).length;
+  var sig = cl + '|' + live.positions.join(',') + '|' + pits + '|' + dnfs + '|' + (live.isComplete ? 1 : 0);
+  var hb = document.getElementById('dashHeartbeat');
+  if (hb) hb.textContent = live.isComplete ? 'FINAL' : ('L' + cl);
+  if (sig !== window._dashSig) {
+    window._dashSig = sig;
+    try { buildDash(); } catch (e) { if (hb) hb.textContent = 'ERR'; console.error('buildDash failed:', e); }
+  }
+}, 500);
+
 requestAnimationFrame(update);
 
 // ── vtoggle ─────────────────────────────────────────────────
@@ -2380,9 +2407,11 @@ function renderRowTip(id) {
   const tip = document.getElementById('rowTip');
   const team = TEAMS.find(t => t.id === id);
   if (!team) { tip.style.display = 'none'; return; }
-  const {positions, gaps, elapsed} = window._LIVE || {};
+  const {positions, gaps} = window._LIVE || {};
+  // elapsed FRESH from the clock (same basis as the tower) — never trust _LIVE.elapsed here
+  const elapsed = Math.max(0, ((Date.now() - _PVT0) / 1000) * _PVSPD - COUNTDOWN_SECONDS);
   const pos = positions ? positions.indexOf(id) : -1;
-  const cp = carProgress(id, elapsed || 0);
+  const cp = carProgress(id, elapsed);
   const retired = !!(RACE.dnfLap[id] && cp.carLap > RACE.dnfLap[id]);
   const comp = currentCompound(id, cp.carLap);
   const CC = { SOFT:'#ef4444', MED:'#ffcc00', HARD:'#e8e8ee' };
