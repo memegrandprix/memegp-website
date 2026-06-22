@@ -265,7 +265,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 <div id="dashboardView" style="display:none">
   <div class="dwrap">
     <div class="dhead">
-      <div><div class="dh1">SESSION DATA <b>· RACE</b></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
+      <div><div class="dh1">SESSION DATA <b>· RACE</b> <span style="font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:1px;color:#3a6;vertical-align:middle;margin-left:6px;opacity:.8">● LIVE-DASH</span></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
       <button id="dashShareBtn" style="font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;border:none;border-radius:6px;padding:7px 16px;cursor:pointer">𝕏 SHARE</button>
     </div>
     <div class="dtitle" id="dashResultTitle">RACE COMPLETED</div>
@@ -2355,6 +2355,7 @@ function showPodium(positions, gaps) {
 }
 
 initTeamPicker();
+console.log('MemeGP race-preview — build: live-dash + pit-fix + strategies ✓');
 requestAnimationFrame(update);
 
 // ── vtoggle ─────────────────────────────────────────────────
