@@ -1453,7 +1453,7 @@ const TEAM_META = {
 // Empty  → grid set by championship standings (overall desc, derived live from
 //          stats-calculator.js).  Once Saturday quali has run, drop the P1→P15
 //          tickers in here and the starting grid uses them instead.
-const QUALIFYING_ORDER = ['PUP','BILLY','MASK','MOMO','LOL','DOBERMANN','VIBECOIN','TURBO','PEPONK','MARS','420BLAZEIT','SHIH','NEURO','SUS','MONKO']; // locked from Sat quali — PUP on pole
+const QUALIFYING_ORDER = ['PUP','MOMO','TURBO','BILLY','MASK','LOL','DOBERMANN','VIBECOIN','PEPONK','SHIH','SUS','420BLAZEIT','MARS','MONKO','NEURO']; // locked — matches published grid card + Sat quali results post (PUP on pole)
 
 function buildTeams() {
   const S = (typeof window !== 'undefined') && window.MEMEGP_Stats;
@@ -1648,7 +1648,29 @@ function buildRace() {
 // after Friday FP. Empty {} => engine uses randomised stand-ins (still ~60%).
 // Grid: uses the real Saturday quali order if QUALIFYING_ORDER is filled; otherwise the
 // engine runs its own qualifying so previews show realistic grid variation.
-const STRATEGY_CONFIG = {};
+// STRATEGY_CONFIG — LOCKED for Round 1. Each team's STARTING compound (a) + fuel load
+// are taken verbatim from the published Starting Grid card (grid-strategy.html):
+//   MEDIUM -> MED (engine compound key).  FULL = 1 stop, HALF = 2 stops.
+// Second/third-stint compounds (b,c) + pit laps are sensible engine defaults
+// (complementary compound; 1-stop pits SOFT~L10/MED~L11/HARD~L12; 2-stop pits L7 & L14)
+// and can be tuned without affecting the grid-card start that fans voted on.
+const STRATEGY_CONFIG = {
+  PUP:         { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P1  SOFT/HALF
+  MOMO:        { fuel:'FULL', a:'SOFT', b:'HARD',           pits:[10]   }, // P2  SOFT/FULL
+  TURBO:       { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P3  SOFT/HALF
+  BILLY:       { fuel:'FULL', a:'HARD', b:'MED',            pits:[12]   }, // P4  HARD/FULL
+  MASK:        { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P5  MEDIUM/HALF
+  LOL:         { fuel:'FULL', a:'MED',  b:'HARD',           pits:[11]   }, // P6  MEDIUM/FULL
+  DOBERMANN:   { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P7  HARD/HALF
+  VIBECOIN:    { fuel:'FULL', a:'HARD', b:'MED',            pits:[12]   }, // P8  HARD/FULL (COMMUNITY)
+  PEPONK:      { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P9  MEDIUM/HALF
+  SHIH:        { fuel:'FULL', a:'SOFT', b:'HARD',           pits:[10]   }, // P10 SOFT/FULL
+  SUS:         { fuel:'HALF', a:'SOFT', b:'HARD', c:'MED',  pits:[7,14] }, // P11 SOFT/HALF
+  '420BLAZEIT':{ fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P12 HARD/HALF
+  MARS:        { fuel:'HALF', a:'MED',  b:'HARD', c:'SOFT', pits:[7,14] }, // P13 MEDIUM/HALF
+  MONKO:       { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P14 HARD/HALF
+  NEURO:       { fuel:'HALF', a:'HARD', b:'MED',  c:'SOFT', pits:[7,14] }, // P15 HARD/HALF
+};
 const RACE = MEMEGP_Race.buildAnimatedRace(
   SEED,
   STRATEGY_CONFIG,
