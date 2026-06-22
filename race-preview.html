@@ -268,7 +268,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
       <div><div class="dh1">SESSION DATA <b>· RACE</b></div><div class="dsub" id="dashSub">SATOSHI SPEEDWAY · ROUND 1</div></div>
       <button id="dashShareBtn" style="font-family:'Orbitron';font-size:9px;font-weight:800;letter-spacing:1px;background:linear-gradient(180deg,#ffcc00,#ffb700);color:#000;border:none;border-radius:6px;padding:7px 16px;cursor:pointer">𝕏 SHARE</button>
     </div>
-    <div class="dtitle" id="dashResultTitle">RACE RESULT</div>
+    <div class="dtitle" id="dashResultTitle">RACE COMPLETED</div>
     <div class="podium" id="dashPodium"></div>
     <div class="list" id="dashList"></div>
     <div class="fcgrid" id="dashGrid"></div>
@@ -1942,7 +1942,7 @@ function update() {
   const isComplete = allCarsFinished;
   const displayLap = leaderFinished ? TOTAL_LAPS : currentLap;
 
-  (function(){var v=document.getElementById('vtoggle');if(v)v.style.display=isComplete?'none':'inline-flex';})();
+  (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='inline-flex';})();
   document.getElementById('lapCounter').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
   document.getElementById('lapDisplay').textContent = `LAP ${displayLap}/${TOTAL_LAPS}`;
   document.getElementById('lapBig').textContent = `${displayLap}/${TOTAL_LAPS}`;
@@ -2011,8 +2011,9 @@ function update() {
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
     const timeSinceAllFinished = elapsed - (TOTAL_LAPS * LAP_REAL_SECONDS + 75);
-    if (timeSinceAllFinished > 5) {
-      showPodium(liveOrder, liveGaps);
+    if (timeSinceAllFinished > 5 && !raceCompleteShown) {
+      raceCompleteShown = true;
+      vtShow('data');   // go to the SESSION DATA screen → flips to "RACE COMPLETED"
     }
   } else if (leaderFinished) {
     tickerEl.innerHTML = `▸ 🏁 CHEQUERED FLAG — ${tImg(leader)} $${leader.id} takes the win! Waiting for all cars to finish...`;
@@ -2074,6 +2075,17 @@ function update() {
   renderLeaderboard(liveOrder, liveGaps, prevLapData, currentLapData, isComplete, currentLap, elapsed);
   renderFanZone();
   window._LIVE = { positions: liveOrder, gaps: interpolatedGaps, elapsed, isComplete, prog };
+
+  // Keep the SESSION DATA dashboard in sync with the live race while it is on screen.
+  // Rebuild only when something meaningful changes (lap, running order, a pit stop, or a
+  // retirement) so positions/gaps/pit-stops/DNFs track the race without per-frame flicker.
+  const _dv = document.getElementById('dashboardView');
+  if (_dv && _dv.style.display !== 'none') {
+    const _pits = RACE.events.filter(e => e.type === 'pit' && e.lap <= currentLap).length;
+    const _dnfs = TEAMS.filter(t => RACE.dnfLap[t.id] && RACE.dnfLap[t.id] <= currentLap).length;
+    const _sig = currentLap + '|' + liveOrder.join(',') + '|' + _pits + '|' + _dnfs + '|' + (isComplete ? 1 : 0);
+    if (_sig !== window._dashSig) { window._dashSig = _sig; buildDash(); }
+  }
 
   requestAnimationFrame(update);
   } catch(e) {
@@ -2298,6 +2310,7 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
 }
 
 let podiumShown = false;
+let raceCompleteShown = false;   // one-time switch to the SESSION DATA dashboard at race end
 function showPodium(positions, gaps) {
   if (podiumShown) return;
   podiumShown = true;
@@ -2471,9 +2484,11 @@ function buildDash() {
   const currentLap = Math.min(TOTAL_LAPS, Math.floor(elapsed / LAP_REAL_SECONDS) + 1);
 
   const titleEl = document.getElementById('dashResultTitle');
-  if (titleEl) titleEl.textContent = isComplete ? 'RACE RESULT' : `RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
+  if (titleEl) titleEl.textContent = isComplete ? 'RACE COMPLETED' : `RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
   const subEl = document.getElementById('dashSub');
-  if (subEl) subEl.textContent = `SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
+  if (subEl) subEl.textContent = isComplete
+    ? `SATOSHI SPEEDWAY · ROUND 1 · ${TOTAL_LAPS} LAPS · FINAL CLASSIFICATION`
+    : `SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
 
   const pcard=(id,absPos)=>{
     const team=TEAMS.find(t=>t.id===id);
