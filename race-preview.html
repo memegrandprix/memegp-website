@@ -104,6 +104,12 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 #dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;margin-bottom:10px}
 #dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(16px,2.8vw,22px);line-height:1.06;color:#fff}
 #dashboardView .fc-sub{font-size:11px;color:#cfcfd6;margin-top:6px;line-height:1.45}
+#dashboardView .fc-photo{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:0;background-size:cover;background-position:center 22%;border-radius:0 12px 12px 0}
+#dashboardView .fc-photo.duo{display:flex}
+#dashboardView .fc-photo.duo>div{flex:1;background-size:cover;background-position:center 22%}
+#dashboardView .fc-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(to right,rgba(12,12,20,.97) 30%,rgba(12,12,20,.62) 55%,rgba(12,12,20,.30))}
+#dashboardView .fc>*:not(.fc-photo):not(.fc-scrim){position:relative;z-index:1}
+#dashboardView .fc.hasphoto .fc-h,#dashboardView .fc.hasphoto .fc-big,#dashboardView .fc.hasphoto .fc-sub{max-width:62%}
 #dashboardView .sk{display:flex;flex-direction:column;gap:7px}
 #dashboardView .skrow{display:flex;align-items:center;gap:9px;font-size:13px}
 #dashboardView .skdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
@@ -2468,21 +2474,44 @@ function buildDash() {
   const s2K = prog && prog.fastestS2 && isFinite(prog.fastestS2.time) ? TEAMS.find(t=>t.id===prog.fastestS2.driver) : null;
   const s3K = prog && prog.fastestS3 && isFinite(prog.fastestS3.time) ? TEAMS.find(t=>t.id===prog.fastestS3.driver) : null;
   const flK  = prog && prog.fastestLap && isFinite(prog.fastestLap.time) ? TEAMS.find(t=>t.id===prog.fastestLap.driver) : null;
-  let bigMover=null,bigMove=0;
-  liveOrder.forEach((id,p)=>{const t=TEAMS.find(x=>x.id===id);const g=t.gridPos-(p+1);if(g>bigMove){bigMove=g;bigMover=t;}});
+  let bigMover=null,bigMove=0,bigLoser=null,bigLoss=0;
+  liveOrder.forEach((id,p)=>{
+    const t=TEAMS.find(x=>x.id===id);
+    const g=t.gridPos-(p+1); if(g>bigMove){bigMove=g;bigMover=t;}
+    const l=(p+1)-t.gridPos; if(l>bigLoss){bigLoss=l;bigLoser=t;}
+  });
   const pitsDone=RACE.events.filter(e=>e.type==='pit'&&e.lap<=currentLap);
   const pitsLeft=TEAMS.filter(t=>!pitsDone.find(p=>p.team===t.id)&&!RACE.dnfLap[t.id]);
   const CC={SOFT:'#ff3b3b',MED:'#ffd21a',HARD:'#e8edf5'};
   let cards='';
+  // SECTOR KINGS — with team logos as dots
   if(s1K&&s2K&&s3K) cards+=`<div class="fc" style="--ac:#ffcc00"><div class="fc-h">SECTOR KINGS</div><div class="sk">
-    <div class="skrow"><span class="skdot" style="background:#3b82f6"></span><span class="sktk" style="color:#3b82f6">$${s1K.id}</span><span style="color:#3b82f6;font-size:10px">S1</span><span class="sktime">${prog.fastestS1.time.toFixed(3)}s</span></div>
-    <div class="skrow"><span class="skdot" style="background:#ef4444"></span><span class="sktk" style="color:#ef4444">$${s2K.id}</span><span style="color:#ef4444;font-size:10px">S2</span><span class="sktime">${prog.fastestS2.time.toFixed(3)}s</span></div>
-    <div class="skrow"><span class="skdot" style="background:#10b981"></span><span class="sktk" style="color:#10b981">$${s3K.id}</span><span style="color:#10b981;font-size:10px">S3</span><span class="sktime">${prog.fastestS3.time.toFixed(3)}s</span></div>
-  </div>${flK?`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.12);font-size:11px;color:#cfcfd6">Fastest lap: <b style="font-family:'JetBrains Mono';color:#ffcc00">$${flK.id} — ${fmt(prog.fastestLap.time)}</b> (Lap ${prog.fastestLap.lap})</div>`:''}</div>`;
-  if(bigMover) cards+=`<div class="fc" style="--ac:${bigMover.color}"><div class="fc-h">BIGGEST MOVER</div><div class="fc-big"><span class="u" style="color:${bigMover.color}">$${bigMover.id}</span> <span style="font-family:'JetBrains Mono'">▲${bigMove}</span></div><div class="fc-sub">Started P${bigMover.gridPos} — now P${bigMover.gridPos-bigMove}</div></div>`;
+    <div class="skrow"><img src="${s1K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #3b82f6;flex-shrink:0"><span class="sktk" style="color:#3b82f6">$${s1K.id}</span><span style="color:#3b82f6;font-size:10px;font-weight:700">SECTOR 1</span><span class="sktime">${prog.fastestS1.time.toFixed(3)}s</span></div>
+    <div class="skrow"><img src="${s2K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #ef4444;flex-shrink:0"><span class="sktk" style="color:#ef4444">$${s2K.id}</span><span style="color:#ef4444;font-size:10px;font-weight:700">SECTOR 2</span><span class="sktime">${prog.fastestS2.time.toFixed(3)}s</span></div>
+    <div class="skrow"><img src="${s3K.logo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #10b981;flex-shrink:0"><span class="sktk" style="color:#10b981">$${s3K.id}</span><span style="color:#10b981;font-size:10px;font-weight:700">SECTOR 3</span><span class="sktime">${prog.fastestS3.time.toFixed(3)}s</span></div>
+  </div>${flK?`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.12);font-size:11px;color:#cfcfd6;display:flex;align-items:center;gap:6px"><img src="${flK.logo}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;border:1px solid #ffcc00">Fastest lap: <b style="font-family:'JetBrains Mono';color:#ffcc00">$${flK.id} — ${fmt(prog.fastestLap.time)}</b> (Lap ${prog.fastestLap.lap})</div>`:''}</div>`;
+
+  // BIGGEST MOVER — hasphoto with team logo
+  if(bigMover) cards+=`<div class="fc hasphoto" style="--ac:${bigMover.color}">
+    <div class="fc-photo" style="background-image:url('${bigMover.logo}')"></div>
+    <div class="fc-scrim"></div>
+    <div class="fc-h">BIGGEST MOVER</div>
+    <div class="fc-big"><span class="u" style="color:${bigMover.color}">$${bigMover.id}</span> <span style="font-family:'JetBrains Mono'">▲${bigMove}</span></div>
+    <div class="fc-sub">Started P${bigMover.gridPos} — now P${bigMover.gridPos-bigMove}</div>
+  </div>`;
+
+  // BIGGEST LOSER — hasphoto with team logo
+  if(bigLoser&&bigLoss>0) cards+=`<div class="fc hasphoto" style="--ac:#ff4444">
+    <div class="fc-photo" style="background-image:url('${bigLoser.logo}');filter:grayscale(30%)"></div>
+    <div class="fc-scrim"></div>
+    <div class="fc-h" style="color:#ff6666">BIGGEST LOSER</div>
+    <div class="fc-big"><span class="u" style="color:#ff4444">$${bigLoser.id}</span> <span style="font-family:'JetBrains Mono'">▼${bigLoss}</span></div>
+    <div class="fc-sub">Started P${bigLoser.gridPos} — now P${bigLoser.gridPos+bigLoss}</div>
+  </div>`;
+  // PIT STOPS
   cards+=`<div class="fc" style="--ac:#ff9900"><div class="fc-h">PIT STOPS — ${pitsDone.length} DONE</div><div class="sk" style="max-height:160px;overflow-y:auto">
-    ${pitsDone.map(p=>{const t=TEAMS.find(x=>x.id===p.team);const ca=RACE.strategies[p.team]?.a||'MED',cb=RACE.strategies[p.team]?.b||'MED';return `<div class="skrow"><span class="skdot" style="background:${t.color}"></span><span class="sktk" style="color:${t.color};font-size:10px">$${p.team}</span><span style="color:${CC[ca]};font-size:9px">${ca}</span><span style="color:#444">→</span><span style="color:${CC[cb]};font-size:9px">${cb}</span><span class="sktime" style="font-size:9px">L${p.lap}</span></div>`;}).join('')}
-    ${pitsLeft.map(t=>`<div class="skrow"><span class="skdot" style="background:#333"></span><span class="sktk" style="color:#555;font-size:10px">$${t.id}</span><span style="color:#ff4444;font-size:9px">PENDING</span></div>`).join('')}
+    ${pitsDone.map(p=>{const t=TEAMS.find(x=>x.id===p.team);const ca=RACE.strategies[p.team]?.a||'MED',cb=RACE.strategies[p.team]?.b||'MED';return `<div class="skrow"><img src="${t.logo}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1.5px solid ${t.color};flex-shrink:0"><span class="sktk" style="color:${t.color};font-size:10px">$${p.team}</span><span style="color:${CC[ca]};font-size:9px">${ca}</span><span style="color:#444">→</span><span style="color:${CC[cb]};font-size:9px">${cb}</span><span class="sktime" style="font-size:9px">L${p.lap}</span></div>`;}).join('')}
+    ${pitsLeft.map(t=>`<div class="skrow"><img src="${t.logo}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1.5px solid #333;flex-shrink:0;opacity:.5"><span class="sktk" style="color:#555;font-size:10px">$${t.id}</span><span style="color:#ff4444;font-size:9px">PENDING</span></div>`).join('')}
   </div></div>`;
   document.getElementById('dashGrid').innerHTML=cards;
 
