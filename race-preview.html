@@ -37,6 +37,37 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 .tower-cols span{flex-shrink:0}
 .tower-cols.show{display:flex}
 .lap-counter{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;color:#ffcc00;letter-spacing:2px}
+/* ── ROW TIP hover card — matches FP exactly ── */
+#rowTip{position:fixed;z-index:600;display:none;width:auto;padding:0;border-radius:12px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));
+  border:1px solid rgba(255,204,0,.25);
+  box-shadow:0 16px 48px rgba(0,0,0,.75);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);pointer-events:none}
+#rowTip .tip-body{padding:13px 14px;width:220px;flex-shrink:0}
+#rowTip .tip-car{position:relative;width:140px;align-self:stretch;flex-shrink:0;background:#0c0c14;border-left:1px solid rgba(255,255,255,.1)}
+#rowTip .tcar-half{position:absolute;left:0;right:0;height:50%;overflow:hidden}
+#rowTip .tcar-half img{width:100%;height:100%;object-fit:cover}
+#rowTip .tcar-top{top:0}
+#rowTip .tcar-top img{object-position:center 30%}
+#rowTip .tcar-bot{bottom:0;border-top:1.5px solid var(--tc)}
+#rowTip .tcar-bot img{object-position:center}
+#rowTip .tip-car .acc{position:absolute;top:0;left:0;right:0;height:3px;z-index:2;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+#rowTip .tip-car .tag{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 8px 9px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.95))}
+#rowTip .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#rowTip .tip-head img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4)}
+#rowTip .tip-head b{font-family:'Orbitron';font-size:14px;color:#fff}
+#rowTip .tip-h2{font-family:'Orbitron';font-size:8.5px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+#rowTip .tip-sec{margin-bottom:10px}
+#rowTip .ssec{display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 0}
+#rowTip .ssec>span:first-child{font-family:'Orbitron';font-size:10px;font-weight:700;letter-spacing:1px}
+#rowTip .tip-live{border-top:1px dashed rgba(255,255,255,.14);padding-top:9px;margin-top:2px}
+#rowTip .tip-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor}
+#rowTip .tcomp{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:var(--tc);border:1px solid var(--tc);border-radius:4px;padding:1px 7px}
+#rowTip .tl-row{display:flex;align-items:center;gap:8px;padding:2px 0}
+#rowTip .tl-row>span:first-child{font-family:'Orbitron';font-size:9px;font-weight:700;letter-spacing:1px;color:#888;min-width:34px}
+#rowTip .bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+#rowTip .bar i{display:block;height:100%;border-radius:4px;transition:width .25s}
+#rowTip .tl-row b{font-family:'JetBrains Mono';font-size:11px;color:#fff;min-width:26px;text-align:right}
 /* SESSION DATA DASHBOARD — FP-identical */
 #dashboardView{position:fixed;left:0;right:0;top:38px;bottom:0;overflow-y:auto;z-index:200;background:#040408}
 #dashboardView .dwrap{max-width:960px;margin:0 auto;padding:22px 18px 70px}
@@ -1785,27 +1816,27 @@ function computeLiveBests(elapsed) {
 
   TEAMS.forEach(t => {
     const cp = carProgress(t.id, elapsed);
-    if (RACE.dnfLap[t.id] && cp.carLap > RACE.dnfLap[t.id]) return;   // retired
-    const completed = Math.min(cp.carLap - 1, TOTAL_LAPS); // fully-done laps
+    // retired: skip if car has DNF'd (>= so we also skip on the DNF lap itself)
+    if (RACE.dnfLap[t.id] && cp.carLap >= RACE.dnfLap[t.id]) return;
+    const completed = Math.min(cp.carLap - 1, TOTAL_LAPS);
     const curProg = cp.frac;
 
-    // fully completed laps → all sectors + lap time are official
     for (let L = 1; L <= completed; L++) {
       const st = RACE.laps[L - 1].sectorTimes[t.id];
       const lt = RACE.laps[L - 1].lapTimes[t.id];
+      if (!st || !isFinite(st.s1)) continue;  // guard: retired/DNF lap has no sectors
       if (st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: L };
       if (st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: L };
       if (st.s3 < bS3.time) bS3 = { time: st.s3, driver: t.id, lap: L };
-      if (lt   < bLap.time) bLap = { time: lt,   driver: t.id, lap: L };
+      if (lt && lt > 0 && lt < bLap.time) bLap = { time: lt, driver: t.id, lap: L };
     }
 
-    // in-progress lap → reveal S1/S2 as the car crosses each split
     const curLap = completed + 1;
     if (curLap <= TOTAL_LAPS) {
       const st = RACE.laps[curLap - 1].sectorTimes[t.id];
+      if (!st || !isFinite(st.s1)) return;  // guard
       if (curProg > THIRD     && st.s1 < bS1.time) bS1 = { time: st.s1, driver: t.id, lap: curLap };
       if (curProg > THIRD * 2 && st.s2 < bS2.time) bS2 = { time: st.s2, driver: t.id, lap: curLap };
-      // S3 completes at the line → picked up next lap as a completed lap
     }
   });
 
@@ -2284,106 +2315,101 @@ function vtShow(which) {
 }
 window.vtShow = vtShow;
 
-// ── hover card — RIGHT LEADERBOARD ONLY ───────────────────
-let _tipX=0, _tipY=0, _tipActive=false;
-function attachTip(el, id) {
-  el.addEventListener('mouseenter', e=>{ _tipX=e.clientX; _tipY=e.clientY; _tipActive=true; renderRowTip(id); });
-  el.addEventListener('mousemove',  e=>{
-    _tipX=e.clientX; _tipY=e.clientY;
-    // update position live on move
-    const tip=document.getElementById('rowTip');
-    if(tip&&tip.style.display!=='none'){
-      const W=360,H=220;
-      let x=_tipX-W-14; if(x<8) x=_tipX+14;
-      let y=Math.min(Math.max(8,_tipY-H/2),window.innerHeight-H-8);
-      tip.style.left=x+'px'; tip.style.top=y+'px';
-    }
-  });
-  el.addEventListener('mouseleave', ()=>{ _tipActive=false; hideTip(); });
-}
-function hideTip() {
-  const t=document.getElementById('rowTip');
-  if(t){ t.style.display='none'; t.style.pointerEvents='none'; }
-}
-// hide on any scroll
-document.addEventListener('scroll', hideTip, true);
+// HOVER REPLACED
+
+// ── HOVER CARD — FP-identical pattern ─────────────────────
+let tipTeam = null, tipX = 0, tipY = 0;
 
 function renderRowTip(id) {
-  const tip=document.getElementById('rowTip'); if(!tip) return;
-  const team=TEAMS.find(t=>t.id===id); if(!team) return;
-  const {positions,gaps,elapsed}=window._LIVE||{};
-  const pos=positions?positions.indexOf(id):-1;
-  const cp=carProgress(id, elapsed||0);
-  const retired=!!(RACE.dnfLap[id]&&cp.carLap>RACE.dnfLap[id]);
-  const comp=currentCompound(id,cp.carLap);
-  const CC={SOFT:'#ef4444',MED:'#ffcc00',HARD:'#e8e8ee'};
-  const cc=CC[comp]||'#888';
-  // Real tyre age — last pit lap before current lap
-  const COMP_MAX={SOFT:8,MED:14,HARD:20};
-  const pitLapsArr2=RACE.pitLaps?RACE.pitLaps[id]||[]:[];
-  const lastPitLap2=pitLapsArr2.filter(p=>p<cp.carLap).pop()||0;
-  const hasPitted=lastPitLap2>0;
-  const tyreAge=Math.max(0,cp.carLap-1-lastPitLap2);
-  const deg=Math.min(100,Math.round(tyreAge/(COMP_MAX[comp]||14)*100));
-  const degCol=deg<40?'#00ff88':deg<70?'#ffd21a':'#ff4444';
-  // fuel
-  let fuelFrac=hasPitted
-    ? Math.max(0, 1 - Math.max(0,cp.carLap-lastPitLap2) / Math.max(1, TOTAL_LAPS-lastPitLap2))
-    : Math.max(0.04,1-(cp.carLap-1)/TOTAL_LAPS);
-  const fuel=Math.round(fuelFrac*100);
-  const fcol=fuel>50?'#22DD66':fuel>25?'#ffcc00':'#ff3b3b';
-  // best lap (skip 0-time laps from DNF)
-  const pitEv=RACE.events.find(e=>e.type==='pit'&&e.team===id);
-  for(let L=1;L<=Math.min(cp.carLap-1,TOTAL_LAPS);L++){const lt=RACE.laps[L-1].lapTimes[id];if(lt&&lt>0&&lt<bLap){bLap=lt;bLapN=L;}}
-  const gapStr=pos===0?'LEADER':retired?'RETIRED':`+${((gaps&&gaps[id])||0).toFixed(2)}s`;
-  const mv=team.gridPos-(pos+1);
-  const mvStr=mv>0?`▲${mv} (P${team.gridPos}→P${pos+1})`:mv<0?`▼${Math.abs(mv)} (P${team.gridPos}→P${pos+1})`:`— P${pos+1}`;
-  const mvCol=mv>0?'#00ff88':mv<0?'#ff4444':'#888';
-  const carSrc=team.car||team.logo.replace('.png','-car.png');
-
-  // Calculate position FIRST before touching display
-  const W=360, H=220;
-  let x=_tipX-W-14; if(x<8) x=_tipX+14;
-  let y=Math.min(Math.max(8,_tipY-H/2), window.innerHeight-H-8);
-
-  tip.style.cssText = `position:fixed;z-index:500;display:flex;flex-direction:row;width:${W}px;height:${H}px;left:${x}px;top:${y}px;border-radius:12px;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)`;
-  tip.innerHTML=`
-    <div style="padding:13px 14px;width:220px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <img src="${team.logo}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4);flex-shrink:0">
-        <b style="font-family:'Orbitron';font-size:13px;color:#fff">$${id}</b>
-        <span style="font-family:'Chakra Petch';font-size:9px;color:#555;margin-left:2px">${retired?'RETIRED':pos<0?'—':`P${pos+1}`}</span>
+  const tip = document.getElementById('rowTip');
+  const team = TEAMS.find(t => t.id === id);
+  if (!team) { tip.style.display = 'none'; return; }
+  const {positions, gaps, elapsed} = window._LIVE || {};
+  const pos = positions ? positions.indexOf(id) : -1;
+  const cp = carProgress(id, elapsed || 0);
+  const retired = !!(RACE.dnfLap[id] && cp.carLap > RACE.dnfLap[id]);
+  const comp = currentCompound(id, cp.carLap);
+  const CC = { SOFT:'#ef4444', MED:'#ffcc00', HARD:'#e8e8ee' };
+  const cc = CC[comp] || '#888';
+  const COMP_MAX = { SOFT:8, MED:14, HARD:20 };
+  const pitLapsArr = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+  const lastPitLapT = pitLapsArr.filter(p => p < cp.carLap).pop() || 0;
+  const hasPittedT = lastPitLapT > 0;
+  const tyreAge = Math.max(0, cp.carLap - 1 - lastPitLapT);
+  const deg = Math.min(100, Math.round(tyreAge / (COMP_MAX[comp] || 14) * 100));
+  const degCol = deg < 40 ? '#00ff88' : deg < 70 ? '#ffd21a' : '#ff4444';
+  const lapsRem = Math.max(1, TOTAL_LAPS - lastPitLapT);
+  const lapsAft = Math.max(0, cp.carLap - lastPitLapT);
+  const fuelFrac = hasPittedT ? Math.max(0, 1 - lapsAft / lapsRem) : Math.max(0.04, 1 - (cp.carLap - 1) / TOTAL_LAPS);
+  const fuel = Math.round(fuelFrac * 100);
+  const fcol = fuel > 66 ? '#22DD66' : fuel > 33 ? '#ffcc00' : '#ff3b3b';
+  let bLap = Infinity, bLapN = 0;
+  for (let L = 1; L <= Math.min(cp.carLap - 1, TOTAL_LAPS); L++) {
+    const lt = RACE.laps[L-1].lapTimes[id];
+    if (lt && lt > 0 && lt < bLap) { bLap = lt; bLapN = L; }
+  }
+  const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id);
+  const gapStr = pos === 0 ? 'LEADER' : retired ? 'RETIRED' : `+${((gaps && gaps[id]) || 0).toFixed(2)}s`;
+  const mv = team.gridPos - (pos + 1);
+  const mvStr = mv > 0 ? `▲${mv} (P${team.gridPos}→P${pos+1})` : mv < 0 ? `▼${Math.abs(mv)} (P${team.gridPos}→P${pos+1})` : `— P${pos+1}`;
+  const mvCol = mv > 0 ? '#00ff88' : mv < 0 ? '#ff4444' : '#888';
+  const carSrc = team.car || team.logo.replace('.png', '-car.png');
+  tip.style.display = 'none';
+  tip.innerHTML = `
+    <div class="tip-body">
+      <div class="tip-head"><img src="${team.logo}" alt=""><b>$${id}</b>
+        <span style="font-family:'Chakra Petch';font-size:9px;color:#555;margin-left:4px">${retired ? 'RETIRED' : pos < 0 ? '—' : `P${pos+1}`}</span>
       </div>
-      <div style="margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:8px">
-        <div style="font-family:'Orbitron';font-size:8px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:5px">RACE DATA</div>
-        ${[['GAP',gapStr],[`LAP`,`${retired?`DNF (L${RACE.dnfLap[id]})`:`${cp.carLap}/${TOTAL_LAPS}`}`],['BEST LAP',`${bLap<Infinity?fmt(bLap):'—'}`],['PIT',`${pitEv?`L${pitEv.lap} (-${pitEv.timeLost}s)`:'NOT YET'}`],['GRID→NOW',`<span style="color:${mvCol}">${mvStr}</span>`]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;font-family:'JetBrains Mono',monospace;font-size:10px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;letter-spacing:1px;color:#888">${l}</span><span style="color:#ccc">${v}</span></div>`).join('')}
+      <div class="tip-sec">
+        <div class="tip-h2">RACE DATA</div>
+        <div class="ssec"><span style="color:#aaa">GAP</span><span>${gapStr}</span></div>
+        <div class="ssec"><span style="color:#aaa">LAP</span><span>${retired ? `DNF (L${RACE.dnfLap[id]})` : `${cp.carLap} / ${TOTAL_LAPS}`}</span></div>
+        <div class="ssec"><span style="color:#aaa">BEST LAP</span><span>${bLap < Infinity ? `${fmt(bLap)} (L${bLapN})` : '—'}</span></div>
+        <div class="ssec"><span style="color:#aaa">PIT</span><span>${pitEv ? `LAP ${pitEv.lap} (-${pitEv.timeLost}s)` : 'NOT YET'}</span></div>
+        <div class="ssec"><span style="color:#aaa">GRID→NOW</span><span style="color:${mvCol}">${mvStr}</span></div>
       </div>
-      <div>
-        <div style="font-family:'Orbitron';font-size:8px;font-weight:800;letter-spacing:1.6px;color:#00ff88;margin-bottom:5px;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;display:inline-block"></span>LIVE</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">TYRE</span><span style="font-family:'Orbitron';font-weight:800;font-size:10px;color:${cc};border:1px solid ${cc};border-radius:4px;padding:1px 6px">${comp}</span></div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">WEAR</span><div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div style="height:100%;width:${deg}%;background:${degCol};border-radius:3px"></div></div><b style="font-family:'JetBrains Mono';font-size:10px;color:#fff;min-width:26px;text-align:right">${deg}%</b></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">FUEL</span><div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div style="height:100%;width:${fuel}%;background:${fcol};border-radius:3px"></div></div><b style="font-family:'JetBrains Mono';font-size:10px;color:#fff;min-width:26px;text-align:right">${fuel>66?'F':fuel>33?'M':'E'}</b></div>
+      <div class="tip-live">
+        <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
+        <div class="tl-row"><span>TYRE</span><span class="tcomp" style="--tc:${cc}">${comp}</span></div>
+        <div class="tl-row"><span>WEAR</span><div class="bar"><i style="width:${deg}%;background:${degCol}"></i></div><b>${deg}%</b></div>
+        <div class="tl-row"><span>FUEL</span><div class="bar"><i style="width:${fuel}%;background:${fcol}"></i></div><b>${fuel > 66 ? 'F' : fuel > 33 ? 'M' : 'E'}</b></div>
       </div>
     </div>
-    <div style="position:relative;width:140px;flex-shrink:0;overflow:hidden;background:#0c0c14;border-left:1px solid rgba(255,255,255,.08)">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${team.color};box-shadow:0 0 8px ${team.color};z-index:2"></div>
-      <div style="position:absolute;top:3px;left:0;right:0;height:calc(50% - 1.5px);overflow:hidden">
-        <img src="${team.logo}" style="width:100%;height:100%;object-fit:cover;object-position:center 30%">
-      </div>
-      <div style="position:absolute;top:50%;left:0;right:0;bottom:0;overflow:hidden;border-top:1.5px solid ${team.color}">
-        <img src="${carSrc}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='${team.logo}'">
-      </div>
-      <div style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:16px 8px 8px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.92))">$${id}</div>
+    <div class="tip-car" style="--tc:${team.color}">
+      <span class="acc"></span>
+      <div class="tcar-half tcar-top"><img src="${team.logo}" alt=""></div>
+      <div class="tcar-half tcar-bot"><img src="${carSrc}" alt="" onerror="if(this.src.slice(-4).toLowerCase()=='.png'){this.src=this.src.slice(0,-4)+'.jpg';}else{this.onerror=null;this.src='${team.logo}';}"></div>
+      <span class="tag">$${id}</span>
     </div>`;
+  tip.style.display = 'flex';
+  const w = tip.offsetWidth || 368, h = tip.offsetHeight || 220;
+  let x = tipX - w - 18; if (x < 8) x = tipX + 18;
+  let y = Math.min(Math.max(8, tipY - 24), window.innerHeight - h - 8);
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
 }
+
+(function() {
+  const tip = document.getElementById('rowTip');
+  const lb  = document.getElementById('leaderboard');
+  if (!lb || !tip) return;
+  lb.addEventListener('mousemove', e => {
+    tipX = e.clientX; tipY = e.clientY;
+    const row = e.target.closest('[data-team]');
+    if (row) { tipTeam = row.getAttribute('data-team'); renderRowTip(tipTeam); }
+    else { tipTeam = null; tip.style.display = 'none'; }
+  });
+  lb.addEventListener('mouseleave', () => { tipTeam = null; tip.style.display = 'none'; });
+})();
 
 // ── SESSION DATA dashboard ──────────────────────────────────
 function buildDash() {
   const {positions:liveOrder,gaps:liveGaps,elapsed,isComplete,prog}=window._LIVE||{};
   if(!liveOrder||!liveOrder.length) return;
   const currentLap=Math.min(TOTAL_LAPS,Math.floor((elapsed||0)/LAP_REAL_SECONDS)+1);
+
   const titleEl=document.getElementById('dashResultTitle');
   if(titleEl) titleEl.textContent=isComplete?'RACE RESULT':`RACE IN PROGRESS — LAP ${currentLap}/${TOTAL_LAPS}`;
+  const subEl=document.getElementById('dashSub');
   if(subEl) subEl.textContent=`SATOSHI SPEEDWAY · ROUND 1 · LAP ${currentLap}/${TOTAL_LAPS} · ${liveOrder.length} RUNNING`;
 
   const pcard=(id,absPos)=>{
