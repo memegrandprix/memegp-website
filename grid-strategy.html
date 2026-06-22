@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MemeGP — Starting Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Chakra+Petch:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #0a0a0e;
+  font-family: 'Chakra Petch', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+}
+
+.card {
+  width: 1080px;
+  background: #0d0d14;
+  border: 1px solid rgba(255,204,0,.2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(255,204,0,.06), 0 32px 64px rgba(0,0,0,.6);
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0f0f1a 0%, #141420 100%);
+  border-bottom: 2px solid rgba(255,204,0,.25);
+  padding: 28px 36px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.header-left {}
+.brand {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #555;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-dots { display:flex; gap:5px; }
+.brand-dot { width:8px; height:8px; border-radius:50%; background:#ff0040; }
+.race-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #ffcc00, #ffb700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.race-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #555;
+  font-weight: 600;
+}
+.header-right {
+  text-align: right;
+}
+.lights-out {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #444;
+  margin-bottom: 6px;
+}
+.lights-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffcc00;
+  letter-spacing: 2px;
+}
+
+/* LEGEND */
+.legend {
+  padding: 10px 36px;
+  background: rgba(255,255,255,.025);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #666;
+  font-weight: 600;
+}
+.leg-dot { width:10px; height:10px; border-radius:50%; }
+.leg-fuel { width:14px; height:8px; border-radius:2px; }
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 28px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  position: relative;
+  transition: background .15s;
+}
+.row:nth-child(odd) { background: rgba(255,255,255,.015); }
+.row.pole { background: linear-gradient(90deg, rgba(255,204,0,.1), rgba(255,204,0,.02)) !important; border-left: 3px solid #ffcc00; }
+
+/* position badge */
+.pos-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pos-badge.pole-badge { background: rgba(255,204,0,.15); border-color: rgba(255,204,0,.4); }
+.pos-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+.pos-badge.pole-badge .pos-num { color: #ffcc00; }
+.pos-label {
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: #555;
+  font-weight: 700;
+  margin-top: 1px;
+}
+.pole-badge .pos-label { color: rgba(255,204,0,.6); }
+
+/* logo */
+.logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.1);
+}
+
+/* team info */
+.team-info { flex: 1; min-width: 0; }
+.team-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.team-sub {
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* strategy */
+.strategy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.tyre-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  border: 1.5px solid;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.tyre-soft   { color: #ff3b3b; border-color: rgba(255,59,59,.5);   background: rgba(255,59,59,.08); }
+.tyre-medium { color: #ffcc00; border-color: rgba(255,204,0,.5);   background: rgba(255,204,0,.08); }
+.tyre-hard   { color: #c8ccd6; border-color: rgba(200,204,214,.4); background: rgba(200,204,214,.06); }
+
+.tyre-circle {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  position: relative;
+}
+.tyre-circle::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .35;
+}
+
+.fuel-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.fuel-full  { color: #3b82f6; border: 1.5px solid rgba(59,130,246,.5); background: rgba(59,130,246,.08); }
+.fuel-half  { color: #ffd21a; border: 1.5px solid rgba(255,210,26,.5); background: rgba(255,210,26,.08); }
+
+.fuel-icon {
+  width: 8px; height: 12px;
+  border-radius: 2px;
+  position: relative;
+  border: 1.5px solid currentColor;
+}
+.fuel-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: .5;
+}
+.fuel-full .fuel-icon::after  { height: 100%; }
+.fuel-half .fuel-icon::after  { height: 55%; }
+
+/* COMMUNITY tag */
+.community-tag {
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: #00cc88;
+  font-weight: 700;
+  background: rgba(0,204,136,.1);
+  border: 1px solid rgba(0,204,136,.3);
+  border-radius: 3px;
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+
+/* FOOTER */
+.footer {
+  padding: 14px 36px;
+  background: rgba(0,0,0,.3);
+  border-top: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-left { font-size: 11px; color: #333; letter-spacing: 2px; }
+.footer-right { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 800; color: #ffcc00; letter-spacing: 2px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="brand">
+        MEME GP
+        <div class="brand-dots">
+          <div class="brand-dot"></div>
+          <div class="brand-dot"></div>
+          <div class="brand-dot"></div>
+          <div class="brand-dot"></div>
+          <div class="brand-dot"></div>
+        </div>
+      </div>
+      <div class="race-title">STARTING GRID</div>
+      <div class="race-sub">SATOSHI SPEEDWAY · ROUND 1 · 22 JUNE 2026</div>
+    </div>
+    <div class="header-right">
+      <div class="lights-out">LIGHTS OUT</div>
+      <div class="lights-time">SUN 22 JUN · 18:00 UTC</div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="leg-dot" style="background:#ff3b3b"></div> SOFT</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#ffcc00"></div> MEDIUM</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#c8ccd6"></div> HARD</div>
+    <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin:0 4px"></div>
+    <div class="legend-item"><div class="leg-fuel" style="background:#3b82f6;opacity:.7"></div> FULL TANK</div>
+    <div class="legend-item"><div class="leg-fuel" style="background:#ffd21a;opacity:.7"></div> HALF TANK</div>
+    <div style="margin-left:auto"></div>
+    <div class="legend-item" style="color:#00cc88">● COMMUNITY VOTE</div>
+  </div>
+
+  <!-- GRID ROWS -->
+  <div class="grid" id="grid"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">memegrandprix.com · 20 LAPS · 1 MANDATORY PIT STOP</div>
+    <div class="footer-right">$MEMEGP</div>
+  </div>
+</div>
+
+<script>
+const QUALI_ORDER = [
+  'PUP','MOMO','TURBO','BILLY','MASK','LOL','DOBERMANN','VIBECOIN',
+  'PEPONK','SHIH','SUS','420BLAZEIT','MARS','MONKO','NEURO'
+];
+
+const TEAMS = {
+  PUP:       { name:'$PUP',       color:'#f5c542', logo:'pup.png' },
+  MOMO:      { name:'$MOMO',      color:'#ff69b4', logo:'momo.png' },
+  TURBO:     { name:'$TURBO',     color:'#00bfff', logo:'turbo.png' },
+  BILLY:     { name:'$BILLY',     color:'#ff8c00', logo:'billy.png' },
+  MASK:      { name:'$MASK',      color:'#cc0000', logo:'mask.png' },
+  LOL:       { name:'$LOL',       color:'#aaaaaa', logo:'lol.png' },
+  DOBERMANN: { name:'$DOBERMANN', color:'#4488ff', logo:'dobermann.png' },
+  VIBECOIN:  { name:'$VIBECOIN',  color:'#ff44aa', logo:'vibecoin.png' },
+  PEPONK:    { name:'$PEPONK',    color:'#ff6644', logo:'peponk.png' },
+  SHIH:      { name:'$SHIH',      color:'#ffcc44', logo:'shih.png' },
+  SUS:       { name:'$SUS',       color:'#cc44ff', logo:'sus.png' },
+  '420BLAZEIT':{ name:'$420BLAZEIT',color:'#44cc66',logo:'420blazeit.png' },
+  MARS:      { name:'$MARS',      color:'#ff4422', logo:'mars.png' },
+  MONKO:     { name:'$MONKO',     color:'#cc8844', logo:'monko.png' },
+  NEURO:     { name:'$NEURO',     color:'#44aaff', logo:'neuro.png' },
+};
+
+// Community votes
+const COMMUNITY_VOTES = {
+  VIBECOIN: { tyre:'HARD', fuel:'FULL' }
+};
+
+// Seeded random for reproducible random picks
+function seededRand(seed) {
+  let s = seed;
+  return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+}
+const rng = seededRand(20260622);
+const TYRES = ['SOFT','MEDIUM','HARD'];
+const FUELS = ['FULL','HALF'];
+
+const STRATEGIES = {};
+QUALI_ORDER.forEach(id => {
+  if (COMMUNITY_VOTES[id]) {
+    STRATEGIES[id] = { ...COMMUNITY_VOTES[id], community: true };
+  } else {
+    STRATEGIES[id] = {
+      tyre: TYRES[Math.floor(rng() * 3)],
+      fuel: FUELS[Math.floor(rng() * 2)],
+      community: false
+    };
+  }
+});
+
+// Build grid
+const grid = document.getElementById('grid');
+QUALI_ORDER.forEach((id, i) => {
+  const pos = i + 1;
+  const t = TEAMS[id];
+  const s = STRATEGIES[id];
+  const isPole = pos === 1;
+
+  const tyreClass = { SOFT:'tyre-soft', MEDIUM:'tyre-medium', HARD:'tyre-hard' }[s.tyre];
+  const fuelClass  = { FULL:'fuel-full',  HALF:'fuel-half'  }[s.fuel];
+
+  const row = document.createElement('div');
+  row.className = 'row' + (isPole ? ' pole' : '');
+  row.innerHTML = `
+    <div class="pos-badge ${isPole?'pole-badge':''}">
+      <div class="pos-num">${pos}</div>
+      <div class="pos-label">${isPole?'POLE':'GRID'}</div>
+    </div>
+    <img class="logo" src="${t.logo}" alt="${id}"
+      onerror="this.style.background='${t.color}33';this.style.border='2px solid ${t.color}66';this.removeAttribute('src')">
+    <div class="team-info">
+      <div class="team-name" style="color:${t.color}">${t.name}</div>
+      <div class="team-sub">P${pos} · SATOSHI SPEEDWAY</div>
+    </div>
+    <div class="strategy">
+      ${s.community ? '<div class="community-tag">COMMUNITY</div>' : ''}
+      <div class="tyre-badge ${tyreClass}">
+        <div class="tyre-circle"></div>
+        ${s.tyre}
+      </div>
+      <div class="fuel-badge ${fuelClass}">
+        <div class="fuel-icon"></div>
+        ${s.fuel}
+      </div>
+    </div>
+  `;
+  grid.appendChild(row);
+});
+</script>
+</body>
+</html>
