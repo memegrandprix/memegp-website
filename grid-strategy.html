@@ -166,6 +166,19 @@ body {
   border: 2px solid rgba(255,255,255,.1);
 }
 
+/* logo fallback monogram (shown when a logo image fails to load) */
+.logo-mono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  object-fit: unset;
+  text-align: center;
+}
+
 /* team info */
 .team-info { flex: 1; min-width: 0; }
 .team-name {
@@ -300,7 +313,7 @@ body {
     </div>
     <div class="header-right">
       <div class="lights-out">LIGHTS OUT</div>
-      <div class="lights-time">SUN 22 JUN · 18:00 UTC</div>
+      <div class="lights-time">MON 22 JUN · 18:00 UTC</div>
     </div>
   </div>
 
@@ -396,7 +409,7 @@ QUALI_ORDER.forEach((id, i) => {
       <div class="pos-label">${isPole?'POLE':'GRID'}</div>
     </div>
     <img class="logo" src="${t.logo}" alt="${id}"
-      onerror="this.style.background='${t.color}33';this.style.border='2px solid ${t.color}66';this.removeAttribute('src')">
+      onerror="this.onerror=null;const d=document.createElement('div');d.className='logo logo-mono';d.style.color='${t.color}';d.style.borderColor='${t.color}66';d.style.background='${t.color}1a';d.textContent='${id.slice(0,3)}';this.replaceWith(d);">
     <div class="team-info">
       <div class="team-name" style="color:${t.color}">${t.name}</div>
       <div class="team-sub">P${pos} · SATOSHI SPEEDWAY</div>
