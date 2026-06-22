@@ -1317,15 +1317,15 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 
 const RACE1_START_UTC = new Date('2026-06-22T18:00:00Z').getTime(); // Round 1 — Satoshi Speedway (Mon 22 Jun, 18:00 UTC)
 // ── PREVIEW MODE ── starts a few seconds from load so you can watch lights-out + the full race now.
-// For production: replace the line below with  const SESSION_START_UTC = RACE1_START_UTC;
-const SESSION_START_UTC = Date.now() + 4000;
+// Unlock 5 minutes early so the page loads and warms up before lights out
+const SESSION_START_UTC = RACE1_START_UTC - (5 * 60 * 1000);
 const COUNTDOWN_SECONDS = 10;
 const TOTAL_LAPS = 20;
 const LAP_REAL_SECONDS = 90;
 const PIT_TIME_LOSS_BASE = 5;
-const _PVSPD = parseFloat(new URLSearchParams(location.search).get('test')) || 20;
+const _PVSPD = 1; // PRODUCTION — real time, no fast-forward
 let _PVT0 = Date.now();
-const SEED = 20260622001; // Round 1 — Satoshi Speedway (lead battle: BILLY→PUP→MASK→PUP, PUP wins +4.7s)
+const SEED = 20260622001; // Round 1 — Satoshi Speedway
 
 // ── TEAM META — display only (colours / logos / names / emoji).
 // Stats are NOT here: they come from stats-calculator.js (single source of truth).
@@ -1757,8 +1757,9 @@ function update() {
     document.getElementById('lightsOverlay').style.display = 'none';
     (function(){var v=document.getElementById('vtoggle');if(v)v.style.display='none';})();
     if (selectedTeam) document.getElementById('teamPicker').style.display = 'none';
-    const remaining = Math.abs(rawElapsed);
-    const h = Math.floor(remaining/3600); const m = Math.floor((remaining%3600)/60); const s = Math.floor(remaining%60);
+    // count to actual lights out (18:00 UTC), not page unlock
+    const lightsOut = Math.max(0, (RACE1_START_UTC - Date.now()) / 1000);
+    const h = Math.floor(lightsOut/3600); const m = Math.floor((lightsOut%3600)/60); const s = Math.floor(lightsOut%60);
     document.getElementById('waitCountdown').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     requestAnimationFrame(update);
     return;
@@ -2239,36 +2240,39 @@ function renderRowTip(id) {
   const mvCol=mv>0?'#00ff88':mv<0?'#ff4444':'#888';
   const carSrc=team.car||team.logo.replace('.png','-car.png');
 
-  tip.style.display='flex';
+  tip.style.cssText = 'position:fixed;z-index:500;display:flex;flex-direction:row;width:360px;height:220px;border-radius:12px;overflow:hidden;background:linear-gradient(160deg,rgba(10,10,18,.98),rgba(6,6,12,.99));border:1px solid rgba(255,204,0,.25);box-shadow:0 16px 48px rgba(0,0,0,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)';
   tip.innerHTML=`
-    <div class="tip-body">
-      <div class="tip-head"><img src="${team.logo}" alt=""><b>$${id}</b>
-        <span style="font-family:'Chakra Petch';font-size:9px;color:#555;margin-left:4px">${retired?'RETIRED':pos<0?'—':`P${pos+1} of ${(positions||[]).length} running`}</span>
+    <div style="padding:13px 14px;width:220px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <img src="${team.logo}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,204,0,.4);flex-shrink:0">
+        <b style="font-family:'Orbitron';font-size:13px;color:#fff">$${id}</b>
+        <span style="font-family:'Chakra Petch';font-size:9px;color:#555;margin-left:2px">${retired?'RETIRED':pos<0?'—':`P${pos+1}`}</span>
       </div>
-      <div class="tip-sec">
-        <div class="tip-h2">RACE DATA</div>
-        <div class="ssec"><span style="color:#aaa">GAP TO LEADER</span><span>${gapStr}</span></div>
-        <div class="ssec"><span style="color:#aaa">CURRENT LAP</span><span>${retired?`DNF (L${RACE.dnfLap[id]})`:`${cp.carLap} / ${TOTAL_LAPS}`}</span></div>
-        <div class="ssec"><span style="color:#aaa">BEST LAP</span><span>${bLap<Infinity?`${fmt(bLap)} (L${bLapN})`:'—'}</span></div>
-        <div class="ssec"><span style="color:#aaa">PIT STOP</span><span>${pitEv?`LAP ${pitEv.lap} (-${pitEv.timeLost}s)`:'NOT YET'}</span></div>
-        <div class="ssec"><span style="color:#aaa">GRID → NOW</span><span style="color:${mvCol}">${mvStr}</span></div>
+      <div style="margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:8px">
+        <div style="font-family:'Orbitron';font-size:8px;font-weight:800;letter-spacing:1.6px;color:#6a6a78;margin-bottom:5px">RACE DATA</div>
+        ${[['GAP',gapStr],[`LAP`,`${retired?`DNF (L${RACE.dnfLap[id]})`:`${cp.carLap}/${TOTAL_LAPS}`}`],['BEST LAP',`${bLap<Infinity?fmt(bLap):'—'}`],['PIT',`${pitEv?`L${pitEv.lap} (-${pitEv.timeLost}s)`:'NOT YET'}`],['GRID→NOW',`<span style="color:${mvCol}">${mvStr}</span>`]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;font-family:'JetBrains Mono',monospace;font-size:10px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;letter-spacing:1px;color:#888">${l}</span><span style="color:#ccc">${v}</span></div>`).join('')}
       </div>
-      <div class="tip-live">
-        <div class="tip-h2" style="color:#00ff88"><span class="tip-dot" style="color:#00ff88;background:#00ff88"></span>LIVE · ON TRACK</div>
-        <div class="tl-row"><span>TYRE</span><span class="tcomp" style="--tc:${cc}">${comp}</span></div>
-        <div class="tl-row"><span>WEAR</span><div class="bar"><i style="width:${deg}%;background:${degCol}"></i></div><b>${deg}%</b></div>
-        <div class="tl-row"><span>FUEL</span><div class="bar"><i style="width:${fuel}%;background:${fcol}"></i></div><b>${fuel>66?'F':fuel>33?'M':'E'}</b></div>
+      <div>
+        <div style="font-family:'Orbitron';font-size:8px;font-weight:800;letter-spacing:1.6px;color:#00ff88;margin-bottom:5px;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;display:inline-block"></span>LIVE</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">TYRE</span><span style="font-family:'Orbitron';font-weight:800;font-size:10px;color:${cc};border:1px solid ${cc};border-radius:4px;padding:1px 6px">${comp}</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">WEAR</span><div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div style="height:100%;width:${deg}%;background:${degCol};border-radius:3px"></div></div><b style="font-family:'JetBrains Mono';font-size:10px;color:#fff;min-width:26px;text-align:right">${deg}%</b></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:#888;min-width:34px">FUEL</span><div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div style="height:100%;width:${fuel}%;background:${fcol};border-radius:3px"></div></div><b style="font-family:'JetBrains Mono';font-size:10px;color:#fff;min-width:26px;text-align:right">${fuel>66?'F':fuel>33?'M':'E'}</b></div>
       </div>
     </div>
-    <div class="tip-car" style="--tc:${team.color}">
-      <span class="acc"></span>
-      <div class="tcar-half tcar-top"><img src="${team.logo}" alt=""></div>
-      <div class="tcar-half tcar-bot"><img src="${carSrc}" alt="" onerror="if(this.src.slice(-4).toLowerCase()=='.png'){this.src=this.src.slice(0,-4)+'.jpg';}else{this.onerror=null;this.src='${team.logo}';}"></div>
-      <span class="tag">$${id}</span>
+    <div style="position:relative;width:140px;flex-shrink:0;overflow:hidden;background:#0c0c14;border-left:1px solid rgba(255,255,255,.08)">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${team.color};box-shadow:0 0 8px ${team.color};z-index:2"></div>
+      <div style="position:absolute;top:3px;left:0;right:0;height:calc(50% - 1.5px);overflow:hidden">
+        <img src="${team.logo}" style="width:100%;height:100%;object-fit:cover;object-position:center 30%">
+      </div>
+      <div style="position:absolute;top:50%;left:0;right:0;bottom:0;overflow:hidden;border-top:1.5px solid ${team.color}">
+        <img src="${carSrc}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='${team.logo}'">
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:16px 8px 8px;text-align:center;font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:1px;color:#fff;background:linear-gradient(transparent,rgba(4,4,8,.92))">$${id}</div>
     </div>`;
-  const w=tip.offsetWidth||368,h=tip.offsetHeight||220;
-  let x=_tipX-w-18; if(x<8) x=_tipX+18;
-  let y=Math.min(Math.max(8,_tipY-24),window.innerHeight-h-8);
+  // position: prefer left of cursor, fall back to right
+  const W=360, H=220;
+  let x=_tipX-W-14; if(x<8) x=_tipX+14;
+  let y=Math.min(Math.max(8,_tipY-H/2), window.innerHeight-H-8);
   tip.style.left=x+'px'; tip.style.top=y+'px';
 }
 
@@ -2354,6 +2358,6 @@ function buildDash() {
   if(el)el.addEventListener('click',function(){try{navigator.clipboard.writeText(ca);}catch(e){}
     if(btn){var t=btn.textContent;btn.textContent='COPIED!';setTimeout(function(){btn.textContent=t;},1200);}});})();
 </script>
-<script>document.addEventListener("DOMContentLoaded",()=>{const d=document.createElement("div");d.innerHTML=`<div style="position:fixed;bottom:8px;left:8px;z-index:99998;font-family:monospace;font-size:10px;color:#ffcc00;background:rgba(0,0,0,.6);padding:3px 8px;border:1px solid #ffcc00;border-radius:4px">PREVIEW · ${_PVSPD}x · pick a team to start · ?test=N for speed</div>`;document.body.appendChild(d.firstChild);});</script>
+
 </body>
 </html>
