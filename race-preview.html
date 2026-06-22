@@ -100,7 +100,7 @@ body{background:#050508;color:#f0f0f0;font-family:'Chakra Petch',monospace;overf
 #dashboardView .llap{font-family:'JetBrains Mono';font-weight:700;font-size:12px;color:#eee;text-align:right}
 #dashboardView .lgap{font-family:'JetBrains Mono';font-size:11px;color:#7a7a88;text-align:right}
 #dashboardView .fcgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
-#dashboardView .fc{background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,#ffcc00);border-radius:12px;padding:16px}
+#dashboardView .fc{position:relative;overflow:hidden;background:linear-gradient(165deg,rgba(24,24,34,.72),rgba(10,10,18,.82));border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ac,#ffcc00);border-radius:12px;padding:16px}
 #dashboardView .fc-h{font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#7a7a88;margin-bottom:10px}
 #dashboardView .fc-big{font-family:'Orbitron';font-weight:900;font-size:clamp(16px,2.8vw,22px);line-height:1.06;color:#fff}
 #dashboardView .fc-sub{font-size:11px;color:#cfcfd6;margin-top:6px;line-height:1.45}
@@ -1788,6 +1788,19 @@ function currentCompound(id, lap) {
   return c;
 }
 
+// Strategy-aware fuel level (0..1) — mirrors the engine's fuelMass() so the gauge
+// matches each car's actual race strategy. FULL tank = heavy, 1 stop, drains across
+// the race from 100%. HALF tank = light, 2 stops, each stint starts at ~50% and burns
+// down (refuels to ~50% at L8 & L15). `lap` may be fractional for smooth animation.
+function currentFuelFrac(id, lap) {
+  const st = RACE.strategies && RACE.strategies[id];
+  if (!st) return Math.max(0, 1 - (lap - 1) / TOTAL_LAPS);
+  if (st.fuel === 'FULL') return Math.max(0, 1 - (lap - 1) / (TOTAL_LAPS - 1));
+  const seg = lap <= 7 ? 0 : (lap <= 14 ? 1 : 2);
+  const ss = [1, 8, 15][seg], se = [7, 14, 20][seg];
+  return Math.max(0, 0.5 * (1 - (lap - ss) / (se - ss + 3)));
+}
+
 let lightsState = 'waiting';
 
 function updateLights(elapsed) {
@@ -2110,23 +2123,23 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id);
 
     let pt;
-    if (isPitting && carLapProgress > 0.88) {
-      // Pit lane runs along the S/F straight (top of track)
-      // Entry: last ~6% of lap (approaching pit entry after final corner)
-      // Service: stationary in box
-      // Exit: rejoins at start of next lap via pit exit
+    // Pit lane parallels the S/F straight (top of track) = the FIRST ~16% of the lap.
+    // Car crosses S/F, dives into the pit lane, services in the box, then rejoins the
+    // racing line ~16% into the lap. (Window was mis-tuned to 0.88-1.0 = the left side.)
+    const PIT_OUT = 0.16;
+    if (isPitting && carLapProgress < PIT_OUT) {
       const pitEv = RACE.events.find(e => e.type === 'pit' && e.team === id && e.lap === carLap);
-      const serviceFrac = Math.min(0.07, Math.max(0.03, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
-      const enterEnd = 0.94, holdEnd = enterEnd + serviceFrac;
+      const serviceFrac = Math.min(0.06, Math.max(0.03, (pitEv ? pitEv.service : 7) / LAP_REAL_SECONDS));
+      const enterEnd = 0.04, holdEnd = enterEnd + serviceFrac;
       if (carLapProgress < enterEnd) {
-        // driving into pit box from track (entry at ~T17 before S/F)
-        const pitFrac = (carLapProgress - 0.88) / (enterEnd - 0.88);
+        // diving off the S/F line into the pit lane
+        const pitFrac = carLapProgress / enterEnd;
         pt = getPitPoint(pitFrac * 0.4);
       } else if (carLapProgress < holdEnd) {
-        pt = getPitPoint(0.5); // stationary in box
+        pt = getPitPoint(0.5); // stationary in the box
       } else {
-        // exiting pit onto track (rejoins just after S/F line)
-        const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.02, (1 - holdEnd)));
+        // accelerating down the pit lane and rejoining the track
+        const exitFrac = Math.min(1, (carLapProgress - holdEnd) / Math.max(0.01, (PIT_OUT - holdEnd)));
         pt = getPitPoint(0.6 + exitFrac * 0.4);
       }
     } else {
@@ -2137,7 +2150,7 @@ function renderCarDots(positions, lapProgress, isComplete, gaps, leaderLap, elap
     }
 
     const logoId = 'logo-clip-' + id;
-    const showPitBadge = isPitting && carLapProgress > 0.88;
+    const showPitBadge = isPitting && carLapProgress < 0.16;
     const ringColor = showPitBadge ? '#ff9900' : team.color;
     const isLeaderDot = pos === 0;
     const leaderHalo = isLeaderDot ? `<circle cx="${pt.x}" cy="${pt.y}" r="13.5" fill="${team.color}" opacity="0.22"/>` : '';
@@ -2171,7 +2184,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     const hasPitted = currentLapData.pittedStatus ? currentLapData.pittedStatus[id] : false;
     const _cp = carProgress(id, elapsed);
     const carLap = _cp.carLap, carLapIdx = _cp.carLapIdx;
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac > 0.88;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac < 0.16;
 
     // Compute real tyre age: laps on current set since last pit
     const pitLaps = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
@@ -2198,15 +2211,9 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
       <span style="font-size:9px;font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1">${wearPct}%</span>
     </div>`;
 
-    // FUEL BAR: full tank at start, burns to empty at finish. After pit = refuel to full for remaining laps.
-    let fuelFrac;
-    if (hasPittedCalc) {
-      const lapsRemaining = Math.max(1, TOTAL_LAPS - lastPitLap);
-      const lapsAfterPit = Math.max(0, carLap - lastPitLap);
-      fuelFrac = Math.max(0, 1 - lapsAfterPit / lapsRemaining);
-    } else {
-      fuelFrac = Math.max(0, 1 - (carLap - 1) / TOTAL_LAPS);
-    }
+    // FUEL BAR: strategy-aware — FULL starters run high & drain across the race,
+    // HALF starters run ~50% and burn down each stint (refuel to ~50% at stops).
+    const fuelFrac = currentFuelFrac(id, carLap);
     const GAUGE_H = 30, fillH = Math.round(fuelFrac * GAUGE_H);
     const fuelCol = fuelFrac > 0.4 ? '#3b82f6' : fuelFrac > 0.15 ? '#ffd21a' : '#ff4444';
     const fuelGauge = `<div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0">
@@ -2256,7 +2263,7 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
 
     const _cp = carProgress(id, elapsed);
     const carLap = _cp.carLap, carLapProgress = _cp.frac, carLapIdx = _cp.carLapIdx;
-    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress > 0.88;
+    const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && carLapProgress < 0.16;
 
     // Use pitLaps array to determine if car has COMPLETED its stop (not just entered)
     const _pitLapsLb = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
@@ -2373,9 +2380,7 @@ function renderRowTip(id) {
   const tyreAge = Math.max(0, cp.carLap - 1 - lastPitLapT);
   const deg = Math.min(100, Math.round(tyreAge / (COMP_MAX[comp] || 14) * 100));
   const degCol = deg < 40 ? '#00ff88' : deg < 70 ? '#ffd21a' : '#ff4444';
-  const lapsRem = Math.max(1, TOTAL_LAPS - lastPitLapT);
-  const lapsAft = Math.max(0, cp.carLap - lastPitLapT);
-  const fuelFrac = hasPittedT ? Math.max(0, 1 - lapsAft / lapsRem) : Math.max(0.04, 1 - (cp.carLap - 1) / TOTAL_LAPS);
+  const fuelFrac = Math.max(0.04, currentFuelFrac(id, cp.carLap));
   const fuel = Math.round(fuelFrac * 100);
   const fcol = fuel > 66 ? '#22DD66' : fuel > 33 ? '#ffcc00' : '#ff3b3b';
   let bLap = Infinity, bLapN = 0;
