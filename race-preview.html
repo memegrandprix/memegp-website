@@ -1383,12 +1383,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 const RACE1_START_UTC = new Date('2026-06-22T18:00:00Z').getTime(); // Round 1 — Satoshi Speedway (Mon 22 Jun, 18:00 UTC)
 // ── PREVIEW MODE ── starts a few seconds from load so you can watch lights-out + the full race now.
 // Unlock 5 minutes early so the page loads and warms up before lights out
-const SESSION_START_UTC = RACE1_START_UTC - (5 * 60 * 1000);
+const SESSION_START_UTC = Date.now() + 4000; // PREVIEW MODE
 const COUNTDOWN_SECONDS = 10;
 const TOTAL_LAPS = 20;
 const LAP_REAL_SECONDS = 90;
 const PIT_TIME_LOSS_BASE = 5;
-const _PVSPD = 1; // PRODUCTION — real time, no fast-forward
+const _PVSPD = 2; // PRODUCTION — real time, no fast-forward
 let _PVT0 = Date.now();
 const SEED = 20260622001; // Round 1 — Satoshi Speedway
 
@@ -1813,6 +1813,7 @@ function computeLiveBests(elapsed) {
 }
 
 function update() {
+  try {
   const now = Date.now();
   const rawElapsed = ((Date.now() - _PVT0)/1000) * _PVSPD;  // PREVIEW fast clock
 
@@ -1924,9 +1925,10 @@ function update() {
 
   const tickerEl = document.getElementById('tickerMsg');
   const tickerDiv = document.getElementById('ticker');
+  const tImg = t => `<img src="${t.logo}" style="width:14px;height:14px;border-radius:50%;object-fit:cover;vertical-align:middle;margin:0 2px 1px;border:1px solid ${t.color}55;display:inline">`;
 
   if (isComplete) {
-    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} WINS THE SATOSHI SPEEDWAY GRAND PRIX`;
+    tickerEl.innerHTML = `▸ 🏁 CHEQUERED FLAG — ${tImg(leader)} $${leader.id} WINS THE SATOSHI SPEEDWAY GRAND PRIX`;
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
     const timeSinceAllFinished = elapsed - (TOTAL_LAPS * LAP_REAL_SECONDS + 75);
@@ -1934,19 +1936,18 @@ function update() {
       showPodium(liveOrder, liveGaps);
     }
   } else if (leaderFinished) {
-    tickerEl.textContent = `▸ 🏁 CHEQUERED FLAG — ${leader.emoji} $${leader.id} takes the win! Waiting for all cars to finish...`;
+    tickerEl.innerHTML = `▸ 🏁 CHEQUERED FLAG — ${tImg(leader)} $${leader.id} takes the win! Waiting for all cars to finish...`;
     tickerEl.style.color = '#00ff88';
     tickerDiv.style.background = 'rgba(0,255,136,0.06)';
   } else {
     const pitsThisLap = RACE.events.filter(e => e.type === 'pit' && e.lap === currentLap);
     const overtakesThisLap = RACE.events.filter(e => e.type === 'overtake' && e.lap === currentLap);
-
     let tickerSet = false;
 
     if (pitsThisLap.length > 0 && lapProgress > 0.77 && lapProgress < 0.93) {
       const pit = pitsThisLap[pitsThisLap.length - 1];
       const team = TEAMS.find(t => t.id === pit.team);
-      tickerEl.textContent = `▸ PIT STOP! ${team.emoji} $${pit.team} — fresh tyres — lost ${pit.timeLost}s — LAP ${currentLap}`;
+      tickerEl.innerHTML = `▸ PIT STOP! ${tImg(team)} $${pit.team} — fresh tyres — lost ${pit.timeLost}s — LAP ${currentLap}`;
       tickerEl.style.color = '#ff9900';
       tickerDiv.style.background = 'rgba(255,153,0,0.06)';
       document.getElementById('statOvertake').textContent = `$${pit.team} PITS`;
@@ -1957,18 +1958,14 @@ function update() {
       const sectorEvents = RACE.events.filter(e => e.lap === currentLap && (e.type === 'fastest_s1' || e.type === 'fastest_s2' || e.type === 'fastest_s3'));
       if (sectorEvents.length > 0) {
         let sectorEvent = null;
-        if (lapProgress > 0.15 && lapProgress < 0.35) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s1');
-        } else if (lapProgress > 0.40 && lapProgress < 0.60) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s2');
-        } else if (lapProgress > 0.65 && lapProgress < 0.85) {
-          sectorEvent = sectorEvents.find(e => e.type === 'fastest_s3');
-        }
+        if (lapProgress > 0.15 && lapProgress < 0.35) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s1');
+        else if (lapProgress > 0.40 && lapProgress < 0.60) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s2');
+        else if (lapProgress > 0.65 && lapProgress < 0.85) sectorEvent = sectorEvents.find(e => e.type === 'fastest_s3');
         if (sectorEvent) {
           const sTeam = TEAMS.find(t => t.id === sectorEvent.team);
           const sLabel = sectorEvent.type === 'fastest_s1' ? '🔵 FASTEST S1' : sectorEvent.type === 'fastest_s2' ? '🔴 FASTEST S2' : '🟢 FASTEST S3';
           const freshMsg = sectorEvent.freshTyres ? ' — FRESH TYRES! 🔥' : '';
-          tickerEl.textContent = `▸ ${sLabel} — ${sTeam.emoji} $${sectorEvent.team} — ${sectorEvent.time.toFixed(3)}${freshMsg}`;
+          tickerEl.innerHTML = `▸ ${sLabel} — ${tImg(sTeam)} $${sectorEvent.team} — ${sectorEvent.time.toFixed(3)}s${freshMsg}`;
           tickerEl.style.color = sectorEvent.type === 'fastest_s1' ? '#3b82f6' : sectorEvent.type === 'fastest_s2' ? '#ef4444' : '#10b981';
           tickerDiv.style.background = `${tickerEl.style.color}0a`;
           tickerSet = true;
@@ -1979,7 +1976,7 @@ function update() {
     if (!tickerSet && overtakesThisLap.length > 0 && lapProgress > 0.4) {
       const ot = overtakesThisLap[overtakesThisLap.length - 1];
       const attacker = TEAMS.find(t => t.id === ot.attacker);
-      tickerEl.textContent = `▸ OVERTAKE! ${attacker.emoji} $${ot.attacker} passes $${ot.defender} for P${ot.newPos} — LAP ${currentLap}`;
+      tickerEl.innerHTML = `▸ OVERTAKE! ${tImg(attacker)} $${ot.attacker} passes $${ot.defender} for P${ot.newPos} — LAP ${currentLap}`;
       tickerEl.style.color = '#ffcc00';
       tickerDiv.style.background = 'rgba(255,204,0,0.06)';
       document.getElementById('statOvertake').textContent = `$${ot.attacker} → P${ot.newPos}`;
@@ -1987,7 +1984,7 @@ function update() {
     }
 
     if (!tickerSet) {
-      tickerEl.textContent = `▸ LAP ${currentLap}/${TOTAL_LAPS} — ${leader.emoji} $${leader.id} leads`;
+      tickerEl.innerHTML = `▸ LAP ${currentLap}/${TOTAL_LAPS} — ${tImg(leader)} $${leader.id} leads`;
       tickerEl.style.color = '#ff6644';
       tickerDiv.style.background = 'rgba(255,0,64,0.06)';
     }
@@ -2000,6 +1997,10 @@ function update() {
   window._LIVE = { positions: liveOrder, gaps: interpolatedGaps, elapsed, isComplete, prog };
 
   requestAnimationFrame(update);
+  } catch(e) {
+    console.error('MemeGP update error:', e);
+    requestAnimationFrame(update); // keep running even if one frame throws
+  }
 }
 
 function renderGridFormation() {
@@ -2101,10 +2102,11 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
     const carLap = _cp.carLap, carLapIdx = _cp.carLapIdx;
     const isPitting = RACE.laps[carLapIdx].pitThisLap.includes(id) && _cp.frac > 0.70;
 
-    // Compute real tyre age: laps since last pit (or since lap 1 if never pitted)
-    const pitLap = RACE.pitLaps ? RACE.pitLaps[id] : null;
-    const lastPit = hasPitted && pitLap ? pitLap : 0;
-    const tyreAge = Math.max(0, carLap - 1 - lastPit); // laps on current set
+    // Compute real tyre age: laps on current set since last pit
+    const pitLaps = RACE.pitLaps ? (RACE.pitLaps[id] || []) : [];
+    const lastPitLap = pitLaps.filter(p => p < carLap).pop() || 0; // last pit before current lap
+    const hasPittedCalc = lastPitLap > 0;
+    const tyreAge = Math.max(0, carLap - 1 - lastPitLap);
 
     // TYRE CIRCLE with live wear %
     const comp = currentCompound(id, carLap);
@@ -2127,7 +2129,7 @@ function renderRaceTower(positions, gaps, prevLapData, currentLapData, isComplet
 
     // FUEL BAR vertical
     let fuelFrac;
-    if (hasPitted && pitLap) { const la = Math.max(0, carLap - pitLap); fuelFrac = Math.max(0, (TOTAL_LAPS/2 - la) / (TOTAL_LAPS/2)) * 0.5; }
+    if (hasPittedCalc) { const la = Math.max(0, carLap - lastPitLap); fuelFrac = Math.max(0, (TOTAL_LAPS/2 - la) / (TOTAL_LAPS/2)) * 0.5; }
     else { fuelFrac = Math.max(0, 1 - (carLap - 1) / TOTAL_LAPS); }
     const GAUGE_H = 30, fillH = Math.round(fuelFrac * GAUGE_H);
     const fuelCol = fuelFrac > 0.4 ? '#3b82f6' : fuelFrac > 0.15 ? '#ffd21a' : '#ff4444';
@@ -2189,7 +2191,7 @@ function renderLeaderboard(positions, gaps, prevLapData, currentLapData, isCompl
       pitIndicator = `<span style="font-size:7px;color:#ff4444;font-family:'Space Mono',monospace">0</span>`;
     }
 
-    html += `<div class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
+    html += `<div data-tipid="${id}" class="lb-row" style="background:${isWinner?'rgba(0,255,136,0.06)':isPitting?'rgba(255,153,0,0.04)':isLeader?'rgba(255,255,255,0.02)':'transparent'};
       border-left:2px solid ${isLeader?'#00ff88':isPitting?'#ff9900':'transparent'}">
       <span style="font-size:11px;font-weight:800;color:${isWinner?'#00ff88':isLeader?'#fff':'#666'};font-family:'Orbitron',sans-serif">${pos+1}</span>
       <span style="display:inline-flex;width:23px;height:23px;border-radius:50%;background:${TYRE_COL[currentCompound(id,carLap)]};padding:2px;box-shadow:0 0 5px ${TYRE_COL[currentCompound(id,carLap)]}66;flex-shrink:0"><img src="${team.logo}" alt="${id}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:1.5px solid #0a0a12"></span>
@@ -2291,21 +2293,20 @@ function renderRowTip(id) {
   const comp=currentCompound(id,cp.carLap);
   const CC={SOFT:'#ef4444',MED:'#ffcc00',HARD:'#e8e8ee'};
   const cc=CC[comp]||'#888';
-  // Real tyre age from pit history
+  // Real tyre age — last pit lap before current lap
   const COMP_MAX={SOFT:8,MED:14,HARD:20};
-  const pitLap=RACE.pitLaps?RACE.pitLaps[id]:null;
-  const pitEv=RACE.events.find(e=>e.type==='pit'&&e.team===id);
-  const hasPitted=!!(pitEv&&pitEv.lap<cp.carLap);
-  const lastPit=hasPitted&&pitLap?pitLap:0;
-  const tyreAge=Math.max(0, cp.carLap-1-lastPit);
+  const pitLapsArr2=RACE.pitLaps?RACE.pitLaps[id]||[]:[];
+  const lastPitLap2=pitLapsArr2.filter(p=>p<cp.carLap).pop()||0;
+  const hasPitted=lastPitLap2>0;
+  const tyreAge=Math.max(0,cp.carLap-1-lastPitLap2);
   const deg=Math.min(100,Math.round(tyreAge/(COMP_MAX[comp]||14)*100));
   const degCol=deg<40?'#00ff88':deg<70?'#ffd21a':'#ff4444';
   // fuel
-  let fuelFrac=hasPitted&&pitLap?Math.max(0,(TOTAL_LAPS/2-Math.max(0,cp.carLap-pitLap))/(TOTAL_LAPS/2))*0.5:Math.max(0.04,1-(cp.carLap-1)/TOTAL_LAPS);
+  let fuelFrac=hasPitted?Math.max(0,(TOTAL_LAPS/2-Math.max(0,cp.carLap-lastPitLap2))/(TOTAL_LAPS/2))*0.5:Math.max(0.04,1-(cp.carLap-1)/TOTAL_LAPS);
   const fuel=Math.round(fuelFrac*100);
   const fcol=fuel>50?'#22DD66':fuel>25?'#ffcc00':'#ff3b3b';
-  // best lap
-  let bLap=Infinity,bLapN=0;
+  // best lap (skip 0-time laps from DNF)
+  const pitEv=RACE.events.find(e=>e.type==='pit'&&e.team===id);
   for(let L=1;L<=Math.min(cp.carLap-1,TOTAL_LAPS);L++){const lt=RACE.laps[L-1].lapTimes[id];if(lt&&lt>0&&lt<bLap){bLap=lt;bLapN=L;}}
   const gapStr=pos===0?'LEADER':retired?'RETIRED':`+${((gaps&&gaps[id])||0).toFixed(2)}s`;
   const mv=team.gridPos-(pos+1);
