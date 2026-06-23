@@ -53,30 +53,31 @@
   .zone .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
   .zone .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--green),transparent)}
 
-  /* ── TOP 4 — compact 2×2 cards (team icons) ── */
+  /* ── TOP 4 — 2×2 cards, mascot art prominent (POLE-MARGIN style) ── */
   .top4{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
-  .bigcard{position:relative;border-radius:14px;overflow:hidden;padding:18px 20px 16px 26px;
-    background:linear-gradient(180deg,rgba(25,210,124,.09),rgba(255,255,255,.012));
+  .bigcard{position:relative;height:170px;border-radius:14px;overflow:hidden;background:var(--bg1);
     border:1px solid rgba(25,210,124,.40);
-    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 22px rgba(25,210,124,.07),0 10px 30px rgba(0,0,0,.45);
-    display:flex;flex-direction:column;gap:12px;min-height:152px}
-  .bigcard .accent{position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--tc,#fff);box-shadow:0 0 16px var(--tc)}
-  .bigcard .bc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-  .bigcard .rk{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .bigcard .rk .p{font-family:'Orbitron',sans-serif;font-weight:900;font-size:26px;color:#fff;line-height:1}
-  .bigcard .rk .q{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--green);border:1px solid rgba(25,210,124,.5);background:rgba(25,210,124,.1);padding:3px 8px;border-radius:999px;text-transform:uppercase}
-  .bigcard .pts{text-align:right;flex:none}
-  .bigcard .pts b{font-family:'Orbitron',sans-serif;font-weight:900;font-size:40px;line-height:.78;color:#fff}
-  .bigcard .pts span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--mute);margin-top:4px}
-  .bigcard .bc-team{display:flex;align-items:center;gap:13px}
-  .bigcard .bc-ic{width:54px;height:54px;border-radius:50%;flex:none;object-fit:cover;background:#0c0c12;border:2px solid var(--tc,#333);box-shadow:0 4px 12px rgba(0,0,0,.5)}
-  .bigcard .bc-mono{width:54px;height:54px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:#0a0a0a;border:2px solid rgba(255,255,255,.2)}
-  .bigcard .tick{font-family:'Orbitron',sans-serif;font-weight:800;font-size:30px;line-height:.92;color:var(--tc,#fff)}
-  .bigcard .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
-  .chip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--mute);text-transform:uppercase;white-space:nowrap}
-  .chip.win{background:rgba(255,204,0,.14);border-color:rgba(255,204,0,.5);color:var(--gold)}
-  .chip.pole{background:rgba(39,211,222,.12);border-color:rgba(39,211,222,.45);color:var(--cyan)}
-  .chip.fl{background:rgba(177,120,255,.16);border-color:rgba(177,120,255,.5);color:#c39bff}
+    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 22px rgba(25,210,124,.07),0 10px 30px rgba(0,0,0,.45)}
+  .bigcard .media{position:absolute;top:0;right:0;bottom:0;width:56%;overflow:hidden}
+  .bigcard .media img{width:100%;height:100%;object-fit:cover;object-position:center 24%;display:block}
+  .bigcard .bigmono{position:absolute;top:0;right:0;bottom:0;width:56%;display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron',sans-serif;font-weight:900;font-size:56px;color:rgba(255,255,255,.16)}
+  .bigcard .scrim{position:absolute;inset:0;z-index:2;
+    background:linear-gradient(90deg,var(--bg1) 30%,rgba(12,12,18,.88) 47%,rgba(12,12,18,.30) 66%,transparent 90%)}
+  .bigcard .accent{position:absolute;left:0;top:0;bottom:0;width:6px;z-index:4;background:var(--tc,#fff);box-shadow:0 0 16px var(--tc)}
+  .bigcard .body{position:absolute;z-index:5;left:24px;right:42%;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:9px}
+  .bigcard .rk{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .bigcard .rk .p{font-family:'Orbitron',sans-serif;font-weight:900;font-size:24px;color:#fff;line-height:1}
+  .bigcard .rk .q{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:var(--green);border:1px solid rgba(25,210,124,.5);background:rgba(25,210,124,.12);padding:3px 7px;border-radius:999px;text-transform:uppercase}
+  .bigcard .tick{font-family:'Orbitron',sans-serif;font-weight:800;font-size:33px;line-height:.9;color:var(--tc,#fff);text-shadow:0 2px 10px rgba(0,0,0,.6)}
+  .bigcard .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--mute);text-transform:uppercase;white-space:nowrap;backdrop-filter:blur(2px)}
+  .chip.win{background:rgba(255,204,0,.16);border-color:rgba(255,204,0,.5);color:var(--gold)}
+  .chip.pole{background:rgba(39,211,222,.14);border-color:rgba(39,211,222,.45);color:var(--cyan)}
+  .chip.fl{background:rgba(177,120,255,.18);border-color:rgba(177,120,255,.5);color:#c39bff}
+  .bigcard .pts{position:absolute;z-index:6;top:14px;right:16px;text-align:right}
+  .bigcard .pts b{font-family:'Orbitron',sans-serif;font-weight:900;font-size:38px;line-height:.8;color:#fff;text-shadow:0 2px 10px #000,0 0 22px rgba(0,0,0,.95)}
+  .bigcard .pts span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:#fff;opacity:.9;margin-top:3px;text-shadow:0 1px 6px #000}
 
   /* cut line */
   .cut{display:flex;align-items:center;gap:16px;margin:22px 2px 16px}
@@ -148,10 +149,10 @@
 
   // OFFICIAL Race 1 classification → pts 25/20/16/13/11/10/9/8/7/6/5/4/3/2/1 + pole(PUP +1) + FL(TURBO +1); DNF scores 0
   const TOP4=[
-    {pos:1,id:'PUP',   pts:26,car:'pup-car.png',   logo:'pup.png',   color:'#F0B90B',chips:[['win','🏆 RACE WIN'],['pole','🏁 POLE']]},
-    {pos:2,id:'MOMO',  pts:20,car:'momo-car.png',  logo:'momo.png',  color:'#F989B9',chips:[['','P2 FINISH']]},
-    {pos:3,id:'TURBO', pts:17,car:'turbo-car.jpg', logo:'turbo.png', color:'#1e7fd9',chips:[['fl','⚡ FASTEST LAP'],['','P3 FINISH']]},
-    {pos:4,id:'BILLY', pts:13,car:'billy-car.png', logo:'billy.png', color:'#F7931A',chips:[['','P4 FINISH']]},
+    {pos:1,id:'PUP',   pts:26,logo:'pup.png',   color:'#F0B90B',chips:[['win','🏆 RACE WIN'],['pole','🏁 POLE']]},
+    {pos:2,id:'MOMO',  pts:20,logo:'momo.png',  color:'#F989B9',chips:[['','P2 FINISH']]},
+    {pos:3,id:'TURBO', pts:17,logo:'turbo.png', color:'#1e7fd9',chips:[['fl','⚡ FASTEST LAP'],['','P3 FINISH']]},
+    {pos:4,id:'BILLY', pts:13,logo:'billy.png', color:'#F7931A',chips:[['','P4 FINISH']]},
   ];
   const REST=[
     {pos:5,id:'MASK',      pts:11,logo:'mask.png',       color:'#e62538'},
@@ -169,23 +170,22 @@
   // ── TOP 4 ──
   document.getElementById('top4').innerHTML=TOP4.map(t=>`
     <div class="bigcard" style="--tc:${t.color}">
+      <div class="media"><img src="${IMG_BASE}${t.logo}" alt="${t.id}" data-id="${t.id}" data-color="${t.color}"></div>
+      <div class="scrim"></div>
       <div class="accent"></div>
-      <div class="bc-top">
+      <div class="body">
         <div class="rk"><span class="p">P${t.pos}</span><span class="q">Auto-Qualify</span></div>
-        <div class="pts"><b>${t.pts}</b><span>PTS</span></div>
-      </div>
-      <div class="bc-team">
-        <img class="bc-ic" src="${IMG_BASE}${t.logo}" alt="${t.id}" data-id="${t.id}" data-color="${t.color}">
         <div class="tick">$${t.id}</div>
+        <div class="chips">${t.chips.map(c=>`<span class="chip ${c[0]}">${c[1]}</span>`).join('')}</div>
       </div>
-      <div class="chips">${t.chips.map(c=>`<span class="chip ${c[0]}">${c[1]}</span>`).join('')}</div>
+      <div class="pts"><b>${t.pts}</b><span>PTS</span></div>
     </div>`).join('');
 
-  // top-4 icon fallback → coloured monogram
-  document.querySelectorAll('.bigcard .bc-ic').forEach(im=>{
+  // top-4 mascot fallback → coloured monogram
+  document.querySelectorAll('.bigcard .media img').forEach(im=>{
     im.addEventListener('error',()=>{
-      const d=document.createElement('div');d.className='bc-mono';d.style.background=im.dataset.color;d.textContent=(im.dataset.id||'').slice(0,3);
-      im.replaceWith(d);
+      const d=document.createElement('div');d.className='bigmono';d.style.color=im.dataset.color;d.textContent=(im.dataset.id||'').slice(0,3);
+      im.closest('.media').replaceWith(d);
     });
     if(im.complete && im.naturalWidth===0) im.dispatchEvent(new Event('error'));
   });
