@@ -148,24 +148,24 @@
   const g=document.getElementById('gantry');
   for(let p=0;p<5;p++){const pod=document.createElement('div');pod.className='pod';pod.innerHTML='<i></i><i></i>';g.appendChild(pod);}
 
-  // CORRECTED Race 1 result (true finish time) → pts 25/20/16/13/11/10/9/8/7/6/5/4/3/2/1 + pole(PUP) + FL(TURBO)
+  // OFFICIAL Race 1 classification → pts 25/20/16/13/11/10/9/8/7/6/5/4/3/2/1 + pole(PUP +1) + FL(TURBO +1); DNF scores 0
   const TOP4=[
-    {pos:1,id:'TURBO', pts:26,car:'turbo-car.jpg', logo:'turbo.png', color:'#1e7fd9',chips:[['win','🏆 RACE WIN'],['fl','⚡ FASTEST LAP']]},
-    {pos:2,id:'PUP',   pts:21,car:'pup-car.png',   logo:'pup.png',   color:'#F0B90B',chips:[['pole','🏁 POLE'],['','P2 FINISH']]},
-    {pos:3,id:'PEPONK',pts:16,car:'peponk-car.png',logo:'peponk.png',color:'#FB8802',chips:[['','P3 FINISH']]},
-    {pos:4,id:'MASK',  pts:13,car:'mask-car.png',  logo:'mask.png',  color:'#e62538',chips:[['','P4 FINISH']]},
+    {pos:1,id:'PUP',   pts:26,car:'pup-car.png',   logo:'pup.png',   color:'#F0B90B',chips:[['win','🏆 RACE WIN'],['pole','🏁 POLE']]},
+    {pos:2,id:'MOMO',  pts:20,car:'momo-car.png',  logo:'momo.png',  color:'#F989B9',chips:[['','P2 FINISH']]},
+    {pos:3,id:'TURBO', pts:17,car:'turbo-car.jpg', logo:'turbo.png', color:'#1e7fd9',chips:[['fl','⚡ FASTEST LAP'],['','P3 FINISH']]},
+    {pos:4,id:'BILLY', pts:13,car:'billy-car.png', logo:'billy.png', color:'#F7931A',chips:[['','P4 FINISH']]},
   ];
   const REST=[
-    {pos:5,id:'VIBECOIN',  pts:11,logo:'vibe.png',       color:'#E91E63'},
+    {pos:5,id:'MASK',      pts:11,logo:'mask.png',       color:'#e62538'},
     {pos:6,id:'DOBERMANN', pts:10,logo:'dobermann.png',  color:'#8a8a99'},
-    {pos:7,id:'BILLY',     pts:9, logo:'billy.png',      color:'#F7931A'},
-    {pos:8,id:'MOMO',      pts:8, logo:'momo.png',       color:'#F989B9'},
-    {pos:9,id:'MONKO',     pts:7, logo:'monko.png',      color:'#ffcc00'},
+    {pos:7,id:'VIBECOIN',  pts:9, logo:'vibe.png',       color:'#E91E63'},
+    {pos:8,id:'PEPONK',    pts:8, logo:'peponk.png',     color:'#FB8802'},
+    {pos:9,id:'SHIH',      pts:7, logo:'shih.png',       color:'#FFD200'},
     {pos:10,id:'SUS',      pts:6, logo:'susdog.png',     color:'#C8102E'},
     {pos:11,id:'420BLAZEIT',pts:5,logo:'420blazeit.png', color:'#7B2D8E'},
-    {pos:12,id:'SHIH',     pts:4, logo:'shih.png',       color:'#FFD200'},
+    {pos:12,id:'MONKO',    pts:4, logo:'monko.png',      color:'#ffcc00'},
     {pos:13,id:'NEURO',    pts:3, logo:'neuroticat.png', color:'#F58A1F'},
-    {pos:14,id:'LOL',      pts:2, logo:'lol.png',        color:'#22DD66',dnf:'DNF · L19'},
+    {pos:14,id:'LOL',      pts:0, logo:'lol.png',        color:'#22DD66',dnf:'DNF · L19'},
   ];
 
   // ── TOP 4 ──
