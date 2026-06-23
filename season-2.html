@@ -1315,21 +1315,81 @@ body::before{
 <!-- INTRO -->
 <div class="intro-row">
   <div class="intro-left">
-    <h2>THE GRID</h2>
-    <p>15 teams will line up for Season 2. Click any locked team to view their full reveal.</p>
+    <h2>SEASON STANDINGS</h2>
+    <p>Round 1 complete at Satoshi Speedway. The top 4 hold the auto-qualify zone — and the cut line is tight.</p>
   </div>
   <div class="intro-progress">
-    <span>GRID PROGRESS</span>
+    <span>SEASON PROGRESS</span>
     <div class="progress-track">
-      <div class="progress-fill"></div>
+      <div class="progress-fill" style="width:25%"></div>
     </div>
-    <span><strong style="color:var(--gold);font-size:20px;text-shadow:0 0 8px rgba(255,204,0,.4)">15</strong> / 15</span>
+    <span><strong style="color:var(--gold);font-size:20px;text-shadow:0 0 8px rgba(255,204,0,.4)">1</strong> / 4</span>
   </div>
 </div>
 
-<!-- F1-STYLE GRID LIST -->
+<!-- SEASON STANDINGS (was: F1-style grid list) -->
+<style>
+  .std-zone-label{display:flex;align-items:center;gap:14px;margin:0 0 16px}
+  .std-zone-tag{font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;letter-spacing:.16em;color:var(--green);text-transform:uppercase;white-space:nowrap}
+  .std-zone-sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+  .std-zone-line{flex:1;height:1px;background:linear-gradient(90deg,var(--green),transparent)}
+  .std-top4{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .std-card{position:relative;height:170px;border-radius:14px;overflow:hidden;background:var(--bg-card);
+    border:1px solid rgba(0,255,136,.34);box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 22px rgba(0,255,136,.06),0 10px 30px rgba(0,0,0,.45)}
+  .std-card .media{position:absolute;top:0;right:0;bottom:0;width:56%;overflow:hidden}
+  .std-card .media img{width:100%;height:100%;object-fit:cover;object-position:center 24%;display:block}
+  .std-card .mono{position:absolute;top:0;right:0;bottom:0;width:56%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:56px;color:rgba(255,255,255,.14)}
+  .std-card .scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,var(--bg-card) 30%,rgba(19,19,28,.88) 47%,rgba(19,19,28,.3) 66%,transparent 90%)}
+  .std-card .accent{position:absolute;left:0;top:0;bottom:0;width:6px;z-index:4;background:var(--tc,#fff);box-shadow:0 0 16px var(--tc)}
+  .std-card .body{position:absolute;z-index:5;left:22px;right:42%;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:9px}
+  .std-card .rk{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .std-card .rk .p{font-family:'Orbitron',sans-serif;font-weight:900;font-size:24px;color:#fff;line-height:1}
+  .std-card .rk .q{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--green);border:1px solid rgba(0,255,136,.5);background:rgba(0,255,136,.1);padding:3px 7px;border-radius:999px;text-transform:uppercase}
+  .std-card .tick{font-family:'Orbitron',sans-serif;font-weight:800;font-size:30px;line-height:.9;color:var(--tc,#fff);text-shadow:0 2px 10px rgba(0,0,0,.6)}
+  .std-card .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .std-chip{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line-bright);color:var(--muted);text-transform:uppercase;white-space:nowrap}
+  .std-chip.win{background:rgba(255,204,0,.16);border-color:rgba(255,204,0,.5);color:var(--gold)}
+  .std-chip.pole{background:rgba(39,211,222,.14);border-color:rgba(39,211,222,.45);color:#27d3de}
+  .std-chip.fl{background:rgba(177,120,255,.18);border-color:rgba(177,120,255,.5);color:#c39bff}
+  .std-card .pts{position:absolute;z-index:6;top:14px;right:16px;text-align:right}
+  .std-card .pts b{font-family:'Orbitron',sans-serif;font-weight:900;font-size:36px;line-height:.8;color:#fff;text-shadow:0 2px 10px #000,0 0 22px rgba(0,0,0,.95)}
+  .std-card .pts span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:#fff;opacity:.9;margin-top:3px;text-shadow:0 1px 6px #000}
+  .std-cut{display:flex;align-items:center;gap:14px;margin:20px 0 14px}
+  .std-cut-line{flex:1;height:1px;background:repeating-linear-gradient(90deg,rgba(255,204,0,.55) 0 14px,transparent 14px 26px)}
+  .std-cut-txt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;white-space:nowrap;text-align:center}
+  .std-rest{display:flex;flex-direction:column;gap:8px}
+  .std-row{display:flex;align-items:center;gap:16px;padding:11px 18px;border-radius:11px;background:var(--bg-card);border:1px solid var(--line)}
+  .std-row .pos{font-family:'Orbitron',sans-serif;font-weight:700;font-size:19px;color:var(--muted);width:32px;text-align:center;flex:none}
+  .std-row .ic{width:42px;height:42px;border-radius:50%;flex:none;background-size:cover;background-position:center;background-color:#0c0c12;border:2px solid var(--tc,#333)}
+  .std-row .tick{font-family:'Orbitron',sans-serif;font-weight:700;font-size:18px;color:var(--tc,#fff);flex:1}
+  .std-row .dnf{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--accent);border:1px solid rgba(255,0,64,.4);background:rgba(255,0,64,.1);padding:3px 8px;border-radius:6px;margin-right:6px}
+  .std-row .pts{font-family:'Orbitron',sans-serif;font-weight:900;font-size:21px;color:#fff;width:52px;text-align:right;flex:none}
+  .std-row .pts small{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;display:block;margin-top:2px;font-weight:400}
+  @media (max-width:760px){ .std-top4{grid-template-columns:1fr} .std-cut-txt{font-size:9px;letter-spacing:.1em} }
+
+  /* Satoshi Speedway — RACED, winner treatment */
+  .circuit-art--won .circuit-won-img{position:absolute;inset:0;background-size:cover;background-position:center 22%;z-index:1}
+  .circuit-art--won .circuit-won-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(4,4,8,.30),rgba(4,4,8,.62))}
+  .circuit-art--won .circuit-won-tag{position:absolute;top:12px;left:12px;z-index:4;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--gold);border:1px solid rgba(255,204,0,.5);background:rgba(0,0,0,.45);padding:4px 9px;border-radius:999px;text-transform:uppercase}
+  .circuit-art--won .circuit-won-sash{position:absolute;left:-14%;right:-14%;top:50%;z-index:3;transform:translateY(-50%) rotate(-9deg);
+    background:linear-gradient(90deg,rgba(255,204,0,0),rgba(255,204,0,.94) 16%,rgba(255,204,0,.94) 84%,rgba(255,204,0,0));
+    border-top:2px solid #fff;border-bottom:2px solid #fff;padding:9px 0;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.55)}
+  .circuit-art--won .circuit-won-sash span{font-family:'Orbitron',sans-serif;font-weight:900;font-size:25px;letter-spacing:.24em;color:#0a0a0a;text-transform:uppercase}
+  .circuit-art--won .circuit-won-team{position:absolute;left:0;right:0;bottom:13px;z-index:4;text-align:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:19px;color:#fff;text-shadow:0 2px 8px #000}
+</style>
 <div class="grid-section">
-  <div class="grid-list" id="gridList"></div>
+  <div class="std-zone-label">
+    <span class="std-zone-tag">▶ Auto-Qualify Zone</span>
+    <span class="std-zone-line"></span>
+    <span class="std-zone-sub">Top 4 advance</span>
+  </div>
+  <div class="std-top4" id="stdTop4"></div>
+  <div class="std-cut">
+    <span class="std-cut-line"></span>
+    <span class="std-cut-txt">⛔ Auto-Qualify Line · Top 4 advance to the championship</span>
+    <span class="std-cut-line"></span>
+  </div>
+  <div class="std-rest" id="stdRest"></div>
 </div>
 
 <!-- ============================================ -->
@@ -1364,34 +1424,14 @@ body::before{
 <div class="circuits-section">
   <div class="circuits-grid">
 
-    <!-- 1. Satoshi Speedway -->
+    <!-- 1. Satoshi Speedway — RACED (Race 1 winner: PUP) -->
     <div class="circuit-card" style="--circuit-color:#1e7fd9;--circuit-color-faded:rgba(30,127,217,.15);--tease-blur:3px">
-      <div class="circuit-art">
-        <!-- Track tease: simplified Satoshi Speedway shape, light blur (already revealed) -->
-        <div class="circuit-tease">
-          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M 80 60
-                     L 260 55
-                     C 290 60, 295 75, 290 88
-                     C 320 95, 350 100, 360 115
-                     C 370 130, 360 145, 340 145
-                     C 320 150, 305 138, 290 130
-                     C 260 135, 220 145, 180 150
-                     C 170 165, 185 175, 200 178
-                     C 180 188, 145 192, 110 178
-                     C 90 175, 80 168, 70 170
-                     C 55 175, 50 162, 45 145
-                     C 50 110, 65 80, 75 62
-                     C 78 60, 80 60, 80 60 Z"/>
-          </svg>
-        </div>
-        <div class="circuit-overlay">
-          <div class="circuit-overlay-line"></div>
-          <div class="circuit-overlay-text">LAYOUT</div>
-          <div class="circuit-overlay-text">TO BE DROPPED</div>
-          <div class="circuit-overlay-text">SOON</div>
-          <div class="circuit-overlay-line"></div>
-        </div>
+      <div class="circuit-art circuit-art--won">
+        <div class="circuit-won-img" style="background-image:url('pup.png')"></div>
+        <div class="circuit-won-scrim"></div>
+        <div class="circuit-won-tag">🏁 Race 1 · Complete</div>
+        <div class="circuit-won-sash"><span>Winner</span></div>
+        <div class="circuit-won-team">$PUP</div>
       </div>
       <div class="circuit-label">
         <span class="circuit-num">1.</span>
@@ -1685,45 +1725,60 @@ function hexToRgba(hex, alpha){
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-const gridList = document.getElementById('gridList');
-let html = '';
+// ── SEASON STANDINGS render (Race 1 official classification) ──
+const STANDINGS_TOP4 = [
+  {pos:1,id:'PUP',  pts:26,logo:'pup.png',  color:'#F0B90B',chips:[['win','🏆 RACE WIN'],['pole','🏁 POLE']]},
+  {pos:2,id:'MOMO', pts:20,logo:'momo.png', color:'#F989B9',chips:[['','P2 FINISH']]},
+  {pos:3,id:'TURBO',pts:17,logo:'turbo.png',color:'#1e7fd9',chips:[['fl','⚡ FASTEST LAP'],['','P3 FINISH']]},
+  {pos:4,id:'BILLY',pts:13,logo:'billy.png',color:'#F7931A',chips:[['','P4 FINISH']]},
+];
+const STANDINGS_REST = [
+  {pos:5,id:'MASK',      pts:11,logo:'mask.png',       color:'#e62538'},
+  {pos:6,id:'DOBERMANN', pts:10,logo:'dobermann.png',  color:'#8a8a99'},
+  {pos:7,id:'VIBECOIN',  pts:9, logo:'vibe.png',       color:'#E91E63'},
+  {pos:8,id:'PEPONK',    pts:8, logo:'peponk.png',     color:'#FB8802'},
+  {pos:9,id:'SHIH',      pts:7, logo:'shih.png',       color:'#FFD200'},
+  {pos:10,id:'SUS',      pts:6, logo:'susdog.png',     color:'#C8102E'},
+  {pos:11,id:'420BLAZEIT',pts:5,logo:'420blazeit.png', color:'#7B2D8E'},
+  {pos:12,id:'MONKO',    pts:4, logo:'monko.png',      color:'#ffcc00'},
+  {pos:13,id:'NEURO',    pts:3, logo:'neuroticat.png', color:'#F58A1F'},
+  {pos:14,id:'LOL',      pts:0, logo:'lol.png',        color:'#22DD66',dnf:'DNF · L19'},
+];
 
-// Render all 15 slots in order
-for (let pos = 1; pos <= TOTAL_SEATS; pos++) {
-  const team = TEAMS.find(t => t.position === pos);
-
-  if (team && team.locked) {
-    const fadedColor = hexToRgba(team.color, 0.10);
-    const ord = ordinal(pos).replace(/(\d+)/, '<span class="num">$1</span>').replace(/(TH|ST|ND|RD)/, '<span class="ord">$1</span>');
-    html += `
-      <a href="${team.link}" class="grid-row locked"
-         style="--row-color:${team.color};--row-color-faded:${fadedColor}">
-        <div class="row-position">${ord}</div>
-        <div class="row-color"></div>
-        <div class="row-main">
-          <span class="row-ticker">$${team.ticker}</span>
-          <span class="row-team-name">${team.teamName}</span>
-        </div>
-        <div class="row-logo" style="background-image:url('${team.logo}')"></div>
-      </a>
-    `;
-  } else {
-    const ord = ordinal(pos).replace(/(\d+)/, '<span class="num">$1</span>').replace(/(TH|ST|ND|RD)/, '<span class="ord">$1</span>');
-    html += `
-      <div class="grid-row empty">
-        <div class="row-position">${ord}</div>
-        <div class="row-color"></div>
-        <div class="row-main">
-          <span class="row-ticker">$ ? ? ?</span>
-          <span class="row-team-name row-status-inline">SEAT OPEN</span>
-        </div>
-        <div class="row-logo"></div>
+const stdTop4 = document.getElementById('stdTop4');
+if (stdTop4) {
+  stdTop4.innerHTML = STANDINGS_TOP4.map(t => `
+    <div class="std-card" style="--tc:${t.color}">
+      <div class="media"><img src="${t.logo}" alt="${t.id}" data-id="${t.id}" data-color="${t.color}"></div>
+      <div class="scrim"></div><div class="accent"></div>
+      <div class="body">
+        <div class="rk"><span class="p">P${t.pos}</span><span class="q">Auto-Qualify</span></div>
+        <div class="tick">$${t.id}</div>
+        <div class="chips">${t.chips.map(c=>`<span class="std-chip ${c[0]}">${c[1]}</span>`).join('')}</div>
       </div>
-    `;
-  }
+      <div class="pts"><b>${t.pts}</b><span>PTS</span></div>
+    </div>`).join('');
+  stdTop4.querySelectorAll('.media img').forEach(im => {
+    im.addEventListener('error', () => {
+      const d = document.createElement('div'); d.className = 'mono';
+      d.style.color = im.dataset.color; d.textContent = (im.dataset.id || '').slice(0,3);
+      im.closest('.media').replaceWith(d);
+    });
+    if (im.complete && im.naturalWidth === 0) im.dispatchEvent(new Event('error'));
+  });
 }
 
-gridList.innerHTML = html;
+const stdRest = document.getElementById('stdRest');
+if (stdRest) {
+  stdRest.innerHTML = STANDINGS_REST.map(t => `
+    <div class="std-row" style="--tc:${t.color}">
+      <div class="pos">${t.pos}</div>
+      <div class="ic" style="background-image:url('${t.logo}')"></div>
+      <div class="tick">$${t.id}</div>
+      ${t.dnf ? `<div class="dnf">${t.dnf}</div>` : ''}
+      <div class="pts">${t.pts}<small>PTS</small></div>
+    </div>`).join('');
+}
 </script>
 
 <script src="news-loader.js"></script>
