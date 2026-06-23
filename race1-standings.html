@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MemeGP — Season Standings · After Round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#ffcc00; --cyan:#27d3de; --red:#ff2b50; --green:#19d27c;
+    --bg0:#08080c; --bg1:#0c0c12; --line:rgba(255,255,255,.08);
+    --ink:#f4f5f8; --mute:#9aa0ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;font-family:'Chakra Petch',sans-serif}
+  .board{
+    position:relative;width:1080px;margin:0 auto;overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(39,211,222,.06), transparent 60%),
+      linear-gradient(180deg,var(--bg1),var(--bg0));
+    color:var(--ink);padding:46px 46px 38px;
+  }
+  .board::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:44px 44px;
+    -webkit-mask-image:radial-gradient(120% 90% at 50% 30%,#000 55%,transparent 100%);
+    mask-image:radial-gradient(120% 90% at 50% 30%,#000 55%,transparent 100%);
+  }
+  .board::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 220px rgba(0,0,0,.85)}
+  .board > *{position:relative;z-index:2}
+
+  /* gantry */
+  .gantry{display:flex;gap:12px;justify-content:center;margin-bottom:22px}
+  .pod{width:54px;height:30px;border-radius:5px;background:#14141b;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:5px}
+  .pod i{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 9px var(--red),0 0 3px #fff inset;display:block}
+
+  /* header */
+  .head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+  .head .kick{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px}
+  .head h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:46px;line-height:.98}
+  .head h1 span{color:var(--gold)}
+  .head .meta{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.16em;color:var(--mute);line-height:1.7;text-transform:uppercase}
+  .head .meta b{color:var(--ink)}
+
+  /* zone label */
+  .zone{display:flex;align-items:center;gap:14px;margin:4px 0 18px}
+  .zone .tag{font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;letter-spacing:.18em;color:var(--green);text-transform:uppercase;white-space:nowrap}
+  .zone .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
+  .zone .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--green),transparent)}
+
+  /* ── TOP 4 big cinematic cards ── */
+  .top4{display:flex;flex-direction:column;gap:14px;margin-bottom:8px}
+  .bigcard{position:relative;height:164px;border-radius:16px;overflow:hidden;
+    background:var(--bg1);
+    border:1px solid rgba(25,210,124,.40);
+    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 26px rgba(25,210,124,.08),0 14px 40px rgba(0,0,0,.5)}
+  .bigcard .media{position:absolute;top:0;right:0;bottom:0;width:60%;overflow:hidden}
+  .bigcard .media img{width:100%;height:100%;object-fit:cover;object-position:center 32%;display:block}
+  .bigcard .bigmono{position:absolute;top:0;right:0;bottom:0;width:60%;display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron',sans-serif;font-weight:900;font-size:64px;color:rgba(255,255,255,.18)}
+  .bigcard .scrim{position:absolute;inset:0;z-index:2;
+    background:linear-gradient(90deg,var(--bg1) 30%,rgba(12,12,18,.78) 46%,rgba(12,12,18,.15) 66%,transparent 86%)}
+  .bigcard .accent{position:absolute;left:0;top:0;bottom:0;width:6px;z-index:4;background:var(--tc,#fff);box-shadow:0 0 16px var(--tc)}
+  .bigcard .body{position:absolute;z-index:5;left:30px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .bigcard .rk{display:flex;align-items:center;gap:10px}
+  .bigcard .rk .p{font-family:'Orbitron',sans-serif;font-weight:900;font-size:34px;color:#fff;line-height:1}
+  .bigcard .rk .q{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--green);border:1px solid rgba(25,210,124,.5);background:rgba(25,210,124,.1);padding:4px 9px;border-radius:999px;text-transform:uppercase}
+  .bigcard .tick{font-family:'Orbitron',sans-serif;font-weight:800;font-size:40px;line-height:.92;color:var(--tc,#fff)}
+  .bigcard .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--mute);text-transform:uppercase;white-space:nowrap}
+  .chip.win{background:rgba(255,204,0,.14);border-color:rgba(255,204,0,.5);color:var(--gold)}
+  .chip.pole{background:rgba(39,211,222,.12);border-color:rgba(39,211,222,.45);color:var(--cyan)}
+  .chip.fl{background:rgba(177,120,255,.16);border-color:rgba(177,120,255,.5);color:#c39bff}
+  .bigcard .pts{position:absolute;z-index:5;right:26px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;text-align:right}
+  .bigcard .pts b{font-family:'Orbitron',sans-serif;font-weight:900;font-size:54px;line-height:.82;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8)}
+  .bigcard .pts span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--mute);margin-top:6px}
+
+  /* cut line */
+  .cut{display:flex;align-items:center;gap:16px;margin:22px 2px 16px}
+  .cut .ln{flex:1;height:1px;background:repeating-linear-gradient(90deg,rgba(255,204,0,.55) 0 14px,transparent 14px 26px)}
+  .cut .txt{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+
+  /* rest rows */
+  .rest{display:flex;flex-direction:column;gap:7px}
+  .row{display:flex;align-items:center;gap:16px;padding:11px 18px;border-radius:11px;background:rgba(255,255,255,.022);border:1px solid var(--line)}
+  .row .pos{font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--mute);width:34px;text-align:center;flex:none}
+  .row .ic{width:42px;height:42px;border-radius:50%;flex:none;object-fit:cover;background:#0c0c12;border:2px solid var(--tc,#333)}
+  .row .icmono{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;color:#0a0a0a;border:2px solid rgba(255,255,255,.18)}
+  .row .tick{font-family:'Orbitron',sans-serif;font-weight:700;font-size:19px;color:var(--tc,#fff);flex:1}
+  .row .dnf{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--red);border:1px solid rgba(255,43,80,.4);background:rgba(255,43,80,.1);padding:3px 8px;border-radius:6px;margin-right:6px}
+  .row .pts{font-family:'Orbitron',sans-serif;font-weight:900;font-size:22px;color:#fff;width:54px;text-align:right;flex:none}
+  .row .pts small{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mute);letter-spacing:.1em;display:block;margin-top:2px;font-weight:400}
+
+  /* footer */
+  .foot{display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+  .foot .l{font-family:'Orbitron',sans-serif;font-weight:900;font-size:18px}
+  .foot .l span{color:var(--gold)}
+  .foot .r{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase}
+</style>
+</head>
+<body>
+  <div class="board" id="board">
+    <div class="gantry" id="gantry"></div>
+
+    <div class="head">
+      <div>
+        <div class="kick">Championship · Season 2</div>
+        <h1>SEASON <span>STANDINGS</span></h1>
+      </div>
+      <div class="meta">After <b>Round 1</b><br>Satoshi Speedway<br>20 Laps · <b>Final</b></div>
+    </div>
+
+    <div class="zone">
+      <div class="tag">▶ Auto-Qualify Zone</div>
+      <div class="ln"></div>
+      <div class="sub">Top 4 advance</div>
+    </div>
+
+    <div class="top4" id="top4"></div>
+
+    <div class="cut">
+      <div class="ln"></div>
+      <div class="txt">⛔ Auto-Qualify Line · Top 4 advance to the next championship</div>
+      <div class="ln"></div>
+    </div>
+
+    <div class="rest" id="rest"></div>
+
+    <div class="foot">
+      <div class="l">MEME<span>GP</span></div>
+      <div class="r">🏁 memegrandprix.com · $MEMEGP</div>
+    </div>
+  </div>
+
+<script>
+  // ── IMAGE BASE ──────────────────────────────────────────────────────────────
+  // Relative by default → drop this file in the SAME folder as your other cards
+  // (pup.png, turbo-car.jpg, etc.) and images load just like grid-strategy.html.
+  // To host-link instead, set IMG_BASE to "https://memegrandprix.com/".
+  const IMG_BASE = "";
+
+  // gantry (5 pods, all lit)
+  const g=document.getElementById('gantry');
+  for(let p=0;p<5;p++){const pod=document.createElement('div');pod.className='pod';pod.innerHTML='<i></i><i></i>';g.appendChild(pod);}
+
+  // CORRECTED Race 1 result (true finish time) → pts 25/20/16/13/11/10/9/8/7/6/5/4/3/2/1 + pole(PUP) + FL(TURBO)
+  const TOP4=[
+    {pos:1,id:'TURBO', pts:26,car:'turbo-car.jpg', logo:'turbo.png', color:'#1e7fd9',chips:[['win','🏆 RACE WIN'],['fl','⚡ FASTEST LAP']]},
+    {pos:2,id:'PUP',   pts:21,car:'pup-car.png',   logo:'pup.png',   color:'#F0B90B',chips:[['pole','🏁 POLE'],['','P2 FINISH']]},
+    {pos:3,id:'PEPONK',pts:16,car:'peponk-car.png',logo:'peponk.png',color:'#FB8802',chips:[['','P3 FINISH']]},
+    {pos:4,id:'MASK',  pts:13,car:'mask-car.png',  logo:'mask.png',  color:'#e62538',chips:[['','P4 FINISH']]},
+  ];
+  const REST=[
+    {pos:5,id:'VIBECOIN',  pts:11,logo:'vibe.png',       color:'#E91E63'},
+    {pos:6,id:'DOBERMANN', pts:10,logo:'dobermann.png',  color:'#8a8a99'},
+    {pos:7,id:'BILLY',     pts:9, logo:'billy.png',      color:'#F7931A'},
+    {pos:8,id:'MOMO',      pts:8, logo:'momo.png',       color:'#F989B9'},
+    {pos:9,id:'MONKO',     pts:7, logo:'monko.png',      color:'#ffcc00'},
+    {pos:10,id:'SUS',      pts:6, logo:'susdog.png',     color:'#C8102E'},
+    {pos:11,id:'420BLAZEIT',pts:5,logo:'420blazeit.png', color:'#7B2D8E'},
+    {pos:12,id:'SHIH',     pts:4, logo:'shih.png',       color:'#FFD200'},
+    {pos:13,id:'NEURO',    pts:3, logo:'neuroticat.png', color:'#F58A1F'},
+    {pos:14,id:'LOL',      pts:2, logo:'lol.png',        color:'#22DD66',dnf:'DNF · L19'},
+    {pos:15,id:'MARS',     pts:1, logo:'mars.png',       color:'#3a5bd0',dnf:'DNF · L9'},
+  ];
+
+  // ── TOP 4 ──
+  document.getElementById('top4').innerHTML=TOP4.map(t=>`
+    <div class="bigcard" style="--tc:${t.color}">
+      <div class="media">
+        <img src="${IMG_BASE}${t.car}" alt="${t.id}" data-id="${t.id}" data-color="${t.color}" data-fallback="${IMG_BASE}${t.logo}">
+      </div>
+      <div class="scrim"></div>
+      <div class="accent"></div>
+      <div class="body">
+        <div class="rk"><span class="p">P${t.pos}</span><span class="q">Auto-Qualify</span></div>
+        <div class="tick">$${t.id}</div>
+        <div class="chips">${t.chips.map(c=>`<span class="chip ${c[0]}">${c[1]}</span>`).join('')}</div>
+      </div>
+      <div class="pts"><b>${t.pts}</b><span>PTS</span></div>
+    </div>`).join('');
+
+  // big-card layered fallback: -car image → small logo → coloured monogram
+  document.querySelectorAll('.bigcard .media img').forEach(im=>{
+    im.addEventListener('error',()=>{
+      if(im.dataset.tried!=='1' && im.dataset.fallback){im.dataset.tried='1';im.src=im.dataset.fallback;return;}
+      const d=document.createElement('div');d.className='bigmono';d.style.color=im.dataset.color;d.textContent=(im.dataset.id||'').slice(0,3);
+      im.closest('.media').replaceWith(d);
+    });
+    if(im.complete && im.naturalWidth===0) im.dispatchEvent(new Event('error'));
+  });
+
+  // ── REST ──
+  document.getElementById('rest').innerHTML=REST.map(t=>`
+    <div class="row" style="--tc:${t.color}">
+      <div class="pos">${t.pos}</div>
+      <img class="ic" src="${IMG_BASE}${t.logo}" alt="${t.id}" data-id="${t.id}" data-color="${t.color}">
+      <div class="tick">$${t.id}</div>
+      ${t.dnf?`<div class="dnf">${t.dnf}</div>`:''}
+      <div class="pts">${t.pts}<small>PTS</small></div>
+    </div>`).join('');
+
+  document.querySelectorAll('.row .ic').forEach(im=>{
+    im.addEventListener('error',()=>{
+      const d=document.createElement('div');d.className='icmono';d.style.background=im.dataset.color;d.textContent=(im.dataset.id||'').slice(0,3);
+      im.replaceWith(d);
+    });
+    if(im.complete && im.naturalWidth===0) im.dispatchEvent(new Event('error'));
+  });
+</script>
+</body>
+</html>
