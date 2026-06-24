@@ -1895,7 +1895,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
       <div class="pitwall-intro">
         <h3>LIVE <span class="gold">POWER RANKINGS</span></h3>
-        <p>The grid sorted by on-chain power, updated daily. Week 1 upgrade window is LIVE — communities have until Sunday 14 June to climb. Race 1: Satoshi Speedway, 21 June.</p>
+        <p>The grid sorted by on-chain power, updated daily. Week 2 upgrade window runs <strong>Fri 26 Jun → Fri 3 Jul (09:00 SAST)</strong> — hit your targets to climb. Race Week 2 begins Friday 3 July.</p>
       </div>
 
       <div class="pitwall-status">
@@ -2059,7 +2059,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       <div class="factory-method">
         <div class="factory-method-title">▸ METHODOLOGY</div>
         <div>
-          <strong>Upgrade Bulletins</strong> drop every Monday during race weeks. Each team's <strong>two lowest stats</strong> (from ENGINE, AERO, CHASSIS, DRAG) become that week's targets. <strong>50 likes</strong> on the bulletin tweet → lowest stat <strong>+1</strong>. <strong>30 retweets</strong> → second-lowest <strong>+1</strong>. Cycle locks Friday 23:59 UTC. Upgrades are permanent for the season — they stack on top of the weekly on-chain BASE. <strong>PIT</strong> resets to 5 weekly and is not upgradeable. Pre-season measurement runs 1–7 June; pre-season upgrade cycle runs 8–14 June; Race 1 weekend 15–21 June.
+          <strong>Upgrade Bulletins</strong> drop when each upgrade window opens (Friday 09:00 SAST). Each team's <strong>two lowest stats</strong> (from ENGINE, AERO, CHASSIS, DRAG) become that week's targets. <strong>50 likes</strong> on the bulletin tweet → lowest stat <strong>+1</strong>. <strong>30 retweets</strong> → second-lowest <strong>+1</strong>. Each upgrade window runs <strong>Friday 09:00 SAST → the next Friday 09:00 SAST</strong>. Upgrades are permanent for the season — they stack on top of the weekly on-chain BASE. <strong>PIT</strong> resets to 5 weekly and is not upgradeable. <strong>Week 2 window: 26 June – 3 July</strong>; Race Week 2 begins 3 July.
         </div>
       </div>
 
@@ -2092,7 +2092,6 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     { ticker: 'LOL',       name: 'LOL RACING',       chain: 'SOL', contract: '53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD',       dxChain: 'solana',   color: '#22DD66', logo: 'lol.png',       editorialPit: 5.0 },
     { ticker: 'SHIH',      name: 'SHIH SPEED',       chain: 'BNB', contract: '0xfCa5208e4074e06596CC28B47214A109E4c14444',         dxChain: 'bsc',      color: '#FFD200', logo: 'shih.png',      editorialPit: 5.0 },
     { ticker: 'VIBECOIN',  name: 'VIBING CAT',       chain: 'SOL', contract: 'AZbem4s8iLJE5eniDZJ7c8q1ahbfMwWgCA8TxVW2tDUB',       dxChain: 'solana',   color: '#E91E63', logo: 'vibe.png',      editorialPit: 5.0 },
-    { ticker: 'MARS',      name: 'MARS RACING',      chain: 'SOL', contract: 'EWAyfPVbo1LxrywXzkBRkqvG6d8KkrcdBvmASxcZdoge',       dxChain: 'solana',   color: '#1A2B5C', logo: 'mars.png',      editorialPit: 5.0 },
     { ticker: '420BLAZEIT',name: '420BLAZEIT',       chain: 'SOL', contract: 'Amyv5r77rhmDGMnsAHMxghMrJVGYitQDmkKt7wjdoge',       dxChain: 'solana',   color: '#7B2D8E', logo: '420blazeit.png',editorialPit: 5.0 },
     { ticker: 'PUP',       name: 'PUP POWER',         chain: 'BNB', contract: '0x73b84f7e3901f39fc29f3704a03126d317ab4444',         dxChain: 'bsc',      color: '#F0B90B', logo: 'pup.png',       editorialPit: 5.0 },
     { ticker: 'PEPONK',    name: 'PEPONK RACING',    chain: 'SOL', contract: 'Gqqdgfkn7bcsuBQZEk9oMBkqCv1bRXvPmTLs3sQ9pump',       dxChain: 'solana',   color: '#FB8802', logo: 'peponk.png',    editorialPit: 5.0 },
@@ -2104,7 +2103,7 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
 
   const TRACK_START = new Date('2026-05-14T00:00:00Z');
   const SEASON_START = new Date('2026-06-01T00:00:00Z');
-  const RACE_START = new Date('2026-06-21T16:00:00Z'); // Race 1 — Satoshi Speedway (18:00 SAST)
+  const RACE_START = new Date('2026-07-05T16:00:00Z'); // Race 2 — Solana Slam Circuit (Sun 5 Jul 18:00 SAST) — CONFIRM exact lights-out
 
   // ============================================================
   // STAT FORMULAS — sourced from shared stats-calculator.js
@@ -2414,9 +2413,9 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
       trackEl.textContent = `TRACKING · DAY ${daysSinceStart} of ${totalDays}`;
     } else if (now < RACE_START) {
       const daysToRace = Math.max(1, Math.ceil((RACE_START - now) / DAY_MS));
-      trackEl.textContent = `RACE 1 · ${daysToRace} DAY${daysToRace === 1 ? '' : 'S'} TO GO`;
+      trackEl.textContent = `RACE 2 · ${daysToRace} DAY${daysToRace === 1 ? '' : 'S'} TO GO`;
     } else {
-      trackEl.textContent = `RACE WEEK · SATOSHI SPEEDWAY`;
+      trackEl.textContent = `RACE WEEK · SOLANA SLAM CIRCUIT`;
     }
   }
 
@@ -2621,7 +2620,6 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
     LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
     SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
     VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
-    MARS:       { engine: 1.5, aero: 4.1, chassis: 1.3, drag: 2.9 },
     '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
     PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
     PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
@@ -2692,8 +2690,8 @@ body.tab-factory .banner-eyebrow-factory{display:flex}
   const FACTORY_STATE_COPY = {
     provisional: { label: 'PROVISIONAL · GRID LOCK IN PROGRESS', cycle: 'CYCLE · GRID LOCK WEEK', lockdown: 'GRID LOCKS · SUN 31 MAY 23:59 UTC', hero: 'GRID LOCK', mile: 'SUN 31 MAY', tag: 'PROVISIONAL · CURRENT STATS' },
     measurement: { label: 'MEASUREMENT IN PROGRESS', cycle: 'CYCLE · BASE MEASUREMENT WEEK', lockdown: 'BASE SNAPSHOT · SUN 7 JUN 23:59 UTC', hero: 'BASE MEASUREMENT', mile: 'SUN 7 JUN', tag: 'MEASURING · LIVE ON-CHAIN' },
-    upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · WEEK 1 UPGRADES', lockdown: 'LOCKDOWN · SUN 14 JUN 23:59 UTC', hero: 'WEEK 1 UPGRADES', mile: 'SUN 14 JUN', tag: 'CURRENT STATS · UPGRADE WEEK' },
-    raceweek: { label: 'RACE WEEK', cycle: 'CYCLE · RACE WEEK 1', lockdown: 'LIGHTS OUT · SUN 21 JUN', hero: 'RACE WEEK', mile: 'SUN 21 JUN', tag: 'RACE-DAY STATS · COMMIT' },
+    upgrades: { label: 'UPGRADE CYCLE LIVE', cycle: 'CYCLE · WEEK 2 UPGRADES', lockdown: 'LOCKDOWN · FRI 3 JUL 09:00 SAST', hero: 'WEEK 2 UPGRADES', mile: 'FRI 3 JUL', tag: 'CURRENT STATS · UPGRADE WEEK' },
+    raceweek: { label: 'RACE WEEK', cycle: 'CYCLE · RACE WEEK 2', lockdown: 'LIGHTS OUT · SUN 5 JUL', hero: 'RACE WEEK', mile: 'SUN 5 JUL', tag: 'RACE-DAY STATS · COMMIT' },
     locked: { label: 'CYCLE LOCKED', cycle: 'LAST CYCLE COMPLETE', lockdown: 'NEXT CYCLE · TBD', hero: 'LOCKED', mile: 'TBD', tag: 'LOCKED STATS' }
   };
 

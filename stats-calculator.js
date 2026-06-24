@@ -77,7 +77,7 @@
     //   MONKO / MARS         (2.9 / 3.0)
     //   PEPONK / MOMO / BILLY / VIBECOIN  (5.5 / 5.6 / 5.7 / 5.8)
     order: [
-      'NEURO', 'MONKO', 'MARS', '420BLAZEIT', 'SUS', 'SHIH', 'DOBERMANN',
+      'NEURO', 'MONKO', '420BLAZEIT', 'SUS', 'SHIH', 'DOBERMANN',
       'LOL', 'PEPONK', 'MOMO', 'BILLY', 'VIBECOIN', 'MASK', 'TURBO', 'PUP',
     ],
   };
@@ -359,6 +359,11 @@
   //
   // To record a new earned upgrade: add the stat to EARNED_UPGRADES.
   // To set a new weekly base: replace the numbers in FROZEN_BASE.
+  //
+  // >>> WEEK 2 ACTION (Fri 26 Jun 09:00 SAST): replace all 14 objects below
+  //     with the new on-chain snapshot. Current values are the 2026-W23 base.
+  //     MARS removed (grid integrity). PUP/BILLY earned upgrades persist via
+  //     EARNED_UPGRADES and render green — do NOT bake them into the base.
   // ============================================================
   const FROZEN_BASE = {
     TURBO:      { engine: 9.0, aero: 6.9, chassis: 6.5, drag: 7.1 },
@@ -368,7 +373,6 @@
     LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
     SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
     VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
-    MARS:       { engine: 1.5, aero: 4.1, chassis: 1.3, drag: 2.9 },
     '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
     PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
     PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
@@ -384,10 +388,20 @@
     PUP:   ['ENGINE']
   };
 
-  // CYCLE_LOCKED: false during the upgrade window (unearned targets show
-  // "DEVELOPMENT IN PROGRESS"), true once the window closes (unearned targets
-  // show "UPGRADE FAILED"). Flip to false at the start of each new cycle.
-  const CYCLE_LOCKED = true;
+  // ============================================================
+  // CYCLE WINDOW — the upgrade window auto-opens/closes on these moments,
+  // so nobody has to remember to flip a flag each Friday.
+  //   OPEN   (CYCLE_LOCKED=false): unearned targets show "DEVELOPMENT IN PROGRESS"
+  //   CLOSED (CYCLE_LOCKED=true):  unearned targets show "UPGRADE FAILED"
+  // Update these two ISO-UTC moments each cycle. Friday 09:00 SAST = 07:00 UTC.
+  // ============================================================
+  const CYCLE_OPEN_UTC  = '2026-06-26T07:00:00Z'; // Fri 26 Jun 09:00 SAST — new base snapshot + window OPENS
+  const CYCLE_CLOSE_UTC = '2026-07-03T07:00:00Z'; // Fri 03 Jul 09:00 SAST — window CLOSES → Race Week 2
+  function isCycleLocked(date){
+    const now = date ? date.getTime() : Date.now();
+    return now < Date.parse(CYCLE_OPEN_UTC) || now >= Date.parse(CYCLE_CLOSE_UTC);
+  }
+  const CYCLE_LOCKED = isCycleLocked();
 
   const FROZEN_PIT = 5.0; // PIT resets weekly to 5, not upgradeable
 
@@ -639,7 +653,10 @@
     calcStats:   calcStats,
     getBaseStats: getBaseStats,   // frozen base (no upgrades) — for dev cycle base→target
     getEarned:    getEarned,       // earned/locked upgrade stat names for a team
-    cycleLocked:  CYCLE_LOCKED,     // true once the upgrade window has closed
+    cycleLocked:  CYCLE_LOCKED,     // true once the upgrade window has closed (computed from window below)
+    isCycleLocked: isCycleLocked,   // live check: isCycleLocked(date?) for mid-session re-eval
+    CYCLE_OPEN_UTC:  CYCLE_OPEN_UTC,
+    CYCLE_CLOSE_UTC: CYCLE_CLOSE_UTC,
     rankWithUpgrades: rankWithUpgrades, // opening grid -> current standings + movement
     FROZEN_BASE:  FROZEN_BASE,
     EARNED_UPGRADES: EARNED_UPGRADES,
