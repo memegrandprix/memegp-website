@@ -520,8 +520,8 @@
     var map = statRowMap();
     populate(ticker, map);              // main rows show current = base + earned upgrades
     map = statRowMap();                 // re-read after populate (for highlight rows)
-    var baseMap = baseStatMap(ticker) || map;   // frozen base for targets + dev cycle
-    var targets = revealed ? lowestTwo(baseMap) : null;
+    var baseMap = baseStatMap(ticker) || map;   // frozen base — used for dev-cycle base->target display
+    var targets = revealed ? lowestTwo(map) : null;   // 2 lowest by CURRENT value (base + earned), so an upgraded stat leaves the zone
     var S = window.MEMEGP_Stats;
     var earned = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker) : [];
     applyHighlight(map, baseMap, targets, earned);
