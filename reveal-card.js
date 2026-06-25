@@ -73,8 +73,9 @@
       // BOTH earned + target: keep the green earned section + value, but the badge reads UPGRADE (red)
       '.stat-row.is-upgrade-earned.is-upgrade-target .stat-row-name::after{content:"\\25B2 UPGRADE";',
       '  color:#ff2b5e;border-color:rgba(255,0,64,.5);}',
-      '  background:#0a0a12;border:1px solid var(--line,#23232e);border-radius:6px;',
-      '  padding:11px 18px;margin:0 0 10px;}',
+      '.rank-strip{display:flex;align-items:center;justify-content:space-between;',
+      '  background:#0a0a12;border-top:1px solid var(--line,#23232e);',
+      '  padding:13px 22px;margin:0;}',
       '.rank-strip-label{font-family:\'Orbitron\',sans-serif;font-size:11px;font-weight:700;',
       '  letter-spacing:2px;color:var(--dim,#8a8a99);}',
       '.rank-strip-right{display:flex;align-items:center;gap:10px;}',
