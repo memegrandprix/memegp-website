@@ -70,7 +70,9 @@
       '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
       '  color:#16c784;border:1px solid rgba(22,199,132,.5);border-radius:4px;',
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
-      '.rank-strip{display:flex;align-items:center;justify-content:space-between;',
+      // BOTH earned + target: keep the green earned section + value, but the badge reads UPGRADE (red)
+      '.stat-row.is-upgrade-earned.is-upgrade-target .stat-row-name::after{content:"\\25B2 UPGRADE";',
+      '  color:#ff2b5e;border-color:rgba(255,0,64,.5);}',
       '  background:#0a0a12;border:1px solid var(--line,#23232e);border-radius:6px;',
       '  padding:11px 18px;margin:0 0 10px;}',
       '.rank-strip-label{font-family:\'Orbitron\',sans-serif;font-size:11px;font-weight:700;',
@@ -211,9 +213,10 @@
       var e = map[name];
       if (!e) return;
       var isEarned = earnedArr.indexOf(name) !== -1;
-      var isTarget = !!targets && targets.indexOf(name) !== -1 && !isEarned;
-      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = locked
-      e.row.classList.toggle('is-upgrade-target', isTarget);             // red = still in progress
+      // a stat can be BOTH earned (keeps its green section) and a current target (reads UPGRADE)
+      var isTarget = !!targets && targets.indexOf(name) !== -1;
+      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = earned section
+      e.row.classList.toggle('is-upgrade-target', isTarget);             // red = still a target
       // gold base | green earned: gold runs to the frozen base, green is the earned +1
       if (isEarned) {
         var base = (baseMap && baseMap[name] && baseMap[name].value != null)
