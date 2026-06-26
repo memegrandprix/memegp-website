@@ -58,6 +58,7 @@
   #card .duo{position:absolute;top:0;right:0;bottom:0;width:50%;overflow:hidden}
   #card .m{position:absolute;top:0;bottom:0;background-size:cover;background-position:center 22%}
   #card .m.gain{left:0;width:60%;z-index:3;clip-path:polygon(0 0,100% 0,82% 100%,0 100%)}
+  #card .m.solo{left:0;width:100%;z-index:3;background-position:center 18%;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%)}
   #card .m.lose{right:0;width:52%;z-index:2;clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);
     filter:grayscale(.45) brightness(.5) contrast(.95)}
   #card .m .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -104,13 +105,16 @@
         <div class="seg" id="typeSeg">
           <button data-type="overtake" class="on">⚡ Overtake</button>
           <button data-type="rankings">📊 Power Rankings</button>
+          <button data-type="solo">📈 Solo Mover</button>
         </div>
       </div>
-      <div class="fld"><label>Gainer (moves up)</label><select id="gainer"></select></div>
-      <div class="fld"><label>Loser (drops)</label><select id="loser"></select></div>
+      <div class="fld"><label id="gainerLabel">Gainer (moves up)</label><select id="gainer"></select></div>
+      <div class="fld" id="loserFld"><label>Loser (drops)</label><select id="loser"></select></div>
+      <div class="fld" id="prevPosFld" style="display:none"><label>Previous position</label><input id="prevPos" value="P5"></div>
       <div class="fld"><label>New position</label><input id="pos" value="P3"></div>
       <div class="fld" id="lapFld"><label>Lap</label><input id="lap" value="12"></div>
       <div class="fld" id="gapFld"><label>Gap (optional)</label><input id="gap" placeholder="0.412s"></div>
+      <div class="fld" id="driverFld" style="display:none;grid-column:span 2"><label>Driver / reason (optional)</label><input id="driver" placeholder="e.g. AERO +1.3 &amp; CHASSIS +1.3 — deepest week yet"></div>
       <div class="fld" style="grid-column:span 2">
         <label style="display:flex;justify-content:space-between;align-items:center">Subtitle override (optional)
           <span style="display:inline-flex;gap:6px;align-items:center;color:var(--mute);text-transform:none;letter-spacing:0">
@@ -193,32 +197,57 @@
     var hideSub = document.getElementById('noSub').checked;
 
     var eyebrowLbl, eyebrowDt, mid, sub, detail;
+    var isSolo = (TYPE==='solo');
+    var dir='flat', mag=0, prevN=null;
     if (TYPE==='overtake'){
       eyebrowLbl = 'OVERTAKE'; eyebrowDt = lap ? ('· LAP '+lap) : '';
       mid = 'TAKES ' + pos;
       sub = '<span class="small">FROM</span> <span style="color:'+L.color+'">$'+l+'</span>';
       detail = ovr || (gap ? ('Gap at the line · '+gap) : 'Position '+pos+' changes hands on track.');
-    } else {
+    } else if (TYPE==='rankings'){
       var today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
       eyebrowLbl = 'POWER RANKINGS'; eyebrowDt = '· ' + today;
       mid = 'CLIMBS TO ' + pos;
       sub = '<span class="small">PASSES</span> <span style="color:'+L.color+'">$'+l+'</span>';
       detail = ovr || ('$'+g+' overtakes $'+l+' in the live standings.');
+    } else { // solo mover — one team, a position move, the stat that drove it
+      var todayS = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
+      prevN = posNum(document.getElementById('prevPos').value);
+      var drv = document.getElementById('driver').value.trim();
+      dir = (lN!=null && prevN!=null) ? (lN<prevN?'up':lN>prevN?'down':'flat') : 'flat';
+      mag = (lN!=null && prevN!=null) ? Math.abs(prevN-lN) : 0;
+      eyebrowLbl = 'POWER RANKINGS'; eyebrowDt = '· ' + todayS;
+      mid = (dir==='up'?'CLIMBS TO ':dir==='down'?'DROPS TO ':'HOLDS ') + pos;
+      sub = dir==='up'   ? '<span style="color:var(--green)">\u25B2 UP '+mag+' PLACE'+(mag===1?'':'S')+'</span>'
+          : dir==='down' ? '<span style="color:var(--red)">\u25BC DOWN '+mag+' PLACE'+(mag===1?'':'S')+'</span>'
+          : '<span class="small">HOLDS POSITION</span>';
+      detail = ovr || drv || ('Moved from P'+(prevN!=null?prevN:'?')+' to '+pos+' on the live standings.');
     }
 
     var gfs = Math.min(104, Math.round(560/(g.length+1)*1.05));  // shrink long cashtags to fit the column
-    var card = document.getElementById('card');
-    card.innerHTML =
-      '<div class="railL" style="background:linear-gradient(180deg,'+G.color+','+hexA(G.color,.25)+')"></div>'+
-      '<div class="gantry">'+'<i class="lit"></i><i class="lit"></i><i class="lit"></i><i></i><i></i>'+'</div>'+
-      '<div class="duo">'+
+    var duoHTML;
+    if (isSolo){
+      var sArrow = dir==='up'?'\u25B2':dir==='down'?'\u25BC':'\u2014';
+      var sColor = dir==='up'?'var(--green)':dir==='down'?'var(--red)':'var(--mute)';
+      duoHTML =
+        '<div class="m solo" id="mGain"></div>'+
+        '<div class="basegrad"></div>'+
+        '<div class="delta gain" style="color:'+sColor+'">'+sArrow+' '+g+' '+pos+'</div>';
+    } else {
+      duoHTML =
         '<div class="m lose" id="mLose"></div>'+
         '<div class="m gain" id="mGain"></div>'+
         '<div class="seam" style="background:'+G.color+';filter:drop-shadow(0 0 7px '+hexA(G.color,.85)+')"></div>'+
         '<div class="basegrad"></div>'+
         '<div class="delta gain">\u25B2 '+g+' '+pos+'</div>'+
-        (loserPos?('<div class="delta lose">\u25BC '+l+' '+loserPos+'</div>'):'')+
-      '</div>'+
+        (loserPos?('<div class="delta lose">\u25BC '+l+' '+loserPos+'</div>'):'');
+    }
+
+    var card = document.getElementById('card');
+    card.innerHTML =
+      '<div class="railL" style="background:linear-gradient(180deg,'+G.color+','+hexA(G.color,.25)+')"></div>'+
+      '<div class="gantry">'+'<i class="lit"></i><i class="lit"></i><i class="lit"></i><i></i><i></i>'+'</div>'+
+      '<div class="duo">'+ duoHTML +'</div>'+
       '<div class="scrim"></div>'+
       '<div class="body">'+
         '<span class="eyebrow"><span class="lbl">'+eyebrowLbl+'</span>'+(eyebrowDt?'<span class="dt">'+eyebrowDt+'</span>':'')+'</span>'+
@@ -230,23 +259,32 @@
       '<div class="foot"><span class="wm">MEME GRAND PRIX</span><span class="tag">$MEMEGP</span></div>';
 
     setMascot(document.getElementById('mGain'), g);
-    setMascot(document.getElementById('mLose'), l);
+    if (!isSolo) setMascot(document.getElementById('mLose'), l);
   }
 
   // pos input has id "pos" but pos is also a fn-local; grab by id safely
   var pos_ = document.getElementById('pos');
 
   // wire controls
-  ['gainer','loser','pos','lap','gap','subtitle','base','noSub'].forEach(function(id){
+  ['gainer','loser','pos','prevPos','lap','gap','driver','subtitle','base','noSub'].forEach(function(id){
     document.getElementById(id).addEventListener('input', render);
     document.getElementById(id).addEventListener('change', render);
   });
+  function applyModeFields(){
+    var solo = TYPE==='solo', ot = TYPE==='overtake';
+    document.getElementById('lapFld').style.display = ot?'flex':'none';
+    document.getElementById('gapFld').style.display = ot?'flex':'none';
+    document.getElementById('loserFld').style.display = solo?'none':'flex';
+    document.getElementById('prevPosFld').style.display = solo?'flex':'none';
+    document.getElementById('driverFld').style.display = solo?'flex':'none';
+    document.getElementById('gainerLabel').textContent = solo?'Team':'Gainer (moves up)';
+    document.getElementById('swapBtn').style.display = solo?'none':'inline-block';
+  }
   document.querySelectorAll('#typeSeg button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('#typeSeg button').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on'); TYPE=b.dataset.type;
-      document.getElementById('lapFld').style.display = TYPE==='overtake'?'flex':'none';
-      document.getElementById('gapFld').style.display = TYPE==='overtake'?'flex':'none';
+      applyModeFields();
       render();
     });
   });
@@ -269,7 +307,7 @@
   });
   window.addEventListener('resize', function(){ if(document.querySelector('.zoombar button.on').dataset.z==='fit') setZoom('fit'); });
 
-  render(); setZoom('fit');
+  applyModeFields(); render(); setZoom('fit');
 </script>
 </body>
 </html>
