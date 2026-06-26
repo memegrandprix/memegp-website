@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MemeGP · Rivalry Card Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#ffcc00; --green:#19d27c; --cyan:#27d3de; --red:#ff2b50;
+    --bg0:#08080c; --bg1:#0f0f16; --panel:#13131c; --rail:#1c1c27;
+    --ink:#f4f5f8; --mute:#8a8f9c; --line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg0);color:var(--ink);font-family:'Chakra Petch',sans-serif;padding:24px;
+    display:flex;flex-direction:column;align-items:center;gap:22px}
+
+  /* ---------- controls ---------- */
+  .controls{width:100%;max-width:1080px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .controls h1{font-family:'Orbitron';font-size:15px;letter-spacing:.14em;color:var(--gold);margin-bottom:4px}
+  .controls .sub{font-size:12.5px;color:var(--mute);margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .fld{display:flex;flex-direction:column;gap:5px}
+  .fld label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
+  .fld select,.fld input{background:var(--bg1);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+    font-family:'Chakra Petch';font-size:14px;padding:9px 10px;outline:none}
+  .fld select:focus,.fld input:focus{border-color:var(--cyan)}
+  .seg{display:flex;gap:6px}
+  .seg button{flex:1;background:var(--bg1);border:1px solid var(--line);color:var(--mute);font-family:'JetBrains Mono';
+    font-size:11px;letter-spacing:.1em;padding:9px 8px;border-radius:8px;cursor:pointer;text-transform:uppercase}
+  .seg button.on{background:rgba(255,204,0,.14);border-color:var(--gold);color:var(--gold)}
+  .row2{display:flex;gap:12px;align-items:flex-end;margin-top:12px;flex-wrap:wrap}
+  .swap{background:var(--rail);border:1px solid var(--line);color:var(--ink);font-family:'JetBrains Mono';font-size:11px;
+    letter-spacing:.08em;padding:10px 14px;border-radius:8px;cursor:pointer}
+  .swap:hover{border-color:var(--cyan)}
+  .hint{font-family:'JetBrains Mono';font-size:11px;color:var(--mute);line-height:1.7;margin-left:auto;text-align:right}
+  .hint b{color:var(--gold)}
+
+  .zoombar{display:flex;gap:6px;align-items:center}
+  .zoombar span{font-family:'JetBrains Mono';font-size:10px;color:var(--mute);letter-spacing:.1em}
+  .zoombar button{background:var(--bg1);border:1px solid var(--line);color:var(--mute);font-family:'JetBrains Mono';
+    font-size:11px;padding:6px 10px;border-radius:7px;cursor:pointer}
+  .zoombar button.on{border-color:var(--cyan);color:var(--cyan)}
+
+  /* ---------- card stage ---------- */
+  .stage{width:100%;max-width:1080px;overflow:auto;border-radius:14px}
+  .scaler{transform-origin:top left}
+
+  #card{width:1080px;height:620px;position:relative;overflow:hidden;border-radius:18px;
+    background:radial-gradient(900px 520px at 18% -10%,rgba(255,255,255,.05),transparent 60%),
+               linear-gradient(180deg,var(--bg1),#070709);
+    font-family:'Chakra Petch';}
+  #card .railL{position:absolute;left:0;top:0;bottom:0;width:12px;z-index:6}
+
+  /* duo mascots on the right */
+  #card .duo{position:absolute;top:0;right:0;bottom:0;width:50%;overflow:hidden}
+  #card .m{position:absolute;top:0;bottom:0;background-size:cover;background-position:center 22%}
+  #card .m.gain{left:0;width:60%;z-index:3;clip-path:polygon(0 0,100% 0,82% 100%,0 100%)}
+  #card .m.lose{right:0;width:52%;z-index:2;clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);
+    filter:grayscale(.45) brightness(.5) contrast(.95)}
+  #card .m .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron';font-weight:900;font-size:120px;opacity:.9}
+  #card .seam{position:absolute;top:0;bottom:0;left:54%;width:4px;z-index:4;transform:skewX(-9deg);
+    box-shadow:0 0 22px rgba(0,0,0,.6)}
+  /* left scrim so text is readable over mascots */
+  #card .scrim{position:absolute;inset:0;z-index:4;
+    background:linear-gradient(90deg,#06060a 0%,#06060a 40%,rgba(6,6,10,.86) 52%,rgba(6,6,10,0) 72%)}
+
+  /* text block */
+  #card .body{position:absolute;left:46px;top:54px;right:46%;z-index:7}
+  #card .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono';font-weight:700;
+    font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);
+    border:1px solid rgba(39,211,222,.4);background:rgba(39,211,222,.08);padding:7px 13px;border-radius:999px}
+  #card .gainer{font-family:'Orbitron';font-weight:900;font-size:104px;line-height:.92;margin-top:26px;letter-spacing:.005em}
+  #card .mid{font-family:'Orbitron';font-weight:800;font-size:46px;color:var(--ink);margin-top:6px;letter-spacing:.01em}
+  #card .sub{font-family:'Orbitron';font-weight:800;font-size:34px;margin-top:10px}
+  #card .sub .small{color:var(--mute);font-size:26px}
+  #card .detail{font-family:'JetBrains Mono';font-size:17px;color:var(--mute);margin-top:18px;letter-spacing:.02em;line-height:1.5}
+  #card .chips{display:flex;gap:10px;margin-top:22px}
+  #card .chip{font-family:'JetBrains Mono';font-weight:700;font-size:14px;letter-spacing:.06em;padding:7px 13px;border-radius:8px}
+  #card .chip.up{color:var(--green);border:1px solid rgba(25,210,124,.5);background:rgba(25,210,124,.12)}
+  #card .chip.down{color:var(--red);border:1px solid rgba(255,43,80,.5);background:rgba(255,43,80,.12)}
+
+  #card .foot{position:absolute;left:46px;bottom:34px;z-index:7;display:flex;align-items:center;gap:14px}
+  #card .foot .wm{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.16em;color:var(--ink)}
+  #card .foot .tag{font-family:'JetBrains Mono';font-size:13px;color:var(--gold);letter-spacing:.08em}
+  #card .gantry{position:absolute;top:30px;right:34px;z-index:7;display:flex;gap:9px}
+  #card .gantry i{width:13px;height:13px;border-radius:50%;background:#2a0a12;box-shadow:0 0 8px rgba(255,43,80,.25) inset}
+  #card .gantry i.lit{background:var(--red);box-shadow:0 0 14px var(--red)}
+</style>
+</head>
+<body>
+  <div class="controls">
+    <h1>RIVALRY · POSITION-CHANGE CARD</h1>
+    <div class="sub">Overtakes during a race, or power-rankings flips between snapshots. One layout, two triggers.</div>
+    <div class="grid">
+      <div class="fld" style="grid-column:span 2">
+        <label>Card type</label>
+        <div class="seg" id="typeSeg">
+          <button data-type="overtake" class="on">⚡ Overtake</button>
+          <button data-type="rankings">📊 Power Rankings</button>
+        </div>
+      </div>
+      <div class="fld"><label>Gainer (moves up)</label><select id="gainer"></select></div>
+      <div class="fld"><label>Loser (drops)</label><select id="loser"></select></div>
+      <div class="fld"><label>New position</label><input id="pos" value="P3"></div>
+      <div class="fld" id="lapFld"><label>Lap</label><input id="lap" value="12"></div>
+      <div class="fld" id="gapFld"><label>Gap (optional)</label><input id="gap" placeholder="0.412s"></div>
+      <div class="fld" style="grid-column:span 2"><label>Subtitle override (optional)</label><input id="subtitle" placeholder="leave blank for auto"></div>
+      <div class="fld"><label>Image base path</label><input id="base" placeholder="./ or https://memegrandprix.com/"></div>
+    </div>
+    <div class="row2">
+      <button class="swap" id="swapBtn">⇄ Swap gainer / loser</button>
+      <div class="zoombar"><span>VIEW</span>
+        <button data-z="fit" class="on">Fit</button>
+        <button data-z="1">100%</button>
+        <button data-z=".5">50%</button>
+      </div>
+      <div class="hint">Export: set view to <b>100%</b> → right-click the card →<br><b>Capture node screenshot</b> (Chrome DevTools). True size 1080×620.</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="scaler" id="scaler">
+      <div id="card"></div>
+    </div>
+  </div>
+
+<script>
+  // ---- team registry: ticker -> { slug, ext, color } ; mascot art = {slug}-driver.{ext}
+  var TEAMS = {
+    PUP:{slug:'pup',ext:'png',color:'#F0B90B'},
+    MOMO:{slug:'momo',ext:'png',color:'#F989B9'},
+    TURBO:{slug:'turbo',ext:'png',color:'#1e7fd9'},
+    BILLY:{slug:'billy',ext:'png',color:'#F7931A'},
+    MASK:{slug:'mask',ext:'jpg',color:'#e62538'},
+    DOBERMANN:{slug:'dobermann',ext:'png',color:'#8a8a99'},
+    VIBECOIN:{slug:'vibe',ext:'png',color:'#E91E63'},
+    PEPONK:{slug:'peponk',ext:'png',color:'#FB8802'},
+    SHIH:{slug:'shih',ext:'png',color:'#FFD200'},
+    SUS:{slug:'susdog',ext:'png',color:'#C8102E'},
+    '420BLAZEIT':{slug:'420blazeit',ext:'png',color:'#7B2D8E'},
+    MONKO:{slug:'monko',ext:'png',color:'#ffcc00'},
+    NEURO:{slug:'neuroticat',ext:'png',color:'#F58A1F'},
+    LOL:{slug:'lol',ext:'png',color:'#22DD66'}
+  };
+  var ORDER = Object.keys(TEAMS);
+
+  function fillSelect(sel, val){ sel.innerHTML = ORDER.map(function(t){return '<option'+(t===val?' selected':'')+'>'+t+'</option>';}).join(''); }
+  fillSelect(gainer,'PUP'); fillSelect(loser,'SHIH');
+
+  function posNum(s){ var m=String(s).match(/\d+/); return m?parseInt(m[0],10):null; }
+  function posLabel(s){ var n=posNum(s); return n?('P'+n):String(s||'').toUpperCase(); }
+
+  // mascot loader with monogram fallback
+  function setMascot(el, ticker){
+    var t = TEAMS[ticker]; el.style.backgroundImage='none'; el.innerHTML='';
+    var base = (document.getElementById('base').value||'').trim();
+    var url = base + t.slug + '-driver.' + t.ext;
+    var img = new Image();
+    img.onload = function(){ el.style.backgroundImage = "url('"+url+"')"; };
+    img.onerror = function(){
+      el.style.background = 'radial-gradient(circle at 50% 35%,'+hexA(t.color,.5)+','+hexA(t.color,.12)+' 60%,#0b0b11)';
+      var mono = document.createElement('div'); mono.className='mono'; mono.style.color=t.color;
+      mono.textContent = ticker.slice(0,2); el.appendChild(mono);
+    };
+    img.src = url;
+  }
+  function hexA(hex,a){ var h=hex.replace('#',''); if(h.length===3)h=h.split('').map(function(c){return c+c;}).join('');
+    var n=parseInt(h,16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
+
+  var TYPE='overtake';
+  function render(){
+    var g = gainer.value, l = loser.value;
+    var G = TEAMS[g], L = TEAMS[l];
+    var pos = posLabel(pos_.value);
+    var lN = posNum(pos_.value);
+    var loserPos = lN ? ('P'+(lN+1)) : '';
+    var gap = document.getElementById('gap').value.trim();
+    var lap = document.getElementById('lap').value.trim();
+    var ovr = document.getElementById('subtitle').value.trim();
+
+    var eyebrow, mid, sub, detail;
+    if (TYPE==='overtake'){
+      eyebrow = '⚡ OVERTAKE' + (lap ? ' · LAP '+lap : '');
+      mid = 'TAKES ' + pos;
+      sub = '<span class="small">FROM</span> <span style="color:'+L.color+'">$'+l+'</span>';
+      detail = ovr || (gap ? ('Gap at the line · '+gap) : 'Position '+pos+' changes hands on track.');
+    } else {
+      var today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
+      eyebrow = '📊 POWER RANKINGS · ' + today;
+      mid = 'CLIMBS TO ' + pos;
+      sub = '<span class="small">PASSES</span> <span style="color:'+L.color+'">$'+l+'</span>';
+      detail = ovr || ('$'+g+' overtakes $'+l+' in the live standings.');
+    }
+
+    var gfs = Math.min(104, Math.round(560/(g.length+1)*1.05));  // shrink long cashtags to fit the column
+    var card = document.getElementById('card');
+    card.innerHTML =
+      '<div class="railL" style="background:linear-gradient(180deg,'+G.color+','+hexA(G.color,.25)+')"></div>'+
+      '<div class="gantry">'+'<i class="lit"></i><i class="lit"></i><i class="lit"></i><i></i><i></i>'+'</div>'+
+      '<div class="duo">'+
+        '<div class="m lose" id="mLose"></div>'+
+        '<div class="m gain" id="mGain"></div>'+
+        '<div class="seam" style="background:'+G.color+';box-shadow:0 0 24px '+hexA(G.color,.7)+'"></div>'+
+      '</div>'+
+      '<div class="scrim"></div>'+
+      '<div class="body">'+
+        '<span class="eyebrow">'+eyebrow+'</span>'+
+        '<div class="gainer" style="color:'+G.color+';font-size:'+gfs+'px">$'+g+'</div>'+
+        '<div class="mid">'+mid+'</div>'+
+        '<div class="sub">'+sub+'</div>'+
+        '<div class="detail">'+detail+'</div>'+
+        '<div class="chips">'+
+          '<span class="chip up">▲ '+g+' '+pos+'</span>'+
+          (loserPos?('<span class="chip down">▼ '+l+' '+loserPos+'</span>'):'')+
+        '</div>'+
+      '</div>'+
+      '<div class="foot"><span class="wm">MEME GRAND PRIX</span><span class="tag">$MEMEGP</span></div>';
+
+    setMascot(document.getElementById('mGain'), g);
+    setMascot(document.getElementById('mLose'), l);
+  }
+
+  // pos input has id "pos" but pos is also a fn-local; grab by id safely
+  var pos_ = document.getElementById('pos');
+
+  // wire controls
+  ['gainer','loser','pos','lap','gap','subtitle','base'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', render);
+    document.getElementById(id).addEventListener('change', render);
+  });
+  document.querySelectorAll('#typeSeg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#typeSeg button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); TYPE=b.dataset.type;
+      document.getElementById('lapFld').style.display = TYPE==='overtake'?'flex':'none';
+      document.getElementById('gapFld').style.display = TYPE==='overtake'?'flex':'none';
+      render();
+    });
+  });
+  document.getElementById('swapBtn').addEventListener('click', function(){
+    var a=gainer.value; gainer.value=loser.value; loser.value=a; render();
+  });
+
+  // zoom
+  function setZoom(z){
+    var scaler=document.getElementById('scaler'), stage=document.getElementById('stage');
+    var scale = z==='fit' ? Math.min(1,(stage.clientWidth-2)/1080) : parseFloat(z);
+    scaler.style.transform='scale('+scale+')';
+    scaler.style.height=(620*scale)+'px'; scaler.style.width=(1080*scale)+'px';
+  }
+  document.querySelectorAll('.zoombar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.zoombar button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); setZoom(b.dataset.z);
+    });
+  });
+  window.addEventListener('resize', function(){ if(document.querySelector('.zoombar button.on').dataset.z==='fit') setZoom('fit'); });
+
+  render(); setZoom('fit');
+</script>
+</body>
+</html>
