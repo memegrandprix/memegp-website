@@ -70,18 +70,19 @@
 
   /* text block */
   #card .body{position:absolute;left:46px;top:54px;right:46%;z-index:7}
-  #card .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono';font-weight:700;
-    font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);
-    border:1px solid rgba(39,211,222,.4);background:rgba(39,211,222,.08);padding:7px 13px;border-radius:999px}
+  #card .eyebrow{display:inline-flex;align-items:baseline;gap:12px;font-family:'Orbitron';font-weight:800;
+    font-size:28px;letter-spacing:.05em;text-transform:uppercase}
+  #card .eyebrow .lbl{color:var(--gold)}
+  #card .eyebrow .dt{color:var(--ink);font-size:22px;font-weight:700}
   #card .gainer{font-family:'Orbitron';font-weight:900;font-size:104px;line-height:.92;margin-top:26px;letter-spacing:.005em}
   #card .mid{font-family:'Orbitron';font-weight:800;font-size:46px;color:var(--ink);margin-top:6px;letter-spacing:.01em}
   #card .sub{font-family:'Orbitron';font-weight:800;font-size:34px;margin-top:10px}
   #card .sub .small{color:var(--mute);font-size:26px}
   #card .detail{font-family:'JetBrains Mono';font-size:17px;color:var(--mute);margin-top:18px;letter-spacing:.02em;line-height:1.5}
-  #card .chips{display:flex;gap:10px;margin-top:22px}
-  #card .chip{font-family:'JetBrains Mono';font-weight:700;font-size:14px;letter-spacing:.06em;padding:7px 13px;border-radius:8px}
-  #card .chip.up{color:var(--green);border:1px solid rgba(25,210,124,.5);background:rgba(25,210,124,.12)}
-  #card .chip.down{color:var(--red);border:1px solid rgba(255,43,80,.5);background:rgba(255,43,80,.12)}
+  #card .chips{display:flex;gap:28px;margin-top:26px;align-items:baseline}
+  #card .chip{font-family:'Orbitron';font-weight:800;font-size:26px;letter-spacing:.03em}
+  #card .chip.up{color:var(--green)}
+  #card .chip.down{color:var(--red)}
 
   #card .foot{position:absolute;left:46px;bottom:34px;z-index:7;display:flex;align-items:center;gap:14px}
   #card .foot .wm{font-family:'Orbitron';font-weight:800;font-size:15px;letter-spacing:.16em;color:var(--ink)}
@@ -182,15 +183,15 @@
     var lap = document.getElementById('lap').value.trim();
     var ovr = document.getElementById('subtitle').value.trim();
 
-    var eyebrow, mid, sub, detail;
+    var eyebrowLbl, eyebrowDt, mid, sub, detail;
     if (TYPE==='overtake'){
-      eyebrow = '⚡ OVERTAKE' + (lap ? ' · LAP '+lap : '');
+      eyebrowLbl = 'OVERTAKE'; eyebrowDt = lap ? ('· LAP '+lap) : '';
       mid = 'TAKES ' + pos;
       sub = '<span class="small">FROM</span> <span style="color:'+L.color+'">$'+l+'</span>';
       detail = ovr || (gap ? ('Gap at the line · '+gap) : 'Position '+pos+' changes hands on track.');
     } else {
       var today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
-      eyebrow = '📊 POWER RANKINGS · ' + today;
+      eyebrowLbl = 'POWER RANKINGS'; eyebrowDt = '· ' + today;
       mid = 'CLIMBS TO ' + pos;
       sub = '<span class="small">PASSES</span> <span style="color:'+L.color+'">$'+l+'</span>';
       detail = ovr || ('$'+g+' overtakes $'+l+' in the live standings.');
@@ -208,7 +209,7 @@
       '</div>'+
       '<div class="scrim"></div>'+
       '<div class="body">'+
-        '<span class="eyebrow">'+eyebrow+'</span>'+
+        '<span class="eyebrow"><span class="lbl">'+eyebrowLbl+'</span>'+(eyebrowDt?'<span class="dt">'+eyebrowDt+'</span>':'')+'</span>'+
         '<div class="gainer" style="color:'+G.color+';font-size:'+gfs+'px">$'+g+'</div>'+
         '<div class="mid">'+mid+'</div>'+
         '<div class="sub">'+sub+'</div>'+
