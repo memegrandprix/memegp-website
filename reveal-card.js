@@ -41,16 +41,9 @@
     el.id = 'reveal-card-css';
     el.textContent = [
       '.stat-row.is-upgrade-target .stat-row-fill{background:linear-gradient(180deg,#ff0040,#a3002a);}',
-      // target: gold base fill, then a hatched-red ghost showing the +1 up for grabs (score->ghost)
-      '.stat-row.is-upgrade-target .stat-row-main{position:relative;background:linear-gradient(90deg,',
-      '  rgba(255,204,0,.18) 0%, rgba(255,204,0,.18) var(--score-pct,0%),',
+      '.stat-row.is-upgrade-target .stat-row-main{background:linear-gradient(90deg,',
+      '  rgba(255,0,64,.20) 0%, rgba(255,0,64,.20) var(--score-pct,0%),',
       '  transparent var(--score-pct,0%), transparent 100%);}',
-      '.stat-row.is-upgrade-target .stat-row-main::before{content:"";position:absolute;top:0;bottom:0;',
-      '  left:var(--score-pct,0%);width:calc(var(--ghost-pct,0%) - var(--score-pct,0%));',
-      '  background:repeating-linear-gradient(135deg,rgba(255,43,80,.40) 0 6px,rgba(255,43,80,.14) 6px 12px);',
-      '  border-left:2px dashed rgba(255,43,80,.7);pointer-events:none;z-index:0;}',
-      // keep stat name + value painted above the ghost layer
-      '.stat-row-main .stat-row-name,.stat-row-main .stat-row-value{position:relative;z-index:1;}',
       '.stat-row.is-upgrade-target .stat-row-value{color:#ff2b5e;}',
       '.stat-row.is-upgrade-target .stat-row-name{color:#ff6688;}',
       '.stat-row.is-upgrade-target .stat-row-name::after{content:"\\25B2 UPGRADE";',
@@ -59,10 +52,8 @@
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
       // EARNED upgrade (locked) — green
       '.stat-row.is-upgrade-earned .stat-row-fill{background:linear-gradient(180deg,#16c784,#0e8f5e);}',
-      // gold up to the frozen base (--base-pct), green for the earned +1 (base->score)
       '.stat-row.is-upgrade-earned .stat-row-main{background:linear-gradient(90deg,',
-      '  rgba(255,204,0,.18) 0%, rgba(255,204,0,.18) var(--base-pct,0%),',
-      '  rgba(22,199,132,.30) var(--base-pct,0%), rgba(22,199,132,.30) var(--score-pct,0%),',
+      '  rgba(22,199,132,.20) 0%, rgba(22,199,132,.20) var(--score-pct,0%),',
       '  transparent var(--score-pct,0%), transparent 100%);}',
       '.stat-row.is-upgrade-earned .stat-row-value{color:#16c784;}',
       '.stat-row.is-upgrade-earned .stat-row-name{color:#3fe0a0;}',
@@ -70,12 +61,9 @@
       '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
       '  color:#16c784;border:1px solid rgba(22,199,132,.5);border-radius:4px;',
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
-      // BOTH earned + target: keep the green earned section + value, but the badge reads UPGRADE (red)
-      '.stat-row.is-upgrade-earned.is-upgrade-target .stat-row-name::after{content:"\\25B2 UPGRADE";',
-      '  color:#ff2b5e;border-color:rgba(255,0,64,.5);}',
       '.rank-strip{display:flex;align-items:center;justify-content:space-between;',
-      '  background:#0a0a12;border-top:1px solid var(--line,#23232e);',
-      '  padding:13px 22px;margin:0;}',
+      '  background:#0a0a12;border:1px solid var(--line,#23232e);border-radius:6px;',
+      '  padding:11px 18px;margin:0 0 10px;}',
       '.rank-strip-label{font-family:\'Orbitron\',sans-serif;font-size:11px;font-weight:700;',
       '  letter-spacing:2px;color:var(--dim,#8a8a99);}',
       '.rank-strip-right{display:flex;align-items:center;gap:10px;}',
@@ -208,33 +196,15 @@
     });
     return [pool[0].name, pool[1].name];
   }
-  function applyHighlight(map, baseMap, targets, earned) {
+  function applyHighlight(map, targets, earned) {
     var earnedArr = earned || [];
     UPGRADEABLE.forEach(function (name) {
       var e = map[name];
       if (!e) return;
       var isEarned = earnedArr.indexOf(name) !== -1;
-      // a stat can be BOTH earned (keeps its green section) and a current target (reads UPGRADE)
       var isTarget = !!targets && targets.indexOf(name) !== -1;
-      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = earned section
-      e.row.classList.toggle('is-upgrade-target', isTarget);             // red = still a target
-      // gold base | green earned: gold runs to the frozen base, green is the earned +1
-      if (isEarned) {
-        var base = (baseMap && baseMap[name] && baseMap[name].value != null)
-          ? baseMap[name].value
-          : (e.value != null ? e.value - 1 : 0);
-        e.row.style.setProperty('--base-pct', Math.max(0, Math.min(100, base * 10)) + '%');
-      } else {
-        e.row.style.removeProperty('--base-pct');
-      }
-      // gold base | red ghost: hatched zone marks the +1 the community can still earn
-      if (isTarget) {
-        var cur = (e.value != null) ? e.value : 0;
-        var ghost = Math.min(cur + 1, 9.5);
-        e.row.style.setProperty('--ghost-pct', Math.max(0, Math.min(100, ghost * 10)) + '%');
-      } else {
-        e.row.style.removeProperty('--ghost-pct');
-      }
+      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = locked
+      e.row.classList.toggle('is-upgrade-target', isTarget && !isEarned); // red = still in progress
     });
   }
 
@@ -445,9 +415,11 @@
     var S = window.MEMEGP_Stats;
     var dev = devTeam(ticker) || {};
 
-    // Single source of truth: earned upgrades + base come from stats-calculator.
-    // Fall back to upgrades.json only if the accessors aren't available.
-    var lockedArr = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker)
+    // The DEV-CYCLE locked state must reflect upgrades earned THIS cycle only —
+    // NOT the permanent all-time list. A stat earned last week can be a target again
+    // this week (its base is still lowest); it stays "IN PROGRESS" until re-earned.
+    // (getEarned/EARNED_UPGRADES still drives the green stat bars elsewhere.)
+    var lockedArr = (S && typeof S.getCycleEarned === 'function') ? S.getCycleEarned(ticker)
                     : (Array.isArray(dev.locked) ? dev.locked : []);
 
     var base = null;
@@ -521,11 +493,11 @@
     var map = statRowMap();
     populate(ticker, map);              // main rows show current = base + earned upgrades
     map = statRowMap();                 // re-read after populate (for highlight rows)
-    var baseMap = baseStatMap(ticker) || map;   // frozen base — used for dev-cycle base->target display
-    var targets = revealed ? lowestTwo(map) : null;   // 2 lowest by CURRENT value (base + earned), so an upgraded stat leaves the zone
+    var baseMap = baseStatMap(ticker) || map;   // frozen base for targets + dev cycle
+    var targets = revealed ? lowestTwo(baseMap) : null;
     var S = window.MEMEGP_Stats;
     var earned = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker) : [];
-    applyHighlight(map, baseMap, targets, earned);
+    applyHighlight(map, targets, earned);
     renderRank(ticker, revealed);
     renderDevCycle(ticker, baseMap, targets, revealed);
   }
