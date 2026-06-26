@@ -40,27 +40,37 @@
     var el = document.createElement('style');
     el.id = 'reveal-card-css';
     el.textContent = [
-      '.stat-row.is-upgrade-target .stat-row-fill{background:linear-gradient(180deg,#ff0040,#a3002a);}',
+      '.stat-row.is-upgrade-target .stat-row-fill{background:linear-gradient(180deg,#ff2b50,#a3002a);}',
+      // gold BASE (0 -> current) then RED ghost (current -> current+1, the +1 up for grabs)
       '.stat-row.is-upgrade-target .stat-row-main{background:linear-gradient(90deg,',
-      '  rgba(255,0,64,.20) 0%, rgba(255,0,64,.20) var(--score-pct,0%),',
-      '  transparent var(--score-pct,0%), transparent 100%);}',
+      '  rgba(255,204,0,.18) 0%, rgba(255,204,0,.18) var(--score-pct,0%),',
+      '  rgba(255,43,80,.34) var(--score-pct,0%), rgba(255,43,80,.34) var(--ghost-pct,0%),',
+      '  transparent var(--ghost-pct,0%));}',
       '.stat-row.is-upgrade-target .stat-row-value{color:#ff2b5e;}',
       '.stat-row.is-upgrade-target .stat-row-name{color:#ff6688;}',
       '.stat-row.is-upgrade-target .stat-row-name::after{content:"\\25B2 UPGRADE";',
       '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
       '  color:#ff2b5e;border:1px solid rgba(255,0,64,.5);border-radius:4px;',
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
-      // EARNED upgrade (locked) — green
+      // EARNED upgrade (locked) — gold BASE (0 -> base) then GREEN (base -> current = base+1)
       '.stat-row.is-upgrade-earned .stat-row-fill{background:linear-gradient(180deg,#16c784,#0e8f5e);}',
       '.stat-row.is-upgrade-earned .stat-row-main{background:linear-gradient(90deg,',
-      '  rgba(22,199,132,.20) 0%, rgba(22,199,132,.20) var(--score-pct,0%),',
-      '  transparent var(--score-pct,0%), transparent 100%);}',
+      '  rgba(255,204,0,.18) 0%, rgba(255,204,0,.18) var(--base-pct,0%),',
+      '  rgba(22,199,132,.34) var(--base-pct,0%), rgba(22,199,132,.34) var(--score-pct,0%),',
+      '  transparent var(--score-pct,0%));}',
       '.stat-row.is-upgrade-earned .stat-row-value{color:#16c784;}',
       '.stat-row.is-upgrade-earned .stat-row-name{color:#3fe0a0;}',
       '.stat-row.is-upgrade-earned .stat-row-name::after{content:"\\25B2 UPGRADED";',
       '  font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;',
       '  color:#16c784;border:1px solid rgba(22,199,132,.5);border-radius:4px;',
       '  padding:2px 5px;margin-left:10px;vertical-align:middle;white-space:nowrap;}',
+      // EARNED *and* still a TARGET (e.g. ENGINE upgraded in cycle 1, still lowest, climbing again):
+      // gold BASE (0 -> base) -> GREEN earned (base -> current) -> RED ghost (current -> current+1)
+      '.stat-row.is-upgrade-earned.is-upgrade-target .stat-row-main{background:linear-gradient(90deg,',
+      '  rgba(255,204,0,.18) 0%, rgba(255,204,0,.18) var(--base-pct,0%),',
+      '  rgba(22,199,132,.34) var(--base-pct,0%), rgba(22,199,132,.34) var(--score-pct,0%),',
+      '  rgba(255,43,80,.40) var(--score-pct,0%), rgba(255,43,80,.40) var(--ghost-pct,0%),',
+      '  transparent var(--ghost-pct,0%));}',
       '.rank-strip{display:flex;align-items:center;justify-content:space-between;',
       '  background:#0a0a12;border:1px solid var(--line,#23232e);border-radius:6px;',
       '  padding:11px 18px;margin:0 0 10px;}',
@@ -184,9 +194,9 @@
     var items = UPGRADEABLE.map(function (name, i) { return { name: name, i: i, e: map[name] }; })
       .filter(function (x) { return x.e; });
     if (items.length < 2) return null;
-    // Prefer stats that actually have a value; only fall back to all if fewer than 2 are valued.
-    // A team missing a stat (e.g. no liquidity -> CHASSIS null) still gets a clean 2-upgrade cycle
-    // rather than collapsing the whole section.
+    // Two lowest by CURRENT value (incl. prior upgrades). An already-upgraded stat stays a
+    // target only while it's still one of the two weakest; once pumped past the others it
+    // naturally drops out. Prefer valued stats; fall back to all only if <2 are valued.
     var valued = items.filter(function (x) { return x.e.value !== null; });
     var pool = (valued.length >= 2) ? valued : items;
     pool.sort(function (a, b) {
@@ -196,15 +206,24 @@
     });
     return [pool[0].name, pool[1].name];
   }
-  function applyHighlight(map, targets, earned) {
+  function applyHighlight(map, targets, earned, baseMap) {
     var earnedArr = earned || [];
     UPGRADEABLE.forEach(function (name) {
       var e = map[name];
       if (!e) return;
       var isEarned = earnedArr.indexOf(name) !== -1;
       var isTarget = !!targets && targets.indexOf(name) !== -1;
-      e.row.classList.toggle('is-upgrade-earned', isEarned);              // green = locked
-      e.row.classList.toggle('is-upgrade-target', isTarget && !isEarned); // red = still in progress
+      // gold BASE width = frozen base value (no upgrades) — the gold portion of the split bar
+      var bv = (baseMap && baseMap[name] && baseMap[name].value != null) ? baseMap[name].value
+             : (e.value != null ? e.value : 0);
+      e.row.style.setProperty('--base-pct', Math.max(0, Math.min(100, bv * 10)) + '%');
+      // RED ghost end = current + 1 (the +1 a target stat is racing for this week)
+      var cur = (e.value != null) ? e.value : bv;
+      e.row.style.setProperty('--ghost-pct', Math.max(0, Math.min(100, (cur + 1) * 10)) + '%');
+      e.row.classList.toggle('is-upgrade-earned', isEarned);   // green = already upgraded
+      e.row.classList.toggle('is-upgrade-target', isTarget);   // red ghost = this cycle's +1
+      // earned + target together (e.g. ENGINE: upgraded in cycle 1, still lowest, climbing again)
+      // is handled by the combined CSS rule: gold base -> green earned -> red ghost.
     });
   }
 
@@ -494,12 +513,12 @@
     populate(ticker, map);              // main rows show current = base + earned upgrades
     map = statRowMap();                 // re-read after populate (for highlight rows)
     var baseMap = baseStatMap(ticker) || map;   // frozen base for targets + dev cycle
-    var targets = revealed ? lowestTwo(baseMap) : null;
     var S = window.MEMEGP_Stats;
     var earned = (S && typeof S.getEarned === 'function') ? S.getEarned(ticker) : [];
-    applyHighlight(map, targets, earned);
+    var targets = revealed ? lowestTwo(map) : null;  // 2 lowest by CURRENT value (incl. upgrades)
+    applyHighlight(map, targets, earned, baseMap);
     renderRank(ticker, revealed);
-    renderDevCycle(ticker, baseMap, targets, revealed);
+    renderDevCycle(ticker, map, targets, revealed);  // current map -> boxes read 6.8 -> 7.8, not 5.8 -> 6.8
   }
 
   function init() { run(); fetchData(run); }
