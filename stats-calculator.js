@@ -365,21 +365,27 @@
   //     MARS removed (grid integrity). PUP/BILLY earned upgrades persist via
   //     EARNED_UPGRADES and render green — do NOT bake them into the base.
   // ============================================================
+  // 2026-W26 base — derived from data/snapshot.json (frozen 2026-06-26T10:18Z)
+  // via the B-prime formulas above. MARS removed (grid integrity, 14 teams).
+  // PUP ENGINE / BILLY AERO earned upgrades persist via EARNED_UPGRADES (+1, green) —
+  // NOT baked in here (PUP base engine 5.7 -> 6.7 live; BILLY base aero 6.9 -> 7.9 live).
+  // DRAG computed single-day from this snapshot; refresh from history.json if a
+  // multi-day DRAG is required.
   const FROZEN_BASE = {
-    TURBO:      { engine: 9.0, aero: 6.9, chassis: 6.5, drag: 7.1 },
-    MASK:       { engine: 5.7, aero: 6.6, chassis: 7.4, drag: 6.0 },
-    NEURO:      { engine: 1.5, aero: 3.5, chassis: 1.4, drag: 1.0 },
-    SUS:        { engine: 4.0, aero: 2.3, chassis: 4.0, drag: 3.3 },
-    LOL:        { engine: 4.5, aero: 7.2, chassis: 5.1, drag: 4.7 },
-    SHIH:       { engine: 3.9, aero: 4.2, chassis: 4.8, drag: 4.1 },
-    VIBECOIN:   { engine: 5.6, aero: 6.7, chassis: 5.5, drag: 5.8 },
-    '420BLAZEIT': { engine: 3.2, aero: 2.9, chassis: 3.1, drag: 3.3 },
-    PUP:        { engine: 5.8, aero: 9.5, chassis: 8.3, drag: 7.8 },
-    PEPONK:     { engine: 5.1, aero: 7.3, chassis: 5.1, drag: 5.0 },
-    MOMO:       { engine: 4.9, aero: 5.2, chassis: 5.8, drag: 7.0 },
-    DOBERMANN:  { engine: 4.9, aero: 5.0, chassis: 4.8, drag: 4.2 },
-    MONKO:      { engine: 3.3, aero: 1.8, chassis: 3.2, drag: 1.0 },
-    BILLY:      { engine: 6.0, aero: 5.6, chassis: 5.6, drag: 6.1 }
+    TURBO:        { engine: 9.0, aero: 8.1, chassis: 5.5, drag: 7.7 },
+    MASK:         { engine: 5.8, aero: 5.3, chassis: 7.6, drag: 6.7 },
+    NEURO:        { engine: 1.5, aero: 1.0, chassis: 1.2, drag: 1.0 },
+    SUS:          { engine: 4.2, aero: 3.7, chassis: 4.3, drag: 4.8 },
+    LOL:          { engine: 4.3, aero: 4.4, chassis: 5.0, drag: 5.4 },
+    SHIH:         { engine: 3.6, aero: 3.9, chassis: 4.6, drag: 4.0 },
+    VIBECOIN:     { engine: 5.5, aero: 5.5, chassis: 5.5, drag: 6.2 },
+    '420BLAZEIT': { engine: 3.0, aero: 4.5, chassis: 3.0, drag: 4.6 },
+    PUP:          { engine: 5.7, aero: 9.5, chassis: 8.2, drag: 8.4 },
+    PEPONK:       { engine: 2.2, aero: 6.6, chassis: 2.5, drag: 4.2 },
+    MOMO:         { engine: 4.1, aero: 8.9, chassis: 5.1, drag: 5.2 },
+    DOBERMANN:    { engine: 4.7, aero: 5.3, chassis: 4.6, drag: 6.1 },
+    MONKO:        { engine: 3.2, aero: 1.0, chassis: 3.3, drag: 1.0 },
+    BILLY:        { engine: 6.0, aero: 6.9, chassis: 6.9, drag: 6.6 }
   };
 
   // Earned upgrades — locked stats per team (+1 each, permanent for the season).
