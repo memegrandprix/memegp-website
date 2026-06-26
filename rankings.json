@@ -141,17 +141,6 @@
         {
           "rank": 13,
           "previous_rank": null,
-          "ticker": "MARS",
-          "team_name": "MARS RACING",
-          "score": 3,
-          "color": "#1A2B5C",
-          "logo": "mars.png",
-          "commentary": "Bled down the order all month. Due a recovery lap.",
-          "tweet": "🏁 P13 — MARS RACING ($MARS)\n\nRough month in the books — the chart bled all the way down the order, and that lands MARS P13 to open. But grids reset, and this car has shown it can move when it wants to.\n\nRecovery lap, anyone? 🔴\n\n#MemeGP Season 2"
-        },
-        {
-          "rank": 14,
-          "previous_rank": null,
           "ticker": "MONKO",
           "team_name": "MONKO MOTORS",
           "score": 2.9,
@@ -161,7 +150,7 @@
           "tweet": "🏁 P14 — MONKO MOTORS ($MONKO)\n\nQuiet garage, quiet tape. MONKO rolls onto the grid second-from-last — thin volume, modest liquidity. The pace is in there somewhere.\n\nTime to find it. 🔧\n\n#MemeGP Season 2"
         },
         {
-          "rank": 15,
+          "rank": 14,
           "previous_rank": null,
           "ticker": "NEURO",
           "team_name": "NEURO RACING",
