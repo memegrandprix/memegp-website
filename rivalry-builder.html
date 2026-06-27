@@ -106,12 +106,15 @@
           <button data-type="overtake" class="on">⚡ Overtake</button>
           <button data-type="rankings">📊 Power Rankings</button>
           <button data-type="solo">📈 Solo Mover</button>
+          <button data-type="upgrade">🔧 Upgrade</button>
         </div>
       </div>
       <div class="fld"><label id="gainerLabel">Gainer (moves up)</label><select id="gainer"></select></div>
       <div class="fld" id="loserFld"><label>Loser (drops)</label><select id="loser"></select></div>
+      <div class="fld" id="statFld" style="display:none"><label>Upgraded stat</label><select id="stat"><option>ENGINE</option><option>AERO</option><option>CHASSIS</option><option>DRAG</option></select></div>
+      <div class="fld" id="upImgFld" style="display:none"><label>Upgrade image (optional)</label><input id="upImg" placeholder="e.g. engine.png — blank = stat label"></div>
       <div class="fld" id="prevPosFld" style="display:none"><label>Previous position</label><input id="prevPos" value="P5"></div>
-      <div class="fld"><label>New position</label><input id="pos" value="P3"></div>
+      <div class="fld" id="posFld"><label>New position</label><input id="pos" value="P3"></div>
       <div class="fld" id="lapFld"><label>Lap</label><input id="lap" value="12"></div>
       <div class="fld" id="gapFld"><label>Gap (optional)</label><input id="gap" placeholder="0.412s"></div>
       <div class="fld" id="driverFld" style="display:none;grid-column:span 2"><label>Driver / reason (optional)</label><input id="driver" placeholder="e.g. AERO +1.3 &amp; CHASSIS +1.3 — deepest week yet"></div>
@@ -161,6 +164,11 @@
   };
   var ORDER = Object.keys(TEAMS);
 
+  // current stats per team (base + this-cycle earned), for upgrade from->to auto-fill
+  var STATS = {'PUP':{e:5.8,a:9.5,c:8.3,d:7.8,up:['ENGINE']},'MOMO':{e:4.9,a:5.2,c:5.8,d:7,up:[]},'TURBO':{e:9,a:6.9,c:6.5,d:7.1,up:[]},'BILLY':{e:6,a:5.6,c:5.6,d:6.1,up:['AERO']},'MASK':{e:5.7,a:6.6,c:7.4,d:6,up:[]},'DOBERMANN':{e:4.9,a:5,c:4.8,d:4.2,up:[]},'VIBECOIN':{e:5.6,a:6.7,c:5.5,d:5.8,up:[]},'PEPONK':{e:5.1,a:7.3,c:5.1,d:5,up:[]},'SHIH':{e:3.9,a:4.2,c:4.8,d:4.1,up:[]},'SUS':{e:4,a:2.3,c:4,d:3.3,up:[]},'420BLAZEIT':{e:3.2,a:2.9,c:3.1,d:3.3,up:[]},'MONKO':{e:3.3,a:1.8,c:3.2,d:1,up:[]},'NEURO':{e:1.5,a:3.5,c:1.4,d:1,up:[]},'LOL':{e:4.5,a:7.2,c:5.1,d:4.7,up:[]}};
+  var STATKEY = {ENGINE:'e',AERO:'a',CHASSIS:'c',DRAG:'d'};
+  function statNow(tk, stat){ var s=STATS[tk]||{}; var v=(s[STATKEY[stat]]||0); if((s.up||[]).indexOf(stat)>-1) v+=1; return v; }
+
   function fillSelect(sel, val){ sel.innerHTML = ORDER.map(function(t){return '<option'+(t===val?' selected':'')+'>'+t+'</option>';}).join(''); }
   fillSelect(gainer,'PUP'); fillSelect(loser,'SHIH');
 
@@ -181,6 +189,22 @@
     };
     img.src = url;
   }
+  // generic image into a .m panel; falls back to a big stat label on a tinted ground
+  function setImage(el, file, label, color){
+    el.style.backgroundImage='none'; el.innerHTML='';
+    var base = (document.getElementById('base').value||'').trim();
+    if (file){
+      var url = base + file, img = new Image();
+      img.onload = function(){ el.style.backgroundImage="url('"+url+"')"; };
+      img.onerror = function(){ labelFallback(el,label,color); };
+      img.src = url;
+    } else { labelFallback(el,label,color); }
+  }
+  function labelFallback(el,label,color){
+    el.style.background = 'radial-gradient(circle at 50% 38%,'+hexA(color,.5)+','+hexA(color,.12)+' 60%,#0b0b11)';
+    var m=document.createElement('div'); m.className='mono'; m.style.cssText='color:'+color+';font-size:64px;letter-spacing:1px';
+    m.textContent=label; el.appendChild(m);
+  }
   function hexA(hex,a){ var h=hex.replace('#',''); if(h.length===3)h=h.split('').map(function(c){return c+c;}).join('');
     var n=parseInt(h,16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
 
@@ -197,7 +221,7 @@
     var hideSub = document.getElementById('noSub').checked;
 
     var eyebrowLbl, eyebrowDt, mid, sub, detail;
-    var isSolo = (TYPE==='solo');
+    var isSolo = (TYPE==='solo'), isUpgrade = (TYPE==='upgrade');
     var dir='flat', mag=0, prevN=null;
     if (TYPE==='overtake'){
       eyebrowLbl = 'OVERTAKE'; eyebrowDt = lap ? ('· LAP '+lap) : '';
@@ -210,6 +234,15 @@
       mid = 'CLIMBS TO ' + pos;
       sub = '<span class="small">PASSES</span> <span style="color:'+L.color+'">$'+l+'</span>';
       detail = ovr || ('$'+g+' overtakes $'+l+' in the live standings.');
+    } else if (TYPE==='upgrade'){
+      var todayU = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
+      var uStat = document.getElementById('stat').value;
+      var uFrom = statNow(g, uStat);
+      var uTo = Math.round((uFrom+1)*10)/10;
+      eyebrowLbl = 'UPGRADE UNLOCKED'; eyebrowDt = '· ' + todayU;
+      mid = 'DEVELOPS ' + uStat;
+      sub = '<span style="color:var(--green)">\u25B2 ' + uFrom + ' \u2192 ' + uTo + '</span>';
+      detail = ovr || ('$'+g+' earns a +1 '+uStat+' upgrade — voted up by the community this week.');
     } else { // solo mover — one team, a position move, the stat that drove it
       var todayS = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
       prevN = posNum(document.getElementById('prevPos').value);
@@ -233,6 +266,16 @@
         '<div class="m solo" id="mGain"></div>'+
         '<div class="basegrad"></div>'+
         '<div class="delta gain" style="color:'+sColor+'">'+sArrow+' '+g+' '+pos+'</div>';
+    } else if (isUpgrade){
+      var uStat2 = document.getElementById('stat').value;
+      var uTo2 = Math.round((statNow(g,uStat2)+1)*10)/10;
+      duoHTML =
+        '<div class="m lose" id="mLose"></div>'+
+        '<div class="m gain" id="mGain"></div>'+
+        '<div class="seam" style="background:'+G.color+';filter:drop-shadow(0 0 7px '+hexA(G.color,.85)+')"></div>'+
+        '<div class="basegrad"></div>'+
+        '<div class="delta gain">\u25B2 '+g+'</div>'+
+        '<div class="delta lose" style="color:var(--green)">'+uStat2+' \u2192 '+uTo2+'</div>';
     } else {
       duoHTML =
         '<div class="m lose" id="mLose"></div>'+
@@ -259,26 +302,33 @@
       '<div class="foot"><span class="wm">MEME GRAND PRIX</span><span class="tag">$MEMEGP</span></div>';
 
     setMascot(document.getElementById('mGain'), g);
-    if (!isSolo) setMascot(document.getElementById('mLose'), l);
+    if (isUpgrade){
+      setImage(document.getElementById('mLose'), document.getElementById('upImg').value.trim(), document.getElementById('stat').value, G.color);
+    } else if (!isSolo){
+      setMascot(document.getElementById('mLose'), l);
+    }
   }
 
   // pos input has id "pos" but pos is also a fn-local; grab by id safely
   var pos_ = document.getElementById('pos');
 
   // wire controls
-  ['gainer','loser','pos','prevPos','lap','gap','driver','subtitle','base','noSub'].forEach(function(id){
+  ['gainer','loser','pos','prevPos','lap','gap','driver','subtitle','base','noSub','stat','upImg'].forEach(function(id){
     document.getElementById(id).addEventListener('input', render);
     document.getElementById(id).addEventListener('change', render);
   });
   function applyModeFields(){
-    var solo = TYPE==='solo', ot = TYPE==='overtake';
+    var solo = TYPE==='solo', ot = TYPE==='overtake', up = TYPE==='upgrade';
     document.getElementById('lapFld').style.display = ot?'flex':'none';
     document.getElementById('gapFld').style.display = ot?'flex':'none';
-    document.getElementById('loserFld').style.display = solo?'none':'flex';
+    document.getElementById('loserFld').style.display = (solo||up)?'none':'flex';
     document.getElementById('prevPosFld').style.display = solo?'flex':'none';
     document.getElementById('driverFld').style.display = solo?'flex':'none';
-    document.getElementById('gainerLabel').textContent = solo?'Team':'Gainer (moves up)';
-    document.getElementById('swapBtn').style.display = solo?'none':'inline-block';
+    document.getElementById('posFld').style.display = up?'none':'flex';
+    document.getElementById('statFld').style.display = up?'flex':'none';
+    document.getElementById('upImgFld').style.display = up?'flex':'none';
+    document.getElementById('gainerLabel').textContent = (solo||up)?'Team':'Gainer (moves up)';
+    document.getElementById('swapBtn').style.display = (solo||up)?'none':'inline-block';
   }
   document.querySelectorAll('#typeSeg button').forEach(function(b){
     b.addEventListener('click', function(){
