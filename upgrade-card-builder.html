@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MemeGP — Upgrade Card Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg0:#07070d; --bg1:#11111a; --bg2:#0a0a12; --line:#23232f; --rail:#1a1a24;
+    --ink:#f0f0f5; --mute:#7a7a88;
+    --gold:#ffcc00; --green:#19d27c; --cyan:#27d3de; --red:#ff2b50;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg0);color:var(--ink);font-family:'Chakra Petch',sans-serif;margin:0;padding:24px;
+    display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+
+  /* ---------- controls ---------- */
+  .controls{width:340px;flex:0 0 340px}
+  .controls h1{font-family:'Orbitron';font-weight:900;font-size:16px;letter-spacing:.12em;color:var(--gold);margin:0 0 4px}
+  .controls .sub{font-size:12.5px;color:var(--mute);margin-bottom:18px;line-height:1.5}
+  .fld{margin-bottom:16px}
+  .fld label{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;
+    color:var(--mute);text-transform:uppercase;margin-bottom:6px}
+  .fld select,.fld input{width:100%;background:var(--bg1);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+    font-family:'Chakra Petch';font-size:14px;padding:10px;outline:none}
+  .fld select:focus,.fld input:focus{border-color:var(--cyan)}
+  .row2{display:flex;gap:10px}
+  .row2 .fld{flex:1}
+
+  .chip{display:flex;align-items:center;gap:10px;width:100%;background:var(--bg1);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;cursor:pointer;margin-bottom:9px;transition:.15s;text-align:left}
+  .chip:hover{border-color:var(--cyan)}
+  .chip.on{border-color:var(--green);background:rgba(25,210,124,.10)}
+  .chip .box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);flex:0 0 18px;display:grid;place-items:center;
+    font-size:11px;color:#001;font-weight:900}
+  .chip.on .box{background:var(--green);border-color:var(--green)}
+  .chip .meta{flex:1}
+  .chip .meta .s{font-family:'Orbitron';font-weight:800;font-size:14px;letter-spacing:.04em}
+  .chip .meta .d{font-family:'JetBrains Mono';font-size:11px;color:var(--mute);margin-top:2px}
+  .chip .via{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.1em;color:var(--mute);text-align:right}
+
+  .hint{font-family:'JetBrains Mono';font-size:11px;color:var(--mute);line-height:1.7;margin-top:14px;
+    border-top:1px solid var(--line);padding-top:12px}
+  .hint b{color:var(--gold)}
+  .dlbtn{width:100%;margin-top:12px;background:var(--gold);color:#101014;border:none;border-radius:9px;
+    font-family:'Orbitron';font-weight:800;letter-spacing:.08em;font-size:13px;padding:13px;cursor:pointer}
+  .dlbtn:active{transform:translateY(1px)}
+
+  /* ---------- card ---------- */
+  .stage{flex:0 0 auto}
+  .scaler{transform-origin:top left}
+  #card{
+    width:1080px;height:1080px;position:relative;overflow:hidden;
+    background:
+      radial-gradient(1200px 700px at 78% -10%, rgba(255,204,0,.06), transparent 60%),
+      radial-gradient(900px 700px at -10% 110%, rgba(39,211,222,.05), transparent 55%),
+      linear-gradient(160deg,#0c0c14 0%, #07070c 60%, #050509 100%);
+    color:var(--ink);font-family:'Chakra Petch';
+    padding:72px 76px;display:flex;flex-direction:column;
+  }
+  /* faint asphalt grain */
+  #card::before{content:"";position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+    background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px);}
+  /* team color edge */
+  #card .edge{position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--tc,#ffcc00)}
+
+  .c-top{display:flex;align-items:center;justify-content:space-between}
+  .eyebrow{display:inline-flex;align-items:center;gap:14px;font-family:'Orbitron';font-weight:800;
+    font-size:24px;letter-spacing:.16em;color:var(--gold)}
+  .eyebrow .dot{width:13px;height:13px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}
+  .c-week{font-family:'JetBrains Mono';font-size:20px;letter-spacing:.18em;color:var(--mute);
+    border:1px solid var(--line);border-radius:8px;padding:8px 14px}
+
+  .c-id{display:flex;align-items:center;gap:26px;margin-top:54px}
+  .c-logo{width:128px;height:128px;border-radius:22px;flex:0 0 128px;display:grid;place-items:center;
+    font-family:'Orbitron';font-weight:900;font-size:54px;color:#0a0a0f;
+    background:var(--tc,#ffcc00);box-shadow:0 0 50px -8px var(--tc,#ffcc00)}
+  .c-name .tk{font-family:'Orbitron';font-weight:900;font-size:84px;line-height:.96;color:var(--tc,#fff)}
+  .c-name .tk b{color:var(--mute);font-weight:800}
+  .c-name .nm{font-family:'JetBrains Mono';font-size:24px;letter-spacing:.14em;color:var(--mute);margin-top:10px}
+
+  .c-up{margin-top:18px;flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px}
+  .up{}
+  .up .uh{display:flex;align-items:baseline;justify-content:space-between}
+  .up .stat{font-family:'Orbitron';font-weight:900;font-size:64px;letter-spacing:.02em}
+  .up .plus{font-family:'Orbitron';font-weight:900;font-size:46px;color:var(--green)}
+  .up .vals{font-family:'JetBrains Mono';font-weight:700;font-size:40px;margin-top:6px}
+  .up .vals .from{color:var(--mute)}
+  .up .vals .arr{color:var(--mute);margin:0 14px}
+  .up .vals .to{color:var(--green)}
+  .bar{height:30px;border-radius:8px;background:#15151f;border:1px solid var(--line);margin-top:18px;overflow:hidden;display:flex}
+  .bar .gold{height:100%;background:linear-gradient(180deg,#ffe066,#d9a400)}
+  .bar .grn{height:100%;background:linear-gradient(180deg,#1ee98a,#0e9c5c);box-shadow:0 0 24px rgba(25,210,124,.6)}
+
+  .c-overall{display:flex;align-items:center;gap:18px;margin-top:6px;font-family:'JetBrains Mono';font-size:30px}
+  .c-overall .lab{letter-spacing:.18em;color:var(--mute);font-size:22px}
+  .c-overall .ov{font-weight:700}
+  .c-overall .ov .to{color:var(--green)}
+  .c-overall .delta{font-family:'Orbitron';font-weight:800;color:var(--green);font-size:26px}
+
+  .c-earn{margin-top:30px;font-family:'JetBrains Mono';font-size:24px;letter-spacing:.06em;color:var(--ink)}
+  .c-earn .by{color:var(--mute);letter-spacing:.16em;font-size:18px;display:block;margin-bottom:8px}
+  .c-earn .hi{color:var(--gold);font-weight:700}
+
+  .gantry{display:flex;gap:16px;margin-top:30px}
+  .gantry i{width:46px;height:46px;border-radius:50%;background:#2a0d12;border:1px solid #43151b;
+    box-shadow:inset 0 0 10px rgba(0,0,0,.6)}
+  .gantry i.lit{background:radial-gradient(circle at 50% 38%, #ff5a6e, #c8102e);
+    box-shadow:0 0 22px rgba(255,43,80,.8), inset 0 0 8px rgba(255,255,255,.25)}
+
+  .c-foot{display:flex;align-items:center;justify-content:space-between;margin-top:30px;
+    border-top:1px solid var(--line);padding-top:26px;font-family:'JetBrains Mono';font-size:24px;letter-spacing:.06em}
+  .c-foot .cash{color:var(--gold);font-weight:700}
+  .c-foot .url{color:var(--mute)}
+</style>
+</head>
+<body>
+
+  <!-- ============ CONTROLS ============ -->
+  <div class="controls">
+    <h1>🏁 UPGRADE CARD BUILDER</h1>
+    <div class="sub">Make a shareable card when a team unlocks its weekly upgrade(s). Pick the team, tick what unlocked, hit download.</div>
+
+    <div class="fld">
+      <label>Team</label>
+      <select id="team"></select>
+    </div>
+
+    <div class="fld">
+      <label>What unlocked this week</label>
+      <div id="chips"></div>
+    </div>
+
+    <div class="row2">
+      <div class="fld"><label>Likes</label><input id="likes" type="number" value="15" min="0"></div>
+      <div class="fld"><label>RTs</label><input id="rts" type="number" value="10" min="0"></div>
+    </div>
+    <div class="fld">
+      <label>Week label</label>
+      <input id="week" type="text" value="WEEK 2">
+    </div>
+
+    <button class="dlbtn" id="dl">⬇  DOWNLOAD PNG (1080×1080)</button>
+    <div class="hint">
+      One-click <b>Download PNG</b> uses your browser.<br>
+      If fonts look off, wait 1s and click again (web fonts loading).<br>
+      Reliable fallback: DevTools → right-click <b>#card</b> → <b>Capture node screenshot</b>.
+    </div>
+  </div>
+
+  <!-- ============ CARD ============ -->
+  <div class="stage">
+    <div class="scaler" id="scaler">
+      <div id="card">
+        <div class="edge"></div>
+        <div class="c-top">
+          <div class="eyebrow"><span class="dot"></span> UPGRADE UNLOCKED</div>
+          <div class="c-week" id="cWeek">WEEK 2</div>
+        </div>
+
+        <div class="c-id">
+          <div class="c-logo" id="cLogo">P</div>
+          <div class="c-name">
+            <div class="tk" id="cTk">$<span></span></div>
+            <div class="nm" id="cNm">PUP POWER · P1</div>
+          </div>
+        </div>
+
+        <div class="c-up" id="cUp"></div>
+
+        <div class="c-overall">
+          <span class="lab">OVERALL</span>
+          <span class="ov"><span class="from" id="ovFrom">7.5</span> → <span class="to" id="ovTo">7.7</span></span>
+          <span class="delta" id="ovDelta">+0.2</span>
+        </div>
+
+        <div class="c-earn">
+          <span class="by">EARNED BY THE COMMUNITY</span>
+          <span id="earnLine"><span class="hi">15 ❤️ likes</span> developed the upgrade this week.</span>
+        </div>
+
+        <div class="gantry" id="gantry"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i></div>
+
+        <div class="c-foot">
+          <span class="cash">🏁 $MEMEGP</span>
+          <span class="url">memegrandprix.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const TEAMS = [{"tk":"PUP","name":"PUP POWER","color":"#F0B90B","rank":1,"base":{"engine":5.8,"aero":9.5,"chassis":8.3,"drag":7.8,"pit":5},"earned":["ENGINE"]},{"tk":"TURBO","name":"AI TURBO RACING","color":"#1e7fd9","rank":2,"base":{"engine":9,"aero":6.9,"chassis":6.5,"drag":7.1,"pit":5},"earned":[]},{"tk":"MASK","name":"MASK STAYS ON","color":"#e62538","rank":3,"base":{"engine":5.7,"aero":6.6,"chassis":7.4,"drag":6,"pit":5},"earned":[]},{"tk":"BILLY","name":"BILLY RACING","color":"#F7931A","rank":5,"base":{"engine":6,"aero":5.6,"chassis":5.6,"drag":6.1,"pit":5},"earned":["AERO"]},{"tk":"VIBECOIN","name":"VIBING CAT","color":"#E91E63","rank":4,"base":{"engine":5.6,"aero":6.7,"chassis":5.5,"drag":5.8,"pit":5},"earned":[]},{"tk":"MOMO","name":"MOMO MOTORS","color":"#F989B9","rank":6,"base":{"engine":4.9,"aero":5.2,"chassis":5.8,"drag":7,"pit":5},"earned":[]},{"tk":"PEPONK","name":"PEPONK RACING","color":"#FB8802","rank":7,"base":{"engine":5.1,"aero":7.3,"chassis":5.1,"drag":5,"pit":5},"earned":[]},{"tk":"LOL","name":"LOL RACING","color":"#22DD66","rank":8,"base":{"engine":4.5,"aero":7.2,"chassis":5.1,"drag":4.7,"pit":5},"earned":[]},{"tk":"DOBERMANN","name":"STEALTH DOBIE","color":"#1a1a1a","rank":9,"base":{"engine":4.9,"aero":5,"chassis":4.8,"drag":4.2,"pit":5},"earned":[]},{"tk":"SHIH","name":"SHIH SPEED","color":"#FFD200","rank":10,"base":{"engine":3.9,"aero":4.2,"chassis":4.8,"drag":4.1,"pit":5},"earned":[]},{"tk":"SUS","name":"SUS SPEED RACING","color":"#C8102E","rank":11,"base":{"engine":4,"aero":2.3,"chassis":4,"drag":3.3,"pit":5},"earned":[]},{"tk":"420BLAZEIT","name":"420BLAZEIT","color":"#7B2D8E","rank":12,"base":{"engine":3.2,"aero":2.9,"chassis":3.1,"drag":3.3,"pit":5},"earned":[]},{"tk":"MONKO","name":"MONKO MOTORS","color":"#ffcc00","rank":13,"base":{"engine":3.3,"aero":1.8,"chassis":3.2,"drag":1,"pit":5},"earned":[]},{"tk":"NEURO","name":"NEURO RACING","color":"#F58A1F","rank":14,"base":{"engine":1.5,"aero":3.5,"chassis":1.4,"drag":1,"pit":5},"earned":[]}];
+const UPG = ["ENGINE","AERO","CHASSIS","DRAG"];
+const f1 = v => (Math.round(v*10)/10).toFixed(1);
+
+function current(t){
+  const c={}; UPG.forEach(n=>{ c[n] = t.base[n.toLowerCase()] + (t.earned.includes(n)?1:0); });
+  c.PIT = t.base.pit; return c;
+}
+function targets(c){ // 2 lowest current upgradeable stats: [0]=LIKES, [1]=RTs
+  return UPG.map(n=>({n,v:c[n]})).sort((a,b)=> a.v-b.v || UPG.indexOf(a.n)-UPG.indexOf(b.n)).slice(0,2);
+}
+function overall(c){ return (c.ENGINE+c.AERO+c.CHASSIS+c.DRAG+c.PIT)/5; }
+
+let state = { teamIdx:0, unlocked:{} }; // unlocked: {STAT:true}
+
+function teamSel(){
+  const sel=document.getElementById('team');
+  sel.innerHTML = TEAMS.map((t,i)=>`<option value="${i}">$${t.tk} — ${t.name}</option>`).join('');
+  sel.onchange = ()=>{ state.teamIdx=+sel.value; initUnlocked(); render(); };
+}
+function initUnlocked(){
+  const t=TEAMS[state.teamIdx], c=current(t), tg=targets(c);
+  state.unlocked={}; state.unlocked[tg[0].n]=true; // default: the LIKES upgrade
+}
+function chips(){
+  const t=TEAMS[state.teamIdx], c=current(t), tg=targets(c);
+  const via=['LIKE · 15 ❤️','RT · 10 🔁'];
+  document.getElementById('chips').innerHTML = tg.map((g,i)=>{
+    const on = !!state.unlocked[g.n];
+    return `<button class="chip ${on?'on':''}" data-stat="${g.n}">
+      <span class="box">${on?'✓':''}</span>
+      <span class="meta"><span class="s">${g.n}</span><span class="d">${f1(g.v)} → ${f1(g.v+1)}</span></span>
+      <span class="via">${via[i]}</span>
+    </button>`;
+  }).join('');
+  document.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    const s=ch.dataset.stat; state.unlocked[s]=!state.unlocked[s];
+    if(!Object.values(state.unlocked).some(Boolean)) state.unlocked[s]=true; // keep ≥1
+    render();
+  });
+}
+function render(){
+  const t=TEAMS[state.teamIdx], c=current(t), tg=targets(c);
+  document.documentElement.style.setProperty('--tc', t.color);
+  document.getElementById('card').style.setProperty('--tc', t.color);
+  document.getElementById('cLogo').textContent = t.tk[0];
+  document.getElementById('cTk').innerHTML = '$<span>'+t.tk+'</span>';
+  document.getElementById('cNm').textContent = t.name+' · P'+t.rank;
+  document.getElementById('cWeek').textContent = document.getElementById('week').value||'WEEK 2';
+
+  // upgrades shown = the unlocked ones (in target order)
+  const shown = tg.filter(g=>state.unlocked[g.n]);
+  document.getElementById('cUp').innerHTML = shown.map(g=>{
+    const from=g.v, to=g.v+1;
+    const goldPct=Math.max(0,Math.min(100, from*10));
+    const grnPct=Math.max(0,Math.min(100, to*10))-goldPct;
+    return `<div class="up">
+      <div class="uh"><span class="stat">${g.n}</span><span class="plus">+1</span></div>
+      <div class="vals"><span class="from">${f1(from)}</span><span class="arr">→</span><span class="to">${f1(to)}</span></div>
+      <div class="bar"><span class="gold" style="width:${goldPct}%"></span><span class="grn" style="width:${grnPct}%"></span></div>
+    </div>`;
+  }).join('');
+
+  // overall before/after
+  const before=overall(c);
+  const after={...c}; shown.forEach(g=>after[g.n]=g.v+1);
+  const ov2=overall(after);
+  document.getElementById('ovFrom').textContent=f1(before);
+  document.getElementById('ovTo').textContent=f1(ov2);
+  document.getElementById('ovDelta').textContent='+'+f1(ov2-before);
+
+  // earned line
+  const likes=document.getElementById('likes').value, rts=document.getElementById('rts').value;
+  const viaLikes = shown.some(g=>g.n===tg[0].n);
+  const viaRts   = shown.some(g=>g.n===tg[1].n);
+  let bits=[];
+  if(viaLikes) bits.push(`<span class="hi">${likes} ❤️ likes</span>`);
+  if(viaRts)   bits.push(`<span class="hi">${rts} 🔁 RTs</span>`);
+  document.getElementById('earnLine').innerHTML = bits.join(' + ')+' developed '+(shown.length>1?'these upgrades':'the upgrade')+' this week.';
+}
+
+document.getElementById('likes').oninput=render;
+document.getElementById('rts').oninput=render;
+document.getElementById('week').oninput=render;
+
+// responsive scale to fit viewport
+function fit(){
+  const avail=Math.min(window.innerWidth-420, 720);
+  const s=Math.max(.28, Math.min(1, avail/1080));
+  const sc=document.getElementById('scaler');
+  sc.style.transform='scale('+s+')';
+  sc.parentElement.style.width=(1080*s)+'px';
+  sc.parentElement.style.height=(1080*s)+'px';
+}
+window.addEventListener('resize',fit);
+
+document.getElementById('dl').onclick=async ()=>{
+  const card=document.getElementById('card');
+  await (document.fonts?document.fonts.ready:Promise.resolve());
+  const canvas=await html2canvas(card,{backgroundColor:null,scale:1,width:1080,height:1080,useCORS:true});
+  const a=document.createElement('a');
+  a.download='memegp-upgrade-'+TEAMS[state.teamIdx].tk.toLowerCase()+'.png';
+  a.href=canvas.toDataURL('image/png'); a.click();
+};
+
+teamSel(); initUnlocked(); chips(); render(); fit();
+// re-render chips on team change too
+document.getElementById('team').addEventListener('change',()=>{chips();});
+</script>
+</body>
+</html>
