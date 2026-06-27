@@ -78,6 +78,7 @@
 
   /* text block */
   #card .body{position:absolute;left:46px;top:54px;right:46%;z-index:7}
+  #card .body.upbody{right:52%}
   #card .eyebrow{display:inline-flex;align-items:baseline;gap:12px;font-family:'Orbitron';font-weight:800;
     font-size:28px;letter-spacing:.05em;text-transform:uppercase}
   #card .eyebrow .lbl{color:var(--gold)}
@@ -242,7 +243,7 @@
     var ovr = document.getElementById('subtitle').value.trim();
     var hideSub = document.getElementById('noSub').checked;
 
-    var eyebrowLbl, eyebrowDt, mid, sub, detail;
+    var eyebrowLbl, eyebrowDt, mid, sub, detail, midStyle='';
     var isSolo = (TYPE==='solo'), isUpgrade = (TYPE==='upgrade');
     var dir='flat', mag=0, prevN=null;
     if (TYPE==='overtake'){
@@ -263,6 +264,7 @@
       var uTo = Math.round((uFrom+1)*10)/10;
       eyebrowLbl = 'UPGRADE UNLOCKED'; eyebrowDt = '· ' + todayU;
       mid = 'DEVELOPS ' + uStat;
+      midStyle = 'font-size:' + Math.min(46, Math.floor(462 / (mid.length * 0.78))) + 'px';
       sub = '<span style="color:var(--green)">\u25B2 ' + uFrom + ' \u2192 ' + uTo + '</span>';
       detail = ovr || ('$'+g+' earns a +1 '+uStat+' upgrade — voted up by the community this week.');
     } else { // solo mover — one team, a position move, the stat that drove it
@@ -314,10 +316,10 @@
       '<div class="gantry">'+'<i class="lit"></i><i class="lit"></i><i class="lit"></i><i></i><i></i>'+'</div>'+
       '<div class="duo">'+ duoHTML +'</div>'+
       '<div class="scrim"></div>'+
-      '<div class="body">'+
+      '<div class="body'+(isUpgrade?' upbody':'')+'">'+
         '<span class="eyebrow"><span class="lbl">'+eyebrowLbl+'</span>'+(eyebrowDt?'<span class="dt">'+eyebrowDt+'</span>':'')+'</span>'+
         '<div class="gainer" style="color:'+G.color+';font-size:'+gfs+'px">$'+g+'</div>'+
-        '<div class="mid">'+mid+'</div>'+
+        '<div class="mid"'+(midStyle?' style="'+midStyle+'"':'')+'>'+mid+'</div>'+
         '<div class="sub">'+sub+'</div>'+
         (hideSub?'':'<div class="detail">'+detail+'</div>')+
       '</div>'+
