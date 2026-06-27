@@ -63,6 +63,13 @@
     filter:grayscale(.45) brightness(.5) contrast(.95)}
   #card .m .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font-family:'Orbitron';font-weight:900;font-size:120px;opacity:.9}
+  /* upgrade card: right panel shows the stat icon as a centred emblem, not a dimmed photo */
+  #card .m.upart{filter:none!important;background:#0b0b11;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:22px;padding-left:5%}
+  #card .m.upart .upart-ground{position:absolute;inset:0;z-index:0}
+  #card .m.upart .upart-ico{position:relative;z-index:1;max-width:48%;max-height:40%;object-fit:contain}
+  #card .m.upart .upart-lbl{position:relative;z-index:1;font-family:'Orbitron';font-weight:800;
+    letter-spacing:4px;font-size:34px}
   #card .seam{position:absolute;inset:0;z-index:4;pointer-events:none;
     clip-path:polygon(calc(60% - 2px) 0, calc(60% + 2px) 0, calc(49.2% + 2px) 100%, calc(49.2% - 2px) 100%)}
   /* left scrim so text is readable over mascots */
@@ -112,7 +119,7 @@
       <div class="fld"><label id="gainerLabel">Gainer (moves up)</label><select id="gainer"></select></div>
       <div class="fld" id="loserFld"><label>Loser (drops)</label><select id="loser"></select></div>
       <div class="fld" id="statFld" style="display:none"><label>Upgraded stat</label><select id="stat"><option>ENGINE</option><option>AERO</option><option>CHASSIS</option><option>DRAG</option></select></div>
-      <div class="fld" id="upImgFld" style="display:none"><label>Upgrade image (optional)</label><input id="upImg" placeholder="e.g. engine.png — blank = stat label"></div>
+      <div class="fld" id="upImgFld" style="display:none"><label>Upgrade image (optional)</label><input id="upImg" placeholder="blank = icon-engine.png (auto)"></div>
       <div class="fld" id="prevPosFld" style="display:none"><label>Previous position</label><input id="prevPos" value="P5"></div>
       <div class="fld" id="posFld"><label>New position</label><input id="pos" value="P3"></div>
       <div class="fld" id="lapFld"><label>Lap</label><input id="lap" value="12"></div>
@@ -204,6 +211,21 @@
     el.style.background = 'radial-gradient(circle at 50% 38%,'+hexA(color,.5)+','+hexA(color,.12)+' 60%,#0b0b11)';
     var m=document.createElement('div'); m.className='mono'; m.style.cssText='color:'+color+';font-size:64px;letter-spacing:1px';
     m.textContent=label; el.appendChild(m);
+  }
+  // upgrade card: centred stat-icon emblem on a team-tinted ground (icon + label), label-only fallback
+  function setUpgradeArt(el, file, label, color){
+    el.classList.add('upart'); el.style.backgroundImage='none'; el.innerHTML='';
+    var ground=document.createElement('div'); ground.className='upart-ground';
+    ground.style.background='radial-gradient(circle at 60% 42%,'+hexA(color,.34)+','+hexA(color,.07)+' 55%,#0b0b11 80%)';
+    el.appendChild(ground);
+    var lbl=document.createElement('div'); lbl.className='upart-lbl'; lbl.style.color=color; lbl.textContent=label;
+    var base=(document.getElementById('base').value||'').trim();
+    if (file){
+      var img=new Image(); img.className='upart-ico';
+      img.onload=function(){ img.style.filter='drop-shadow(0 8px 26px '+hexA(color,.55)+')'; el.insertBefore(img,lbl); };
+      img.onerror=function(){ lbl.style.fontSize='72px'; };
+      img.src=base+file; el.appendChild(lbl);
+    } else { lbl.style.fontSize='72px'; el.appendChild(lbl); }
   }
   function hexA(hex,a){ var h=hex.replace('#',''); if(h.length===3)h=h.split('').map(function(c){return c+c;}).join('');
     var n=parseInt(h,16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
@@ -303,7 +325,9 @@
 
     setMascot(document.getElementById('mGain'), g);
     if (isUpgrade){
-      setImage(document.getElementById('mLose'), document.getElementById('upImg').value.trim(), document.getElementById('stat').value, G.color);
+      var uStatF = document.getElementById('stat').value;
+      var uFile = document.getElementById('upImg').value.trim() || ('icon-'+uStatF.toLowerCase()+'.png');
+      setUpgradeArt(document.getElementById('mLose'), uFile, uStatF, G.color);
     } else if (!isSolo){
       setMascot(document.getElementById('mLose'), l);
     }
