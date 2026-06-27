@@ -386,7 +386,7 @@
   // PERMANENT: drives the green stat bars all season long. Never resets.
   const EARNED_UPGRADES = {
     BILLY: ['AERO'],
-    PUP:   ['ENGINE']
+    PUP:   ['ENGINE', 'ENGINE']   // 2× ENGINE — Week-1 (5.8→6.8) + Week-2 (6.8→7.8). Stacks via occurrence count below.
   };
 
   // Upgrades earned THIS CYCLE — drives ONLY the DEVELOPMENT CYCLE "locked" state.
@@ -397,7 +397,7 @@
   // permanent list. When the community hits a target's threshold this week, add the
   // stat here (and, if it's a fresh stat, to EARNED_UPGRADES above for the green bar).
   const CYCLE_EARNED = {
-    // e.g.  PUP: ['ENGINE']   ← add as targets are earned during this week's window
+    PUP: ['ENGINE']   // Week-2 window: ENGINE target hit (6.8→7.8). Flips dev card green. Reset to {} next Friday.
   };
 
   // ============================================================
@@ -473,7 +473,13 @@
     const fb = getBaseStats(ticker);
     if (fb) {
       const up = getEarned(ticker);
-      const bump = (name, val) => Math.min(val + (up.indexOf(name) !== -1 ? 1 : 0), 9.5);
+      // Count occurrences so a stat upgraded across multiple weeks compounds (+1 each),
+      // instead of capping at +1 via indexOf. PUP ENGINE = base 5.8 + 2 = 7.8.
+      const bump = (name, val) => {
+        let cnt = 0;
+        for (let i = 0; i < up.length; i++) { if (up[i] === name) cnt++; }
+        return Math.min(val + cnt, 9.5);
+      };
       const eng = bump('ENGINE', fb.engine);
       const aer = bump('AERO', fb.aero);
       const cha = bump('CHASSIS', fb.chassis);
