@@ -76,9 +76,11 @@
     border:1px solid var(--line);border-radius:8px;padding:8px 14px}
 
   .c-id{display:flex;align-items:center;gap:26px;margin-top:54px}
-  .c-logo{width:128px;height:128px;border-radius:22px;flex:0 0 128px;display:grid;place-items:center;
-    font-family:'Orbitron';font-weight:900;font-size:54px;color:#0a0a0f;
+  .c-logo{width:128px;height:128px;border-radius:22px;flex:0 0 128px;position:relative;overflow:hidden;
+    display:grid;place-items:center;font-family:'Orbitron';font-weight:900;font-size:54px;color:#0a0a0f;
     background:var(--tc,#ffcc00);box-shadow:0 0 50px -8px var(--tc,#ffcc00)}
+  .c-logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+  .c-logo img.show{display:block}
   .c-name .tk{font-family:'Orbitron';font-weight:900;font-size:84px;line-height:.96;color:var(--tc,#fff)}
   .c-name .tk b{color:var(--mute);font-weight:800}
   .c-name .nm{font-family:'JetBrains Mono';font-size:24px;letter-spacing:.14em;color:var(--mute);margin-top:10px}
@@ -163,7 +165,7 @@
         </div>
 
         <div class="c-id">
-          <div class="c-logo" id="cLogo">P</div>
+          <div class="c-logo" id="cLogo"><img id="cLogoImg" alt=""><span id="cLogoMono">P</span></div>
           <div class="c-name">
             <div class="tk" id="cTk">$<span></span></div>
             <div class="nm" id="cNm">PUP POWER · P1</div>
@@ -194,7 +196,7 @@
   </div>
 
 <script>
-const TEAMS = [{"tk":"PUP","name":"PUP POWER","color":"#F0B90B","rank":1,"base":{"engine":5.8,"aero":9.5,"chassis":8.3,"drag":7.8,"pit":5},"earned":["ENGINE"]},{"tk":"TURBO","name":"AI TURBO RACING","color":"#1e7fd9","rank":2,"base":{"engine":9,"aero":6.9,"chassis":6.5,"drag":7.1,"pit":5},"earned":[]},{"tk":"MASK","name":"MASK STAYS ON","color":"#e62538","rank":3,"base":{"engine":5.7,"aero":6.6,"chassis":7.4,"drag":6,"pit":5},"earned":[]},{"tk":"BILLY","name":"BILLY RACING","color":"#F7931A","rank":5,"base":{"engine":6,"aero":5.6,"chassis":5.6,"drag":6.1,"pit":5},"earned":["AERO"]},{"tk":"VIBECOIN","name":"VIBING CAT","color":"#E91E63","rank":4,"base":{"engine":5.6,"aero":6.7,"chassis":5.5,"drag":5.8,"pit":5},"earned":[]},{"tk":"MOMO","name":"MOMO MOTORS","color":"#F989B9","rank":6,"base":{"engine":4.9,"aero":5.2,"chassis":5.8,"drag":7,"pit":5},"earned":[]},{"tk":"PEPONK","name":"PEPONK RACING","color":"#FB8802","rank":7,"base":{"engine":5.1,"aero":7.3,"chassis":5.1,"drag":5,"pit":5},"earned":[]},{"tk":"LOL","name":"LOL RACING","color":"#22DD66","rank":8,"base":{"engine":4.5,"aero":7.2,"chassis":5.1,"drag":4.7,"pit":5},"earned":[]},{"tk":"DOBERMANN","name":"STEALTH DOBIE","color":"#1a1a1a","rank":9,"base":{"engine":4.9,"aero":5,"chassis":4.8,"drag":4.2,"pit":5},"earned":[]},{"tk":"SHIH","name":"SHIH SPEED","color":"#FFD200","rank":10,"base":{"engine":3.9,"aero":4.2,"chassis":4.8,"drag":4.1,"pit":5},"earned":[]},{"tk":"SUS","name":"SUS SPEED RACING","color":"#C8102E","rank":11,"base":{"engine":4,"aero":2.3,"chassis":4,"drag":3.3,"pit":5},"earned":[]},{"tk":"420BLAZEIT","name":"420BLAZEIT","color":"#7B2D8E","rank":12,"base":{"engine":3.2,"aero":2.9,"chassis":3.1,"drag":3.3,"pit":5},"earned":[]},{"tk":"MONKO","name":"MONKO MOTORS","color":"#ffcc00","rank":13,"base":{"engine":3.3,"aero":1.8,"chassis":3.2,"drag":1,"pit":5},"earned":[]},{"tk":"NEURO","name":"NEURO RACING","color":"#F58A1F","rank":14,"base":{"engine":1.5,"aero":3.5,"chassis":1.4,"drag":1,"pit":5},"earned":[]}];
+const TEAMS = [{"tk":"PUP","name":"PUP POWER","color":"#F0B90B","rank":1,"logo":"pup.png","base":{"engine":5.8,"aero":9.5,"chassis":8.3,"drag":7.8,"pit":5},"earned":["ENGINE"]},{"tk":"TURBO","name":"AI TURBO RACING","color":"#1e7fd9","rank":2,"logo":"turbo.png","base":{"engine":9,"aero":6.9,"chassis":6.5,"drag":7.1,"pit":5},"earned":[]},{"tk":"MASK","name":"MASK STAYS ON","color":"#e62538","rank":3,"logo":"mask.png","base":{"engine":5.7,"aero":6.6,"chassis":7.4,"drag":6,"pit":5},"earned":[]},{"tk":"BILLY","name":"BILLY RACING","color":"#F7931A","rank":5,"logo":"billy.png","base":{"engine":6,"aero":5.6,"chassis":5.6,"drag":6.1,"pit":5},"earned":["AERO"]},{"tk":"VIBECOIN","name":"VIBING CAT","color":"#E91E63","rank":4,"logo":"vibe.png","base":{"engine":5.6,"aero":6.7,"chassis":5.5,"drag":5.8,"pit":5},"earned":[]},{"tk":"MOMO","name":"MOMO MOTORS","color":"#F989B9","rank":6,"logo":"momo.png","base":{"engine":4.9,"aero":5.2,"chassis":5.8,"drag":7,"pit":5},"earned":[]},{"tk":"PEPONK","name":"PEPONK RACING","color":"#FB8802","rank":7,"logo":"peponk.png","base":{"engine":5.1,"aero":7.3,"chassis":5.1,"drag":5,"pit":5},"earned":[]},{"tk":"LOL","name":"LOL RACING","color":"#22DD66","rank":8,"logo":"lol.png","base":{"engine":4.5,"aero":7.2,"chassis":5.1,"drag":4.7,"pit":5},"earned":[]},{"tk":"DOBERMANN","name":"STEALTH DOBIE","color":"#1a1a1a","rank":9,"logo":"dobermann.png","base":{"engine":4.9,"aero":5,"chassis":4.8,"drag":4.2,"pit":5},"earned":[]},{"tk":"SHIH","name":"SHIH SPEED","color":"#FFD200","rank":10,"logo":"shih.png","base":{"engine":3.9,"aero":4.2,"chassis":4.8,"drag":4.1,"pit":5},"earned":[]},{"tk":"SUS","name":"SUS SPEED RACING","color":"#C8102E","rank":11,"logo":"susdog.png","base":{"engine":4,"aero":2.3,"chassis":4,"drag":3.3,"pit":5},"earned":[]},{"tk":"420BLAZEIT","name":"420BLAZEIT","color":"#7B2D8E","rank":12,"logo":"420blazeit.png","base":{"engine":3.2,"aero":2.9,"chassis":3.1,"drag":3.3,"pit":5},"earned":[]},{"tk":"MONKO","name":"MONKO MOTORS","color":"#ffcc00","rank":13,"logo":"monko.png","base":{"engine":3.3,"aero":1.8,"chassis":3.2,"drag":1,"pit":5},"earned":[]},{"tk":"NEURO","name":"NEURO RACING","color":"#F58A1F","rank":14,"logo":"neuroticat.png","base":{"engine":1.5,"aero":3.5,"chassis":1.4,"drag":1,"pit":5},"earned":[]}];
 const UPG = ["ENGINE","AERO","CHASSIS","DRAG"];
 const f1 = v => (Math.round(v*10)/10).toFixed(1);
 
@@ -239,7 +241,12 @@ function render(){
   const t=TEAMS[state.teamIdx], c=current(t), tg=targets(c);
   document.documentElement.style.setProperty('--tc', t.color);
   document.getElementById('card').style.setProperty('--tc', t.color);
-  document.getElementById('cLogo').textContent = t.tk[0];
+  document.getElementById('cLogoMono').textContent = t.tk[0];
+  const img=document.getElementById('cLogoImg');
+  img.classList.remove('show');
+  img.onload=()=>img.classList.add('show');
+  img.onerror=()=>img.classList.remove('show');
+  img.src=t.logo;
   document.getElementById('cTk').innerHTML = '$<span>'+t.tk+'</span>';
   document.getElementById('cNm').textContent = t.name+' · P'+t.rank;
   document.getElementById('cWeek').textContent = document.getElementById('week').value||'WEEK 2';
