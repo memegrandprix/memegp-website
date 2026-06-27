@@ -408,7 +408,7 @@
   // Update these two ISO-UTC moments each cycle. Friday 09:00 SAST = 07:00 UTC.
   // ============================================================
   const CYCLE_OPEN_UTC  = '2026-06-26T07:00:00Z'; // Fri 26 Jun 09:00 SAST — new base snapshot + window OPENS
-  const CYCLE_CLOSE_UTC = '2026-07-03T07:00:00Z'; // Fri 03 Jul 09:00 SAST — window CLOSES → Race Week 2
+  const CYCLE_CLOSE_UTC = '2026-07-03T23:59:00Z'; // Fri 03 Jul 23:59 UTC — upgrade window LOCKS → Race Week 2
   function isCycleLocked(date){
     const now = date ? date.getTime() : Date.now();
     return now < Date.parse(CYCLE_OPEN_UTC) || now >= Date.parse(CYCLE_CLOSE_UTC);
