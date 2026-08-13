@@ -10879,6 +10879,130 @@
           "data_source_note": "coingecko+ordiscan"
         }
       }
+    },
+    {
+      "date": "2026-08-13",
+      "captured_at": "2026-08-13T08:25:01Z",
+      "teams": {
+        "TURBO": {
+          "mcap": 54702266,
+          "fdv": 54701508,
+          "price": 0.0007927,
+          "vol_24h": 6193.92,
+          "liq": 69326,
+          "change_24h": -3.41
+        },
+        "MASK": {
+          "mcap": 1003941,
+          "fdv": 1003539,
+          "price": 0.001004,
+          "vol_24h": 5226.48,
+          "liq": 188267.18,
+          "change_24h": 1.49
+        },
+        "NEURO": {
+          "mcap": 6730,
+          "fdv": 6730,
+          "price": 8.06e-08,
+          "vol_24h": 36.41,
+          "liq": 5019.54,
+          "change_24h": 0.11
+        },
+        "SUS": {
+          "mcap": 71777,
+          "fdv": 71777,
+          "price": 8.035e-05,
+          "vol_24h": 4205.88,
+          "liq": 21616.11,
+          "change_24h": 0.06
+        },
+        "LOL": {
+          "mcap": 128418,
+          "fdv": 128418,
+          "price": 0.0001286,
+          "vol_24h": 1263.59,
+          "liq": 41293.59,
+          "change_24h": 2.67
+        },
+        "SHIH": {
+          "mcap": 139049,
+          "fdv": 139049,
+          "price": 0.0001393,
+          "vol_24h": 836.18,
+          "liq": 47609.3,
+          "change_24h": 2.93
+        },
+        "VIBECOIN": {
+          "mcap": 548932,
+          "fdv": 548932,
+          "price": 0.0005491,
+          "vol_24h": 3737.85,
+          "liq": 56029.99,
+          "change_24h": -13.59
+        },
+        "MARS": {
+          "error": "no pairs found"
+        },
+        "420BLAZEIT": {
+          "mcap": 56218,
+          "fdv": 56218,
+          "price": 5.621e-05,
+          "vol_24h": 34.46,
+          "liq": 17776.4,
+          "change_24h": 0
+        },
+        "PUP": {
+          "mcap": 272226,
+          "fdv": 272226,
+          "price": 0.0002722,
+          "vol_24h": 4818.95,
+          "liq": 135927.57,
+          "change_24h": -7.88
+        },
+        "PEPONK": {
+          "mcap": 7120,
+          "fdv": 8025,
+          "price": 8.146e-06,
+          "vol_24h": 0,
+          "liq": 7142.7,
+          "change_24h": 0.04
+        },
+        "MOMO": {
+          "mcap": 213200,
+          "fdv": 214163,
+          "price": 0.0002141,
+          "vol_24h": 2808.58,
+          "liq": 61306.7,
+          "change_24h": -2.39
+        },
+        "DOBERMANN": {
+          "mcap": 188487,
+          "fdv": 188487,
+          "price": 0.0001885,
+          "vol_24h": 5971.84,
+          "liq": 32768.07,
+          "change_24h": 10.47
+        },
+        "MONKO": {
+          "mcap": 34795,
+          "fdv": 34795,
+          "price": 3.591e-05,
+          "vol_24h": 74.26,
+          "liq": 14282.5,
+          "change_24h": -0.47
+        },
+        "BILLY": {
+          "mcap": 995901,
+          "fdv": 995901,
+          "price": 0.00099589,
+          "vol_24h": 2169.81,
+          "liq": null,
+          "change_24h": -9.902,
+          "btc_mcap": 14.71,
+          "btc_price_sats": 1.4718,
+          "data_source_note": "coingecko+ordiscan"
+        }
+      }
     }
   ]
 }
